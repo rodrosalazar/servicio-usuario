@@ -33,11 +33,11 @@ task wrapper(type: Wrapper) {
 apply plugin: 'application'
 
 // The main class of the application
-mainClassName = 'com.example.helloworld.HelloWorldApplication'
+mainClassName = 'ec.gob.senescyt.usuario.UsuarioApplication'
 
 // Configure the run task to start the Dropwizard service
 run {
-    args 'server', 'hello-world.yml'
+    args 'server', 'servicio-usuario.yml'
 }
 
 test {

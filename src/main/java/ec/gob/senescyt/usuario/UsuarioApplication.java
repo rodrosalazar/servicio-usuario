@@ -1,4 +1,4 @@
-package com.example.helloworld;
+package ec.gob.senescyt.usuario;
 
 import com.example.helloworld.health.TemplateHealthCheck;
 import com.example.helloworld.resources.HelloWorldResource;

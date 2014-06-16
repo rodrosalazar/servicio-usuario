@@ -1,4 +1,4 @@
-package com.example.helloworld;
+package ec.gob.senescyt.usuario;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.Configuration;
