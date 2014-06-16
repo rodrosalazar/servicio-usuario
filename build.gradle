@@ -20,7 +20,9 @@ dependencies {
     compile (
         'io.dropwizard:dropwizard-core:' + dropwizardVersion,
         'io.dropwizard:dropwizard-testing:' + dropwizardVersion,
-        'org.slf4j:slf4j-api:1.7.5'
+        'io.dropwizard:dropwizard-hibernate:' + dropwizardVersion,
+        'org.slf4j:slf4j-api:1.7.5',
+        'org.postgresql:postgresql:9.3-1101-jdbc41'
     )
     testCompile "junit:junit:4.11"
 }
