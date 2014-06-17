@@ -1,5 +1,6 @@
 package ec.gob.senescyt.instituciones.carga;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -55,5 +56,17 @@ public class InstitucionesCsvTest {
 
         assertThat(resultado, is("INSERT INTO instituciones VALUES (1001, 'ESCUELA POLITECNICA NACIONAL', 1, 'PUBLICA', 1, 'VIGENTE', 1, 'A');\n" +
                 "INSERT INTO instituciones VALUES (1002, 'ESCUELA SUPERIOR POLITECNICA DE CHIMBORAZO', 1, 'PUBLICA', 1, 'VIGENTE', 2, 'B');\n"));
+    }
+
+    @Test
+    public void debeGenerarArchivosSqlAPartirDeArchivosCsvDesdeConsola() throws IOException {
+        InstitucionesCsv.main(this.getClass().getResource("/prueba-consola.csv").getPath());
+        File archivoDestino = new File("prueba-consola.sql");
+        assertThat(archivoDestino.isFile(), is(true));
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        new File("prueba-consola.sql").delete();
     }
 }

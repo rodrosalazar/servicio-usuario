@@ -6,7 +6,9 @@ import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import ec.gob.senescyt.usuario.core.Institucion;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 public class InstitucionesCsv {
@@ -58,5 +60,16 @@ public class InstitucionesCsv {
             return "NULL";
         }
         return "'" + string + "'";
+    }
+
+    public static void main(String... args) throws IOException {
+        String nombreOrigen = args[0];
+        File archivoOrigen = new File(nombreOrigen);
+        String nombreDestino = archivoOrigen.getName().replace(".csv", ".sql");
+        File archivoDestino = new File(nombreDestino);
+        BufferedWriter escritor = new BufferedWriter(new FileWriter(archivoDestino));
+
+        escritor.write(new InstitucionesCsv().archivoASql(archivoOrigen));
+        escritor.close();
     }
 }
