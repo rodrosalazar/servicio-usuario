@@ -1,25 +1,39 @@
-dropwizard-gradle
-=================
+# dropwizard-gradle
 
 Setting up a Dropwizard project using Gradle (each commit is a step in the process). It follows the example on [Dropwizard Getting Started Guide](https://dropwizard.github.io/dropwizard/getting-started.html)
 
-Steps to run:
--------
+## First Time
+
+In order to setup the db (it will be automated):
+```
+$ createdb senescyt
+
+$ createuser -W thoughtworks
+
+$ psql
+
+=# GRANT ALL ON DATABASE senescyt TO thoughtworks;
+```
+
+## Steps to run:
 
 - Run gradle:
 
-      ./gradlew run
+```
+$ ./gradlew run
+```
       
 - Go to http://localtest.me:8080/hello-world
 
 
 
-To Create a IntelliJ project:
------------------------------
+## To Create a IntelliJ project:
 
 - Run:
 
-     ./gradlew idea
+```
+$ ./gradlew idea
+```
 
 
 Troubleshooting:
