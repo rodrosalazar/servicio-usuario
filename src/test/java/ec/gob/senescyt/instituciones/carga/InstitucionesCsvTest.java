@@ -34,4 +34,10 @@ public class InstitucionesCsvTest {
         String resultado = institucionesCsv.filaASql("2345,INSTITUTO SUPERIOR PEDAGÓGICO LOS RIOS,01,PUBLICA,01,VIGENTE");
         assertThat(resultado, is("INSERT INTO instituciones VALUES (2345, 'INSTITUTO SUPERIOR PEDAGÓGICO LOS RIOS', 1, 'PUBLICA', 1, 'VIGENTE', NULL, NULL);"));
     }
+
+    @Test
+    public void debeRemoverEspaciosEnNombres() throws IOException {
+        String resultado = institucionesCsv.filaASql("1004,  ESCUELA POLITECNICA DEL EJERCITO   ,01,PUBLICA,03,\"CERRADA MEDIANTE RESOLUCION RPC-SO-09-NO.098-2014, DE 12 DE MARZO DE 2014, POR FUSIÓN EN LA UFA-ESPE\",01,A");
+        assertThat(resultado, is("INSERT INTO instituciones VALUES (1004, 'ESCUELA POLITECNICA DEL EJERCITO', 1, 'PUBLICA', 3, 'CERRADA MEDIANTE RESOLUCION RPC-SO-09-NO.098-2014, DE 12 DE MARZO DE 2014, POR FUSIÓN EN LA UFA-ESPE', 1, 'A');"));
+    }
 }

@@ -1,6 +1,7 @@
 package ec.gob.senescyt.instituciones.carga;
 
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import ec.gob.senescyt.usuario.core.Institucion;
 
 import java.io.IOException;
@@ -11,6 +12,7 @@ public class InstitucionesCsv {
 
     public String filaASql(String filaCsv) throws IOException {
         CsvMapper mapper = new CsvMapper();
+        mapper.enable(CsvParser.Feature.TRIM_SPACES);
 
         Institucion institucion = mapper.readerWithSchemaFor(Institucion.class).readValue(filaCsv);
 
