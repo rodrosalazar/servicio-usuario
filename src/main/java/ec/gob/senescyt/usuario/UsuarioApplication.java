@@ -1,8 +1,8 @@
 package ec.gob.senescyt.usuario;
 
-import com.example.helloworld.health.TemplateHealthCheck;
-import com.example.helloworld.resources.HelloWorldResource;
 import ec.gob.senescyt.usuario.core.Perfil;
+import ec.gob.senescyt.usuario.dao.PerfilDAO;
+import ec.gob.senescyt.usuario.resources.PerfilResource;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
@@ -24,7 +24,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
     @Override
     public String getName() {
-        return "hello-world";
+        return "servicio-usuario";
     }
 
     @Override
@@ -34,14 +34,8 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
     @Override
     public void run(UsuarioConfiguration configuration, Environment environment) throws Exception {
-        final HelloWorldResource resource = new HelloWorldResource(
-                configuration.getTemplate(),
-                configuration.getDefaultName()
-        );
-        final TemplateHealthCheck healthCheck =
-                new TemplateHealthCheck(configuration.getTemplate());
-        environment.healthChecks().register("template", healthCheck);
-
-        environment.jersey().register(resource);
+        PerfilDAO perfilDAO = new PerfilDAO(hibernate.getSessionFactory());
+        final PerfilResource perfilResource = new PerfilResource(perfilDAO);
+        environment.jersey().register(perfilResource);
     }
 }

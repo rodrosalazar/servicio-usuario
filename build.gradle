@@ -25,7 +25,10 @@ dependencies {
         'org.postgresql:postgresql:9.3-1101-jdbc41',
         'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.4.0'
     )
-    testCompile "junit:junit:4.11"
+    testCompile (
+            'junit:junit:4.11',
+            'org.mockito:mockito-all:1.9.5'
+    )
 }
 
 
