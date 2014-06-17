@@ -24,7 +24,10 @@ dependencies {
         'org.slf4j:slf4j-api:1.7.5',
         'org.postgresql:postgresql:9.3-1101-jdbc41'
     )
-    testCompile "junit:junit:4.11"
+    testCompile (
+            'junit:junit:4.11',
+            'org.mockito:mockito-all:1.9.5'
+    )
 }
 
 
