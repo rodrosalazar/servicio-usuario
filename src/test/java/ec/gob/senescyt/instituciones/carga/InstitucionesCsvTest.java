@@ -14,7 +14,7 @@ public class InstitucionesCsvTest {
 
     public static final String ARCHIVO_SALIDA_SQL = "prueba-consola.sql";
     public static final String ARCHIVO_SALIDA_TXT = "mi-archivo-de-salida.txt";
-    public static final String ARCHIVO_ENTRADA_CSV = "/prueba-consola.csv";
+    public static final String ARCHIVO_ENTRADA_CSV = File.separator + "prueba-consola.csv";
     private InstitucionesCsv institucionesCsv;
 
     @Before
@@ -71,10 +71,19 @@ public class InstitucionesCsvTest {
 
     @Test
     public void debeUsarElSegundoParametroComoElArchivoDeDestino() throws IOException {
-        String rutaDestino = ARCHIVO_SALIDA_TXT;
         String rutaOrigen = this.getClass().getResource(ARCHIVO_ENTRADA_CSV).getPath();
+        String rutaDestino = ARCHIVO_SALIDA_TXT;
         InstitucionesCsv.main(rutaOrigen, rutaDestino);
         File archivoDestino = new File(rutaDestino);
+        assertThat(archivoDestino.isFile(), is(true));
+    }
+
+    @Test
+    public void debeUsarElSegundoParametroComoDirectorioDeDestino() throws IOException {
+        String rutaOrigen = this.getClass().getResource(ARCHIVO_ENTRADA_CSV).getPath();
+        String rutaDestino = rutaOrigen.replace(ARCHIVO_ENTRADA_CSV, "");
+        InstitucionesCsv.main(rutaOrigen, rutaDestino);
+        File archivoDestino = new File(rutaDestino + File.separator + ARCHIVO_SALIDA_SQL);
         assertThat(archivoDestino.isFile(), is(true));
     }
 

@@ -81,9 +81,17 @@ public class InstitucionesCsv {
     }
 
     private static String definirRutaDestino(File archivoOrigen, String[] args) {
+        String nombreArchivoDestino = archivoOrigen.getName().replace(".csv", ".sql");
+
         if (args.length == 1) {
-            return archivoOrigen.getName().replace(".csv", ".sql");
+            return nombreArchivoDestino;
         }
-        return args[1];
+
+        String argDestino = args[1];
+        if (new File(argDestino).isDirectory()) {
+            return argDestino + File.separator + nombreArchivoDestino;
+        }
+
+        return argDestino;
     }
 }
