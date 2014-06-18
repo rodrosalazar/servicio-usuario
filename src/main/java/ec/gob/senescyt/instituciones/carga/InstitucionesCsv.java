@@ -65,7 +65,8 @@ public class InstitucionesCsv {
     public static void main(String... args) throws IOException {
 
         if (args.length == 0) {
-            System.out.print("Uso correcto...");
+            System.out.println("Uso correcto:\n" +
+                    "./gradlew runCsv -P params=\"ruta-entrada [ruta-salida]\"");
             return;
         }
         String rutaOrigen = args[0];

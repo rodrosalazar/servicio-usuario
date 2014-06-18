@@ -1,10 +1,10 @@
-# dropwizard-gradle
+# servicio-usuario
 
-Setting up a Dropwizard project using Gradle (each commit is a step in the process). It follows the example on [Dropwizard Getting Started Guide](https://dropwizard.github.io/dropwizard/getting-started.html)
+Micro servicio para el manejo de usuarios usando Dropwizard
 
-## First Time
+## Primera Vez
 
-In order to setup the db (it will be automated):
+Para crear la base de datos en PostgreSQL (este proceso será automatizado):
 ```
 $ createdb senescyt
 
@@ -15,28 +15,34 @@ $ psql
 =# GRANT ALL ON DATABASE senescyt TO thoughtworks;
 ```
 
-## Steps to run:
+## Pasos para correr el servicio web:
 
-- Run gradle:
+- Ejecutar gradle:
 
 ```
 $ ./gradlew run
 ```
       
-- Go to http://localtest.me:8080/hello-world
+- Ir a <http://localtest.me:8081>
 
 
+## Para crear un proyecto de IntelliJ:
 
-## To Create a IntelliJ project:
-
-- Run:
+- Correr:
 
 ```
 $ ./gradlew idea
 ```
 
+## Para convertir archivos CSV de instituciones a SQL:
 
-Troubleshooting:
+- Correr:
+
+```
+$ ./gradlew runCsv -P params="ruta-entrada [ruta-salida]"
+```
+
+Resolución de Problemas:
 ----------------
 
-- You may need to install [Java 7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
+- Tal vez necesites instalar [Java 7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
