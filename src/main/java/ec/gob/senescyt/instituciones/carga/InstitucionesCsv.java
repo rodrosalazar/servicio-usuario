@@ -80,7 +80,7 @@ public class InstitucionesCsv {
         escritor.close();
     }
 
-    private static String definirRutaDestino(File archivoOrigen, String[] args) {
+    private static String definirRutaDestino(File archivoOrigen, String... args) {
         String nombreArchivoDestino = archivoOrigen.getName().replace(".csv", ".sql");
 
         if (args.length == 1) {

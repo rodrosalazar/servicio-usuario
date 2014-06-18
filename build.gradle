@@ -58,3 +58,12 @@ test {
 
     outputs.upToDateWhen { false }
 }
+
+task( runCsv, type: JavaExec ) {
+    main = 'ec.gob.senescyt.instituciones.carga.InstitucionesCsv'
+    classpath = sourceSets.main.runtimeClasspath
+
+    if (project.hasProperty('params')) {
+        args(params.split())
+    }
+}
