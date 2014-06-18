@@ -2,17 +2,20 @@ package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.validation.constraints.NotNull;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "perfil")
 public class Perfil {
 
     @JsonProperty
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "perfil_seq_gen")
+    @SequenceGenerator(name = "perfil_seq_gen", sequenceName = "perfil_id_seq")
     private long id;
+
     @JsonProperty
+    @Column
     private String nombre;
 
     public String getNombre() {

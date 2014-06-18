@@ -2,6 +2,7 @@ package ec.gob.senescyt.usuario.resources;
 
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
+import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -21,6 +22,7 @@ public class PerfilResource {
     }
 
     @POST
+    @UnitOfWork
     public Response crearPerfil(String nombrePerfil) {
 
         if (nombrePerfil.isEmpty()) {

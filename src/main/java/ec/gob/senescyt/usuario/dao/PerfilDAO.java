@@ -13,4 +13,8 @@ public class PerfilDAO extends AbstractDAO<Perfil> {
     public long guardar(Perfil perfil) {
         return persist(perfil).getId();
     }
+
+    public Perfil buscar(long id) {
+        return get(id);
+    }
 }

@@ -1,5 +1,6 @@
 package ec.gob.senescyt.usuario;
 
+import com.google.common.annotations.VisibleForTesting;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.resources.PerfilResource;
@@ -8,6 +9,7 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.hibernate.SessionFactory;
 
 public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
@@ -34,8 +36,13 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
     @Override
     public void run(UsuarioConfiguration configuration, Environment environment) throws Exception {
-        PerfilDAO perfilDAO = new PerfilDAO(hibernate.getSessionFactory());
+        PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory());
         final PerfilResource perfilResource = new PerfilResource(perfilDAO);
         environment.jersey().register(perfilResource);
+    }
+
+    @VisibleForTesting
+    public SessionFactory getSessionFactory() {
+        return hibernate.getSessionFactory();
     }
 }
