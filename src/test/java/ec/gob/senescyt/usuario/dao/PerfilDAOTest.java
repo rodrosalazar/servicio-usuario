@@ -23,6 +23,7 @@ public class PerfilDAOTest extends BaseDAOTest {
 
         long nuevoId = perfilDAO.guardar(perfil);
         Perfil nuevoPerfil = perfilDAO.buscar(nuevoId);
+        sessionFactory.getCurrentSession().delete(nuevoPerfil);
 
         assertThat(nuevoPerfil.getNombre(), is(perfil.getNombre()));
     }

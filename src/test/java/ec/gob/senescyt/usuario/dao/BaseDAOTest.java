@@ -15,7 +15,7 @@ import java.io.File;
 public abstract class BaseDAOTest {
 
     @ClassRule
-    public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath("test.yml"));
+    public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath("test-integracion.yml"));
     protected SessionFactory sessionFactory;
 
     public static String resourceFilePath(String resourceClassPathLocation) {
