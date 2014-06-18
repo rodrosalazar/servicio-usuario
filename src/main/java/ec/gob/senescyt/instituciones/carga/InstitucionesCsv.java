@@ -63,13 +63,27 @@ public class InstitucionesCsv {
     }
 
     public static void main(String... args) throws IOException {
-        String nombreOrigen = args[0];
-        File archivoOrigen = new File(nombreOrigen);
-        String nombreDestino = archivoOrigen.getName().replace(".csv", ".sql");
-        File archivoDestino = new File(nombreDestino);
+
+        if (args.length == 0) {
+            System.out.print("Uso correcto...");
+            return;
+        }
+        String rutaOrigen = args[0];
+        File archivoOrigen = new File(rutaOrigen);
+
+        String rutaDestino = definirRutaDestino(archivoOrigen, args);
+
+        File archivoDestino = new File(rutaDestino);
         BufferedWriter escritor = new BufferedWriter(new FileWriter(archivoDestino));
 
         escritor.write(new InstitucionesCsv().archivoASql(archivoOrigen));
         escritor.close();
+    }
+
+    private static String definirRutaDestino(File archivoOrigen, String[] args) {
+        if (args.length == 1) {
+            return archivoOrigen.getName().replace(".csv", ".sql");
+        }
+        return args[1];
     }
 }

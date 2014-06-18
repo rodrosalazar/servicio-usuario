@@ -7,10 +7,14 @@ import org.junit.Test;
 import java.io.*;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class InstitucionesCsvTest {
 
+    public static final String ARCHIVO_SALIDA_SQL = "prueba-consola.sql";
+    public static final String ARCHIVO_SALIDA_TXT = "mi-archivo-de-salida.txt";
+    public static final String ARCHIVO_ENTRADA_CSV = "/prueba-consola.csv";
     private InstitucionesCsv institucionesCsv;
 
     @Before
@@ -60,13 +64,37 @@ public class InstitucionesCsvTest {
 
     @Test
     public void debeGenerarArchivosSqlAPartirDeArchivosCsvDesdeConsola() throws IOException {
-        InstitucionesCsv.main(this.getClass().getResource("/prueba-consola.csv").getPath());
-        File archivoDestino = new File("prueba-consola.sql");
+        InstitucionesCsv.main(this.getClass().getResource(ARCHIVO_ENTRADA_CSV).getPath());
+        File archivoDestino = new File(ARCHIVO_SALIDA_SQL);
         assertThat(archivoDestino.isFile(), is(true));
+    }
+
+    @Test
+    public void debeUsarElSegundoParametroComoElArchivoDeDestino() throws IOException {
+        String rutaDestino = ARCHIVO_SALIDA_TXT;
+        String rutaOrigen = this.getClass().getResource(ARCHIVO_ENTRADA_CSV).getPath();
+        InstitucionesCsv.main(rutaOrigen, rutaDestino);
+        File archivoDestino = new File(rutaDestino);
+        assertThat(archivoDestino.isFile(), is(true));
+    }
+
+    @Test
+    public void debeImprimirMensajeDeAyudaCuandoMainEsLLamadoSinArgumentos() throws IOException {
+        PrintStream old = System.out;
+        ByteArrayOutputStream flujoSalida = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(flujoSalida));
+
+        InstitucionesCsv.main();
+
+        System.out.flush();
+        System.setOut(old);
+
+        assertThat(flujoSalida.toString(), containsString("Uso correcto"));
     }
 
     @After
     public void tearDown() throws Exception {
-        new File("prueba-consola.sql").delete();
+        new File(ARCHIVO_SALIDA_SQL).delete();
+        new File(ARCHIVO_SALIDA_TXT).delete();
     }
 }
