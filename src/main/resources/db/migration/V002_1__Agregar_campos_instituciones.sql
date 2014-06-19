@@ -1,0 +1,7 @@
+ALTER TABLE instituciones
+  ADD COLUMN regimen_id INT NOT NULL,
+  ADD COLUMN regimen VARCHAR(50) NOT NULL,
+  ADD COLUMN estado_id INT NOT NULL,
+  ADD COLUMN estado VARCHAR(255) NOT NULL,
+  ADD COLUMN categoria_id INT,
+  ADD COLUMN categoria VARCHAR(100);

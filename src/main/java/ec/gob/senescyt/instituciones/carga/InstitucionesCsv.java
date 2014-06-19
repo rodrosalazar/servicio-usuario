@@ -42,9 +42,9 @@ public class InstitucionesCsv {
     private String institucionASql(Institucion institucion) {
         return String.format("INSERT INTO %s VALUES (%s, %s, %s, %s, %s, %s, %s, %s);", NOMBRE_TABLA,
                 longASql(institucion.getId()), stringASql(institucion.getNombre()),
-                longASql(institucion.getIdRegimen()), stringASql(institucion.getRegimen()),
-                longASql(institucion.getIdEstado()), stringASql(institucion.getEstado()),
-                longASql(institucion.getIdCategoria()), stringASql(institucion.getCategoria())
+                longASql(institucion.getRegimenId()), stringASql(institucion.getRegimen()),
+                longASql(institucion.getEstadoId()), stringASql(institucion.getEstado()),
+                longASql(institucion.getCategoriaId()), stringASql(institucion.getCategoria())
         );
     }
 

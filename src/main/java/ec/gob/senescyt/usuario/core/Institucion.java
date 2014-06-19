@@ -2,15 +2,15 @@ package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder({"id", "nombre", "idRegimen", "regimen", "idEstado", "estado", "idCategoria", "categoria"})
+@JsonPropertyOrder({"id", "nombre", "regimenId", "regimen", "estadoId", "estado", "categoriaId", "categoria"})
 public class Institucion {
     private long id;
     private String nombre;
-    private long idRegimen;
+    private long regimenId;
     private String regimen;
-    private long idEstado;
+    private long estadoId;
     private String estado;
-    private long idCategoria;
+    private long categoriaId;
     private String categoria;
 
     public long getId() {
@@ -29,12 +29,12 @@ public class Institucion {
         this.nombre = nombre;
     }
 
-    public long getIdRegimen() {
-        return idRegimen;
+    public long getRegimenId() {
+        return regimenId;
     }
 
-    public void setIdRegimen(long idRegimen) {
-        this.idRegimen = idRegimen;
+    public void setRegimenId(long regimenId) {
+        this.regimenId = regimenId;
     }
 
     public String getRegimen() {
@@ -45,12 +45,12 @@ public class Institucion {
         this.regimen = regimen;
     }
 
-    public long getIdEstado() {
-        return idEstado;
+    public long getEstadoId() {
+        return estadoId;
     }
 
-    public void setIdEstado(long idEstado) {
-        this.idEstado = idEstado;
+    public void setEstadoId(long estadoId) {
+        this.estadoId = estadoId;
     }
 
     public String getEstado() {
@@ -61,12 +61,12 @@ public class Institucion {
         this.estado = estado;
     }
 
-    public long getIdCategoria() {
-        return idCategoria;
+    public long getCategoriaId() {
+        return categoriaId;
     }
 
-    public void setIdCategoria(long idCategoria) {
-        this.idCategoria = idCategoria;
+    public void setCategoriaId(long categoriaId) {
+        this.categoriaId = categoriaId;
     }
 
     public String getCategoria() {
