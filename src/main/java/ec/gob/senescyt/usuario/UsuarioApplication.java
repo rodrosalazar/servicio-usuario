@@ -2,6 +2,7 @@ package ec.gob.senescyt.usuario;
 
 import com.google.common.annotations.VisibleForTesting;
 import ec.gob.senescyt.usuario.core.Perfil;
+import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.resources.PerfilResource;
 import io.dropwizard.Application;
@@ -13,7 +14,7 @@ import org.hibernate.SessionFactory;
 
 public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
-    private final HibernateBundle<UsuarioConfiguration> hibernate = new HibernateBundle<UsuarioConfiguration>(Perfil.class) {
+    private final HibernateBundle<UsuarioConfiguration> hibernate = new HibernateBundle<UsuarioConfiguration>(Perfil.class, Permiso.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
             return configuration.getDataSourceFactory();

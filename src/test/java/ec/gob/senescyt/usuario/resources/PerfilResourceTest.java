@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
@@ -28,17 +29,6 @@ public class PerfilResourceTest {
     }
 
     @Test
-    public void puedoIngresarUnNombreDePerfil() {
-        Perfil perfil = new Perfil("Perfil 1", null);
-        Response response = perfilResource.crearPerfil(perfil);
-        Perfil nuevoPerfil = (Perfil) response.getEntity();
-
-        verify(perfilDAO).guardar(any(Perfil.class));
-        assertThat(response.getStatus()).isEqualTo(201);
-        assertThat(nuevoPerfil.getNombre()).isEqualTo("Perfil 1");
-    }
-
-    @Test
     public void noPuedoCrearPerfilSinNombre() {
         Perfil perfil = new Perfil(null, null);
         Response response = perfilResource.crearPerfil(perfil);
@@ -48,7 +38,7 @@ public class PerfilResourceTest {
     }
 
     @Test
-    public void debeAceptarPermisos() {
+    public void debeCrearUnNuevoPerfilConNombreYPermisos() {
         Funcion funcion = new Funcion("funcionA", newArrayList(Acceso.LEER, Acceso.MODIFICAR, Acceso.ELIMINAR, Acceso.CREAR));
         Permiso permiso = new Permiso("modulo101", newArrayList(funcion));
         Perfil perfil = new Perfil("Perfil 1", newArrayList(permiso));
@@ -58,5 +48,6 @@ public class PerfilResourceTest {
         verify(perfilDAO).guardar(any(Perfil.class));
         assertThat(response.getStatus()).isEqualTo(201);
         assertThat(perfil.getNombre()).isEqualTo("Perfil 1");
+        assertThat(perfil.getPermisos().get(0).getNombre()).isEqualTo("modulo101");
     }
 }

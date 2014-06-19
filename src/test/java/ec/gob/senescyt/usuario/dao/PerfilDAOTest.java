@@ -1,9 +1,11 @@
 package ec.gob.senescyt.usuario.dao;
 
 import ec.gob.senescyt.usuario.core.Perfil;
+import ec.gob.senescyt.usuario.core.Permiso;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -18,10 +20,10 @@ public class PerfilDAOTest extends BaseDAOTest {
 
     @Test
     public void debePersistirElPerfil() {
-        Perfil perfil = new Perfil("indiferente", null);
+        Permiso permiso = new Permiso("modulo101", null);
+        Perfil perfil = new Perfil("indiferente", newArrayList(permiso));
 
-        long nuevoId = perfilDAO.guardar(perfil);
-        Perfil nuevoPerfil = perfilDAO.buscar(nuevoId);
+        Perfil nuevoPerfil = perfilDAO.guardar(perfil);
 
         assertThat(nuevoPerfil.getNombre(), is(perfil.getNombre()));
     }

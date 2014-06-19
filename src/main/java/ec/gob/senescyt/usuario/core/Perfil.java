@@ -12,17 +12,21 @@ public class Perfil {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "perfil_seq_gen")
-    @SequenceGenerator(name = "perfil_seq_gen", sequenceName = "perfiles_id_seq")
+    @SequenceGenerator(name = "perfil_seq_gen", sequenceName = "perfiles_id_seq", initialValue = 1)
     private long id;
 
     @Column
     private String nombre;
 
-//    private List<Permiso> permisos;
+    @OneToMany
+    @JoinTable(name = "permisos", joinColumns = {@JoinColumn(name="id")},
+            inverseJoinColumns = {@JoinColumn(name="permisos_id")} )
+    private List<Permiso> permisos;
 
     @JsonCreator
-    public Perfil(@JsonProperty String nombre, List<Permiso> permisos) {
+    public Perfil(@JsonProperty("nombre") String nombre, @JsonProperty("permisos") List<Permiso> permisos) {
         this.nombre = nombre;
+        this.permisos = permisos;
     }
 
     @JsonProperty
@@ -35,8 +39,8 @@ public class Perfil {
         return id;
     }
 
-//    @JsonProperty
-//    public List<Permiso> getPermisos() {
-//        return permisos;
-//    }
+    @JsonProperty
+    public List<Permiso> getPermisos() {
+        return permisos;
+    }
 }

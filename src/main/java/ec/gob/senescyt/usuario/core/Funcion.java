@@ -1,9 +1,11 @@
 package ec.gob.senescyt.usuario.core;
 
+import javax.persistence.Id;
 import java.util.List;
 
 public class Funcion {
 
+    @Id
     private String id;
 
     private List<Acceso> accesos;

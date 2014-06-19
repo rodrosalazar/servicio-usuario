@@ -1,23 +1,42 @@
 package ec.gob.senescyt.usuario.core;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "permisos")
 public class Permiso {
 
-    private String moduloId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "permisos_seq_gen")
+    @SequenceGenerator(name = "permisos_seq_gen", sequenceName = "permisos_id_seq", allocationSize = 1)
+    private long id;
 
-    private List<Funcion> funciones;
+    @Column
+    private String nombre;
 
-    public Permiso(String moduloId, List<Funcion> funciones) {
-        this.moduloId = moduloId;
-        this.funciones = funciones;
+//    private List<Funcion> funciones;
+
+    @JsonCreator
+    public Permiso(@JsonProperty("nombre") String nombre, @JsonProperty("funciones") List<Funcion> funciones) {
+        this.nombre = nombre;
+//        this.funciones = funciones;
     }
 
-    public String getModuloId() {
-        return moduloId;
+    @JsonProperty
+    public String getNombre() {
+        return nombre;
     }
 
-    public List<Funcion> getFunciones() {
-        return funciones;
+    @JsonProperty
+    public long getId() {
+        return id;
     }
+
+//    public List<Funcion> getFunciones() {
+//        return funciones;
+//    }
 }

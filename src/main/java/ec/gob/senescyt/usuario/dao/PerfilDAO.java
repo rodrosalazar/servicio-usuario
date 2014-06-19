@@ -10,11 +10,8 @@ public class PerfilDAO extends AbstractDAO<Perfil> {
         super(sessionFactory);
     }
 
-    public long guardar(Perfil perfil) {
-        return persist(perfil).getId();
+    public Perfil guardar(Perfil perfil) {
+        return persist(perfil);
     }
 
-    public Perfil buscar(long id) {
-        return get(id);
-    }
 }

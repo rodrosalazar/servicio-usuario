@@ -4,6 +4,7 @@ import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -29,7 +30,7 @@ public class PerfilResource {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        perfilDAO.guardar(perfil);
-        return Response.status(Response.Status.CREATED).entity(perfil).build();
+        Perfil perfilCreado = perfilDAO.guardar(perfil);
+        return Response.status(Response.Status.CREATED).entity(perfilCreado).build();
     }
 }
