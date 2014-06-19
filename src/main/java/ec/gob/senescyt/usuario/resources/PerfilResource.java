@@ -23,14 +23,12 @@ public class PerfilResource {
 
     @POST
     @UnitOfWork
-    public Response crearPerfil(String nombrePerfil) {
+    public Response crearPerfil(Perfil perfil) {
 
-        if (nombrePerfil.isEmpty()) {
+        if (perfil.getNombre() == null || perfil.getNombre().isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 
-        Perfil perfil = new Perfil();
-        perfil.setNombre(nombrePerfil);
         perfilDAO.guardar(perfil);
         return Response.status(Response.Status.CREATED).entity(perfil).build();
     }

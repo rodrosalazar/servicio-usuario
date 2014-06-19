@@ -1,36 +1,42 @@
 package ec.gob.senescyt.usuario.core;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "perfil")
 public class Perfil {
 
-    @JsonProperty
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "perfil_seq_gen")
     @SequenceGenerator(name = "perfil_seq_gen", sequenceName = "perfil_id_seq")
     private long id;
 
-    @JsonProperty
     @Column
     private String nombre;
 
+    private List<Permiso> permisos;
+
+    @JsonCreator
+    public Perfil(@JsonProperty String nombre, List<Permiso> permisos) {
+        this.nombre = nombre;
+    }
+
+    @JsonProperty
     public String getNombre() {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
+    @JsonProperty
     public long getId() {
         return id;
     }
 
-    private void setId(int id) {
-        this.id = id;
+    @JsonProperty
+    public List<Permiso> getPermisos() {
+        return permisos;
     }
 }
