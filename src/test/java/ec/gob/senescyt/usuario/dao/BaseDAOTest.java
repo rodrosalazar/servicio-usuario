@@ -4,6 +4,7 @@ import com.google.common.io.Resources;
 import ec.gob.senescyt.usuario.UsuarioApplication;
 import ec.gob.senescyt.usuario.UsuarioConfiguration;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
 import org.junit.After;
@@ -30,10 +31,20 @@ public abstract class BaseDAOTest {
     public void setUpDB() {
         sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
         ManagedSessionContext.bind(sessionFactory.openSession());
+        limpiarTablas();
     }
 
     @After
     public void tearDownDB() {
+        limpiarTablas();
         ManagedSessionContext.unbind(sessionFactory);
     }
+
+    private void limpiarTablas() {
+        String stringQuery = "DELETE FROM " + getTableName();
+        Query query = sessionFactory.getCurrentSession().createQuery(stringQuery);
+        query.executeUpdate();
+    }
+
+    protected abstract String getTableName();
 }

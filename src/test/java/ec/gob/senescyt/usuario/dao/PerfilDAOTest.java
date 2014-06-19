@@ -18,14 +18,16 @@ public class PerfilDAOTest extends BaseDAOTest {
 
     @Test
     public void debePersistirElPerfil() {
-        Perfil perfil = new Perfil();
-        perfil.setNombre("indiferente");
+        Perfil perfil = new Perfil("indiferente", null);
 
         long nuevoId = perfilDAO.guardar(perfil);
         Perfil nuevoPerfil = perfilDAO.buscar(nuevoId);
-        sessionFactory.getCurrentSession().delete(nuevoPerfil);
 
         assertThat(nuevoPerfil.getNombre(), is(perfil.getNombre()));
     }
 
+    @Override
+    protected String getTableName() {
+        return "Perfil";
+    }
 }
