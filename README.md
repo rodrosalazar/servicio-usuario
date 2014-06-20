@@ -5,6 +5,7 @@ Micro servicio para el manejo de usuarios usando Dropwizard
 ## Requisitos
 - PostgreSql
 - Java 8
+- Postgres.app (opcional, pero muy útil para no tener que configurar PostgreSql en tu línea de comandos y tener un lindo ícono de elefante en tu barra de menú del sistema operativo)
 
 ## Primera Vez
 
@@ -50,3 +51,6 @@ Resolución de Problemas:
 ----------------
 
 - Tal vez necesites instalar [Java 7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
+
+- Si instalaste PostgreSql por Homebrew, como buen Jedi, al momento de levantar PostgreSql te pedirá el archivo de configuración. Para ello necesitas establecer la variable PGDATA
+```export PGDATA=/usr/local/var/postgres```
