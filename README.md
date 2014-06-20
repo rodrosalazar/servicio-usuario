@@ -2,6 +2,10 @@
 
 Micro servicio para el manejo de usuarios usando Dropwizard
 
+## Requisitos
+- PostgreSql
+- Java 8
+
 ## Primera Vez
 
 Para crear la base de datos en PostgreSQL (este proceso será automatizado):
