@@ -65,8 +65,16 @@ public class InstitucionesCsv {
     public static void main(String... args) throws IOException {
 
         if (args.length == 0) {
-            System.out.println("Uso correcto:\n" +
-                    "./gradlew runCsv -P params=\"ruta-entrada [ruta-salida]\"");
+            System.out.println("\nUso correcto:\n" +
+                    "./gradlew runCsv -P params=\"ruta-entrada.csv [ruta-salida.sql]\"\n\n" +
+                    "El archivo CSV de entrada esperado consiste en:\n" +
+                    "  - Una primera línea con los títulos de las columnas\n" +
+                    "  - Todas las líneas subsiguientes con los datos a importarse\n\n" +
+                    "Ejemplo:\n" +
+                    "CODIGO,NOMBRE,CODIGO_REGIMEN,REGIMEN,CODIGO_ESTADO,ESTADO,CODIGO_CATEGORIA,CATEGORIA\n" +
+                    "1001,ESCUELA POLITECNICA NACIONAL,01,PUBLICA,01,VIGENTE,01,A\n" +
+                    "1002,ESCUELA SUPERIOR POLITECNICA DE CHIMBORAZO,01,PUBLICA,01,VIGENTE,02,B\n" +
+                    "...");
             return;
         }
         String rutaOrigen = args[0];
