@@ -1,6 +1,7 @@
 package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
@@ -18,6 +19,10 @@ public class Permiso {
     @Column
     private String nombre;
 
+    @ManyToOne
+    @JoinColumn(name = "perfil_id", nullable = false, updatable = false, insertable = true)
+    private Perfil perfil;
+
 //    private List<Funcion> funciones;
 
     @JsonCreator
@@ -34,6 +39,11 @@ public class Permiso {
     @JsonProperty
     public long getId() {
         return id;
+    }
+
+    @JsonIgnore
+    public Perfil getPerfil() {
+        return perfil;
     }
 
 //    public List<Funcion> getFunciones() {

@@ -47,7 +47,5 @@ public class PerfilResourceTest {
 
         verify(perfilDAO).guardar(any(Perfil.class));
         assertThat(response.getStatus()).isEqualTo(201);
-        assertThat(perfil.getNombre()).isEqualTo("Perfil 1");
-        assertThat(perfil.getPermisos().get(0).getNombre()).isEqualTo("modulo101");
     }
 }

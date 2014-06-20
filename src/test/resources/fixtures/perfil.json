@@ -1,0 +1,11 @@
+{
+    "nombre": "Perfil1",
+    "permisos": [
+        {
+            "nombre":"modulo1"
+        },
+        {
+            "nombre":"modulo2"
+        }
+    ]
+}

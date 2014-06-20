@@ -2,8 +2,12 @@ package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.List;
 
 @Entity
@@ -12,15 +16,14 @@ public class Perfil {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "perfil_seq_gen")
-    @SequenceGenerator(name = "perfil_seq_gen", sequenceName = "perfiles_id_seq", initialValue = 1)
+    @SequenceGenerator(name = "perfil_seq_gen", sequenceName = "perfiles_id_seq", allocationSize = 1)
     private long id;
 
     @Column
     private String nombre;
 
-    @OneToMany
-    @JoinTable(name = "permisos", joinColumns = {@JoinColumn(name="id")},
-            inverseJoinColumns = {@JoinColumn(name="permisos_id")} )
+    @OneToMany(mappedBy = "perfil")
+//    @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE})
     private List<Permiso> permisos;
 
     @JsonCreator
