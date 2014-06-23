@@ -10,7 +10,7 @@ buildscript {
 }
 
 ssh {
-    identity = file('id_rsa')
+    identity = file('/var/go/.ssh/id_rsa')
     knownHosts = allowAnyHosts
 }
 
