@@ -54,3 +54,20 @@ Resolución de Problemas:
 
 - Si instalaste PostgreSql por Homebrew, como buen Jedi, al momento de levantar PostgreSql te pedirá el archivo de configuración. Para ello necesitas establecer la variable PGDATA
 ```export PGDATA=/usr/local/var/postgres```
+
+Crear el artefacto con todas las dependencias (fat jar)
+---------------
+
+- Correr:
+
+```
+$ ./gradlew oneJar
+```
+
+- El fat jar se crea como build/lib/servicio-usuario-standalone.jar
+
+- Para ejecutar el fat jar:
+
+```
+$ java -jar build/lib/servicio-usuario-standalone.jar server servicio-usuario.yml
+```
