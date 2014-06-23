@@ -20,7 +20,7 @@ $ psql
 =# GRANT ALL ON DATABASE senescyt TO thoughtworks;
 ```
 
-## Pasos para correr el servicio web:
+## Pasos para correr el servicio web
 
 - Ejecutar gradle:
 
@@ -31,7 +31,15 @@ $ ./gradlew run
 - Ir a <http://localtest.me:8081>
 
 
-## Para crear un proyecto de IntelliJ:
+## Para correr las pruebas
+
+- Correr:
+
+```
+$ ./gradlew test
+```
+
+## Para crear un proyecto de IntelliJ
 
 - Correr:
 
@@ -39,7 +47,7 @@ $ ./gradlew run
 $ ./gradlew idea
 ```
 
-## Para convertir archivos CSV de instituciones a SQL:
+## Para convertir archivos CSV de instituciones a SQL
 
 - Correr:
 
@@ -47,7 +55,32 @@ $ ./gradlew idea
 $ ./gradlew runCsv -P params="ruta-entrada [ruta-salida]"
 ```
 
-Resolución de Problemas:
+## Para correr las migraciones
+ 
+- Correr:
+ 
+```
+$ ./gradlew flywayMigrate
+```
+
+## Para borrar la base de datos 
+
+- Correr:
+
+```
+$ ./gradlew flywayClean
+```
+
+## Para ver el estado de las migraciones 
+
+- Correr:
+
+```
+$ ./gradlew flywayInfo
+```
+
+
+Resolución de Problemas
 ----------------
 
 - Tal vez necesites instalar [Java 7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
