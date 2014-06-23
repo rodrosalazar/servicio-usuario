@@ -49,6 +49,7 @@ dependencies {
             'org.slf4j:slf4j-api:1.7.5',
             'org.postgresql:postgresql:9.3-1101-jdbc41',
             'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.4.0',
+            'org.flywaydb:flyway-core:3.0',
     )
     testCompile(
             'junit:junit:4.11',
@@ -66,12 +67,10 @@ mainClassName = 'ec.gob.senescyt.usuario.UsuarioApplication'
 
 // Configure the run task to start the Dropwizard service
 run {
-    dependsOn flywayMigrate
     args 'server', 'servicio-usuario.yml'
 }
 
 test {
-    dependsOn flywayMigrate
     // show standard out and standard error of the test JVM(s) on the console
     testLogging {
         showStandardStreams = true
