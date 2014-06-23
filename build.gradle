@@ -5,6 +5,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'flyway'
 apply plugin: 'application'
+apply plugin: 'gradle-one-jar'
 
 // Use Java 7 by default
 sourceCompatibility = '1.7'
@@ -17,6 +18,7 @@ buildscript {
     dependencies {
         classpath 'org.flywaydb:flyway-gradle-plugin:3.0'
         classpath 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.3.2'
+        classpath 'com.github.rholder:gradle-one-jar:1.0.3'
     }
 }
 
@@ -89,3 +91,9 @@ task(runCsv, type: JavaExec) {
         args(params.split())
     }
 }
+
+// Configure the oneJar task
+task oneJar(type: OneJar) {
+    mainClass = mainClassName
+}
+
