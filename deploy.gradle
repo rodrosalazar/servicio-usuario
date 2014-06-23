@@ -1,0 +1,30 @@
+apply plugin: 'ssh'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.hidetake:gradle-ssh-plugin:0.3.9'
+    }
+}
+
+ssh {
+    identity = file('id_rsa')
+    knownHosts = allowAnyHosts
+}
+
+remotes {
+    snieseqa {
+        host = '192.168.10.200'
+        user = 'sniese'
+    }
+}
+
+task deployQA(type: SshTask) {
+    description = 'Despliega el Jar a QA'
+    session(remotes.snieseqa) {
+        put 'build/libs/servicio-usuario-standalone.jar' '/home/sniese/servicios'
+        execute 'java -jar /home/sniese/servicios/servicio-usuario-standalone.jar'
+    }
+}
