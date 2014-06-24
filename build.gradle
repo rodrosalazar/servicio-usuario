@@ -94,6 +94,8 @@ task(runCsv, type: JavaExec) {
 // Configure the oneJar task
 task oneJar(type: OneJar) {
     mainClass = mainClassName
+    additionalDir = file('src/main/resources')
+    outputs.upToDateWhen { false }
 }
 
 

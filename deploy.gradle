@@ -24,10 +24,12 @@ remotes {
 task deployQA(type: SshTask) {
     description = 'Despliega el Jar a QA'
     session(remotes.snieseqa) {
-        execute 'mkdir -p /home/sniese/servicios/'
-        put 'build/libs/servicio-usuario-standalone.jar', '/home/sniese/servicios/'
-        put 'servicio-usuario.yml', '/home/sniese/servicios/'
-        execute 'cd /home/sniese/servicios/'
+        def targetDir = '/home/sniese/servicios/servicio-usuario/'
+        execute "mkdir -p ${targetDir}"
+        put 'build/libs/servicio-usuario-standalone.jar', targetDir
+        put 'servicio-usuario.yml', targetDir
+        put 'build/resources/', targetDir
+        execute "cd ${targetDir}"
         execute 'java -jar servicio-usuario-standalone.jar server servicio-usuario.yml'
     }
 }
