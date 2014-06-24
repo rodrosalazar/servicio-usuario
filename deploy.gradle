@@ -24,11 +24,10 @@ remotes {
 task deployQA(type: SshTask) {
     description = 'Despliega el Jar a QA'
     session(remotes.snieseqa) {
-        def targetDir = '/home/sniese/servicios/servicio-usuario/'
+        def targetDir = '/var/sniese/servicios/servicio-usuario/'
         execute "mkdir -p ${targetDir}"
         put 'build/libs/servicio-usuario-standalone.jar', targetDir
         put 'servicio-usuario.yml', targetDir
-        execute "cd ${targetDir}"
-        execute 'java -jar servicio-usuario-standalone.jar server servicio-usuario.yml'
+        executeSudo 'service sniese restart', pty: true
     }
 }
