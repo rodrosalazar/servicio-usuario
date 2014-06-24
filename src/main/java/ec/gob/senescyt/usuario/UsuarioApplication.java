@@ -6,6 +6,7 @@ import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.resources.PerfilResource;
+import ec.gob.senescyt.usuario.resources.UsuarioResource;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
@@ -47,6 +48,8 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory());
         final PerfilResource perfilResource = new PerfilResource(perfilDAO);
         environment.jersey().register(perfilResource);
+        final UsuarioResource usuarioResource = new UsuarioResource();
+        environment.jersey().register(usuarioResource);
     }
 
     @VisibleForTesting

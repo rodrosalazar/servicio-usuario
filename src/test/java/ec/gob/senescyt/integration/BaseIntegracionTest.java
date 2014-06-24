@@ -1,4 +1,4 @@
-package ec.gob.senescyt.usuario.dao;
+package ec.gob.senescyt.integration;
 
 import com.google.common.io.Resources;
 import ec.gob.senescyt.usuario.UsuarioApplication;
@@ -13,7 +13,7 @@ import org.junit.ClassRule;
 
 import java.io.File;
 
-public abstract class BaseDAOTest {
+public abstract class BaseIntegracionTest {
 
     private static final String CONFIGURACION = "test-integracion.yml";
     @ClassRule
@@ -32,12 +32,14 @@ public abstract class BaseDAOTest {
     public void setUpDB() {
         sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
         ManagedSessionContext.bind(sessionFactory.openSession());
+        System.out.println("SET UP DB");
 //        limpiarTablas();
     }
 
     @After
     public void tearDownDB() {
 //        limpiarTablas();
+        System.out.println("TEARDOWN UP DB");
         ManagedSessionContext.unbind(sessionFactory);
     }
 

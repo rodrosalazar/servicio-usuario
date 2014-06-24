@@ -1,8 +1,9 @@
-package ec.gob.senescyt.usuario.dao;
+package ec.gob.senescyt.integration;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.usuario.core.Perfil;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
@@ -11,11 +12,16 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class PerfilDAOTest extends BaseDAOTest {
+public class PerfilResourceIntegracionTest extends BaseIntegracionTest {
 
     @Override
     protected String getTableName() {
         return "Perfil";
+    }
+
+    @Before
+    public void setup() {
+        System.out.println("SET UP TEST");
     }
 
     @Test
