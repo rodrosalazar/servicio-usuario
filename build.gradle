@@ -92,10 +92,9 @@ task(runCsv, type: JavaExec) {
 }
 
 // Configure the oneJar task
-task oneJar(type: OneJar) {
+task oneJar(type: OneJar, dependsOn: clean) {
     mainClass = mainClassName
     additionalDir = file('src/main/resources')
-    outputs.upToDateWhen { false }
 }
 
 
