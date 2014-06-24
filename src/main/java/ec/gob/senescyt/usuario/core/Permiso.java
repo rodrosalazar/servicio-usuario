@@ -1,8 +1,6 @@
 package ec.gob.senescyt.usuario.core;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.List;
@@ -12,41 +10,52 @@ import java.util.List;
 public class Permiso {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "permisos_seq_gen")
-    @SequenceGenerator(name = "permisos_seq_gen", sequenceName = "permisos_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column
-    private String nombre;
+    private long moduloId;
+
+    @Column
+    private long funcionId;
+
+    @ElementCollection(targetClass = Acceso.class)
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "accesos")
+    @Column(name = "accesos")
+    private List<Acceso> accesos;
 
     @ManyToOne
-    @JoinColumn(name = "perfil_id", nullable = false, updatable = false, insertable = true)
+    @JoinColumn(name = "perfil_id")
+    @JsonBackReference
     private Perfil perfil;
 
-//    private List<Funcion> funciones;
+    private Permiso() {}
 
-    @JsonCreator
-    public Permiso(@JsonProperty("nombre") String nombre, @JsonProperty("funciones") List<Funcion> funciones) {
-        this.nombre = nombre;
-//        this.funciones = funciones;
+    public Permiso (long moduloId,long funcionId, List<Acceso> accesos) {
+        this.moduloId = moduloId;
+        this.funcionId = funcionId;
+        this.accesos = accesos;
     }
 
-    @JsonProperty
-    public String getNombre() {
-        return nombre;
-    }
-
-    @JsonProperty
     public long getId() {
         return id;
     }
 
-    @JsonIgnore
+    public long getModuloId() {
+        return moduloId;
+    }
+
+    public long getFuncionId() {
+        return funcionId;
+    }
+
+    public List<Acceso> getAccesos() {
+        return accesos;
+    }
+
     public Perfil getPerfil() {
         return perfil;
     }
 
-//    public List<Funcion> getFunciones() {
-//        return funciones;
-//    }
 }

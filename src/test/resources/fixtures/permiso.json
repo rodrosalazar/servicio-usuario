@@ -1,0 +1,5 @@
+{
+    "moduloId": "1",
+    "funcionId": "2",
+    "accesos": [ "CREAR", "LEER" ]
+}

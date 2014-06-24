@@ -1,7 +1,6 @@
 package ec.gob.senescyt.usuario.resources;
 
 import ec.gob.senescyt.usuario.core.Acceso;
-import ec.gob.senescyt.usuario.core.Funcion;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
@@ -9,13 +8,14 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 public class PerfilResourceTest {
 
@@ -39,13 +39,15 @@ public class PerfilResourceTest {
 
     @Test
     public void debeCrearUnNuevoPerfilConNombreYPermisos() {
-        Funcion funcion = new Funcion("funcionA", newArrayList(Acceso.LEER, Acceso.MODIFICAR, Acceso.ELIMINAR, Acceso.CREAR));
-        Permiso permiso = new Permiso("modulo101", newArrayList(funcion));
+        long moduloId = 3l;
+        long funcionId = 1l;
+        List<Acceso> accesos = newArrayList(Acceso.LEER, Acceso.MODIFICAR, Acceso.ELIMINAR, Acceso.CREAR);
+        Permiso permiso = new Permiso(moduloId, funcionId, accesos);
         Perfil perfil = new Perfil("Perfil 1", newArrayList(permiso));
 
         Response response = perfilResource.crearPerfil(perfil);
 
-        verify(perfilDAO).guardar(any(Perfil.class));
+        verify(perfilDAO).guardar(eq(perfil));
         assertThat(response.getStatus()).isEqualTo(201);
     }
 }

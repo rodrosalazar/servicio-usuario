@@ -2,10 +2,16 @@
     "nombre": "Perfil1",
     "permisos": [
         {
-            "nombre":"modulo1"
+            "id":"3",
+            "moduloId":"1",
+            "funcionId":"2",
+            "accesos":[ "CREAR", "LEER" ]
         },
         {
-            "nombre":"modulo2"
+            "id":"4",
+            "moduloId":"2",
+            "funcionId":"2",
+            "accesos":[ "CREAR", "LEER" ]
         }
     ]
 }

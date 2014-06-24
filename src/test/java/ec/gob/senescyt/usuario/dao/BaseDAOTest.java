@@ -15,11 +15,12 @@ import java.io.File;
 
 public abstract class BaseDAOTest {
 
+    private static final String CONFIGURACION = "test-integracion.yml";
     @ClassRule
-    public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath("test-integracion.yml"));
+    public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
     protected SessionFactory sessionFactory;
 
-    public static String resourceFilePath(String resourceClassPathLocation) {
+    private static String resourceFilePath(String resourceClassPathLocation) {
         try {
             return new File(Resources.getResource(resourceClassPathLocation).toURI()).getAbsolutePath();
         } catch (Exception e) {
@@ -31,12 +32,12 @@ public abstract class BaseDAOTest {
     public void setUpDB() {
         sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
         ManagedSessionContext.bind(sessionFactory.openSession());
-        limpiarTablas();
+//        limpiarTablas();
     }
 
     @After
     public void tearDownDB() {
-        limpiarTablas();
+//        limpiarTablas();
         ManagedSessionContext.unbind(sessionFactory);
     }
 
