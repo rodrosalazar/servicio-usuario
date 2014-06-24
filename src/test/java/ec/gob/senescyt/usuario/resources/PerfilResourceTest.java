@@ -31,10 +31,35 @@ public class PerfilResourceTest {
     @Test
     public void noPuedoCrearPerfilSinNombre() {
         Perfil perfil = new Perfil(null, null);
+
         Response response = perfilResource.crearPerfil(perfil);
 
-        verifyZeroInteractions(perfilDAO);
         assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(perfilDAO);
+    }
+
+    @Test
+    public void noDebeCrearUnPerfilSinPermisos() {
+        Perfil perfilSinPermisos = new Perfil("indiferente", null);
+
+        Response response = perfilResource.crearPerfil(perfilSinPermisos);
+
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(perfilDAO);
+    }
+
+    @Test
+    public void noDebeCrearUnPerfilSinAlMenosUnAcceso() {
+        long modduloId = 1l;
+        long funcionId = 2l;
+        Permiso permisoSinAcceso = new Permiso(modduloId, funcionId, null);
+        List<Permiso> permisos = newArrayList(permisoSinAcceso);
+        Perfil perfilSinAccesos = new Perfil("indiferente", permisos);
+
+        Response response = perfilResource.crearPerfil(perfilSinAccesos);
+
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(perfilDAO);
     }
 
     @Test

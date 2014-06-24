@@ -23,7 +23,7 @@ public class PerfilResource {
     @POST
     @UnitOfWork
     public Response crearPerfil(Perfil perfil) {
-        if (perfil.getNombre() == null || perfil.getNombre().isEmpty()) {
+        if (!perfil.isValido()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 

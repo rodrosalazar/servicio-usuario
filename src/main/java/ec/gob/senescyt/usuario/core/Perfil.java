@@ -1,5 +1,6 @@
 package ec.gob.senescyt.usuario.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -40,5 +41,24 @@ public class Perfil {
 
     public List<Permiso> getPermisos() {
         return permisos;
+    }
+
+    @JsonIgnore
+    public boolean isValido() {
+        if (this.getNombre() == null || this.getNombre().isEmpty()) {
+            return false;
+        }
+
+        if (this.getPermisos() == null || this.getPermisos().isEmpty()) {
+            return false;
+        }
+
+        for (Permiso permiso : permisos) {
+            if (!permiso.isValido()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

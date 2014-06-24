@@ -1,6 +1,7 @@
 package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
@@ -58,4 +59,8 @@ public class Permiso {
         return perfil;
     }
 
+    @JsonIgnore
+    public boolean isValido(){
+        return this.getAccesos() != null && !this.getAccesos().isEmpty();
+    }
 }
