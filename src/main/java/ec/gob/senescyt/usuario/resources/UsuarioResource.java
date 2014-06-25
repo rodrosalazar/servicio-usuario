@@ -3,6 +3,7 @@ package ec.gob.senescyt.usuario.resources;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
+import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -30,7 +31,12 @@ public class UsuarioResource {
     }
 
     @POST
-    public Response crearUsuario(final Usuario usuario) {
+    @UnitOfWork
+    public Response crearUsuario( final Usuario usuario) {
+        if (!usuario.isValido()) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
         Usuario usuarioCreado = usuarioDAO.guardar(usuario);
 
         return Response.status(Response.Status.CREATED).build();

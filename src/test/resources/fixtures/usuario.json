@@ -1,0 +1,17 @@
+{
+    "identificacion": {
+        "tipoDocumento": "CEDULA",
+        "numeroIdentificacion": "1718642174"
+    },
+    "nombre": {
+        "primerNombre": "Nelson",
+        "segundoNombre": "Alberto",
+        "primerApellido": "Jumbo",
+        "segundoApellido": "Hidalgo"
+    },
+    "emailInstitucional":"testEmail@senescyt.gob.ec",
+    "numeroAutorizacionQuipux":"123456",
+    "finDeVigencia":"2015-01-12",
+    "idInstitucion":"1",
+    "nombreUsuario":"njumbo"
+}

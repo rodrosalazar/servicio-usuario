@@ -1,8 +1,11 @@
 package ec.gob.senescyt.usuario.resources;
 
+import ec.gob.senescyt.usuario.core.Identificacion;
+import ec.gob.senescyt.usuario.core.Nombre;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +16,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 public class UsuarioResourceTest {
     private UsuarioResource usuarioResource;
@@ -43,11 +47,37 @@ public class UsuarioResourceTest {
     }
 
     @Test
+    public void debeIndicarCuandoUnEmailInstitucionalEsInvalido(){
+        String emailInvalido = "emailInvalido";
+
+        Usuario usuarioConEmailInvalido = new Usuario(null, null,
+                emailInvalido,null, null, null, null);
+
+        Response response = usuarioResource.crearUsuario(usuarioConEmailInvalido);
+
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(usuarioDAO);
+    }
+
+    @Test
+    public void debeIndicarCuandoUnEmailInstitucionalEsValido(){
+        String emailValido = "test@senescyt.gob.ec";
+
+        Usuario usuarioConEmailInvalido = new Usuario(null, null,
+                emailValido,null, null, null, null);
+
+        Response response = usuarioResource.crearUsuario(usuarioConEmailInvalido);
+
+        verify(usuarioDAO).guardar(eq(usuarioConEmailInvalido));
+        assertThat(response.getStatus()).isEqualTo(201);
+    }
+
+    @Test
     public void debeGuardarUsuario() {
         long idInstitucion = 1l;
 
-        Usuario usuario = new Usuario(TipoDocumentoEnum.CEDULA, "1718642174", "Nelson", "Alberto", "Jumbo", "Hidalgo",
-                "njumbo@thoughtworks.com", "123456", new Date(), idInstitucion, "nombreUsuario");
+        Usuario usuario = new Usuario(new Identificacion(TipoDocumentoEnum.CEDULA, "1718642174"), new Nombre("Nelson", "Alberto", "Jumbo", "Hidalgo"),
+                "njumbo@thoughtworks.com", "123456", new DateTime().withYear(2015).withMonthOfYear(1).withDayOfMonth(12), idInstitucion, "nombreUsuario");
 
         Response response = usuarioResource.crearUsuario(usuario);
 
