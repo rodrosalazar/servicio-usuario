@@ -5,6 +5,7 @@ import ec.gob.senescyt.usuario.bundles.DBMigrationsBundle;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
+import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.resources.PerfilResource;
 import ec.gob.senescyt.usuario.resources.UsuarioResource;
 import io.dropwizard.Application;
@@ -46,9 +47,12 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     @Override
     public void run(UsuarioConfiguration configuration, Environment environment) throws Exception {
         PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory());
+        UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory());
+
         final PerfilResource perfilResource = new PerfilResource(perfilDAO);
         environment.jersey().register(perfilResource);
-        final UsuarioResource usuarioResource = new UsuarioResource();
+
+        final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO);
         environment.jersey().register(usuarioResource);
     }
 

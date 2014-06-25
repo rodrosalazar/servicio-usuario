@@ -7,8 +7,10 @@ import ec.gob.senescyt.usuario.UsuarioApplication;
 import ec.gob.senescyt.usuario.UsuarioConfiguration;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.ClassRule;
+import org.junit.Ignore;
 import org.junit.Test;
 
+import javax.ws.rs.core.MediaType;
 import java.io.File;
 
 import static org.hamcrest.core.Is.is;
@@ -53,4 +55,35 @@ public class UsuarioResourceIntegracionTest {
         assertThat(response.getEntity(String.class), is("Debe ingresar una cédula válida"));
     }
 
+    @Test
+    @Ignore
+    public void debeCrearUsuario(){
+        Client client = new Client();
+
+        ClientResponse response = client.resource(
+                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, usuarioAsJSON());
+
+        assertThat(response.getStatus(), is(201));
+    }
+
+    private String usuarioAsJSON() {
+        return "";
+    }
+
+    @Test
+    public void debeCrearUnNuevoUsuarioCuandoEsValido() {
+
+    }
+
+    @Test
+    public void noDebeCrearUnNuevoUsuarioCuandoElNombreYaExiste() {
+
+    }
+
+    @Test
+    public void noDebeCrearUnNuevoUsuarioCuandoLaCedulaYaExiste() {
+
+    }
 }

@@ -1,17 +1,23 @@
 package ec.gob.senescyt.usuario.resources;
 
+import ec.gob.senescyt.usuario.core.Usuario;
+import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/usuario")
 @Produces(MediaType.APPLICATION_JSON)
 public class UsuarioResource {
+
+    private final UsuarioDAO usuarioDAO;
+
+    public UsuarioResource(final UsuarioDAO usuarioDAO) {
+        this.usuarioDAO = usuarioDAO;
+    }
+
 
     @GET
     @Path("/validacion")
@@ -21,7 +27,12 @@ public class UsuarioResource {
         }
 
         return Response.status(Response.Status.BAD_REQUEST).entity("Debe ingresar una cédula válida").build();
-                //status(Response.Status.BAD_REQUEST).entity("Debe ingresar una cédula válida").build();
     }
 
+    @POST
+    public Response crearUsuario(final Usuario usuario) {
+        Usuario usuarioCreado = usuarioDAO.guardar(usuario);
+
+        return Response.status(Response.Status.CREATED).build();
+    }
 }
