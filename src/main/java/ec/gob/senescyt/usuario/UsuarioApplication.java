@@ -13,7 +13,11 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.hibernate.SessionFactory;
+
+import javax.servlet.DispatcherType;
+import java.util.EnumSet;
 
 public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
@@ -54,6 +58,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO);
         environment.jersey().register(usuarioResource);
+
+        environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
+                .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
     }
 
     @VisibleForTesting
