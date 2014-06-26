@@ -1,6 +1,7 @@
 package ec.gob.senescyt.usuario.validators;
 
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;
@@ -8,12 +9,19 @@ import static org.junit.Assert.assertThat;
 
 public class CedulaValidatorTest {
 
+    private CedulaValidator cedulaValidator;
+
+    @Before
+    public void setup(){
+       cedulaValidator = new CedulaValidator();
+    }
+
     @Test
     public void debeVerificarQueCedulaSeaCorrectaConAlgoritmoDelUltimoDigito(){
 
         String cedulaCorrecta = "1718642174";
 
-        boolean esValidaCedula = CedulaValidator.isValidaCedula(cedulaCorrecta);
+        boolean esValidaCedula = cedulaValidator.isValidaCedula(cedulaCorrecta);
 
         assertThat(esValidaCedula, is(true));
     }
@@ -23,10 +31,10 @@ public class CedulaValidatorTest {
         String cedulaConProvincia0 = "0000000000";
         String cedulaConProvincia25 = "2500000000";
 
-        boolean esValidaCedula = CedulaValidator.isValidaCedula(cedulaConProvincia0);
+        boolean esValidaCedula = cedulaValidator.isValidaCedula(cedulaConProvincia0);
         assertThat(esValidaCedula, is(false));
 
-        esValidaCedula = CedulaValidator.isValidaCedula(cedulaConProvincia25);
+        esValidaCedula = cedulaValidator.isValidaCedula(cedulaConProvincia25);
         assertThat(esValidaCedula, is(false));
     }
 
@@ -34,7 +42,7 @@ public class CedulaValidatorTest {
     public void debeVerificarQueCedulaVaciaNoEsValida(){
         String cedulaVacia = "";
 
-        boolean esValidaCedula = CedulaValidator.isValidaCedula(cedulaVacia);
+        boolean esValidaCedula = cedulaValidator.isValidaCedula(cedulaVacia);
 
         assertThat(esValidaCedula, is(false));
     }
@@ -45,13 +53,13 @@ public class CedulaValidatorTest {
         String cedulaCon7 = "1274676677";
         String cedulaCon8 = "1284676677";
 
-        boolean esValidaCedula = CedulaValidator.isValidaCedula(cedulaCon6);
+        boolean esValidaCedula = cedulaValidator.isValidaCedula(cedulaCon6);
         assertThat(esValidaCedula, is(false));
 
-        esValidaCedula = CedulaValidator.isValidaCedula(cedulaCon7);
+        esValidaCedula = cedulaValidator.isValidaCedula(cedulaCon7);
         assertThat(esValidaCedula, is(false));
 
-        esValidaCedula = CedulaValidator.isValidaCedula(cedulaCon8);
+        esValidaCedula = cedulaValidator.isValidaCedula(cedulaCon8);
         assertThat(esValidaCedula, is(false));
     }
 
@@ -59,7 +67,7 @@ public class CedulaValidatorTest {
     public void debeVerificarQueCedulaConMasDe10DigitosNoEsValida() {
         String cedulaConMasDeDiezDigitos = "11111111111111111111111";
 
-        boolean esValidaCedula = CedulaValidator.isValidaCedula(cedulaConMasDeDiezDigitos);
+        boolean esValidaCedula = cedulaValidator.isValidaCedula(cedulaConMasDeDiezDigitos);
 
         assertThat(esValidaCedula, is(false));
     }
@@ -68,7 +76,7 @@ public class CedulaValidatorTest {
     public void debeVerificarQueCedulaConMenosDe10DigitosNoEsValida() {
         String cedulaConMenosDeDiezDigitos = "11";
 
-        boolean esValidaCedula = CedulaValidator.isValidaCedula(cedulaConMenosDeDiezDigitos);
+        boolean esValidaCedula = cedulaValidator.isValidaCedula(cedulaConMenosDeDiezDigitos);
 
         assertThat(esValidaCedula, is(false));
     }
@@ -77,7 +85,7 @@ public class CedulaValidatorTest {
     public void debeVerificarQueCedulaConCaracteresQueNoSonNumerosNoEsValida() {
         String cedulaConCaracteresQueNosSonNumeros = "12345t78*9";
 
-        boolean esValidaCedula = CedulaValidator.isValidaCedula(cedulaConCaracteresQueNosSonNumeros);
+        boolean esValidaCedula = cedulaValidator.isValidaCedula(cedulaConCaracteresQueNosSonNumeros);
 
         assertThat(esValidaCedula, is(false));
     }

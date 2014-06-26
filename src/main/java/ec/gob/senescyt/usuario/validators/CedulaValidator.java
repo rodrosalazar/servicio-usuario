@@ -7,7 +7,7 @@ public class CedulaValidator {
     static final int MULT = 2;
     static final int TOTAL_PROVINCES = 24;
 
-    public static boolean isValidaCedula(final String cedula) {
+    public boolean isValidaCedula(final String cedula) {
         // si no tiene 10 d?gitos es inv?lida
         if (cedula.length() != 10) {
             return false;

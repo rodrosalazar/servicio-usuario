@@ -19,6 +19,8 @@ import static org.junit.Assert.assertThat;
 public class UsuarioResourceIntegracionTest {
 
     private static final String CONFIGURACION = "test-integracion.yml";
+    private static final String numeroQuipuxValido = "SENESCYT-DFAPO-2014-65946-MI";
+
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
 
@@ -56,8 +58,7 @@ public class UsuarioResourceIntegracionTest {
     }
 
     @Test
-    @Ignore
-    public void debeCrearUsuario(){
+    public void debeCrearUnNuevoUsuarioCuandoEsValido(){
         Client client = new Client();
 
         ClientResponse response = client.resource(
@@ -69,17 +70,28 @@ public class UsuarioResourceIntegracionTest {
     }
 
     private String usuarioAsJSON() {
-        return "";
+        return "{\n" +
+                "    \"identificacion\": {\n" +
+                "        \"tipoDocumento\": \"CEDULA\",\n" +
+                "        \"numeroIdentificacion\": \"1718642174\"\n" +
+                "    },\n" +
+                "    \"nombre\": {\n" +
+                "        \"primerNombre\": \"Nelson\",\n" +
+                "        \"segundoNombre\": \"Alberto\",\n" +
+                "        \"primerApellido\": \"Jumbo\",\n" +
+                "        \"segundoApellido\": \"Hidalgo\"\n" +
+                "    },\n" +
+                "    \"emailInstitucional\":\"testEmail@senescyt.gob.ec\",\n" +
+                "    \"numeroAutorizacionQuipux\":\""+numeroQuipuxValido+"\",\n" +
+                "    \"finDeVigencia\":\"12/01/2015\",\n" +
+                "    \"idInstitucion\":\"1\",\n" +
+                "    \"nombreUsuario\":\"njumbo\"\n" +
+                "}\n";
     }
 
     @Test
-    public void debeCrearUnNuevoUsuarioCuandoEsValido() {
-
-    }
-
-    @Test
-    public void noDebeCrearUnNuevoUsuarioCuandoElNombreYaExiste() {
-
+    public void noDebeCrearUnNuevoUsuarioCuandoElNombreDeUsuarioYaExiste() {
+        
     }
 
     @Test

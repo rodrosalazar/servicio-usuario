@@ -28,7 +28,7 @@ public class UsuarioTest {
 
         usuario = new Usuario(new Identificacion(TipoDocumentoEnum.CEDULA, "1718642174"),
                 new Nombre("Nelson", "Alberto", "Jumbo", "Hidalgo"),
-                "testEmail@senescyt.gob.ec", "123456",
+                "testEmail@senescyt.gob.ec", "SENESCYT-DFAPO-2014-65946-MI",
                 new DateTime().withDate(2015, 1, 12).withZone(DateTimeZone.UTC).withTimeAtStartOfDay(),
                 idInstitucion, "nombreUsuario");
     }
@@ -48,7 +48,6 @@ public class UsuarioTest {
     public void debeSerializarUnJSONDesdeUnUsuario() throws Exception {
         String actual = MAPPER.writeValueAsString(usuario);
         assertThat(actual, is(fixture("fixtures/usuario_con_id.json")));
-
     }
 
 }

@@ -14,16 +14,18 @@ import javax.ws.rs.core.Response;
 public class UsuarioResource {
 
     private final UsuarioDAO usuarioDAO;
+    private CedulaValidator cedulaValidator;
 
-    public UsuarioResource(final UsuarioDAO usuarioDAO) {
+    public UsuarioResource(final UsuarioDAO usuarioDAO, CedulaValidator cedulaValidator) {
         this.usuarioDAO = usuarioDAO;
+        this.cedulaValidator = cedulaValidator;
     }
 
 
     @GET
     @Path("/validacion")
     public Response verificarCedula(@QueryParam("cedula") final String cedula) {
-        if (CedulaValidator.isValidaCedula(cedula)) {
+        if (cedulaValidator.isValidaCedula(cedula)) {
             return Response.status(Response.Status.OK).build();
         }
 

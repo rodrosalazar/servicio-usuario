@@ -2,9 +2,15 @@ package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaDeserializer;
+import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaSerializer;
+import ec.gob.senescyt.usuario.validators.QuipuxValidator;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.hibernate.validator.constraints.Email;
+import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
 import javax.persistence.*;
 
@@ -31,6 +37,9 @@ public class Usuario {
 
     @Column
     @Temporal(TemporalType.DATE)
+    @Type(type="org.joda.time.DateTime")
+    @JsonSerialize(using = JSONFechaVigenciaSerializer.class)
+    @JsonDeserialize(using = JSONFechaVigenciaDeserializer.class)
     private DateTime finDeVigencia;
 
     @Column
@@ -88,6 +97,14 @@ public class Usuario {
     @JsonIgnore
     public boolean isValido() {
         if(!EmailValidator.getInstance().isValid(this.emailInstitucional)){
+            return false;
+        }
+
+        if(this.getFinDeVigencia().isBefore(new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay())){
+            return false;
+        }
+
+        if(!QuipuxValidator.isValidoNumeroAutorizacionQuipux(this.numeroAutorizacionQuipux)){
             return false;
         }
 
