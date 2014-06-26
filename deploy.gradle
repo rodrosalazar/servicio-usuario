@@ -10,13 +10,13 @@ buildscript {
 }
 
 ssh {
-    identity = file('/var/go/.ssh/id_rsa')
     knownHosts = allowAnyHosts
 }
 
 remotes {
     snieseqa {
-        host = '192.168.10.200'
+        host = "$System.env.QA_SSH_IP"
+        port = "$System.env.QA_SSH_PORT"
         user = 'sniese'
     }
 }
