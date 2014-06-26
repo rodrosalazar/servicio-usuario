@@ -16,7 +16,7 @@ ssh {
 remotes {
     snieseqa {
         host = "$System.env.QA_SSH_IP"
-        port = "$System.env.QA_SSH_PORT"
+        port = "$System.env.QA_SSH_PORT".toInteger()
         user = 'sniese'
     }
 }
