@@ -7,9 +7,9 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaDeserializer;
 import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaSerializer;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
-import ec.gob.senescyt.usuario.validators.QuipuxValidator;
-import org.apache.commons.validator.routines.EmailValidator;
 import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -31,9 +31,11 @@ public class Usuario {
     private Nombre nombre;
 
     @Column
+    @Email(message = "Email incorrecto")
     private String emailInstitucional;
 
     @Column
+    @NotEmpty
     private String numeroAutorizacionQuipux;
 
     @Column
@@ -97,22 +99,10 @@ public class Usuario {
 
     @JsonIgnore
     public boolean isValido(CedulaValidator cedulaValidator) {
-        if(!EmailValidator.getInstance().isValid(this.emailInstitucional)){
-            return false;
-        }
 
         if(this.getFinDeVigencia().isBefore(new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay())){
             return false;
         }
-
-        if(!identificacion.isValid(cedulaValidator)) {
-            return false;
-        }
-
-        if(!QuipuxValidator.isValidoNumeroAutorizacionQuipux(this.numeroAutorizacionQuipux)){
-            return false;
-        }
-
         return true;
     }
 }

@@ -58,6 +58,39 @@ public class UsuarioResourceIntegracionTest {
     }
 
     @Test
+    @Ignore("Porque no se esta asegurando que dropwizard use el custom validator")
+    public void debeLanzarErrorCuandoEmailDeUsuarioEsInvalido() throws Exception {
+        Client client = new Client();
+
+        ClientResponse response = client.resource(
+                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, usuarioConEmailInvalidoAsJSON());
+
+        assertThat(response.getStatus(), is(400));
+    }
+
+    private String usuarioConEmailInvalidoAsJSON() {
+        return "{\n" +
+                "    \"identificacion\": {\n" +
+                "        \"tipoDocumento\": \"CEDULA\",\n" +
+                "        \"numeroIdentificacion\": \"1718642174\"\n" +
+                "    },\n" +
+                "    \"nombre\": {\n" +
+                "        \"primerNombre\": \"Nelson\",\n" +
+                "        \"segundoNombre\": \"Alberto\",\n" +
+                "        \"primerApellido\": \"Jumbo\",\n" +
+                "        \"segundoApellido\": \"Hidalgo\"\n" +
+                "    },\n" +
+                "    \"emailInstitucional\":\"testEmail\",\n" +
+                "    \"numeroAutorizacionQuipux\":\""+numeroQuipuxValido+"\",\n" +
+                "    \"finDeVigencia\":\"12/01/2015\",\n" +
+                "    \"idInstitucion\":\"1\",\n" +
+                "    \"nombreUsuario\":\"njumbo\"\n" +
+                "}\n";
+    }
+
+    @Test
     public void debeCrearUnNuevoUsuarioCuandoEsValido(){
         Client client = new Client();
 

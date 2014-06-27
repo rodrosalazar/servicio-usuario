@@ -7,6 +7,7 @@ import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
+import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.resources.PerfilResource;
 import ec.gob.senescyt.usuario.resources.UsuarioResource;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
@@ -66,6 +67,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+
+        ValidacionExceptionMapper validacionExceptionMapper = new ValidacionExceptionMapper();
+        environment.jersey().register(validacionExceptionMapper);
     }
 
     @VisibleForTesting

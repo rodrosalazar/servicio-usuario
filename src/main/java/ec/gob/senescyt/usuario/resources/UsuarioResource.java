@@ -42,6 +42,6 @@ public class UsuarioResource {
 
         Usuario usuarioCreado = usuarioDAO.guardar(usuario);
 
-        return Response.status(Response.Status.CREATED).build();
+        return Response.status(Response.Status.CREATED).entity(usuarioCreado).build();
     }
 }
