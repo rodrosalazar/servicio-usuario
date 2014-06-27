@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaDeserializer;
 import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaSerializer;
+import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import ec.gob.senescyt.usuario.validators.QuipuxValidator;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.hibernate.annotations.Type;
@@ -95,12 +96,16 @@ public class Usuario {
     }
 
     @JsonIgnore
-    public boolean isValido() {
+    public boolean isValido(CedulaValidator cedulaValidator) {
         if(!EmailValidator.getInstance().isValid(this.emailInstitucional)){
             return false;
         }
 
         if(this.getFinDeVigencia().isBefore(new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay())){
+            return false;
+        }
+
+        if(!identificacion.isValid(cedulaValidator)) {
             return false;
         }
 

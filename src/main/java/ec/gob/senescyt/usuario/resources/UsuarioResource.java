@@ -5,6 +5,7 @@ import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -34,8 +35,8 @@ public class UsuarioResource {
 
     @POST
     @UnitOfWork
-    public Response crearUsuario( final Usuario usuario) {
-        if (!usuario.isValido()) {
+    public Response crearUsuario(@Valid final Usuario usuario) {
+        if (!usuario.isValido(cedulaValidator)) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
 

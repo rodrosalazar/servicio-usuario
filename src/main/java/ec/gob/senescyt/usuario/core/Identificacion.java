@@ -1,6 +1,8 @@
 package ec.gob.senescyt.usuario.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
+import ec.gob.senescyt.usuario.validators.CedulaValidator;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
@@ -8,9 +10,6 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.io.Serializable;
 
-/**
- * Created by njumbo on 25/06/14.
- */
 @Embeddable
 public class Identificacion implements Serializable {
 
@@ -53,5 +52,11 @@ public class Identificacion implements Serializable {
 
     public String getNumeroIdentificacion() {
         return numeroIdentificacion;
+    }
+
+    @JsonIgnore
+    public boolean isValid(CedulaValidator cedulaValidator) {
+        return tipoDocumento == TipoDocumentoEnum.PASAPORTE
+                || cedulaValidator.isValidaCedula(numeroIdentificacion);
     }
 }

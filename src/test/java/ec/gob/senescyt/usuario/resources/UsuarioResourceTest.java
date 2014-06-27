@@ -70,13 +70,28 @@ public class UsuarioResourceTest {
         String cedulaInvalida = "11";
         Usuario usuario = new Usuario(new Identificacion(tipoDocumentoCedula, cedulaInvalida),
                 new Nombre(primerNombre, segundoNombre, primerApellido, segundoApellido),
-                emailInvalido, numeroQuipuxValido,
+                emailValido, numeroQuipuxValido,
                 now,
                 idInstitucion, nombreUsuario);
 
         Response response = usuarioResource.crearUsuario(usuario);
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
+
+    }
+
+    @Test
+    public void debeGuardarUsuarioConPasaporte() {
+        Usuario usuario = new Usuario(new Identificacion(tipoDocumentoCedula, cedula),
+                new Nombre(primerNombre, segundoNombre, primerApellido, segundoApellido),
+                emailValido, numeroQuipuxValido,
+                now,
+                idInstitucion, nombreUsuario);
+
+        Response response = usuarioResource.crearUsuario(usuario);
+        verify(usuarioDAO).guardar(eq(usuario));
+
+        assertThat(response.getStatus()).isEqualTo(201);
 
     }
 

@@ -91,7 +91,21 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void noDebeCrearUnNuevoUsuarioCuandoElNombreDeUsuarioYaExiste() {
-        
+        Client client = new Client();
+
+        ClientResponse responseBeforeError = client.resource(
+                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, usuarioAsJSON());
+
+        assertThat(responseBeforeError.getStatus(), is(201));
+
+        ClientResponse responseAfterError = client.resource(
+                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, usuarioAsJSON());
+
+        assertThat(responseAfterError.getStatus(), is(201));
     }
 
     @Test
