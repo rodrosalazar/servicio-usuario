@@ -1,13 +1,11 @@
 package ec.gob.senescyt.usuario.validators;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-/**
- * Created by njumbo on 26/06/14.
- */
 public class QuipuxValidatorTest {
 
     private static final String numeroAutorizacionQuipuxValido = "SENESCYT-DFAPO-2014-65946-MI";
@@ -25,65 +23,72 @@ public class QuipuxValidatorTest {
     private static final String numeroAutorizacionQuipuxConNumeroQuipuxConCaracteresEspeciales= "SENESCYT-DFAPO-2014-&5946-MI";
     private static final String numeroAutorizacionConNumeroQuipuxDeLongitudMayorA6 = "SENESCYT-DFAPO-2014-6594677-MI";
     private static final String numeroAutorizacionConSiglasMemorandoInternoIncorrectas = "SENESCYT-DFAPO-2014-65946-MF";
+    private QuipuxValidator quipuxValidator;
+
+    @Before
+    public void setUp() throws Exception {
+        quipuxValidator = new QuipuxValidator();
+
+    }
 
     @Test
     public void debeIndicarCuandoFormatoNumeroQuipuxEsValido() throws Exception {
-        Boolean esValido = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionQuipuxValido);
+        Boolean esValido = quipuxValidator.isValid(numeroAutorizacionQuipuxValido,null);
 
         assertThat(esValido, is(true));
     }
 
     @Test
     public void debeVerificarQueNumeroAutorizacionQuipuxDebeTenerNombreInstitucionSENESCYT(){
-        Boolean esValido = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionQuipuxSinNombreInstitucionSENESCYT);
+        Boolean esValido = quipuxValidator.isValid(numeroAutorizacionQuipuxSinNombreInstitucionSENESCYT, null);
 
         assertThat(esValido, is(false));
     }
 
     @Test
     public void debeVerificarQueNumeroAutorizacionQuipuxContengaSoloLetrasEnSiglasDeUnidadDepartamento(){
-        Boolean esValido = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionQuipuxConSiglasUnidadConNumeros);
+        Boolean esValido = quipuxValidator.isValid(numeroAutorizacionQuipuxConSiglasUnidadConNumeros, null);
 
         assertThat(esValido, is(false));
     }
 
     @Test
     public void debeVerificarQueNumeroAutorizacionQuipuxContengaMinimo2CaracteresEnSiglasDeUnidadDepartamento(){
-        Boolean esValido = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionQuipuxConSiglasMenoresADosCaracteres);
+        Boolean esValido = quipuxValidator.isValid(numeroAutorizacionQuipuxConSiglasMenoresADosCaracteres, null);
 
         assertThat(esValido, is(false));
     }
 
     @Test
     public void debeVerificarQueNumeroAutorizacionQuipuxContengaMaximo6LetrasEnSiglasDeUnidadDepartamento(){
-        Boolean esValido = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionQuipuxConSiglasDeMasDe6Letras);
+        Boolean esValido = quipuxValidator.isValid(numeroAutorizacionQuipuxConSiglasDeMasDe6Letras, null);
 
         assertThat(esValido, is(false));
     }
 
     @Test
     public void debeVerificarQueNumeroAutorizacionQuipuxNoContengaCaracteresEspecialesEnSiglasDeUnidadDepartamento(){
-        Boolean esValido = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionQuipuxConSiglasConCaracteresEspeciales);
+        Boolean esValido = quipuxValidator.isValid(numeroAutorizacionQuipuxConSiglasConCaracteresEspeciales, null);
         assertThat(esValido, is(false));
     }
 
     @Test
     public void debeVerificarQueAnioDeCreacionQuipuxNoContengaLetras(){
-        Boolean esValido = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionQuipuxConAnioConLetras);
+        Boolean esValido = quipuxValidator.isValid(numeroAutorizacionQuipuxConAnioConLetras, null);
         assertThat(esValido, is(false));
     }
 
     @Test
     public void debeVerificarQueAnioDeCreacionQuipuxNoContengaCaracteresEspeciales(){
-        Boolean esValido = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionQuipuxConAnioConCaracteresEspeciales);
+        Boolean esValido = quipuxValidator.isValid(numeroAutorizacionQuipuxConAnioConCaracteresEspeciales, null);
         assertThat(esValido, is(false));
     }
 
     @Test
     public void debeVerificarQueAnioDeCreacionQuipuxSeaMenorOIgualAlAnioActual(){
-        Boolean esValidoConAnioIgualAlActual = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionQuipuxConAnioIgualAlActual);
-        Boolean esValidoConAnioMenorAlActual = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionQuipuxConAnioMenorAlActual);
-        Boolean esValidoConAnioMayorAlActual = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionQuipuxConAnioMayorAlActual);
+        Boolean esValidoConAnioIgualAlActual = quipuxValidator.isValid(numeroAutorizacionQuipuxConAnioIgualAlActual, null);
+        Boolean esValidoConAnioMenorAlActual = quipuxValidator.isValid(numeroAutorizacionQuipuxConAnioMenorAlActual, null);
+        Boolean esValidoConAnioMayorAlActual = quipuxValidator.isValid(numeroAutorizacionQuipuxConAnioMayorAlActual, null);
 
         assertThat(esValidoConAnioIgualAlActual, is(true));
         assertThat(esValidoConAnioMenorAlActual, is(true));
@@ -92,26 +97,26 @@ public class QuipuxValidatorTest {
 
     @Test
     public void debeVerificarQueNumeroDeQuipuxNoContengaLetras(){
-        Boolean esValido = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionQuipuxConNumeroQuipuxConLetras);
+        Boolean esValido = quipuxValidator.isValid(numeroAutorizacionQuipuxConNumeroQuipuxConLetras, null);
         assertThat(esValido, is(false));
     }
 
 
     @Test
     public void debeVerificarQueNumeroDeQuipuxNoContengaCaracteresEspeciales(){
-        Boolean esValido = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionQuipuxConNumeroQuipuxConCaracteresEspeciales);
+        Boolean esValido = quipuxValidator.isValid(numeroAutorizacionQuipuxConNumeroQuipuxConCaracteresEspeciales, null);
         assertThat(esValido, is(false));
     }
 
     @Test
     public void debeVerificarQueNumeroDeQuipuxNoTengaMasDe6Digitos(){
-        Boolean esValido = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionConNumeroQuipuxDeLongitudMayorA6);
+        Boolean esValido = quipuxValidator.isValid(numeroAutorizacionConNumeroQuipuxDeLongitudMayorA6, null);
         assertThat(esValido, is(false));
     }
 
     @Test
     public void debeVerificarQueSiglasDeMemorandoInternoSeanMI(){
-        Boolean esValido = QuipuxValidator.isValidoNumeroAutorizacionQuipux(numeroAutorizacionConSiglasMemorandoInternoIncorrectas);
+        Boolean esValido = quipuxValidator.isValid(numeroAutorizacionConSiglasMemorandoInternoIncorrectas, null);
         assertThat(esValido, is(false));
     }
 }

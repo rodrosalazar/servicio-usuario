@@ -1,6 +1,7 @@
 package ec.gob.senescyt.usuario;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.sun.jersey.api.core.ResourceConfig;
 import ec.gob.senescyt.usuario.bundles.DBMigrationsBundle;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Permiso;
@@ -20,7 +21,11 @@ import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.hibernate.SessionFactory;
 
 import javax.servlet.DispatcherType;
+import javax.ws.rs.ext.ExceptionMapper;
+import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.List;
+import java.util.Set;
 
 public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
@@ -68,12 +73,38 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
 
-        ValidacionExceptionMapper validacionExceptionMapper = new ValidacionExceptionMapper();
-        environment.jersey().register(validacionExceptionMapper);
+        registrarValidacionExceptionMapper(environment);
+
+
     }
 
     @VisibleForTesting
     public SessionFactory getSessionFactory() {
         return hibernate.getSessionFactory();
+    }
+
+    private void registrarValidacionExceptionMapper(Environment environment) {
+
+        eliminarDefaultConstraintValidationMapper(environment);
+
+        ValidacionExceptionMapper validacionExceptionMapper = new ValidacionExceptionMapper();
+        environment.jersey().register(validacionExceptionMapper);
+
+    }
+
+    private void eliminarDefaultConstraintValidationMapper(Environment environment) {
+        ResourceConfig jrConfig = environment.jersey().getResourceConfig();
+        Set<Object> dwSingletons = jrConfig.getSingletons();
+        List<Object> singletonsToRemove = new ArrayList<Object>();
+
+        for (Object s : dwSingletons) {
+            if (s instanceof ExceptionMapper && s.getClass().getName().equals("io.dropwizard.jersey.validation.ConstraintViolationExceptionMapper")) {
+                singletonsToRemove.add(s);
+            }
+        }
+
+        for (Object s : singletonsToRemove) {
+            jrConfig.getSingletons().remove(s);
+        }
     }
 }

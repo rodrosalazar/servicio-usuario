@@ -1,12 +1,17 @@
 package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.annotations.VisibleForTesting;
 import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaDeserializer;
 import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaSerializer;
-import ec.gob.senescyt.usuario.validators.CedulaValidator;
+import ec.gob.senescyt.usuario.validators.annotations.FechaVigenciaValida;
+import ec.gob.senescyt.usuario.validators.annotations.QuipuxValido;
+import io.dropwizard.jackson.Jackson;
+import io.dropwizard.validation.ValidationMethod;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -14,6 +19,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 
 @Entity
 @Table(name = "usuarios")
@@ -24,7 +30,7 @@ public class Usuario {
     private long id;
 
     @Embedded
-    @JsonProperty("identificacion")
+    @Valid
     private Identificacion identificacion;
 
     @Embedded
@@ -36,13 +42,15 @@ public class Usuario {
 
     @Column
     @NotEmpty
+    @QuipuxValido
     private String numeroAutorizacionQuipux;
 
     @Column
     @Temporal(TemporalType.DATE)
-    @Type(type="org.joda.time.DateTime")
+    @Type(type = "org.joda.time.DateTime")
     @JsonSerialize(using = JSONFechaVigenciaSerializer.class)
     @JsonDeserialize(using = JSONFechaVigenciaDeserializer.class)
+    @FechaVigenciaValida
     private DateTime finDeVigencia;
 
     @Column
@@ -97,12 +105,9 @@ public class Usuario {
         return nombreUsuario;
     }
 
-    @JsonIgnore
-    public boolean isValido(CedulaValidator cedulaValidator) {
-
-        if(this.getFinDeVigencia().isBefore(new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay())){
-            return false;
-        }
-        return true;
+    @VisibleForTesting
+    public String toJson() throws JsonProcessingException {
+        ObjectMapper mapper = Jackson.newObjectMapper();
+        return mapper.writeValueAsString(this);
     }
 }

@@ -1,16 +1,24 @@
 package ec.gob.senescyt.integration;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.io.Resources;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.usuario.UsuarioApplication;
 import ec.gob.senescyt.usuario.UsuarioConfiguration;
+import ec.gob.senescyt.usuario.builders.UsuarioBuilder;
+import ec.gob.senescyt.usuario.core.Usuario;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import io.dropwizard.validation.ConstraintViolations;
+import org.fest.assertions.api.Assertions;
 import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import javax.validation.Validation;
+import javax.validation.Validator;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.File;
 
 import static org.hamcrest.core.Is.is;
@@ -58,36 +66,27 @@ public class UsuarioResourceIntegracionTest {
     }
 
     @Test
-    @Ignore("Porque no se esta asegurando que dropwizard use el custom validator")
+    public void debeVerificarQueLaFechaDeFinDeVigenciaNoPuedeSerMenorALaFechaActual() {
+        Client client = new Client();
+
+        ClientResponse response = client.resource(
+                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConFechaDeVigenciaInvalida());
+
+        assertThat(response.getStatus(), is(400));
+    }
+
+    @Test
     public void debeLanzarErrorCuandoEmailDeUsuarioEsInvalido() throws Exception {
         Client client = new Client();
 
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioConEmailInvalidoAsJSON());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConEmailInvalido());
 
         assertThat(response.getStatus(), is(400));
-    }
-
-    private String usuarioConEmailInvalidoAsJSON() {
-        return "{\n" +
-                "    \"identificacion\": {\n" +
-                "        \"tipoDocumento\": \"CEDULA\",\n" +
-                "        \"numeroIdentificacion\": \"1718642174\"\n" +
-                "    },\n" +
-                "    \"nombre\": {\n" +
-                "        \"primerNombre\": \"Nelson\",\n" +
-                "        \"segundoNombre\": \"Alberto\",\n" +
-                "        \"primerApellido\": \"Jumbo\",\n" +
-                "        \"segundoApellido\": \"Hidalgo\"\n" +
-                "    },\n" +
-                "    \"emailInstitucional\":\"testEmail\",\n" +
-                "    \"numeroAutorizacionQuipux\":\""+numeroQuipuxValido+"\",\n" +
-                "    \"finDeVigencia\":\"12/01/2015\",\n" +
-                "    \"idInstitucion\":\"1\",\n" +
-                "    \"nombreUsuario\":\"njumbo\"\n" +
-                "}\n";
     }
 
     @Test
@@ -97,48 +96,14 @@ public class UsuarioResourceIntegracionTest {
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioAsJSON());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido());
 
         assertThat(response.getStatus(), is(201));
     }
 
-    private String usuarioAsJSON() {
-        return "{\n" +
-                "    \"identificacion\": {\n" +
-                "        \"tipoDocumento\": \"CEDULA\",\n" +
-                "        \"numeroIdentificacion\": \"1718642174\"\n" +
-                "    },\n" +
-                "    \"nombre\": {\n" +
-                "        \"primerNombre\": \"Nelson\",\n" +
-                "        \"segundoNombre\": \"Alberto\",\n" +
-                "        \"primerApellido\": \"Jumbo\",\n" +
-                "        \"segundoApellido\": \"Hidalgo\"\n" +
-                "    },\n" +
-                "    \"emailInstitucional\":\"testEmail@senescyt.gob.ec\",\n" +
-                "    \"numeroAutorizacionQuipux\":\""+numeroQuipuxValido+"\",\n" +
-                "    \"finDeVigencia\":\"12/01/2015\",\n" +
-                "    \"idInstitucion\":\"1\",\n" +
-                "    \"nombreUsuario\":\"njumbo\"\n" +
-                "}\n";
-    }
-
     @Test
     public void noDebeCrearUnNuevoUsuarioCuandoElNombreDeUsuarioYaExiste() {
-        Client client = new Client();
 
-        ClientResponse responseBeforeError = client.resource(
-                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioAsJSON());
-
-        assertThat(responseBeforeError.getStatus(), is(201));
-
-        ClientResponse responseAfterError = client.resource(
-                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioAsJSON());
-
-        assertThat(responseAfterError.getStatus(), is(201));
     }
 
     @Test

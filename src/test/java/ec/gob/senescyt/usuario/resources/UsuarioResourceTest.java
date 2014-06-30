@@ -1,6 +1,8 @@
 package ec.gob.senescyt.usuario.resources;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sun.jersey.api.client.ClientResponse;
+import ec.gob.senescyt.usuario.builders.UsuarioBuilder;
 import ec.gob.senescyt.usuario.core.Identificacion;
 import ec.gob.senescyt.usuario.core.Nombre;
 import ec.gob.senescyt.usuario.core.Usuario;
@@ -8,20 +10,15 @@ import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
-import io.dropwizard.jersey.errors.ErrorMessage;
-import io.dropwizard.jersey.validation.ConstraintViolationExceptionMapper;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.ClassRule;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.Date;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
@@ -60,7 +57,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueUnaCedulaSeaValida() {
+    public void debeVerificarQueUnaCedulaSeaValidaUsandoResource() {
         String cedulaValida = "1718642174";
 
         Response response = usuarioResource.verificarCedula(cedulaValida);
@@ -69,7 +66,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueUnaCedulaSeaInvalida() {
+    public void debeVerificarQueUnaCedulaSeaInvalidaUsandoResource() {
         String cedulaInvalida = "1111111111";
 
         Response response = usuarioResource.verificarCedula(cedulaInvalida);
@@ -78,85 +75,22 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    @Ignore("NO esta validando correctmente el numero de identificacion")
-    public void debeVerificarQueCedulaDeUsuarioNoEsteEnBlanco() {
-        String cedulaInvalida = "11";
-        Usuario usuario = new Usuario(new Identificacion(tipoDocumentoCedula, cedulaInvalida),
-                new Nombre(primerNombre, segundoNombre, primerApellido, segundoApellido),
-                emailValido, numeroQuipuxValido,
-                now,
-                idInstitucion, nombreUsuario);
-
+    public void debeVerificarQueCedulaDeUsuarioNoEsteEnBlanco() throws Exception {
         ClientResponse response = resources.client().resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioConCedulaInvalidaAsJSON());
-
-        assertThat(response.getStatus()).isEqualTo(400);
-        assertThat(response.getEntity(String.class)).isEmpty();
-        verifyZeroInteractions(usuarioDAO);
-
-    }
-
-    private String usuarioConCedulaInvalidaAsJSON() {
-        return "{\n" +
-                "    \"identificacion\": {\n" +
-                "        \"tipoDocumento\": \"CEDULA\",\n" +
-                "        \"numeroIdentificacion\": \"\"\n" +
-                "    },\n" +
-                "    \"nombre\": {\n" +
-                "        \"primerNombre\": \"Nelson\",\n" +
-                "        \"segundoNombre\": \"Alberto\",\n" +
-                "        \"primerApellido\": \"Jumbo\",\n" +
-                "        \"segundoApellido\": \"Hidalgo\"\n" +
-                "    },\n" +
-                "    \"emailInstitucional\":\"test@senescyt.gob.ec\",\n" +
-                "    \"numeroAutorizacionQuipux\":\"" + numeroQuipuxValido + "\",\n" +
-                "    \"finDeVigencia\":\"12/01/2015\",\n" +
-                "    \"idInstitucion\":\"1\",\n" +
-                "    \"nombreUsuario\":\"njumbo\"\n" +
-                "}\n";
-    }
-
-    @Test
-    public void debeVerificarQueNumeroQuipuxNoEsteEnBlanco() throws Exception {
-        ClientResponse response = resources.client().resource("/usuario")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioConNumeroQuipuxEnBlancoAsJSON());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConCedulaEnBlanco().toJson());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
     }
 
-    private String usuarioConNumeroQuipuxEnBlancoAsJSON() {
-        return "{\n" +
-                "    \"identificacion\": {\n" +
-                "        \"tipoDocumento\": \"CEDULA\",\n" +
-                "        \"numeroIdentificacion\": \"1718642174\"\n" +
-                "    },\n" +
-                "    \"nombre\": {\n" +
-                "        \"primerNombre\": \"Nelson\",\n" +
-                "        \"segundoNombre\": \"Alberto\",\n" +
-                "        \"primerApellido\": \"Jumbo\",\n" +
-                "        \"segundoApellido\": \"Hidalgo\"\n" +
-                "    },\n" +
-                "    \"emailInstitucional\":\"test@senescyt.gob.ec\",\n" +
-                "    \"numeroAutorizacionQuipux\":\"\",\n" +
-                "    \"finDeVigencia\":\"12/01/2015\",\n" +
-                "    \"idInstitucion\":\"1\",\n" +
-                "    \"nombreUsuario\":\"njumbo\"\n" +
-                "}\n";
-    }
 
     @Test
     public void debeGuardarUsuarioConPasaporte() {
-        Usuario usuario = new Usuario(new Identificacion(tipoDocumentoCedula, cedula),
-                new Nombre(primerNombre, segundoNombre, primerApellido, segundoApellido),
-                emailValido, numeroQuipuxValido,
-                now,
-                idInstitucion, nombreUsuario);
 
-        Response response = usuarioResource.crearUsuario(usuario);
-        verify(usuarioDAO).guardar(eq(usuario));
+        Usuario usuarioConPasaporte = UsuarioBuilder.usuarioConPasaporte();
+        Response response = usuarioResource.crearUsuario(usuarioConPasaporte);
+        verify(usuarioDAO).guardar(eq(usuarioConPasaporte));
 
         assertThat(response.getStatus()).isEqualTo(201);
 
@@ -166,89 +100,50 @@ public class UsuarioResourceTest {
     public void debeIndicarCuandoUnEmailInstitucionalEsInvalido() {
         ClientResponse response = resources.client().resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioAsJSON());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConEmailInvalido());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
     }
 
-    private String usuarioAsJSON() {
-        return "{\n" +
-                "    \"identificacion\": {\n" +
-                "        \"tipoDocumento\": \"CEDULA\",\n" +
-                "        \"numeroIdentificacion\": \"1718642174\"\n" +
-                "    },\n" +
-                "    \"nombre\": {\n" +
-                "        \"primerNombre\": \"Nelson\",\n" +
-                "        \"segundoNombre\": \"Alberto\",\n" +
-                "        \"primerApellido\": \"Jumbo\",\n" +
-                "        \"segundoApellido\": \"Hidalgo\"\n" +
-                "    },\n" +
-                "    \"emailInstitucional\":\"test\",\n" +
-                "    \"numeroAutorizacionQuipux\":\"" + numeroQuipuxValido + "\",\n" +
-                "    \"finDeVigencia\":\"12/01/2015\",\n" +
-                "    \"idInstitucion\":\"1\",\n" +
-                "    \"nombreUsuario\":\"njumbo\"\n" +
-                "}\n";
-    }
-
     @Test
-    public void debeIndicarCuandoUnEmailInstitucionalEsValido() {
-        Usuario usuarioConEmailValido = new Usuario(new Identificacion(tipoDocumentoCedula, cedula),
-                new Nombre(primerNombre, segundoNombre, primerApellido, segundoApellido),
-                emailValido, numeroQuipuxValido,
-                now,
-                idInstitucion, nombreUsuario);
-
-        Response response = usuarioResource.crearUsuario(usuarioConEmailValido);
+    public void debeIndicarCuandoUnUsuarioEsValido() {
+        Usuario usuarioConEmailValido = UsuarioBuilder.usuarioValido();
+        Response response = usuarioResource.crearUsuario( usuarioConEmailValido);
 
         verify(usuarioDAO).guardar(eq(usuarioConEmailValido));
         assertThat(response.getStatus()).isEqualTo(201);
     }
 
     @Test
-    public void debeVerificarQueLaFechaDeFinDeVigenciaNoPuedeSerMenorALaFechaActual() {
-        DateTime fechaHaceUnMes = new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay().minusMonths(1);
-
-        Usuario usuarioConFechaDeVigenciaInvalida = new Usuario(new Identificacion(tipoDocumentoCedula, cedula),
-                new Nombre(primerNombre, segundoNombre, primerApellido, segundoApellido),
-                emailValido, numeroQuipuxValido,
-                fechaHaceUnMes,
-                idInstitucion, nombreUsuario);
-
-        Response response = usuarioResource.crearUsuario(usuarioConFechaDeVigenciaInvalida);
+    public void debeVerificarQueLaFechaDeFinDeVigenciaNoPuedeSerMenorALaFechaActual() throws JsonProcessingException {
+        ClientResponse response = resources.client().resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConFechaDeVigenciaInvalida().toJson());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
     }
 
     @Test
-    @Ignore("[#20] no esta pasando porque se esta revisando validaciond de numero quipux")
-    public void debeIndicarQueFormatoDeNumeroAutorizacionQuipuxEsInvalido() {
-        Usuario usuarioConNumeroQuipuxInvalido = new Usuario(new Identificacion(tipoDocumentoCedula, cedula),
-                new Nombre(primerNombre, segundoNombre, primerApellido, segundoApellido),
-                emailValido, numeroQuipuxInvalido,
-                now,
-                idInstitucion, nombreUsuario);
-
-        Response response = usuarioResource.crearUsuario(usuarioConNumeroQuipuxInvalido);
+    public void debeVerificarQueNumeroQuipuxNoEsteEnBlanco() throws Exception {
+        ClientResponse response = resources.client().resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConNumeroQuipuxEnBlanco().toJson());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
     }
 
     @Test
-    public void debeAceptarNumeroAutorizacionQuipuxValido() {
-        Usuario usuarioConNumeroQuipuxValido = new Usuario(new Identificacion(tipoDocumentoCedula, cedula),
-                new Nombre(primerNombre, segundoNombre, primerApellido, segundoApellido),
-                emailValido, numeroQuipuxValido,
-                now,
-                idInstitucion, nombreUsuario);
+    public void debeIndicarQueFormatoDeNumeroAutorizacionQuipuxEsInvalido() throws JsonProcessingException {
 
-        Response response = usuarioResource.crearUsuario(usuarioConNumeroQuipuxValido);
+        ClientResponse response = resources.client().resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConNumeroQuipuxInvalido().toJson());
 
-        verify(usuarioDAO).guardar(eq(usuarioConNumeroQuipuxValido));
-        assertThat(response.getStatus()).isEqualTo(201);
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(usuarioDAO);
     }
 
     @Test

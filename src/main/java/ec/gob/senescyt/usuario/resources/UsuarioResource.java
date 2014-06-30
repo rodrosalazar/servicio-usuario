@@ -36,10 +36,6 @@ public class UsuarioResource {
     @POST
     @UnitOfWork
     public Response crearUsuario(@Valid final Usuario usuario) {
-        if (!usuario.isValido(cedulaValidator)) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
         Usuario usuarioCreado = usuarioDAO.guardar(usuario);
 
         return Response.status(Response.Status.CREATED).entity(usuarioCreado).build();
