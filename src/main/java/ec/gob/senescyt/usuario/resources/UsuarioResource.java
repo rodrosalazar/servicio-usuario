@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Optional;
 
 @Path("/usuario")
 @Produces(MediaType.APPLICATION_JSON)
@@ -25,42 +26,30 @@ public class UsuarioResource {
 
     @GET
     @Path("/validacion")
-    public Response verificarCedula(@QueryParam("cedula") final String cedula) {
-        if (cedulaValidator.isValidaCedula(cedula)) {
+    @UnitOfWork
+    public Response validarUsuario(@QueryParam("cedula") final String cedula,
+                                   @QueryParam("nombreUsuario") final String nombreUsuario,
+                                   @QueryParam("numeroIdentificacion") final String numeroIdentificacion) {
+
+        if (cedula!= null && cedulaValidator.isValidaCedula(cedula)) {
             return Response.status(Response.Status.OK).build();
         }
 
-        return Response.status(Response.Status.BAD_REQUEST).entity("Debe ingresar una cédula válida").build();
-    }
-
-    @GET
-    @Path("/existe/nombreUsuario/{nombreUsuario}")
-    @UnitOfWork
-    public Response verificarExistenciaNombreUsuario(@PathParam("nombreUsuario")final String nombreUsuario) {
-        if(usuarioDAO.isRegistradoNombreUsuario(nombreUsuario)){
-            return Response.status(Response.Status.OK).entity("El nombre de usuario ya ha sido registrado").build();
-        }else{
-            return Response.status(Response.Status.BAD_REQUEST).build();
+        if(nombreUsuario!=null && !usuarioDAO.isRegistradoNombreUsuario(nombreUsuario)){
+            return Response.status(Response.Status.OK).build();
         }
-    }
 
-    @GET
-    @Path("/existe/numeroIdentificacion/{numeroIdentificacion}")
-    @UnitOfWork
-    public Response verificarExistenciaNumeroIdentificacion(@PathParam("numeroIdentificacion") final String numeroIdentificacion) {
-        if(usuarioDAO.isRegistradoNumeroIdentificacion(numeroIdentificacion)){
-            return Response.status(Response.Status.OK).entity("El número de identificación ya ha sido registrado").build();
-        }else{
-            return Response.status(Response.Status.BAD_REQUEST).build();
+        if(numeroIdentificacion!=null && !usuarioDAO.isRegistradoNumeroIdentificacion(numeroIdentificacion)){
+            return Response.status(Response.Status.OK).build();
         }
-    }
 
+        return Response.status(Response.Status.BAD_REQUEST).build();
+    }
 
     @POST
     @UnitOfWork
     public Response crearUsuario(@Valid final Usuario usuario) {
         Usuario usuarioCreado = usuarioDAO.guardar(usuario);
-
 
         return Response.status(Response.Status.CREATED).entity(usuarioCreado).build();
     }
