@@ -8,8 +8,6 @@ import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.testing.junit.ResourceTestRule;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -42,7 +40,7 @@ public class UsuarioResourceTest {
     public void debeVerificarQueUnaCedulaSeaValidaUsandoResource() {
         String cedulaValida = "1718642174";
 
-        Response response = usuarioResource.verificarCedula(cedulaValida);
+        Response response = usuarioResource.validarUsuario(cedulaValida, null, null);
 
         assertThat(response.getStatus()).isEqualTo(200);
     }
@@ -51,7 +49,7 @@ public class UsuarioResourceTest {
     public void debeVerificarQueUnaCedulaSeaInvalidaUsandoResource() {
         String cedulaInvalida = "1111111111";
 
-        Response response = usuarioResource.verificarCedula(cedulaInvalida);
+        Response response = usuarioResource.validarUsuario(cedulaInvalida,null,null);
 
         assertThat(response.getStatus()).isEqualTo(400);
     }

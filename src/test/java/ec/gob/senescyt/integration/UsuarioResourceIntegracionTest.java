@@ -73,7 +73,6 @@ public class UsuarioResourceIntegracionTest {
                 .get(ClientResponse.class);
 
         assertThat(response.getStatus(), is(400));
-        assertThat(response.getEntity(String.class), is("Debe ingresar una cédula válida"));
     }
 
     @Test
@@ -124,11 +123,11 @@ public class UsuarioResourceIntegracionTest {
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
         ClientResponse responseValidacion = client.resource(
-                String.format("http://localhost:%d/usuario/existe/nombreUsuario/" + UsuarioBuilder.usuarioValido().getNombreUsuario(), RULE.getLocalPort()))
+                String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
+                .queryParam("nombreUsuario",UsuarioBuilder.usuarioValido().getNombreUsuario())
                 .get(ClientResponse.class);
 
-        assertThat(responseValidacion.getStatus(), is(200));
-        assertThat(responseValidacion.getEntity(String.class), is("El nombre de usuario ya ha sido registrado"));
+        assertThat(responseValidacion.getStatus(), is(400));
 
     }
 
@@ -137,10 +136,11 @@ public class UsuarioResourceIntegracionTest {
         Client client = new Client();
 
         ClientResponse responseValidacion = client.resource(
-                String.format("http://localhost:%d/usuario/existe/nombreUsuario/" + UsuarioBuilder.usuarioValido().getNombreUsuario(), RULE.getLocalPort()))
+                String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
+                .queryParam("nombreUsuario",UsuarioBuilder.usuarioValido().getNombreUsuario())
                 .get(ClientResponse.class);
 
-        assertThat(responseValidacion.getStatus(), is(400));
+        assertThat(responseValidacion.getStatus(), is(200));
 
     }
 
@@ -156,11 +156,11 @@ public class UsuarioResourceIntegracionTest {
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
         ClientResponse responseValidacion = client.resource(
-                String.format("http://localhost:%d/usuario/existe/numeroIdentificacion/" + UsuarioBuilder.usuarioValido().getIdentificacion().getNumeroIdentificacion(), RULE.getLocalPort()))
+                String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
+                .queryParam("numeroIdentificacion",UsuarioBuilder.usuarioValido().getIdentificacion().getNumeroIdentificacion())
                 .get(ClientResponse.class);
 
-        assertThat(responseValidacion.getStatus(), is(200));
-        assertThat(responseValidacion.getEntity(String.class), is("El número de identificación ya ha sido registrado"));
+        assertThat(responseValidacion.getStatus(), is(400));
 
     }
 
@@ -169,10 +169,11 @@ public class UsuarioResourceIntegracionTest {
         Client client = new Client();
 
         ClientResponse responseValidacion = client.resource(
-                String.format("http://localhost:%d/usuario/existe/numeroIdentificacion/" + UsuarioBuilder.usuarioValido().getIdentificacion().getNumeroIdentificacion(), RULE.getLocalPort()))
+                String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
+                .queryParam("numeroIdentificacion",UsuarioBuilder.usuarioValido().getIdentificacion().getNumeroIdentificacion())
                 .get(ClientResponse.class);
 
-        assertThat(responseValidacion.getStatus(), is(400));
+        assertThat(responseValidacion.getStatus(), is(200));
 
     }
 }
