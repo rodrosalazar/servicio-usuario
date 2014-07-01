@@ -3,11 +3,8 @@ package ec.gob.senescyt.usuario.resources;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.usuario.builders.UsuarioBuilder;
-import ec.gob.senescyt.usuario.core.Identificacion;
-import ec.gob.senescyt.usuario.core.Nombre;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
-import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -27,22 +24,7 @@ import static org.mockito.Mockito.*;
 public class UsuarioResourceTest {
     private UsuarioResource usuarioResource;
     private static UsuarioDAO usuarioDAO = mock(UsuarioDAO.class);
-    ;
     private static CedulaValidator cedulaValidator = new CedulaValidator();
-
-    private static final TipoDocumentoEnum tipoDocumentoCedula = TipoDocumentoEnum.CEDULA;
-    private static final String cedula = "1718642174";
-    private static final String primerNombre = "Nelson";
-    private static final String segundoNombre = "Alberto";
-    private static final String primerApellido = "Jumbo";
-    private static final String segundoApellido = "Hidalgo";
-    private static final String emailValido = "test@senescyt.gob.ec";
-    private static final String emailInvalido = "emailInvalido";
-    private static final String numeroQuipuxInvalido = "123456";
-    private static final String numeroQuipuxValido = "SENESCYT-DFAPO-2014-65946-MI";
-    private static final DateTime now = new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay();
-    private static final long idInstitucion = 1l;
-    private static final String nombreUsuario = "nombreUsuario";
 
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
@@ -84,9 +66,29 @@ public class UsuarioResourceTest {
         verifyZeroInteractions(usuarioDAO);
     }
 
+    @Test
+    public void debeAlertarCuandoUnaCedulaDeUnUsuarioSeaInvalida() throws Exception {
+        ClientResponse response = resources.client().resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConCedulaInvalida().toJson());
+
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(usuarioDAO);
+    }
+
 
     @Test
-    public void debeGuardarUsuarioConPasaporte() {
+    public void debeAlertarCuandoUnUsuarioTengaUnDocumentoDistintoACedulaOPasaporte() throws Exception {
+        ClientResponse response = resources.client().resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConDocumentoInvalido().toJson());
+
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(usuarioDAO);
+    }
+
+    @Test
+    public void debeGuardarUsuarioConPasaporte() throws Exception {
 
         Usuario usuarioConPasaporte = UsuarioBuilder.usuarioConPasaporte();
         Response response = usuarioResource.crearUsuario(usuarioConPasaporte);
@@ -107,7 +109,18 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeIndicarCuandoUnUsuarioEsValido() {
+    public void debeVerificarQueEmailNoEsteEnBlanco() throws Exception {
+        ClientResponse response = resources.client().resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConEmailEnBlanco());
+
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(usuarioDAO);
+    }
+
+
+    @Test
+    public void debeIndicarCuandoUnUsuarioEsValido() throws Exception {
         Usuario usuarioConEmailValido = UsuarioBuilder.usuarioValido();
         Response response = usuarioResource.crearUsuario( usuarioConEmailValido);
 
@@ -147,17 +160,61 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeGuardarUsuario() {
-        long idInstitucion = 1l;
-        DateTime fechaDentroDeUnMes = new DateTime().plusMonths(1)
-                .withZone(DateTimeZone.UTC)
-                .withTimeAtStartOfDay();
+    public void debeVerificarQuePrimerNombreNoEsteEnBlanco() throws Exception {
+        ClientResponse response = resources.client().resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConPrimerNombreEnBlanco().toJson());
 
-        Usuario usuario = new Usuario(new Identificacion(tipoDocumentoCedula, cedula),
-                new Nombre(primerNombre, segundoNombre, primerApellido, segundoApellido),
-                emailValido, numeroQuipuxValido,
-                fechaDentroDeUnMes,
-                idInstitucion, nombreUsuario);
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(usuarioDAO);
+
+    }
+
+    @Test
+    public void debeVerificarQuePrimerApellidoNoEsteEnBlanco() throws Exception {
+        ClientResponse response = resources.client().resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConPrimerApellidoEnBlanco().toJson());
+
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(usuarioDAO);
+
+    }
+
+    @Test
+    public void debeVerificarQueFechaFinDeVigenciaNoEsteEnBlanco() throws Exception{
+        ClientResponse response = resources.client().resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConFechaDeVigenciaEnBlanco().toJson());
+
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(usuarioDAO);
+    }
+
+    @Test
+    //TODO:Verificar si cuando no se seleccione una opcion se va a mandar un null o un cero
+    public void debeVerificarQueCodigoInstitucionNoEsteEnBlanco() throws Exception {
+        ClientResponse response = resources.client().resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConIdInstitucionEnBlanco().toJson());
+
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(usuarioDAO);
+    }
+
+    @Test
+    public void debeVerificarQueNombreDeUsuarioNoEsteEnBlanco() throws Exception {
+        ClientResponse response = resources.client().resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConNombreUsuarioEnBlanco().toJson());
+
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(usuarioDAO);
+    }
+
+    @Test
+    public void debeGuardarUsuario() throws Exception {
+        Usuario usuario = UsuarioBuilder.usuarioValido();
 
         Response response = usuarioResource.crearUsuario(usuario);
 

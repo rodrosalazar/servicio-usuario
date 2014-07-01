@@ -32,14 +32,12 @@ public abstract class BaseIntegracionTest {
     public void setUpDB() {
         sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
         ManagedSessionContext.bind(sessionFactory.openSession());
-        System.out.println("SET UP DB");
 //        limpiarTablas();
     }
 
     @After
     public void tearDownDB() {
 //        limpiarTablas();
-        System.out.println("TEARDOWN UP DB");
         ManagedSessionContext.unbind(sessionFactory);
     }
 

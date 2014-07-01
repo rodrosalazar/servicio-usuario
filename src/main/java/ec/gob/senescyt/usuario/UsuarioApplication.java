@@ -74,8 +74,6 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
 
         registrarValidacionExceptionMapper(environment);
-
-
     }
 
     @VisibleForTesting

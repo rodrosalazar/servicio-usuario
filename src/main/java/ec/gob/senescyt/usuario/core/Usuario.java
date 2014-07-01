@@ -1,6 +1,5 @@
 package ec.gob.senescyt.usuario.core;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -9,17 +8,17 @@ import com.google.common.annotations.VisibleForTesting;
 import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaDeserializer;
 import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaSerializer;
 import ec.gob.senescyt.usuario.validators.annotations.FechaVigenciaValida;
+import ec.gob.senescyt.usuario.validators.annotations.IdentificacionValida;
 import ec.gob.senescyt.usuario.validators.annotations.QuipuxValido;
 import io.dropwizard.jackson.Jackson;
-import io.dropwizard.validation.ValidationMethod;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "usuarios")
@@ -31,13 +30,16 @@ public class Usuario {
 
     @Embedded
     @Valid
+    @IdentificacionValida
     private Identificacion identificacion;
 
     @Embedded
+    @Valid
     private Nombre nombre;
 
     @Column
-    @Email(message = "Email incorrecto")
+    @Email(message = "{ec.gob.senescyt.error.email}")
+    @NotEmpty
     private String emailInstitucional;
 
     @Column
@@ -54,9 +56,11 @@ public class Usuario {
     private DateTime finDeVigencia;
 
     @Column
+    @NotNull
     private Long idInstitucion;
 
     @Column
+    @NotEmpty
     private String nombreUsuario;
 
     private Usuario() {

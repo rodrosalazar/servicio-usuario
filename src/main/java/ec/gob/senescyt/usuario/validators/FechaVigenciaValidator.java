@@ -15,6 +15,10 @@ public class FechaVigenciaValidator  implements ConstraintValidator<FechaVigenci
 
     @Override
     public boolean isValid(DateTime fechaFinVigencia, ConstraintValidatorContext context) {
+        if(fechaFinVigencia==null){
+         return false;
+        }
+
         return !fechaFinVigencia.isBefore(new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay());
     }
 }

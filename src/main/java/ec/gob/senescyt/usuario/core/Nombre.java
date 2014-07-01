@@ -1,5 +1,7 @@
 package ec.gob.senescyt.usuario.core;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
@@ -11,12 +13,14 @@ import java.io.Serializable;
 public class Nombre implements Serializable{
 
     @Column
+    @NotEmpty
     private String primerNombre;
 
     @Column
     private String segundoNombre;
 
     @Column
+    @NotEmpty
     private String primerApellido;
 
     @Column

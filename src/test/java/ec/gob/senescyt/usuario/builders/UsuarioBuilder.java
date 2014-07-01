@@ -82,4 +82,69 @@ public class UsuarioBuilder {
                 FECHA_ACTUAL,
                 ID_INSTITUCION, NOMBRE_USUARIO);
     }
+
+    public static Usuario usuarioConCedulaInvalida() {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_INVALIDA),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                ID_INSTITUCION, NOMBRE_USUARIO);
+    }
+
+    public static Usuario usuarioConDocumentoInvalido() {
+        return new Usuario(new Identificacion(null, CEDULA_VALIDA),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                ID_INSTITUCION, NOMBRE_USUARIO);
+    }
+
+    public static Usuario usuarioConPrimerNombreEnBlanco() {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
+                new Nombre(CAMPO_EN_BLANCO, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                ID_INSTITUCION, NOMBRE_USUARIO);
+    }
+
+    public static Usuario usuarioConPrimerApellidoEnBlanco() {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, CAMPO_EN_BLANCO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                ID_INSTITUCION, NOMBRE_USUARIO);
+    }
+
+    public static Object usuarioConEmailEnBlanco() {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                CAMPO_EN_BLANCO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                ID_INSTITUCION, NOMBRE_USUARIO);
+
+    }
+
+    public static Usuario usuarioConFechaDeVigenciaEnBlanco() {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                null,
+                ID_INSTITUCION, NOMBRE_USUARIO);
+    }
+
+    public static Usuario usuarioConIdInstitucionEnBlanco() {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                null, NOMBRE_USUARIO);
+    }
+
+    public static Usuario usuarioConNombreUsuarioEnBlanco() {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                ID_INSTITUCION, CAMPO_EN_BLANCO);
+    }
 }
