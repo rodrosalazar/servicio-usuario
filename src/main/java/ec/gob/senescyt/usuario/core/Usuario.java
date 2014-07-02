@@ -112,7 +112,7 @@ public class Usuario {
 
     @VisibleForTesting
     public String toJson() throws JsonProcessingException {
-        ObjectMapper mapper = Jackson.newObjectMapper();
-        return mapper.writeValueAsString(this);
+            ObjectMapper mapper = Jackson.newObjectMapper();
+            return mapper.writeValueAsString(this);
     }
 }

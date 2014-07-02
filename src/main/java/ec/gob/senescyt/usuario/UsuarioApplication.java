@@ -3,12 +3,15 @@ package ec.gob.senescyt.usuario;
 import com.google.common.annotations.VisibleForTesting;
 import com.sun.jersey.api.core.ResourceConfig;
 import ec.gob.senescyt.usuario.bundles.DBMigrationsBundle;
+import ec.gob.senescyt.usuario.core.Institucion;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.core.Usuario;
+import ec.gob.senescyt.usuario.dao.InstitucionDAO;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
+import ec.gob.senescyt.usuario.resources.InstitucionResource;
 import ec.gob.senescyt.usuario.resources.PerfilResource;
 import ec.gob.senescyt.usuario.resources.UsuarioResource;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
@@ -33,7 +36,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     private final DBMigrationsBundle flywayBundle = new DBMigrationsBundle();
 
     private final HibernateBundle<UsuarioConfiguration> hibernate = new HibernateBundle<UsuarioConfiguration>(Perfil.class, Permiso.class,
-            Usuario.class) {
+            Usuario.class, Institucion.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
@@ -61,6 +64,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     public void run(UsuarioConfiguration configuration, Environment environment) throws Exception {
         PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory());
         UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory());
+        InstitucionDAO institucionDAO = new InstitucionDAO(getSessionFactory());
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO);
         environment.jersey().register(perfilResource);
@@ -69,6 +73,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator);
         environment.jersey().register(usuarioResource);
+
+        final InstitucionResource institucionResource = new InstitucionResource(institucionDAO);
+        environment.jersey().register(institucionResource);
 
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
@@ -82,7 +89,6 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     }
 
     private void registrarValidacionExceptionMapper(Environment environment) {
-
         eliminarDefaultConstraintValidationMapper(environment);
 
         ValidacionExceptionMapper validacionExceptionMapper = new ValidacionExceptionMapper();

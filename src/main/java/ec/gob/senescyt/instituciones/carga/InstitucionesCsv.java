@@ -48,8 +48,8 @@ public class InstitucionesCsv {
         );
     }
 
-    private String longASql(long number) {
-        if (number == 0) {
+    private String longASql(Long number) {
+        if (number == null || number == 0) {
             return "NULL";
         }
         return String.valueOf(number);

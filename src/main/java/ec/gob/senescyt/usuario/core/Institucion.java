@@ -2,78 +2,69 @@ package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 @JsonPropertyOrder({"id", "nombre", "regimenId", "regimen", "estadoId", "estado", "categoriaId", "categoria"})
+@Entity
+@Table(name = "instituciones")
 public class Institucion {
+
+    @Id
     private long id;
     private String nombre;
     private long regimenId;
     private String regimen;
     private long estadoId;
     private String estado;
-    private long categoriaId;
+    @Column(nullable = true)
+    private Long categoriaId;
     private String categoria;
+
+    private Institucion() {}
+
+    public Institucion(long id, String nombre, long regimenId, String regimen, long estadoId, String estado, long categoriaId, String categoria) {
+        this.id = id;
+        this.nombre = nombre;
+        this.regimenId = regimenId;
+        this.regimen = regimen;
+        this.estadoId = estadoId;
+        this.estado = estado;
+        this.categoriaId = categoriaId;
+        this.categoria = categoria;
+    }
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getNombre() {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
     public long getRegimenId() {
         return regimenId;
-    }
-
-    public void setRegimenId(long regimenId) {
-        this.regimenId = regimenId;
     }
 
     public String getRegimen() {
         return regimen;
     }
 
-    public void setRegimen(String regimen) {
-        this.regimen = regimen;
-    }
-
     public long getEstadoId() {
         return estadoId;
-    }
-
-    public void setEstadoId(long estadoId) {
-        this.estadoId = estadoId;
     }
 
     public String getEstado() {
         return estado;
     }
 
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    public long getCategoriaId() {
+    public Long getCategoriaId() {
         return categoriaId;
-    }
-
-    public void setCategoriaId(long categoriaId) {
-        this.categoriaId = categoriaId;
     }
 
     public String getCategoria() {
         return categoria;
-    }
-
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
     }
 }
