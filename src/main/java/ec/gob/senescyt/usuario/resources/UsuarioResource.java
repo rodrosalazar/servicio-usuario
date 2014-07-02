@@ -1,5 +1,6 @@
 package ec.gob.senescyt.usuario.resources;
 
+import com.google.common.base.Optional;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
@@ -22,24 +23,23 @@ public class UsuarioResource {
         this.cedulaValidator = cedulaValidator;
     }
 
-
     @GET
     @Path("/validacion")
     @UnitOfWork
-    public Response validarUsuario(@QueryParam("cedula") final String cedula,
-                                   @QueryParam("nombreUsuario") final String nombreUsuario,
-                                   @QueryParam("numeroIdentificacion") final String numeroIdentificacion) {
+    public Response validar(@QueryParam("cedula") final Optional<String> cedula,
+                            @QueryParam("nombreUsuario") final Optional<String> nombreUsuario,
+                            @QueryParam("numeroIdentificacion") final Optional<String> numeroIdentificacion) {
 
-        if (cedula!= null && cedulaValidator.isValidaCedula(cedula)) {
-            return Response.status(Response.Status.OK).build();
+        if (cedula.isPresent() && cedulaValidator.isValidaCedula(cedula.get())) {
+            return Response.ok().build();
         }
 
-        if(nombreUsuario!=null && !usuarioDAO.isRegistradoNombreUsuario(nombreUsuario)){
-            return Response.status(Response.Status.OK).build();
+        if(nombreUsuario.isPresent() && !usuarioDAO.isRegistradoNombreUsuario(nombreUsuario.get())){
+            return Response.ok().build();
         }
 
-        if(numeroIdentificacion!=null && !usuarioDAO.isRegistradoNumeroIdentificacion(numeroIdentificacion)){
-            return Response.status(Response.Status.OK).build();
+        if(numeroIdentificacion.isPresent() && !usuarioDAO.isRegistradoNumeroIdentificacion(numeroIdentificacion.get())){
+            return Response.ok().build();
         }
 
         return Response.status(Response.Status.BAD_REQUEST).build();
@@ -47,7 +47,7 @@ public class UsuarioResource {
 
     @POST
     @UnitOfWork
-    public Response crearUsuario(@Valid final Usuario usuario) {
+    public Response crear(@Valid final Usuario usuario) {
         Usuario usuarioCreado = usuarioDAO.guardar(usuario);
 
         return Response.status(Response.Status.CREATED).entity(usuarioCreado).build();

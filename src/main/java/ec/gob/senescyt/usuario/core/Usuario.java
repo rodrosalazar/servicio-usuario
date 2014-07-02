@@ -57,6 +57,7 @@ public class Usuario {
 
     @Column
     @NotNull
+    @Valid
     private Long idInstitucion;
 
     @Column

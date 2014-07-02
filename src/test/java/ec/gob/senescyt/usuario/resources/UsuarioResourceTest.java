@@ -1,6 +1,8 @@
 package ec.gob.senescyt.usuario.resources;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.base.Optional;
+import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.usuario.builders.UsuarioBuilder;
 import ec.gob.senescyt.usuario.core.Usuario;
@@ -29,10 +31,12 @@ public class UsuarioResourceTest {
             .addResource(new UsuarioResource(usuarioDAO, cedulaValidator))
             .addProvider(ValidacionExceptionMapper.class)
             .build();
+    private Client client;
 
     @Before
-    public void init() {
+    public void setUp() {
         usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator);
+        client = resources.client();
         reset(usuarioDAO);
     }
 
@@ -40,7 +44,7 @@ public class UsuarioResourceTest {
     public void debeVerificarQueUnaCedulaSeaValidaUsandoResource() {
         String cedulaValida = "1718642174";
 
-        Response response = usuarioResource.validarUsuario(cedulaValida, null, null);
+        Response response = usuarioResource.validar(Optional.of(cedulaValida), Optional.<String>absent(), Optional.<String>absent());
 
         assertThat(response.getStatus()).isEqualTo(200);
     }
@@ -49,16 +53,16 @@ public class UsuarioResourceTest {
     public void debeVerificarQueUnaCedulaSeaInvalidaUsandoResource() {
         String cedulaInvalida = "1111111111";
 
-        Response response = usuarioResource.validarUsuario(cedulaInvalida,null,null);
+        Response response = usuarioResource.validar(Optional.of(cedulaInvalida), Optional.<String>absent(), Optional.<String>absent());
 
         assertThat(response.getStatus()).isEqualTo(400);
     }
 
     @Test
     public void debeVerificarQueCedulaDeUsuarioNoEsteEnBlanco() throws Exception {
-        ClientResponse response = resources.client().resource("/usuario")
+        ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioConCedulaEnBlanco().toJson());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConCedulaEnBlanco());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
@@ -66,20 +70,19 @@ public class UsuarioResourceTest {
 
     @Test
     public void debeAlertarCuandoUnaCedulaDeUnUsuarioSeaInvalida() throws Exception {
-        ClientResponse response = resources.client().resource("/usuario")
+        ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioConCedulaInvalida().toJson());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConCedulaInvalida());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
     }
 
-
     @Test
     public void debeAlertarCuandoUnUsuarioTengaUnDocumentoDistintoACedulaOPasaporte() throws Exception {
-        ClientResponse response = resources.client().resource("/usuario")
+        ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioConDocumentoInvalido().toJson());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConDocumentoInvalido());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
@@ -87,18 +90,19 @@ public class UsuarioResourceTest {
 
     @Test
     public void debeGuardarUsuarioConPasaporte() throws Exception {
-
         Usuario usuarioConPasaporte = UsuarioBuilder.usuarioConPasaporte();
-        Response response = usuarioResource.crearUsuario(usuarioConPasaporte);
-        verify(usuarioDAO).guardar(eq(usuarioConPasaporte));
 
+        ClientResponse response = client.resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, usuarioConPasaporte);
+
+        verify(usuarioDAO).guardar(any(Usuario.class));
         assertThat(response.getStatus()).isEqualTo(201);
-
     }
 
     @Test
     public void debeIndicarCuandoUnEmailInstitucionalEsInvalido() {
-        ClientResponse response = resources.client().resource("/usuario")
+        ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, UsuarioBuilder.usuarioConEmailInvalido());
 
@@ -108,7 +112,7 @@ public class UsuarioResourceTest {
 
     @Test
     public void debeVerificarQueEmailNoEsteEnBlanco() throws Exception {
-        ClientResponse response = resources.client().resource("/usuario")
+        ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, UsuarioBuilder.usuarioConEmailEnBlanco());
 
@@ -116,21 +120,23 @@ public class UsuarioResourceTest {
         verifyZeroInteractions(usuarioDAO);
     }
 
-
     @Test
-    public void debeIndicarCuandoUnUsuarioEsValido() throws Exception {
+    public void debeIndicarCuandoUnEmailInstitucionalEsValido() throws Exception {
         Usuario usuarioConEmailValido = UsuarioBuilder.usuarioValido();
-        Response response = usuarioResource.crearUsuario( usuarioConEmailValido);
 
-        verify(usuarioDAO).guardar(eq(usuarioConEmailValido));
+        ClientResponse response = client.resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, usuarioConEmailValido);
+
+        verify(usuarioDAO).guardar(any(Usuario.class));
         assertThat(response.getStatus()).isEqualTo(201);
     }
 
     @Test
     public void debeVerificarQueLaFechaDeFinDeVigenciaNoPuedeSerMenorALaFechaActual() throws JsonProcessingException {
-        ClientResponse response = resources.client().resource("/usuario")
+        ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioConFechaDeVigenciaInvalida().toJson());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConFechaDeVigenciaInvalida());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
@@ -138,9 +144,9 @@ public class UsuarioResourceTest {
 
     @Test
     public void debeVerificarQueNumeroQuipuxNoEsteEnBlanco() throws Exception {
-        ClientResponse response = resources.client().resource("/usuario")
+        ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioConNumeroQuipuxEnBlanco().toJson());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConNumeroQuipuxEnBlanco());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
@@ -149,9 +155,9 @@ public class UsuarioResourceTest {
     @Test
     public void debeIndicarQueFormatoDeNumeroAutorizacionQuipuxEsInvalido() throws JsonProcessingException {
 
-        ClientResponse response = resources.client().resource("/usuario")
+        ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioConNumeroQuipuxInvalido().toJson());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConNumeroQuipuxInvalido());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
@@ -159,9 +165,9 @@ public class UsuarioResourceTest {
 
     @Test
     public void debeVerificarQuePrimerNombreNoEsteEnBlanco() throws Exception {
-        ClientResponse response = resources.client().resource("/usuario")
+        ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioConPrimerNombreEnBlanco().toJson());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConPrimerNombreEnBlanco());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
@@ -170,9 +176,9 @@ public class UsuarioResourceTest {
 
     @Test
     public void debeVerificarQuePrimerApellidoNoEsteEnBlanco() throws Exception {
-        ClientResponse response = resources.client().resource("/usuario")
+        ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioConPrimerApellidoEnBlanco().toJson());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConPrimerApellidoEnBlanco());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
@@ -181,20 +187,29 @@ public class UsuarioResourceTest {
 
     @Test
     public void debeVerificarQueFechaFinDeVigenciaNoEsteEnBlanco() throws Exception{
-        ClientResponse response = resources.client().resource("/usuario")
+        ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioConFechaDeVigenciaEnBlanco().toJson());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConFechaDeVigenciaEnBlanco());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
     }
 
     @Test
-    //TODO:Verificar si cuando no se seleccione una opcion se va a mandar un null o un cero
-    public void debeVerificarQueCodigoInstitucionNoEsteEnBlanco() throws Exception {
-        ClientResponse response = resources.client().resource("/usuario")
+    public void debeVerificarQueCodigoInstitucionNoSeaNulo() throws Exception {
+        ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioConIdInstitucionEnBlanco().toJson());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConIdInstitucionNulo());
+
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(usuarioDAO);
+    }
+
+    @Test
+    public void debeVerificarQueCodigoInstitucionNoEsteEnBlanco() throws Exception {
+        ClientResponse response = client.resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConIdInstitucionEnBlanco());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
@@ -202,9 +217,9 @@ public class UsuarioResourceTest {
 
     @Test
     public void debeVerificarQueNombreDeUsuarioNoEsteEnBlanco() throws Exception {
-        ClientResponse response = resources.client().resource("/usuario")
+        ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioConNombreUsuarioEnBlanco().toJson());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioConNombreUsuarioEnBlanco());
 
         assertThat(response.getStatus()).isEqualTo(400);
         verifyZeroInteractions(usuarioDAO);
@@ -214,7 +229,7 @@ public class UsuarioResourceTest {
     public void debeGuardarUsuario() throws Exception {
         Usuario usuario = UsuarioBuilder.usuarioValido();
 
-        Response response = usuarioResource.crearUsuario(usuario);
+        Response response = usuarioResource.crear(usuario);
 
         verify(usuarioDAO).guardar(eq(usuario));
         assertThat(response.getStatus()).isEqualTo(201);

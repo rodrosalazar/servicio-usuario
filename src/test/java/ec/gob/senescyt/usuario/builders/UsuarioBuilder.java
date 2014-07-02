@@ -132,7 +132,7 @@ public class UsuarioBuilder {
                 ID_INSTITUCION, NOMBRE_USUARIO);
     }
 
-    public static Usuario usuarioConIdInstitucionEnBlanco() {
+    public static Usuario usuarioConIdInstitucionNulo() {
         return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
@@ -146,5 +146,25 @@ public class UsuarioBuilder {
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
                 ID_INSTITUCION, CAMPO_EN_BLANCO);
+    }
+
+    public static String usuarioConIdInstitucionEnBlanco() {
+        return "{\n" +
+                "    \"identificacion\": {\n" +
+                "        \"tipoDocumento\": \"CEDULA\",\n" +
+                "        \"numeroIdentificacion\": \"1718642174\"\n" +
+                "    },\n" +
+                "    \"nombre\": {\n" +
+                "        \"primerNombre\": \"Nelson\",\n" +
+                "        \"segundoNombre\": \"Alberto\",\n" +
+                "        \"primerApellido\": \"Jumbo\",\n" +
+                "        \"segundoApellido\": \"Hidalgo\"\n" +
+                "    },\n" +
+                "    \"emailInstitucional\":\"testEmail@senescyt.gob.ec\",\n" +
+                "    \"numeroAutorizacionQuipux\":\"SENESCYT-DFAPO-2014-65946-MI\",\n" +
+                "    \"finDeVigencia\":\"12/01/2015\",\n" +
+                "    \"idInstitucion\":\"\",\n" +
+                "    \"nombreUsuario\":\"njumbo\"\n" +
+                "}";
     }
 }
