@@ -7,9 +7,9 @@ apply plugin: 'flyway'
 apply plugin: 'application'
 apply plugin: 'gradle-one-jar'
 
-// Use Java 8 by default
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+// Use Java 7 by default
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
 
 buildscript {
     repositories {
