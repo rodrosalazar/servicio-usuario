@@ -8,15 +8,10 @@ import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Date;
-
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-/**
- * Created by njumbo on 25/06/14.
- */
 public class UsuarioTest {
 
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
@@ -29,7 +24,7 @@ public class UsuarioTest {
         usuario = new Usuario(new Identificacion(TipoDocumentoEnum.CEDULA, "1718642174"),
                 new Nombre("Nelson", "Alberto", "Jumbo", "Hidalgo"),
                 "testEmail@senescyt.gob.ec", "SENESCYT-DFAPO-2014-65946-MI",
-                new DateTime().withDate(2015, 1, 12).withZone(DateTimeZone.UTC).withTimeAtStartOfDay(),
+                new DateTime(2015, 1, 12,0, 0, DateTimeZone.UTC),
                 idInstitucion, "nombreUsuario");
     }
 
