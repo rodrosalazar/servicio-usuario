@@ -34,11 +34,11 @@ public class UsuarioResource {
             return Response.ok().build();
         }
 
-        if(nombreUsuario.isPresent() && !usuarioDAO.isRegistradoNombreUsuario(nombreUsuario.get())){
+        if (nombreUsuario.isPresent() && !usuarioDAO.isRegistradoNombreUsuario(nombreUsuario.get())) {
             return Response.ok().build();
         }
 
-        if(numeroIdentificacion.isPresent() && !usuarioDAO.isRegistradoNumeroIdentificacion(numeroIdentificacion.get())){
+        if (numeroIdentificacion.isPresent() && !usuarioDAO.isRegistradoNumeroIdentificacion(numeroIdentificacion.get())) {
             return Response.ok().build();
         }
 
@@ -48,6 +48,16 @@ public class UsuarioResource {
     @POST
     @UnitOfWork
     public Response crear(@Valid final Usuario usuario) {
+        if (usuario.getNombreUsuario() != null
+                && usuarioDAO.isRegistradoNombreUsuario(usuario.getNombreUsuario())) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
+        if (usuario.getIdentificacion().getNumeroIdentificacion() != null
+                && usuarioDAO.isRegistradoNumeroIdentificacion(usuario.getIdentificacion().getNumeroIdentificacion())) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
         Usuario usuarioCreado = usuarioDAO.guardar(usuario);
 
         return Response.status(Response.Status.CREATED).entity(usuarioCreado).build();

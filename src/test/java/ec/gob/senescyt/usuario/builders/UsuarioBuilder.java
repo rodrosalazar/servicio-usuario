@@ -11,6 +11,7 @@ public class UsuarioBuilder {
     private static final TipoDocumentoEnum TIPO_DOCUMENTO_CEDULA = TipoDocumentoEnum.CEDULA;
     private static final TipoDocumentoEnum TIPO_DOCUMENTO_PASAPORTE = TipoDocumentoEnum.PASAPORTE;
     private static final String CEDULA_VALIDA = "1718642174";
+    private static final String CEDULA_VALIDA_2 = "1804068953";
     private static final String CEDULA_INVALIDA = "11";
     private static final String PRIMER_NOMBRE = "Nelson";
     private static final String SEGUNDO_NOMBRE = "Alberto";
@@ -24,6 +25,7 @@ public class UsuarioBuilder {
     private static final DateTime FECHA_HACE_UN_MES = new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay().minusMonths(1);
     private static final long ID_INSTITUCION = 1l;
     private static final String NOMBRE_USUARIO = "usuarioSenescyt";
+    private static final String NOMBRE_USUARIO_2 = "usuarioAdmin";
     private static final String CAMPO_EN_BLANCO = "";
     private static final String PASAPORTE = "AAD11234";
 
@@ -166,5 +168,29 @@ public class UsuarioBuilder {
                 "    \"idInstitucion\":\"\",\n" +
                 "    \"nombreUsuario\":\"njumbo\"\n" +
                 "}";
+    }
+
+    public static Usuario usuarioValido1718642174UsuarioSenescyt() {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                ID_INSTITUCION, NOMBRE_USUARIO);
+    }
+
+    public static Usuario usuarioValido1804068953UsuarioSenescyt() {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA_2),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                ID_INSTITUCION, NOMBRE_USUARIO);
+    }
+
+    public static Usuario usuarioValido1718642174UsuarioAdmin() {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                ID_INSTITUCION, NOMBRE_USUARIO_2);
     }
 }

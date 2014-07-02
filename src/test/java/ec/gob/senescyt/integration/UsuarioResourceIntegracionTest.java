@@ -137,7 +137,7 @@ public class UsuarioResourceIntegracionTest {
 
         ClientResponse responseValidacion = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("nombreUsuario",UsuarioBuilder.usuarioValido().getNombreUsuario())
+                .queryParam("nombreUsuario", UsuarioBuilder.usuarioValido().getNombreUsuario())
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(200));
@@ -157,7 +157,7 @@ public class UsuarioResourceIntegracionTest {
 
         ClientResponse responseValidacion = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("numeroIdentificacion",UsuarioBuilder.usuarioValido().getIdentificacion().getNumeroIdentificacion())
+                .queryParam("numeroIdentificacion", UsuarioBuilder.usuarioValido().getIdentificacion().getNumeroIdentificacion())
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(400));
@@ -170,10 +170,51 @@ public class UsuarioResourceIntegracionTest {
 
         ClientResponse responseValidacion = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("numeroIdentificacion",UsuarioBuilder.usuarioValido().getIdentificacion().getNumeroIdentificacion())
+                .queryParam("numeroIdentificacion", UsuarioBuilder.usuarioValido().getIdentificacion().getNumeroIdentificacion())
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(200));
 
     }
+
+    @Test
+    public void debeValidarQueNombreDeUsuarioNoSeRepitaCuandoSeGuardaUsuario() throws Exception {
+        Client client = new Client();
+
+        ClientResponse responseInsertUsuario = client.resource(
+                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioSenescyt());
+
+        assertThat(responseInsertUsuario.getStatus(), is(201));
+
+        ClientResponse responseUsuarioRepetido = client.resource(
+                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1804068953UsuarioSenescyt());
+
+        assertThat(responseUsuarioRepetido.getStatus(), is(400));
+    }
+
+
+    @Test
+    public void debeValidarQueNumeroDeIdentificacionNoSeRepitaCuandoSeGuardaUsuario() throws Exception {
+        Client client = new Client();
+
+        ClientResponse responseInsertUsuario = client.resource(
+                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioSenescyt());
+
+        assertThat(responseInsertUsuario.getStatus(), is(201));
+
+        ClientResponse responseUsuarioRepetido = client.resource(
+                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioAdmin());
+
+        assertThat(responseUsuarioRepetido.getStatus(), is(400));
+    }
+
+
 }
