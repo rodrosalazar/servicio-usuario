@@ -73,6 +73,7 @@ public class UsuarioResourceIntegracionTest {
                 .get(ClientResponse.class);
 
         assertThat(response.getStatus(), is(400));
+        assertThat(response.getEntity(String.class), is("identificacion.numeroIdentificacion Cedula no valida *="));
     }
 
     @Test
@@ -128,6 +129,7 @@ public class UsuarioResourceIntegracionTest {
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(400));
+        assertThat(responseValidacion.getEntity(String.class), is("nombreUsuario Nombre de usuario ya esta registrado *="));
 
     }
 
@@ -161,6 +163,7 @@ public class UsuarioResourceIntegracionTest {
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(400));
+        assertThat(responseValidacion.getEntity(String.class), is("identificacion.numeroIdentificacion Numero de Identificacion ya esta registrado *="));
 
     }
 
@@ -194,6 +197,7 @@ public class UsuarioResourceIntegracionTest {
                 .post(ClientResponse.class, UsuarioBuilder.usuarioValido1804068953UsuarioSenescyt());
 
         assertThat(responseUsuarioRepetido.getStatus(), is(400));
+        assertThat(responseUsuarioRepetido.getEntity(String.class), is("nombreUsuario Nombre de usuario ya esta registrado *="));
     }
 
 
@@ -214,6 +218,7 @@ public class UsuarioResourceIntegracionTest {
                 .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioAdmin());
 
         assertThat(responseUsuarioRepetido.getStatus(), is(400));
+        assertThat(responseUsuarioRepetido.getEntity(String.class), is("identificacion.numeroIdentificacion Numero de Identificacion ya esta registrado *="));
     }
 
 

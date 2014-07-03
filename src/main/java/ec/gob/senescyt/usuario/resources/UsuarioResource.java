@@ -30,19 +30,28 @@ public class UsuarioResource {
                             @QueryParam("nombreUsuario") final Optional<String> nombreUsuario,
                             @QueryParam("numeroIdentificacion") final Optional<String> numeroIdentificacion) {
 
-        if (cedula.isPresent() && cedulaValidator.isValidaCedula(cedula.get())) {
-            return Response.ok().build();
+        if (cedula.isPresent()) {
+            if (cedulaValidator.isValidaCedula(cedula.get())) {
+                return Response.ok().build();
+            }
+            return Response.status(Response.Status.BAD_REQUEST).entity("identificacion.numeroIdentificacion Cedula no valida *=").build();
         }
 
-        if (nombreUsuario.isPresent() && !usuarioDAO.isRegistradoNombreUsuario(nombreUsuario.get())) {
-            return Response.ok().build();
+        if (nombreUsuario.isPresent()) {
+            if (!usuarioDAO.isRegistradoNombreUsuario(nombreUsuario.get())) {
+                return Response.ok().build();
+            }
+            return Response.status(Response.Status.BAD_REQUEST).entity("nombreUsuario Nombre de usuario ya esta registrado *=").build();
         }
 
-        if (numeroIdentificacion.isPresent() && !usuarioDAO.isRegistradoNumeroIdentificacion(numeroIdentificacion.get())) {
-            return Response.ok().build();
+        if (numeroIdentificacion.isPresent()) {
+            if (!usuarioDAO.isRegistradoNumeroIdentificacion(numeroIdentificacion.get())) {
+                return Response.ok().build();
+            }
+            return Response.status(Response.Status.BAD_REQUEST).entity("identificacion.numeroIdentificacion Numero de Identificacion ya esta registrado *=").build();
         }
-
         return Response.status(Response.Status.BAD_REQUEST).build();
+
     }
 
     @POST
@@ -50,12 +59,12 @@ public class UsuarioResource {
     public Response crear(@Valid final Usuario usuario) {
         if (usuario.getNombreUsuario() != null
                 && usuarioDAO.isRegistradoNombreUsuario(usuario.getNombreUsuario())) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("nombreUsuario Nombre de usuario ya esta registrado *=").build();
         }
 
         if (usuario.getIdentificacion().getNumeroIdentificacion() != null
                 && usuarioDAO.isRegistradoNumeroIdentificacion(usuario.getIdentificacion().getNumeroIdentificacion())) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("identificacion.numeroIdentificacion Numero de Identificacion ya esta registrado *=").build();
         }
 
         Usuario usuarioCreado = usuarioDAO.guardar(usuario);
