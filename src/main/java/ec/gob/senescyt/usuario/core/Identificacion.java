@@ -3,7 +3,6 @@ package ec.gob.senescyt.usuario.core;
 import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -12,11 +11,9 @@ import java.io.Serializable;
 @Embeddable
 public class Identificacion implements Serializable {
 
-    @Column
     @Enumerated(EnumType.STRING)
     private TipoDocumentoEnum tipoDocumento;
 
-    @Column
     @NotEmpty
     private String numeroIdentificacion;
 

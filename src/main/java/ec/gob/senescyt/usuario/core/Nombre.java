@@ -2,28 +2,20 @@ package ec.gob.senescyt.usuario.core;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
-/**
- * Created by njumbo on 25/06/14.
- */
 @Embeddable
 public class Nombre implements Serializable{
 
-    @Column
     @NotEmpty
     private String primerNombre;
 
-    @Column
     private String segundoNombre;
 
-    @Column
     @NotEmpty
     private String primerApellido;
 
-    @Column
     private String segundoApellido;
 
     @Override

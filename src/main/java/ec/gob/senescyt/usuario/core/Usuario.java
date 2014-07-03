@@ -1,16 +1,12 @@
 package ec.gob.senescyt.usuario.core;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.google.common.annotations.VisibleForTesting;
 import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaDeserializer;
 import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaSerializer;
 import ec.gob.senescyt.usuario.validators.annotations.FechaVigenciaValida;
 import ec.gob.senescyt.usuario.validators.annotations.IdentificacionValida;
 import ec.gob.senescyt.usuario.validators.annotations.QuipuxValido;
-import io.dropwizard.jackson.Jackson;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -37,17 +33,14 @@ public class Usuario {
     @Valid
     private Nombre nombre;
 
-    @Column
     @Email(message = "{ec.gob.senescyt.error.email}")
     @NotEmpty
     private String emailInstitucional;
 
-    @Column
     @NotEmpty
     @QuipuxValido
     private String numeroAutorizacionQuipux;
 
-    @Column
     @Temporal(TemporalType.DATE)
     @Type(type = "org.joda.time.DateTime")
     @JsonSerialize(using = JSONFechaVigenciaSerializer.class)
@@ -55,17 +48,14 @@ public class Usuario {
     @FechaVigenciaValida
     private DateTime finDeVigencia;
 
-    @Column
     @NotNull
     @Valid
     private Long idInstitucion;
 
-    @Column
     @NotEmpty
     private String nombreUsuario;
 
-    private Usuario() {
-    }
+    private Usuario() {}
 
     public Usuario(Identificacion identificacion, Nombre nombre, String emailInstitucional, String numeroAutorizacionQuipux,
                    DateTime fechaDeVigencia, Long idInstitucion, String nombreUsuario) {
@@ -110,9 +100,4 @@ public class Usuario {
         return nombreUsuario;
     }
 
-    @VisibleForTesting
-    public String toJson() throws JsonProcessingException {
-            ObjectMapper mapper = Jackson.newObjectMapper();
-            return mapper.writeValueAsString(this);
-    }
 }
