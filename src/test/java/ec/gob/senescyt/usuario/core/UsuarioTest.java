@@ -24,7 +24,7 @@ public class UsuarioTest {
         usuario = new Usuario(new Identificacion(TipoDocumentoEnum.CEDULA, "1718642174"),
                 new Nombre("Nelson", "Alberto", "Jumbo", "Hidalgo"),
                 "testEmail@senescyt.gob.ec", "SENESCYT-DFAPO-2014-65946-MI",
-                new DateTime(2015, 1, 12,0, 0, DateTimeZone.UTC),
+                new DateTime(2016, 7, 29,0, 0, DateTimeZone.UTC),
                 idInstitucion, "nombreUsuario");
     }
 

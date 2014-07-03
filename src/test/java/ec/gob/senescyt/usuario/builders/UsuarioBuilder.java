@@ -164,7 +164,7 @@ public class UsuarioBuilder {
                 "    },\n" +
                 "    \"emailInstitucional\":\"testEmail@senescyt.gob.ec\",\n" +
                 "    \"numeroAutorizacionQuipux\":\"SENESCYT-DFAPO-2014-65946-MI\",\n" +
-                "    \"finDeVigencia\":\"12/01/2015\",\n" +
+                "    \"finDeVigencia\":\"2016-07-25\",\n" +
                 "    \"idInstitucion\":\"\",\n" +
                 "    \"nombreUsuario\":\"njumbo\"\n" +
                 "}";

@@ -15,7 +15,7 @@ import java.io.IOException;
  */
 public class JSONFechaVigenciaSerializer extends JsonSerializer<DateTime> {
 
-    DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
+    DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
 
     @Override
     public void serialize(DateTime date, JsonGenerator gen, SerializerProvider provider) throws IOException, JsonProcessingException {

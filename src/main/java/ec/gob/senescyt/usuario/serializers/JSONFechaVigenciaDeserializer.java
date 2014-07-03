@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class JSONFechaVigenciaDeserializer extends JsonDeserializer<DateTime> {
 
-    DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yyyy");
+    DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-MM-dd");
 
     @Override
     public DateTime deserialize(JsonParser jsonParser, DeserializationContext ctxt) throws IOException {
