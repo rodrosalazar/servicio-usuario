@@ -11,6 +11,8 @@ import ec.gob.senescyt.usuario.dao.InstitucionDAO;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
+import ec.gob.senescyt.usuario.lectores.LectorArchivoDePropiedades;
+import ec.gob.senescyt.usuario.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.resources.InstitucionResource;
 import ec.gob.senescyt.usuario.resources.PerfilResource;
 import ec.gob.senescyt.usuario.resources.UsuarioResource;
@@ -70,8 +72,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         environment.jersey().register(perfilResource);
 
         CedulaValidator cedulaValidator = new CedulaValidator();
+        LectorArchivoDePropiedades lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
 
-        final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator);
+        final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades);
         environment.jersey().register(usuarioResource);
 
         final InstitucionResource institucionResource = new InstitucionResource(institucionDAO);

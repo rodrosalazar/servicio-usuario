@@ -5,8 +5,11 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.usuario.UsuarioApplication;
 import ec.gob.senescyt.usuario.UsuarioConfiguration;
+import ec.gob.senescyt.usuario.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.usuario.builders.UsuarioBuilder;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
+import ec.gob.senescyt.usuario.lectores.LectorArchivoDePropiedades;
+import ec.gob.senescyt.usuario.lectores.enums.ArchivosPropiedadesEnum;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
@@ -27,6 +30,9 @@ public class UsuarioResourceIntegracionTest {
 
     private SessionFactory sessionFactory;
 
+    private LectorArchivoDePropiedades lectorArchivoDePropiedades;
+    private MensajeErrorBuilder mensajeErrorBuilder;
+
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
 
@@ -44,6 +50,9 @@ public class UsuarioResourceIntegracionTest {
         ManagedSessionContext.bind(sessionFactory.openSession());
         UsuarioDAO usuarioDAO = new UsuarioDAO(sessionFactory);
         usuarioDAO.limpiar();
+        lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
+        mensajeErrorBuilder = new MensajeErrorBuilder(lectorArchivoDePropiedades);
+
     }
 
     @After
@@ -73,7 +82,8 @@ public class UsuarioResourceIntegracionTest {
                 .get(ClientResponse.class);
 
         assertThat(response.getStatus(), is(400));
-        assertThat(response.getEntity(String.class), is("identificacion.numeroIdentificacion Cedula no valida *="));
+        assertThat(response.getEntity(String.class),
+                is(mensajeErrorBuilder.mensajeNumeroIdentificacionInvalido()));
     }
 
     @Test
@@ -129,7 +139,7 @@ public class UsuarioResourceIntegracionTest {
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(400));
-        assertThat(responseValidacion.getEntity(String.class), is("nombreUsuario Nombre de usuario ya esta registrado *="));
+        assertThat(responseValidacion.getEntity(String.class), is(mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()));
 
     }
 
@@ -163,7 +173,7 @@ public class UsuarioResourceIntegracionTest {
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(400));
-        assertThat(responseValidacion.getEntity(String.class), is("identificacion.numeroIdentificacion Numero de Identificacion ya esta registrado *="));
+        assertThat(responseValidacion.getEntity(String.class), is(mensajeErrorBuilder.mensajeNumeroIdentificacionYaHaSidoRegistrado()));
 
     }
 
@@ -197,7 +207,7 @@ public class UsuarioResourceIntegracionTest {
                 .post(ClientResponse.class, UsuarioBuilder.usuarioValido1804068953UsuarioSenescyt());
 
         assertThat(responseUsuarioRepetido.getStatus(), is(400));
-        assertThat(responseUsuarioRepetido.getEntity(String.class), is("nombreUsuario Nombre de usuario ya esta registrado *="));
+        assertThat(responseUsuarioRepetido.getEntity(String.class), is(mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()));
     }
 
 
@@ -218,7 +228,7 @@ public class UsuarioResourceIntegracionTest {
                 .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioAdmin());
 
         assertThat(responseUsuarioRepetido.getStatus(), is(400));
-        assertThat(responseUsuarioRepetido.getEntity(String.class), is("identificacion.numeroIdentificacion Numero de Identificacion ya esta registrado *="));
+        assertThat(responseUsuarioRepetido.getEntity(String.class), is(mensajeErrorBuilder.mensajeNumeroIdentificacionYaHaSidoRegistrado()));
     }
 
 

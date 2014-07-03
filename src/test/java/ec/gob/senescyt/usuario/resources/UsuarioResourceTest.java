@@ -8,6 +8,8 @@ import ec.gob.senescyt.usuario.builders.UsuarioBuilder;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
+import ec.gob.senescyt.usuario.lectores.LectorArchivoDePropiedades;
+import ec.gob.senescyt.usuario.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Before;
@@ -25,17 +27,18 @@ public class UsuarioResourceTest {
     private UsuarioResource usuarioResource;
     private static UsuarioDAO usuarioDAO = mock(UsuarioDAO.class);
     private static CedulaValidator cedulaValidator = new CedulaValidator();
+    private static LectorArchivoDePropiedades lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
 
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new UsuarioResource(usuarioDAO, cedulaValidator))
+            .addResource(new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades))
             .addProvider(ValidacionExceptionMapper.class)
             .build();
     private Client client;
 
     @Before
     public void setUp() {
-        usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator);
+        usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades);
         client = resources.client();
         reset(usuarioDAO);
     }

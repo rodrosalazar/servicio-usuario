@@ -1,8 +1,10 @@
 package ec.gob.senescyt.usuario.resources;
 
 import com.google.common.base.Optional;
+import ec.gob.senescyt.usuario.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
+import ec.gob.senescyt.usuario.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -17,10 +19,14 @@ public class UsuarioResource {
 
     private final UsuarioDAO usuarioDAO;
     private CedulaValidator cedulaValidator;
+    private LectorArchivoDePropiedades lectorArchivoDePropiedades;
+    private MensajeErrorBuilder mensajeErrorBuilder;
 
-    public UsuarioResource(final UsuarioDAO usuarioDAO, CedulaValidator cedulaValidator) {
+    public UsuarioResource(final UsuarioDAO usuarioDAO, final CedulaValidator cedulaValidator, final LectorArchivoDePropiedades lectorArchivoDePropiedades) {
         this.usuarioDAO = usuarioDAO;
         this.cedulaValidator = cedulaValidator;
+        this.lectorArchivoDePropiedades = lectorArchivoDePropiedades;
+        this.mensajeErrorBuilder = new MensajeErrorBuilder(this.lectorArchivoDePropiedades);
     }
 
     @GET
@@ -34,21 +40,21 @@ public class UsuarioResource {
             if (cedulaValidator.isValidaCedula(cedula.get())) {
                 return Response.ok().build();
             }
-            return Response.status(Response.Status.BAD_REQUEST).entity("identificacion.numeroIdentificacion Cedula no valida *=").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(this.mensajeErrorBuilder.mensajeNumeroIdentificacionInvalido()).build();
         }
 
         if (nombreUsuario.isPresent()) {
             if (!usuarioDAO.isRegistradoNombreUsuario(nombreUsuario.get())) {
                 return Response.ok().build();
             }
-            return Response.status(Response.Status.BAD_REQUEST).entity("nombreUsuario Nombre de usuario ya esta registrado *=").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(this.mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()).build();
         }
 
         if (numeroIdentificacion.isPresent()) {
             if (!usuarioDAO.isRegistradoNumeroIdentificacion(numeroIdentificacion.get())) {
                 return Response.ok().build();
             }
-            return Response.status(Response.Status.BAD_REQUEST).entity("identificacion.numeroIdentificacion Numero de Identificacion ya esta registrado *=").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(this.mensajeErrorBuilder.mensajeNumeroIdentificacionYaHaSidoRegistrado()).build();
         }
         return Response.status(Response.Status.BAD_REQUEST).build();
 
@@ -59,12 +65,12 @@ public class UsuarioResource {
     public Response crear(@Valid final Usuario usuario) {
         if (usuario.getNombreUsuario() != null
                 && usuarioDAO.isRegistradoNombreUsuario(usuario.getNombreUsuario())) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("nombreUsuario Nombre de usuario ya esta registrado *=").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(this.mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()).build();
         }
 
         if (usuario.getIdentificacion().getNumeroIdentificacion() != null
                 && usuarioDAO.isRegistradoNumeroIdentificacion(usuario.getIdentificacion().getNumeroIdentificacion())) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("identificacion.numeroIdentificacion Numero de Identificacion ya esta registrado *=").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(mensajeErrorBuilder.mensajeNumeroIdentificacionYaHaSidoRegistrado()).build();
         }
 
         Usuario usuarioCreado = usuarioDAO.guardar(usuario);
