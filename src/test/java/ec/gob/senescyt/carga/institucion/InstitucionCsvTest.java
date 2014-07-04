@@ -1,4 +1,4 @@
-package ec.gob.senescyt.carga.instituciones;
+package ec.gob.senescyt.carga.institucion;
 
 import ec.gob.senescyt.carga.ConversorCsv;
 import org.junit.After;

@@ -83,8 +83,17 @@ test {
     outputs.upToDateWhen { false }
 }
 
-task(runCsv, type: JavaExec) {
-    main = 'ec.gob.senescyt.carga.instituciones.InstitucionesCsv'
+task(runInstitucionCsv, type: JavaExec) {
+    main = 'ec.gob.senescyt.carga.institucion.InstitucionCsv'
+    classpath = sourceSets.main.runtimeClasspath
+
+    if (project.hasProperty('params')) {
+        args(params.split())
+    }
+}
+
+task(runClasificacionCsv, type: JavaExec) {
+    main = 'ec.gob.senescyt.carga.cine.ClasificacionCsv'
     classpath = sourceSets.main.runtimeClasspath
 
     if (project.hasProperty('params')) {

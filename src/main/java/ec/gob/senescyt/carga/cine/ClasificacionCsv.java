@@ -12,8 +12,8 @@ public class ClasificacionCsv extends ConversorCsv {
     }
 
     @Override
-    protected String entidadASql(Object object) {
-        Clasificacion clasificacion = (Clasificacion) object;
+    protected String entidadASql(Object entidad) {
+        Clasificacion clasificacion = (Clasificacion) entidad;
 
         return String.format("INSERT INTO %s VALUES (%s, %s);", ClasificacionCsv.NOMBRE_TABLA,
                 stringASql(clasificacion.getId()),
@@ -21,16 +21,3 @@ public class ClasificacionCsv extends ConversorCsv {
         );
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

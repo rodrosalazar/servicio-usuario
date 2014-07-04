@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import ec.gob.senescyt.carga.instituciones.InstitucionCsv;
+import ec.gob.senescyt.carga.institucion.InstitucionCsv;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,9 +23,9 @@ public abstract class ConversorCsv {
         CsvMapper mapeador = new CsvMapper();
         mapeador.enable(CsvParser.Feature.TRIM_SPACES);
 
-        Object objeto = mapeador.readerWithSchemaFor(tipo).readValue(lineaCsv);
+        Object entidad = mapeador.readerWithSchemaFor(tipo).readValue(lineaCsv);
 
-        return entidadASql(objeto);
+        return entidadASql(entidad);
     }
 
     public String archivoASql(File archivo) throws IOException {
@@ -43,7 +43,7 @@ public abstract class ConversorCsv {
         return resultado;
     }
 
-    protected abstract String entidadASql(Object object) ;
+    protected abstract String entidadASql(Object entidad);
 
     protected String stringASql(String string) {
         if (string == null) {
