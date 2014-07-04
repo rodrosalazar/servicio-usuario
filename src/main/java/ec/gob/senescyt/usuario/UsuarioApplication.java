@@ -16,6 +16,7 @@ import ec.gob.senescyt.usuario.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.resources.InstitucionResource;
 import ec.gob.senescyt.usuario.resources.PerfilResource;
 import ec.gob.senescyt.usuario.resources.UsuarioResource;
+import ec.gob.senescyt.usuario.resources.management.LimpiezaResource;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
@@ -79,6 +80,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         final InstitucionResource institucionResource = new InstitucionResource(institucionDAO);
         environment.jersey().register(institucionResource);
+
+        final LimpiezaResource limpiezaResource = new LimpiezaResource(usuarioDAO);
+        environment.jersey().register(limpiezaResource);
 
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
