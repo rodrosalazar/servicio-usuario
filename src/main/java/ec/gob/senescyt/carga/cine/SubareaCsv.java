@@ -3,6 +3,8 @@ package ec.gob.senescyt.carga.cine;
 import ec.gob.senescyt.carga.ConversorCsv;
 import ec.gob.senescyt.usuario.core.cine.Subarea;
 
+import java.io.IOException;
+
 public class SubareaCsv extends ConversorCsv {
 
     public SubareaCsv() {
@@ -18,5 +20,9 @@ public class SubareaCsv extends ConversorCsv {
                 stringASql(subarea.getNombre()),
                 stringASql(subarea.getAreaId())
         );
+    }
+
+    public static void main(String... args) throws IOException {
+        convertir(new SubareaCsv(), args);
     }
 }

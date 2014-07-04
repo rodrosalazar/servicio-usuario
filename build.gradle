@@ -83,21 +83,26 @@ test {
     outputs.upToDateWhen { false }
 }
 
-task(runInstitucionCsv, type: JavaExec) {
-    main = 'ec.gob.senescyt.carga.institucion.InstitucionCsv'
-    classpath = sourceSets.main.runtimeClasspath
+task(runCsv, type: JavaExec) {
+    final CONVERSORES = ['institucion.InstitucionCsv', 'cine.ClasificacionCsv', 'cine.AreaCsv', 'cine.SubareaCsv']
+    if (!project.hasProperty('params')) {
+        println 'Uso correcto: ./gradlew runCsv -P params="paquete.Clase ruta-entrada.csv [ruta-salida.sql]"'
+        println 'Conversores disponibles:'
 
-    if (project.hasProperty('params')) {
-        args(params.split())
+        for (item in CONVERSORES) {
+            println '  ' + item
+        }
+        return;
     }
-}
 
-task(runClasificacionCsv, type: JavaExec) {
-    main = 'ec.gob.senescyt.carga.cine.ClasificacionCsv'
+    def paramsList = params.split()
+    main = 'ec.gob.senescyt.carga.' + paramsList[0]
+    println main
     classpath = sourceSets.main.runtimeClasspath
-
-    if (project.hasProperty('params')) {
-        args(params.split())
+    if (paramsList.length == 1) {
+        args()
+    } else {
+        args(paramsList[1..- 1])
     }
 }
 
@@ -106,6 +111,3 @@ task oneJar(type: OneJar, dependsOn: clean) {
     mainClass = mainClassName
     additionalDir = file('src/main/resources')
 }
-
-
-

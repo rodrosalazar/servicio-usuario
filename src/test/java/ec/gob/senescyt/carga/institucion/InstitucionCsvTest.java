@@ -1,6 +1,5 @@
 package ec.gob.senescyt.carga.institucion;
 
-import ec.gob.senescyt.carga.ConversorCsv;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -65,7 +64,7 @@ public class InstitucionCsvTest {
 
     @Test
     public void debeGenerarArchivosSqlAPartirDeArchivosCsvDesdeConsola() throws IOException {
-        ConversorCsv.main(this.getClass().getResource(ARCHIVO_ENTRADA_CSV).getPath());
+        InstitucionCsv.main(this.getClass().getResource(ARCHIVO_ENTRADA_CSV).getPath());
         File archivoDestino = new File(ARCHIVO_SALIDA_SQL);
         assertThat(archivoDestino.isFile(), is(true));
     }
@@ -74,7 +73,7 @@ public class InstitucionCsvTest {
     public void debeUsarElSegundoParametroComoElArchivoDeDestino() throws IOException {
         String rutaOrigen = this.getClass().getResource(ARCHIVO_ENTRADA_CSV).getPath();
         String rutaDestino = ARCHIVO_SALIDA_TXT;
-        ConversorCsv.main(rutaOrigen, rutaDestino);
+        InstitucionCsv.main(rutaOrigen, rutaDestino);
         File archivoDestino = new File(rutaDestino);
         assertThat(archivoDestino.isFile(), is(true));
     }
@@ -83,7 +82,7 @@ public class InstitucionCsvTest {
     public void debeUsarElSegundoParametroComoDirectorioDeDestino() throws IOException {
         String rutaOrigen = this.getClass().getResource(ARCHIVO_ENTRADA_CSV).getPath();
         String rutaDestino = rutaOrigen.replace(ARCHIVO_ENTRADA_CSV, "");
-        ConversorCsv.main(rutaOrigen, rutaDestino);
+        InstitucionCsv.main(rutaOrigen, rutaDestino);
         File archivoDestino = new File(rutaDestino + File.separator + ARCHIVO_SALIDA_SQL);
         assertThat(archivoDestino.isFile(), is(true));
     }
@@ -94,7 +93,7 @@ public class InstitucionCsvTest {
         ByteArrayOutputStream flujoSalida = new ByteArrayOutputStream();
         System.setOut(new PrintStream(flujoSalida));
 
-        ConversorCsv.main();
+        InstitucionCsv.main();
 
         System.out.flush();
         System.setOut(old);

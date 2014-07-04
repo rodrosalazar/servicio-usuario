@@ -78,19 +78,19 @@ public abstract class ConversorCsv {
         return argDestino;
     }
 
-    public static void main(String... args) throws IOException {
-
+    protected static void convertir(ConversorCsv conversorCsv, String... args) throws IOException {
+        final String usoCorrecto = "\nUso correcto:\n" +
+                "./gradlew runCsv -P params=\"ruta-entrada.csv [ruta-salida.sql]\"\n\n" +
+                "El archivo CSV de entrada esperado consiste en:\n" +
+                "  - Una primera línea con los títulos de las columnas\n" +
+                "  - Todas las líneas subsiguientes con los datos a importarse\n\n" +
+                "Ejemplo:\n" +
+                "CODIGO,NOMBRE,CODIGO_REGIMEN,REGIMEN,CODIGO_ESTADO,ESTADO,CODIGO_CATEGORIA,CATEGORIA\n" +
+                "1001,ESCUELA POLITECNICA NACIONAL,01,PUBLICA,01,VIGENTE,01,A\n" +
+                "1002,ESCUELA SUPERIOR POLITECNICA DE CHIMBORAZO,01,PUBLICA,01,VIGENTE,02,B\n" +
+                "...";
         if (args.length == 0) {
-            System.out.println("\nUso correcto:\n" +
-                    "./gradlew runCsv -P params=\"ruta-entrada.csv [ruta-salida.sql]\"\n\n" +
-                    "El archivo CSV de entrada esperado consiste en:\n" +
-                    "  - Una primera línea con los títulos de las columnas\n" +
-                    "  - Todas las líneas subsiguientes con los datos a importarse\n\n" +
-                    "Ejemplo:\n" +
-                    "CODIGO,NOMBRE,CODIGO_REGIMEN,REGIMEN,CODIGO_ESTADO,ESTADO,CODIGO_CATEGORIA,CATEGORIA\n" +
-                    "1001,ESCUELA POLITECNICA NACIONAL,01,PUBLICA,01,VIGENTE,01,A\n" +
-                    "1002,ESCUELA SUPERIOR POLITECNICA DE CHIMBORAZO,01,PUBLICA,01,VIGENTE,02,B\n" +
-                    "...");
+            System.out.println(usoCorrecto);
             return;
         }
         String rutaOrigen = args[0];
@@ -101,7 +101,7 @@ public abstract class ConversorCsv {
         File archivoDestino = new File(rutaDestino);
         BufferedWriter escritor = new BufferedWriter(new FileWriter(archivoDestino));
 
-        escritor.write(new InstitucionCsv().archivoASql(archivoOrigen));
+        escritor.write(conversorCsv.archivoASql(archivoOrigen));
         escritor.close();
     }
 }

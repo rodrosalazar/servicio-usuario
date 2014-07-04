@@ -3,6 +3,8 @@ package ec.gob.senescyt.carga.institucion;
 import ec.gob.senescyt.carga.ConversorCsv;
 import ec.gob.senescyt.usuario.core.Institucion;
 
+import java.io.IOException;
+
 public class InstitucionCsv extends ConversorCsv {
 
     public InstitucionCsv() {
@@ -21,4 +23,7 @@ public class InstitucionCsv extends ConversorCsv {
         );
     }
 
+    public static void main(String... args) throws IOException {
+        convertir(new InstitucionCsv(), args);
+    }
 }

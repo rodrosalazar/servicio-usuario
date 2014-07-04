@@ -3,6 +3,8 @@ package ec.gob.senescyt.carga.cine;
 import ec.gob.senescyt.carga.ConversorCsv;
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
 
+import java.io.IOException;
+
 public class ClasificacionCsv extends ConversorCsv {
 
     public ClasificacionCsv() {
@@ -17,5 +19,9 @@ public class ClasificacionCsv extends ConversorCsv {
                 stringASql(clasificacion.getId()),
                 stringASql(clasificacion.getNombre())
         );
+    }
+
+    public static void main(String... args) throws IOException {
+        convertir(new ClasificacionCsv(), args);
     }
 }
