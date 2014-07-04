@@ -28,6 +28,7 @@ public class UsuarioBuilder {
     private static final String NOMBRE_USUARIO_2 = "usuarioAdmin";
     private static final String CAMPO_EN_BLANCO = "";
     private static final String PASAPORTE = "AAD11234";
+    private static final String PASAPORTE_DE_21_DIGITOS = "123456789012345678901";
 
     public static Usuario usuarioConCedulaEnBlanco(){
          return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CAMPO_EN_BLANCO),
@@ -188,6 +189,22 @@ public class UsuarioBuilder {
 
     public static Usuario usuarioValido1718642174UsuarioAdmin() {
         return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                ID_INSTITUCION, NOMBRE_USUARIO_2);
+    }
+
+    public static Usuario usuarioConIdentificacionDeMasDe20Digitos() {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_PASAPORTE, PASAPORTE_DE_21_DIGITOS),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                ID_INSTITUCION, NOMBRE_USUARIO_2);
+    }
+
+    public static Usuario usuarioConPasaporteVacio() {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_PASAPORTE, ""),
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,

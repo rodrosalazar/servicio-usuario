@@ -1,6 +1,7 @@
 package ec.gob.senescyt.usuario.core;
 
 import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Embeddable;
@@ -15,6 +16,7 @@ public class Identificacion implements Serializable {
     private TipoDocumentoEnum tipoDocumento;
 
     @NotEmpty
+    @Length(max = 20)
     private String numeroIdentificacion;
 
     private Identificacion(){};

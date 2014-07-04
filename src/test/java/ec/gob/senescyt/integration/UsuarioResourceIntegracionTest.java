@@ -7,6 +7,7 @@ import ec.gob.senescyt.usuario.UsuarioApplication;
 import ec.gob.senescyt.usuario.UsuarioConfiguration;
 import ec.gob.senescyt.usuario.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.usuario.builders.UsuarioBuilder;
+import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.usuario.lectores.enums.ArchivosPropiedadesEnum;
@@ -229,6 +230,34 @@ public class UsuarioResourceIntegracionTest {
 
         assertThat(responseUsuarioRepetido.getStatus(), is(400));
         assertThat(responseUsuarioRepetido.getEntity(String.class), is(mensajeErrorBuilder.mensajeNumeroIdentificacionYaHaSidoRegistrado()));
+    }
+
+    @Test
+    public void debeDevolverUnMensajeDeErrorCuandoElNumeroDeIdentificacionEsMayorDe20() {
+        Usuario usuarioCon21Digitos = UsuarioBuilder.usuarioConIdentificacionDeMasDe20Digitos();
+
+        Client client = new Client();
+
+        ClientResponse response = client.resource(
+                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, usuarioCon21Digitos);
+
+        assertThat(response.getStatus(), is(400));
+    }
+
+    @Test
+    public void debeDevolverUnMensajeDeErrorCuandoElNumeroDePasaporteEstaVacio() {
+        Usuario usuarioCon21Digitos = UsuarioBuilder.usuarioConPasaporteVacio();
+
+        Client client = new Client();
+
+        ClientResponse response = client.resource(
+                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, usuarioCon21Digitos);
+
+        assertThat(response.getStatus(), is(400));
     }
 
 
