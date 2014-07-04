@@ -1,4 +1,4 @@
-package ec.gob.senescyt.instituciones.carga;
+package ec.gob.senescyt.carga.instituciones;
 
 import org.junit.After;
 import org.junit.Before;

@@ -1,4 +1,4 @@
-package ec.gob.senescyt.instituciones.carga;
+package ec.gob.senescyt.carga.instituciones;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -21,7 +21,7 @@ public class InstitucionesCsv {
 
         Institucion institucion = mapeador.readerWithSchemaFor(Institucion.class).readValue(lineaCsv);
 
-        return institucionASql(institucion);
+        return entidadASql(institucion);
     }
 
     public String archivoASql(File archivo) throws IOException {
@@ -33,13 +33,13 @@ public class InstitucionesCsv {
 
         MappingIterator<Object> iterador = mapeador.reader(Institucion.class).with(esquema).readValues(archivo);
         while (iterador.hasNext()) {
-            resultado += institucionASql((Institucion) iterador.next()) + "\n";
+            resultado += entidadASql((Institucion) iterador.next()) + "\n";
         }
 
         return resultado;
     }
 
-    private String institucionASql(Institucion institucion) {
+    private String entidadASql(Institucion institucion) {
         return String.format("INSERT INTO %s VALUES (%s, %s, %s, %s, %s, %s, %s, %s);", NOMBRE_TABLA,
                 longASql(institucion.getId()), stringASql(institucion.getNombre()),
                 longASql(institucion.getRegimenId()), stringASql(institucion.getRegimen()),

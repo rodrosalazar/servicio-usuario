@@ -84,7 +84,7 @@ test {
 }
 
 task(runCsv, type: JavaExec) {
-    main = 'ec.gob.senescyt.instituciones.carga.InstitucionesCsv'
+    main = 'ec.gob.senescyt.carga.instituciones.InstitucionesCsv'
     classpath = sourceSets.main.runtimeClasspath
 
     if (project.hasProperty('params')) {
