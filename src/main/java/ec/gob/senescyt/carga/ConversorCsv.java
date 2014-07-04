@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import ec.gob.senescyt.carga.institucion.InstitucionCsv;
 
+import javax.persistence.Table;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -14,9 +15,12 @@ import java.io.IOException;
 public abstract class ConversorCsv {
 
     private final Class tipo;
+    protected final String nombreTabla;
 
     protected ConversorCsv(Class tipo) {
         this.tipo = tipo;
+        Table table = (Table) tipo.getAnnotation(Table.class);
+        nombreTabla = table.name();
     }
 
     public String lineaASql(String lineaCsv) throws IOException {

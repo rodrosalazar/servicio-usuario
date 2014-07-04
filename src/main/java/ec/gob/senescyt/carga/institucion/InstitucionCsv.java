@@ -5,8 +5,6 @@ import ec.gob.senescyt.usuario.core.Institucion;
 
 public class InstitucionCsv extends ConversorCsv {
 
-    public static final String NOMBRE_TABLA = "instituciones";
-
     public InstitucionCsv() {
         super(Institucion.class);
     }
@@ -15,7 +13,7 @@ public class InstitucionCsv extends ConversorCsv {
     protected String entidadASql(Object entidad) {
         Institucion institucion = (Institucion) entidad;
 
-        return String.format("INSERT INTO %s VALUES (%s, %s, %s, %s, %s, %s, %s, %s);", NOMBRE_TABLA,
+        return String.format("INSERT INTO %s VALUES (%s, %s, %s, %s, %s, %s, %s, %s);", nombreTabla,
                 longASql(institucion.getId()), stringASql(institucion.getNombre()),
                 longASql(institucion.getRegimenId()), stringASql(institucion.getRegimen()),
                 longASql(institucion.getEstadoId()), stringASql(institucion.getEstado()),

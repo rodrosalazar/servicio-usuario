@@ -5,8 +5,6 @@ import ec.gob.senescyt.usuario.core.cine.Clasificacion;
 
 public class ClasificacionCsv extends ConversorCsv {
 
-    public static final String NOMBRE_TABLA = "cine_clasificaciones";
-
     public ClasificacionCsv() {
         super(Clasificacion.class);
     }
@@ -15,7 +13,7 @@ public class ClasificacionCsv extends ConversorCsv {
     protected String entidadASql(Object entidad) {
         Clasificacion clasificacion = (Clasificacion) entidad;
 
-        return String.format("INSERT INTO %s VALUES (%s, %s);", ClasificacionCsv.NOMBRE_TABLA,
+        return String.format("INSERT INTO %s VALUES (%s, %s);", nombreTabla,
                 stringASql(clasificacion.getId()),
                 stringASql(clasificacion.getNombre())
         );
