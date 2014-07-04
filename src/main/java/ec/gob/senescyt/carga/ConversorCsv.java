@@ -1,65 +1,77 @@
-package ec.gob.senescyt.carga.instituciones;
+package ec.gob.senescyt.carga;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import ec.gob.senescyt.usuario.core.Institucion;
+import ec.gob.senescyt.carga.instituciones.InstitucionCsv;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class InstitucionesCsv {
+public abstract class ConversorCsv {
 
-    public static final String NOMBRE_TABLA = "instituciones";
+    private final Class tipo;
+
+    protected ConversorCsv(Class tipo) {
+        this.tipo = tipo;
+    }
 
     public String lineaASql(String lineaCsv) throws IOException {
         CsvMapper mapeador = new CsvMapper();
         mapeador.enable(CsvParser.Feature.TRIM_SPACES);
 
-        Institucion institucion = mapeador.readerWithSchemaFor(Institucion.class).readValue(lineaCsv);
+        Object objeto = mapeador.readerWithSchemaFor(tipo).readValue(lineaCsv);
 
-        return entidadASql(institucion);
+        return entidadASql(objeto);
     }
 
     public String archivoASql(File archivo) throws IOException {
         CsvMapper mapeador = new CsvMapper();
         mapeador.enable(CsvParser.Feature.TRIM_SPACES);
-        CsvSchema esquema = mapeador.schemaFor(Institucion.class).withHeader();
+        CsvSchema esquema = mapeador.schemaFor(tipo).withHeader();
 
         String resultado = "";
 
-        MappingIterator<Object> iterador = mapeador.reader(Institucion.class).with(esquema).readValues(archivo);
+        MappingIterator<Object> iterador = mapeador.reader(tipo).with(esquema).readValues(archivo);
         while (iterador.hasNext()) {
-            resultado += entidadASql((Institucion) iterador.next()) + "\n";
+            resultado += entidadASql(iterador.next()) + "\n";
         }
 
         return resultado;
     }
 
-    private String entidadASql(Institucion institucion) {
-        return String.format("INSERT INTO %s VALUES (%s, %s, %s, %s, %s, %s, %s, %s);", NOMBRE_TABLA,
-                longASql(institucion.getId()), stringASql(institucion.getNombre()),
-                longASql(institucion.getRegimenId()), stringASql(institucion.getRegimen()),
-                longASql(institucion.getEstadoId()), stringASql(institucion.getEstado()),
-                longASql(institucion.getCategoriaId()), stringASql(institucion.getCategoria())
-        );
+    protected abstract String entidadASql(Object object) ;
+
+    protected String stringASql(String string) {
+        if (string == null) {
+            return "NULL";
+        }
+        return "'" + string + "'";
     }
 
-    private String longASql(Long number) {
+    protected String longASql(Long number) {
         if (number == null || number == 0) {
             return "NULL";
         }
         return String.valueOf(number);
     }
 
-    private String stringASql(String string) {
-        if (string == null) {
-            return "NULL";
+    private static String definirRutaDestino(File archivoOrigen, String... args) {
+        String nombreArchivoDestino = archivoOrigen.getName().replace(".csv", ".sql");
+
+        if (args.length == 1) {
+            return nombreArchivoDestino;
         }
-        return "'" + string + "'";
+
+        String argDestino = args[1];
+        if (new File(argDestino).isDirectory()) {
+            return argDestino + File.separator + nombreArchivoDestino;
+        }
+
+        return argDestino;
     }
 
     public static void main(String... args) throws IOException {
@@ -85,22 +97,7 @@ public class InstitucionesCsv {
         File archivoDestino = new File(rutaDestino);
         BufferedWriter escritor = new BufferedWriter(new FileWriter(archivoDestino));
 
-        escritor.write(new InstitucionesCsv().archivoASql(archivoOrigen));
+        escritor.write(new InstitucionCsv().archivoASql(archivoOrigen));
         escritor.close();
-    }
-
-    private static String definirRutaDestino(File archivoOrigen, String... args) {
-        String nombreArchivoDestino = archivoOrigen.getName().replace(".csv", ".sql");
-
-        if (args.length == 1) {
-            return nombreArchivoDestino;
-        }
-
-        String argDestino = args[1];
-        if (new File(argDestino).isDirectory()) {
-            return argDestino + File.separator + nombreArchivoDestino;
-        }
-
-        return argDestino;
     }
 }
