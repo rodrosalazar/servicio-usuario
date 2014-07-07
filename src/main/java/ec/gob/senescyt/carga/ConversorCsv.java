@@ -80,7 +80,7 @@ public abstract class ConversorCsv {
 
     protected static void convertir(ConversorCsv conversorCsv, String... args) throws IOException {
         final String usoCorrecto = "\nUso correcto:\n" +
-                "./gradlew runCsv -P params=\"ruta-entrada.csv [ruta-salida.sql]\"\n\n" +
+                "./gradlew runCsv -P params=\"paquete.Clase ruta-entrada.csv [ruta-salida.sql]\"\n\n" +
                 "El archivo CSV de entrada esperado consiste en:\n" +
                 "  - Una primera línea con los títulos de las columnas\n" +
                 "  - Todas las líneas subsiguientes con los datos a importarse\n\n" +

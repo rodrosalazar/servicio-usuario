@@ -84,25 +84,27 @@ test {
 }
 
 task(runCsv, type: JavaExec) {
-    final CONVERSORES = ['institucion.InstitucionCsv', 'cine.ClasificacionCsv', 'cine.AreaCsv', 'cine.SubareaCsv']
-    if (!project.hasProperty('params')) {
-        println 'Uso correcto: ./gradlew runCsv -P params="paquete.Clase ruta-entrada.csv [ruta-salida.sql]"'
-        println 'Conversores disponibles:'
+    if (project.hasProperty('params')) {
+        def paramsList = params.split()
+        main = 'ec.gob.senescyt.carga.' + paramsList[0]
+        classpath = sourceSets.main.runtimeClasspath
+
+        if (paramsList.length == 1) {
+            args()
+        } else {
+            args(paramsList[1..- 1])
+        }
+    } else if (gradle.startParameter.taskNames[0] == 'runCsv') {
+        final CONVERSORES = ['institucion.InstitucionCsv', 'cine.ClasificacionCsv', 'cine.AreaCsv', 'cine.SubareaCsv']
+        def error = ''
+        error += 'Uso correcto: ./gradlew runCsv -P params="paquete.Clase ruta-entrada.csv [ruta-salida.sql]"\n'
+        error += 'Conversores disponibles:\n'
 
         for (item in CONVERSORES) {
-            println '  ' + item
+            error += "  ${item}\n"
         }
-        return;
-    }
 
-    def paramsList = params.split()
-    main = 'ec.gob.senescyt.carga.' + paramsList[0]
-    println main
-    classpath = sourceSets.main.runtimeClasspath
-    if (paramsList.length == 1) {
-        args()
-    } else {
-        args(paramsList[1..- 1])
+        throw new StopExecutionException(error)
     }
 }
 
