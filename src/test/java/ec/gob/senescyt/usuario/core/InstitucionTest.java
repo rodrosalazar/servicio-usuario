@@ -46,9 +46,8 @@ public class InstitucionTest {
     }
 
     @Test
-    public void debeSerializarUnJSONDesdeUnUsuario() throws Exception {
+    public void debeSerializarUnUsuarioAJSON() throws Exception {
         String actual = MAPPER.writeValueAsString(institucion);
         assertThat(actual, is(fixture("fixtures/institucion_con_id.json")));
     }
-
 }

@@ -18,7 +18,7 @@ public class AreaCsv extends ConversorCsv {
         return String.format("INSERT INTO %s VALUES (%s, %s, %s);", nombreTabla,
                 stringASql(area.getId()),
                 stringASql(area.getNombre()),
-                stringASql(area.getClasificacionId())
+                stringASql(area.getClasificacionIdParaCsv())
         );
     }
 

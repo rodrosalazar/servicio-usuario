@@ -1,18 +1,40 @@
 package ec.gob.senescyt.usuario.core.cine;
 
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
+import org.hibernate.annotations.Cascade;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
-@JsonPropertyOrder({"id", "nombre", "clasificacionId"})
+@JsonPropertyOrder({"id", "nombre", "clasificacionIdParaCsv"})
 @Entity
 @Table(name = "cine_areas")
 public class Area {
 
+    @Id
     private String id;
     private String nombre;
-    private String clasificacionId;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String clasificacionIdParaCsv;
+
+    @ManyToOne
+    @JoinColumn(name = "clasificacion_id")
+    @JsonBackReference
+    private Clasificacion clasificacion;
+
+    @OneToMany(mappedBy = "area")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @JsonManagedReference
+    private List<Subarea> subareas;
+
+    private Area() {}
+
+    public Area(String id, String nombre, List<Subarea> subareas) {
+        this.id = id;
+        this.nombre = nombre;
+        this.subareas = subareas;
+    }
 
     public String getId() {
         return id;
@@ -22,7 +44,15 @@ public class Area {
         return nombre;
     }
 
-    public String getClasificacionId() {
-        return clasificacionId;
+    public String getClasificacionIdParaCsv() {
+        return clasificacionIdParaCsv;
+    }
+
+    public List<Subarea> getSubareas() {
+        return subareas;
+    }
+
+    public Clasificacion getClasificacion() {
+        return clasificacion;
     }
 }

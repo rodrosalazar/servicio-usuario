@@ -18,7 +18,7 @@ public class SubareaCsv extends ConversorCsv {
         return String.format("INSERT INTO %s VALUES (%s, %s, %s);", nombreTabla,
                 stringASql(subarea.getId()),
                 stringASql(subarea.getNombre()),
-                stringASql(subarea.getAreaId())
+                stringASql(subarea.getAreaIdParaCsv())
         );
     }
 
