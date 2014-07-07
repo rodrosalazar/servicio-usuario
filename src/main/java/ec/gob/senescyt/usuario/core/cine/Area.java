@@ -2,6 +2,7 @@ package ec.gob.senescyt.usuario.core.cine;
 
 import com.fasterxml.jackson.annotation.*;
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,6 +16,7 @@ public class Area {
     private String id;
     private String nombre;
 
+    @Transient
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String clasificacionIdParaCsv;
 
@@ -23,8 +25,8 @@ public class Area {
     @JsonBackReference
     private Clasificacion clasificacion;
 
-    @OneToMany(mappedBy = "area")
-    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "area")
+    @Cascade(CascadeType.ALL)
     @JsonManagedReference
     private List<Subarea> subareas;
 

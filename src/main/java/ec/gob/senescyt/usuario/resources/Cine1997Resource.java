@@ -10,7 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/cine-clasificaciones")
+@Path("/cine")
 @Produces(MediaType.APPLICATION_JSON)
 public class Cine1997Resource {
     private Cine1997DAO cine1997DAO;
@@ -19,11 +19,12 @@ public class Cine1997Resource {
         this.cine1997DAO = cine1997DAO;
     }
 
-    @Path("/1997")
     @GET
+    @Path("/1997")
     @UnitOfWork
     public Response obtenerClasificacion() {
         Clasificacion clasificacion = cine1997DAO.obtenerClasificacion();
+
         return Response.ok(clasificacion).build();
     }
 }

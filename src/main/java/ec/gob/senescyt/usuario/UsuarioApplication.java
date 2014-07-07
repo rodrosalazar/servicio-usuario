@@ -7,12 +7,17 @@ import ec.gob.senescyt.usuario.core.Institucion;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.core.Usuario;
+import ec.gob.senescyt.usuario.core.cine.Area;
+import ec.gob.senescyt.usuario.core.cine.Clasificacion;
+import ec.gob.senescyt.usuario.core.cine.Subarea;
+import ec.gob.senescyt.usuario.dao.Cine1997DAO;
 import ec.gob.senescyt.usuario.dao.InstitucionDAO;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.usuario.lectores.enums.ArchivosPropiedadesEnum;
+import ec.gob.senescyt.usuario.resources.Cine1997Resource;
 import ec.gob.senescyt.usuario.resources.InstitucionResource;
 import ec.gob.senescyt.usuario.resources.PerfilResource;
 import ec.gob.senescyt.usuario.resources.UsuarioResource;
@@ -39,7 +44,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     private final DBMigrationsBundle flywayBundle = new DBMigrationsBundle();
 
     private final HibernateBundle<UsuarioConfiguration> hibernate = new HibernateBundle<UsuarioConfiguration>(Perfil.class, Permiso.class,
-            Usuario.class, Institucion.class) {
+            Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
@@ -68,6 +73,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory());
         UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory());
         InstitucionDAO institucionDAO = new InstitucionDAO(getSessionFactory());
+        Cine1997DAO cine1997DAO = new Cine1997DAO(getSessionFactory());
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO);
         environment.jersey().register(perfilResource);
@@ -83,6 +89,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         final LimpiezaResource limpiezaResource = new LimpiezaResource(usuarioDAO);
         environment.jersey().register(limpiezaResource);
+
+        final Cine1997Resource cine1997Resource = new Cine1997Resource(cine1997DAO);
+        environment.jersey().register(cine1997Resource);
 
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
@@ -106,7 +115,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     private void eliminarDefaultConstraintValidationMapper(Environment environment) {
         ResourceConfig jrConfig = environment.jersey().getResourceConfig();
         Set<Object> dwSingletons = jrConfig.getSingletons();
-        List<Object> singletonsToRemove = new ArrayList<Object>();
+        List<Object> singletonsToRemove = new ArrayList<>();
 
         for (Object s : dwSingletons) {
             if (s instanceof ExceptionMapper && s.getClass().getName().equals("io.dropwizard.jersey.validation.ConstraintViolationExceptionMapper")) {

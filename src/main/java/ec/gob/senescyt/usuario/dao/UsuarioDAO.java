@@ -5,8 +5,6 @@ import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
-
-
 public class UsuarioDAO extends AbstractDAO<Usuario> {
 
     public UsuarioDAO(SessionFactory sessionFactory) {

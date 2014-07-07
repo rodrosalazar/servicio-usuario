@@ -2,7 +2,6 @@ package ec.gob.senescyt.usuario.dao;
 
 import ec.gob.senescyt.usuario.core.Institucion;
 import io.dropwizard.hibernate.AbstractDAO;
-import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 

@@ -1,7 +1,6 @@
 package ec.gob.senescyt.usuario.core.cine;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -16,6 +15,7 @@ public class Subarea {
     private String id;
     private String nombre;
 
+    @Transient
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String areaIdParaCsv;
 
