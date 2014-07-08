@@ -1,12 +1,12 @@
-package ec.gob.senescyt.usuario.dao;
+package ec.gob.senescyt.usuario.dao.cine;
 
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
-public class Cine1997DAO extends AbstractDAO<Clasificacion> {
-    public Cine1997DAO(SessionFactory sessionFactory) {
+public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
+    public ClasificacionDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
     }
 

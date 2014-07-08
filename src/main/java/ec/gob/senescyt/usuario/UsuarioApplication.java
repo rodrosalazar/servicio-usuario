@@ -11,14 +11,14 @@ import ec.gob.senescyt.usuario.core.cine.Area;
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
 import ec.gob.senescyt.usuario.core.cine.Detalle;
 import ec.gob.senescyt.usuario.core.cine.Subarea;
-import ec.gob.senescyt.usuario.dao.Cine1997DAO;
+import ec.gob.senescyt.usuario.dao.cine.ClasificacionDAO;
 import ec.gob.senescyt.usuario.dao.InstitucionDAO;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.usuario.lectores.enums.ArchivosPropiedadesEnum;
-import ec.gob.senescyt.usuario.resources.Cine1997Resource;
+import ec.gob.senescyt.usuario.resources.cine.ClasificacionResource;
 import ec.gob.senescyt.usuario.resources.InstitucionResource;
 import ec.gob.senescyt.usuario.resources.PerfilResource;
 import ec.gob.senescyt.usuario.resources.UsuarioResource;
@@ -74,7 +74,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory());
         UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory());
         InstitucionDAO institucionDAO = new InstitucionDAO(getSessionFactory());
-        Cine1997DAO cine1997DAO = new Cine1997DAO(getSessionFactory());
+        ClasificacionDAO clasificacionDAO = new ClasificacionDAO(getSessionFactory());
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO);
         environment.jersey().register(perfilResource);
@@ -91,8 +91,8 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final LimpiezaResource limpiezaResource = new LimpiezaResource(usuarioDAO);
         environment.jersey().register(limpiezaResource);
 
-        final Cine1997Resource cine1997Resource = new Cine1997Resource(cine1997DAO);
-        environment.jersey().register(cine1997Resource);
+        final ClasificacionResource clasificacionResource = new ClasificacionResource(clasificacionDAO);
+        environment.jersey().register(clasificacionResource);
 
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");

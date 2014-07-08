@@ -22,7 +22,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class Cine1997ResourceIntegracionTest {
+public class ClasificacionResourceIntegracionTest {
 
     private static final String CONFIGURACION = "test-integracion.yml";
 

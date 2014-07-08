@@ -1,7 +1,7 @@
-package ec.gob.senescyt.usuario.resources;
+package ec.gob.senescyt.usuario.resources.cine;
 
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
-import ec.gob.senescyt.usuario.dao.Cine1997DAO;
+import ec.gob.senescyt.usuario.dao.cine.ClasificacionDAO;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
@@ -12,18 +12,18 @@ import javax.ws.rs.core.Response;
 
 @Path("/cine")
 @Produces(MediaType.APPLICATION_JSON)
-public class Cine1997Resource {
-    private Cine1997DAO cine1997DAO;
+public class ClasificacionResource {
+    private ClasificacionDAO clasificacionDAO;
 
-    public Cine1997Resource(Cine1997DAO cine1997DAO) {
-        this.cine1997DAO = cine1997DAO;
+    public ClasificacionResource(ClasificacionDAO clasificacionDAO) {
+        this.clasificacionDAO = clasificacionDAO;
     }
 
     @GET
     @Path("/1997")
     @UnitOfWork
     public Response obtenerClasificacion() {
-        Clasificacion clasificacion = cine1997DAO.obtenerClasificacion();
+        Clasificacion clasificacion = clasificacionDAO.obtenerClasificacion();
 
         return Response.ok(clasificacion).build();
     }
