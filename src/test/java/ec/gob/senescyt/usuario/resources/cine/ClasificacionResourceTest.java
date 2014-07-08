@@ -23,11 +23,11 @@ public class ClasificacionResourceTest {
     @Test
     public void debeObtenerElListadoDeAreasYSubareasParaCine() throws Exception {
         Clasificacion clasificacion = new Clasificacion(ID_CLASIFICACION, NOMBRE_CLASIFICACION, null);
-        when(clasificacionDAO.obtenerClasificacion()).thenReturn(clasificacion);
+        when(clasificacionDAO.obtenerClasificacion("001")).thenReturn(clasificacion);
 
-        Response response = clasificacionResource.obtenerClasificacion();
+        Response response = clasificacionResource.obtenerClasificacion("1997");
 
-        verify(clasificacionDAO).obtenerClasificacion();
+        verify(clasificacionDAO).obtenerClasificacion("001");
         assertThat(response.getStatus()).isEqualTo(200);
         assertThat(((Clasificacion) response.getEntity())).isNotNull();
     }

@@ -1,11 +1,13 @@
 package ec.gob.senescyt.usuario.resources.cine;
 
+import ec.gob.senescyt.usuario.core.cine.AnioClasificacion;
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
 import ec.gob.senescyt.usuario.dao.cine.ClasificacionDAO;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -20,20 +22,12 @@ public class ClasificacionResource {
     }
 
     @GET
-    @Path("/1997")
     @UnitOfWork
-    public Response obtenerClasificacion() {
-        Clasificacion clasificacion = clasificacionDAO.obtenerClasificacion();
+    @Path("/{anio: (1997|2013)}")
+    public Response obtenerClasificacion(@PathParam("anio") String anio) {
+        String id = AnioClasificacion.valueOf("CINE" + anio).id;
+        Clasificacion clasificacion = clasificacionDAO.obtenerClasificacion(id);
 
         return Response.ok(clasificacion).build();
-    }
-
-    @GET
-    @Path("/2013")
-    @UnitOfWork
-    public Response obtenerClasificacion2013() {
-        Clasificacion clasificacion2013 = clasificacionDAO.obtenerClasificacion2013();
-
-        return Response.ok(clasificacion2013).build();
     }
 }
