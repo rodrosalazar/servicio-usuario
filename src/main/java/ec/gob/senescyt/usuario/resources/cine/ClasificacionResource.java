@@ -27,4 +27,13 @@ public class ClasificacionResource {
 
         return Response.ok(clasificacion).build();
     }
+
+    @GET
+    @Path("/2013")
+    @UnitOfWork
+    public Response obtenerClasificacion2013() {
+        Clasificacion clasificacion2013 = clasificacionDAO.obtenerClasificacion2013();
+
+        return Response.ok(clasificacion2013).build();
+    }
 }

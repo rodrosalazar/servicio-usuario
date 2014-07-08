@@ -1,4 +1,4 @@
-package ec.gob.senescyt.integration;
+package ec.gob.senescyt.integration.cine;
 
 import com.google.common.io.Resources;
 import com.sun.jersey.api.client.Client;
@@ -7,6 +7,8 @@ import ec.gob.senescyt.usuario.UsuarioApplication;
 import ec.gob.senescyt.usuario.UsuarioConfiguration;
 import ec.gob.senescyt.usuario.core.cine.Area;
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
+import ec.gob.senescyt.usuario.core.cine.Detalle;
+import ec.gob.senescyt.usuario.core.cine.Subarea;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
@@ -62,5 +64,25 @@ public class ClasificacionResourceIntegracionTest {
         List<Area> areas = response.getEntity(Clasificacion.class).getAreas();
         assertThat(areas.size(), is(not(0)));
         assertThat(areas.get(0).getSubareas().size(), is(not(0)));
+    }
+
+    @Test
+    public void debeObtenerElListadoDeCine2013() throws Exception {
+        Client client = new Client();
+
+        ClientResponse response = client.resource(
+                String.format("http://localhost:%d/cine/2013", RULE.getLocalPort()))
+                .get(ClientResponse.class);
+
+        assertThat(response.getStatus(), is(200));
+
+        List<Area> areas = response.getEntity(Clasificacion.class).getAreas();
+        assertThat(areas.size(), is(not(0)));
+
+        List<Subarea> subareas = areas.get(0).getSubareas();
+        assertThat(subareas.size(), is(not(0)));
+
+        List<Detalle> detalles = subareas.get(0).getDetalles();
+        assertThat(detalles.size(), is(not(0)));
     }
 }

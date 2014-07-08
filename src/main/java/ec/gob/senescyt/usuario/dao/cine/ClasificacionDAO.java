@@ -16,4 +16,11 @@ public class ClasificacionDAO extends AbstractDAO<Clasificacion> {
 
         return (Clasificacion) cine1997.uniqueResult();
     }
+
+    public Clasificacion obtenerClasificacion2013() {
+        String consulta = "SELECT c FROM Clasificacion AS c WHERE c.id = '002'";
+        Query cine2013 = currentSession().createQuery(consulta);
+
+        return (Clasificacion) cine2013.uniqueResult();
+    }
 }
