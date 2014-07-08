@@ -9,6 +9,7 @@ import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.core.cine.Area;
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
+import ec.gob.senescyt.usuario.core.cine.Detalle;
 import ec.gob.senescyt.usuario.core.cine.Subarea;
 import ec.gob.senescyt.usuario.dao.Cine1997DAO;
 import ec.gob.senescyt.usuario.dao.InstitucionDAO;
@@ -44,7 +45,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     private final DBMigrationsBundle flywayBundle = new DBMigrationsBundle();
 
     private final HibernateBundle<UsuarioConfiguration> hibernate = new HibernateBundle<UsuarioConfiguration>(Perfil.class, Permiso.class,
-            Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class) {
+            Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class, Detalle.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
