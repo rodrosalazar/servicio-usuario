@@ -1,5 +1,6 @@
 package ec.gob.senescyt.carga;
 
+import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
@@ -7,10 +8,10 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import ec.gob.senescyt.carga.institucion.InstitucionCsv;
 
 import javax.persistence.Table;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.charset.spi.CharsetProvider;
 
 public abstract class ConversorCsv {
 
@@ -99,7 +100,7 @@ public abstract class ConversorCsv {
         String rutaDestino = definirRutaDestino(archivoOrigen, args);
 
         File archivoDestino = new File(rutaDestino);
-        BufferedWriter escritor = new BufferedWriter(new FileWriter(archivoDestino));
+        OutputStreamWriter escritor = new OutputStreamWriter(new FileOutputStream((archivoDestino)), StandardCharsets.UTF_8);
 
         escritor.write(conversorCsv.archivoASql(archivoOrigen));
         escritor.close();

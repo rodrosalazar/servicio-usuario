@@ -11,10 +11,12 @@ import ec.gob.senescyt.usuario.core.cine.Area;
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
 import ec.gob.senescyt.usuario.core.cine.Detalle;
 import ec.gob.senescyt.usuario.core.cine.Subarea;
+import ec.gob.senescyt.usuario.core.pais.Pais;
 import ec.gob.senescyt.usuario.dao.cine.ClasificacionDAO;
 import ec.gob.senescyt.usuario.dao.InstitucionDAO;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
+import ec.gob.senescyt.usuario.dao.pais.PaisDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.usuario.lectores.enums.ArchivosPropiedadesEnum;
@@ -23,6 +25,7 @@ import ec.gob.senescyt.usuario.resources.InstitucionResource;
 import ec.gob.senescyt.usuario.resources.PerfilResource;
 import ec.gob.senescyt.usuario.resources.UsuarioResource;
 import ec.gob.senescyt.usuario.resources.management.LimpiezaResource;
+import ec.gob.senescyt.usuario.resources.pais.PaisResource;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
@@ -45,7 +48,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     private final DBMigrationsBundle flywayBundle = new DBMigrationsBundle();
 
     private final HibernateBundle<UsuarioConfiguration> hibernate = new HibernateBundle<UsuarioConfiguration>(Perfil.class, Permiso.class,
-            Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class, Detalle.class) {
+            Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class, Detalle.class, Pais.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
@@ -75,6 +78,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory());
         InstitucionDAO institucionDAO = new InstitucionDAO(getSessionFactory());
         ClasificacionDAO clasificacionDAO = new ClasificacionDAO(getSessionFactory());
+        PaisDAO paisDAO = new PaisDAO(getSessionFactory());
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO);
         environment.jersey().register(perfilResource);
@@ -93,6 +97,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         final ClasificacionResource clasificacionResource = new ClasificacionResource(clasificacionDAO);
         environment.jersey().register(clasificacionResource);
+
+        final PaisResource paisResource = new PaisResource(paisDAO);
+        environment.jersey().register(paisResource);
 
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
