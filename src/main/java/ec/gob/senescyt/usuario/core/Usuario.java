@@ -8,17 +8,19 @@ import ec.gob.senescyt.usuario.validators.annotations.FechaVigenciaValida;
 import ec.gob.senescyt.usuario.validators.annotations.IdentificacionValida;
 import ec.gob.senescyt.usuario.validators.annotations.QuipuxValido;
 import org.hibernate.annotations.Type;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "usuarios")
 public class Usuario {
+
+    private static final String REGEX_EMAIL = "^[a-z](\\.?[_-]*[a-z0-9]+)*@\\w+(\\.\\w+)*(\\.[a-z]{2,})$";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +35,7 @@ public class Usuario {
     @Valid
     private Nombre nombre;
 
-    @Email(message = "{ec.gob.senescyt.error.email}")
+    @Pattern(regexp = REGEX_EMAIL, message = "{ec.gob.senescyt.error.email}")
     @NotEmpty
     private String emailInstitucional;
 
