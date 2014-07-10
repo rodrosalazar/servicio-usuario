@@ -6,8 +6,12 @@ import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.usuario.UsuarioApplication;
 import ec.gob.senescyt.usuario.UsuarioConfiguration;
 import ec.gob.senescyt.usuario.builders.MensajeErrorBuilder;
+import ec.gob.senescyt.usuario.builders.PerfilBuilder;
 import ec.gob.senescyt.usuario.builders.UsuarioBuilder;
+import ec.gob.senescyt.usuario.core.Perfil;
+import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.core.Usuario;
+import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.usuario.lectores.enums.ArchivosPropiedadesEnum;
@@ -22,6 +26,7 @@ import org.junit.Test;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -33,6 +38,7 @@ public class UsuarioResourceIntegracionTest {
 
     private LectorArchivoDePropiedades lectorArchivoDePropiedades;
     private MensajeErrorBuilder mensajeErrorBuilder;
+    private UsuarioDAO usuarioDAO;
 
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
@@ -49,15 +55,25 @@ public class UsuarioResourceIntegracionTest {
     public void setUp() {
         sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
         ManagedSessionContext.bind(sessionFactory.openSession());
-        UsuarioDAO usuarioDAO = new UsuarioDAO(sessionFactory);
-        usuarioDAO.limpiar();
+        PerfilDAO perfilDAO = new PerfilDAO(sessionFactory);
+        usuarioDAO = new UsuarioDAO(sessionFactory);
+        Perfil perfil1 = PerfilBuilder.nuevoPerfil().conPermisos(null).generar();
+        perfilDAO.guardar(perfil1);
+        Perfil perfil2 = PerfilBuilder.nuevoPerfil().conPermisos(null).generar();
+        perfilDAO.guardar(perfil2);
+        Perfil perfil3 = PerfilBuilder.nuevoPerfil().conPermisos(null).generar();
+        perfilDAO.guardar(perfil3);
+
         lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
         mensajeErrorBuilder = new MensajeErrorBuilder(lectorArchivoDePropiedades);
     }
 
     @After
     public void tearDown() {
+        usuarioDAO.limpiar();
+
         ManagedSessionContext.unbind(sessionFactory);
+
     }
 
     @Test

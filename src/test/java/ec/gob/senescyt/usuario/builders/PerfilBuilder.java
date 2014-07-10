@@ -11,7 +11,7 @@ import static com.google.common.collect.Lists.newArrayList;
 public class PerfilBuilder {
     private static final List<Acceso> ACCESOS = newArrayList(Acceso.CREAR, Acceso.ELIMINAR);
     private static PerfilBuilder perfilBuilder;
-    private long id = 12345l;
+    private long id = 0;
     private String nombre = "atencion ciudadana";
     private List<Permiso> permisos = newArrayList(new Permiso(1, 2, ACCESOS), new Permiso(1, 3, ACCESOS));
 

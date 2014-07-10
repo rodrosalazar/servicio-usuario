@@ -210,7 +210,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l,2l,3l));
+                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l, 2l, 3l));
     }
 
 
