@@ -1,6 +1,10 @@
-package ec.gob.senescyt.usuario.core.cine;
+package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ec.gob.senescyt.usuario.core.cine.Area;
+import ec.gob.senescyt.usuario.core.cine.Clasificacion;
+import ec.gob.senescyt.usuario.core.cine.Detalle;
+import ec.gob.senescyt.usuario.core.cine.Subarea;
 import io.dropwizard.jackson.Jackson;
 import org.junit.Before;
 import org.junit.Test;

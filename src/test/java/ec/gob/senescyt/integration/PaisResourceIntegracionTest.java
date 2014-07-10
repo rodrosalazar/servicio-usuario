@@ -1,4 +1,4 @@
-package ec.gob.senescyt.integration.pais;
+package ec.gob.senescyt.integration;
 
 import com.google.common.io.Resources;
 import com.sun.jersey.api.client.Client;

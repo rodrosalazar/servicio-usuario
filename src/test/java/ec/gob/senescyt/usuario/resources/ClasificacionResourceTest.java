@@ -1,7 +1,7 @@
-package ec.gob.senescyt.usuario.resources.cine;
+package ec.gob.senescyt.usuario.resources;
 
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
-import ec.gob.senescyt.usuario.dao.cine.ClasificacionDAO;
+import ec.gob.senescyt.usuario.dao.ClasificacionDAO;
 import org.junit.Before;
 import org.junit.Test;
 import javax.ws.rs.core.Response;

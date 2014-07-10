@@ -1,4 +1,4 @@
-package ec.gob.senescyt.usuario.core.pais;
+package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 

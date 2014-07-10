@@ -1,6 +1,6 @@
-package ec.gob.senescyt.usuario.dao.pais;
+package ec.gob.senescyt.usuario.dao;
 
-import ec.gob.senescyt.usuario.core.pais.Pais;
+import ec.gob.senescyt.usuario.core.Pais;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;

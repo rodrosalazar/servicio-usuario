@@ -1,4 +1,4 @@
-package ec.gob.senescyt.usuario.dao.cine;
+package ec.gob.senescyt.usuario.dao;
 
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
 import io.dropwizard.hibernate.AbstractDAO;

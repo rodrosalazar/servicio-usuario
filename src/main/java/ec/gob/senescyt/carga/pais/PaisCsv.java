@@ -1,7 +1,7 @@
 package ec.gob.senescyt.carga.pais;
 
 import ec.gob.senescyt.carga.ConversorCsv;
-import ec.gob.senescyt.usuario.core.pais.Pais;
+import ec.gob.senescyt.usuario.core.Pais;
 
 import java.io.IOException;
 

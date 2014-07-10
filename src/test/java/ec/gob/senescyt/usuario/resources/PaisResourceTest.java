@@ -1,7 +1,8 @@
-package ec.gob.senescyt.usuario.resources.pais;
+package ec.gob.senescyt.usuario.resources;
 
-import ec.gob.senescyt.usuario.core.pais.Pais;
-import ec.gob.senescyt.usuario.dao.pais.PaisDAO;
+import ec.gob.senescyt.usuario.core.Pais;
+import ec.gob.senescyt.usuario.dao.PaisDAO;
+import ec.gob.senescyt.usuario.resources.PaisResource;
 import org.junit.Before;
 import org.junit.Test;
 
