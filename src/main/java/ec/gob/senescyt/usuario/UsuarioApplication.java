@@ -13,6 +13,7 @@ import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.usuario.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.resources.*;
+import ec.gob.senescyt.usuario.resources.filters.HeaderResponseFilter;
 import ec.gob.senescyt.usuario.resources.management.LimpiezaResource;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.Application;
@@ -25,6 +26,8 @@ import org.hibernate.SessionFactory;
 
 import javax.servlet.DispatcherType;
 import javax.ws.rs.ext.ExceptionMapper;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
@@ -96,6 +99,8 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+
+        environment.jersey().getResourceConfig().getContainerResponseFilters().add(new HeaderResponseFilter(StandardCharsets.UTF_8.name()));
 
         registrarValidacionExceptionMapper(environment);
     }
