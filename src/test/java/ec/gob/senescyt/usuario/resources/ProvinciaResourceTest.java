@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
@@ -55,6 +56,6 @@ public class ProvinciaResourceTest {
 
         verify(cantonDAO).obtenerPorProvincia(ID_PROVINCIA);
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(((List<Canton>) response.getEntity()).get(0).getProvincia().getId()).isEqualTo(ID_PROVINCIA);
+        assertThat(((HashMap<String,List<Canton>>) response.getEntity()).get("cantones").get(0).getProvincia().getId()).isEqualTo(ID_PROVINCIA);
     }
 }

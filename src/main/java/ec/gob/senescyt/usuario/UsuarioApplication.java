@@ -97,10 +97,11 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final ProvinciaResource provinciaResource = new ProvinciaResource(provinciaDAO, cantonDAO);
         environment.jersey().register(provinciaResource);
 
+        environment.jersey().getResourceConfig().getContainerResponseFilters().add(new HeaderResponseFilter(StandardCharsets.UTF_8.name()));
+
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
 
-        environment.jersey().getResourceConfig().getContainerResponseFilters().add(new HeaderResponseFilter(StandardCharsets.UTF_8.name()));
 
         registrarValidacionExceptionMapper(environment);
     }

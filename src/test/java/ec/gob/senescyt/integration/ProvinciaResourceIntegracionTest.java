@@ -10,6 +10,7 @@ import ec.gob.senescyt.usuario.core.Canton;
 import ec.gob.senescyt.usuario.core.Provincia;
 import ec.gob.senescyt.usuario.dao.CantonDAO;
 import ec.gob.senescyt.usuario.dao.ProvinciaDAO;
+import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hibernate.SessionFactory;
@@ -20,6 +21,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.not;
@@ -58,7 +60,7 @@ public class ProvinciaResourceIntegracionTest {
         cargarDataParaPruebas();
     }
 
-    private void cargarDataParaPruebas(){
+    private void cargarDataParaPruebas() {
         provinciaDAO = new ProvinciaDAO(sessionFactory);
         cantonDAO = new CantonDAO(sessionFactory);
 
@@ -80,7 +82,7 @@ public class ProvinciaResourceIntegracionTest {
     }
 
 
-    private void eliminarInformacionCargadaParaPrueba(){
+    private void eliminarInformacionCargadaParaPrueba() {
         cantonDAO.eliminar(ID_CANTON_TEST);
         provinciaDAO.eliminar(ID_PROVINCIA_TEST);
         sessionFactory.getCurrentSession().flush();
@@ -115,7 +117,9 @@ public class ProvinciaResourceIntegracionTest {
 
     private String obtenerIdProvinciaDesdeCanton(final ClientResponse response) throws java.io.IOException {
         ObjectMapper MAPPER = Jackson.newObjectMapper();
-        Canton cantonEncontrado = MAPPER.readValue(response.getEntity(String.class).replace("[", "").replace("]", ""), Canton.class);
+        String cantones = response.getEntity(String.class);
+
+        Canton cantonEncontrado = MAPPER.readValue(cantones.replace("{\"" + ElementosRaicesJSONEnum.ELEMENTO_RAIZ_CANTONES.getNombre() + "\":[", "").replace("]", ""), Canton.class);
         return cantonEncontrado.getId().substring(0, ID_PROVINCIA_TEST.length());
     }
 }

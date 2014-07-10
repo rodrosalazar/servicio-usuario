@@ -1,5 +1,6 @@
 package ec.gob.senescyt.usuario.core;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -15,8 +16,9 @@ public class Provincia {
     private String id;
     private String nombre;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "provincia")
+    @OneToMany(mappedBy = "provincia")
     @JsonManagedReference
+    @JsonIgnore
     private List<Canton> cantones;
 
     public Provincia() {
