@@ -11,7 +11,6 @@ import java.util.Map;
 
 public class HeaderResponseFilter implements ContainerResponseFilter {
 
-    public static final String HEADER_ACCESS_CONTROL_ALLOW_ORIGIN = "Access-Control-Allow-Origin";
     public static final String CONTENT_TYPE = "Content-Type";
     public static final String CHARSET = "charset";
 
@@ -50,8 +49,6 @@ public class HeaderResponseFilter implements ContainerResponseFilter {
 
             response.setEntity(m);
         }
-
-        response.getHttpHeaders().putSingle(HEADER_ACCESS_CONTROL_ALLOW_ORIGIN, "*");
 
         return response;
     }
