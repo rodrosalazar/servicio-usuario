@@ -94,12 +94,8 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final PaisResource paisResource = new PaisResource(paisDAO);
         environment.jersey().register(paisResource);
 
-        final ProvinciaResource provinciaResource = new ProvinciaResource(provinciaDAO);
+        final ProvinciaResource provinciaResource = new ProvinciaResource(provinciaDAO, cantonDAO);
         environment.jersey().register(provinciaResource);
-
-        final CantonResource cantonResource = new CantonResource(cantonDAO);
-        environment.jersey().register(cantonResource);
-
 
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
