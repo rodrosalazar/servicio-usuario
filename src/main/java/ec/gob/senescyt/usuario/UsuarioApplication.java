@@ -39,7 +39,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
     private final HibernateBundle<UsuarioConfiguration> hibernate = new HibernateBundle<UsuarioConfiguration>(Perfil.class, Permiso.class,
             Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class, Detalle.class, Pais.class,
-            Provincia.class, Canton.class) {
+            Provincia.class, Canton.class, Parroquia.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {

@@ -1,17 +1,16 @@
 package ec.gob.senescyt.carga;
 
-import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
-import ec.gob.senescyt.carga.institucion.InstitucionCsv;
 
 import javax.persistence.Table;
-import java.io.*;
-import java.nio.charset.Charset;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.nio.charset.spi.CharsetProvider;
 
 public abstract class ConversorCsv {
 

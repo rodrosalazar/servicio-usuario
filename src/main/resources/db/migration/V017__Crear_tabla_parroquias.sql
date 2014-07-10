@@ -1,0 +1,5 @@
+CREATE TABLE parroquias (
+  canton_id VARCHAR(4) NOT NULL REFERENCES cantones(id),
+  id VARCHAR(6) NOT NULL PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL
+);

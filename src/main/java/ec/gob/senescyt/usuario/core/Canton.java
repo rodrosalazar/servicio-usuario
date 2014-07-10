@@ -1,10 +1,9 @@
 package ec.gob.senescyt.usuario.core;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @JsonPropertyOrder({"provinciaIdParaCsv", "id", "nombre"})
 @Entity
@@ -22,6 +21,11 @@ public class Canton {
     @JoinColumn(name = "provincia_id")
     @JsonBackReference
     private Provincia provincia;
+
+    @OneToMany(mappedBy = "canton")
+    @JsonManagedReference
+    @JsonIgnore
+    private List<Parroquia> parroquias;
 
     private String nombre;
 
@@ -50,5 +54,9 @@ public class Canton {
 
     public Provincia getProvincia() {
         return provincia;
+    }
+
+    public List<Parroquia> getParroquias() {
+        return parroquias;
     }
 }
