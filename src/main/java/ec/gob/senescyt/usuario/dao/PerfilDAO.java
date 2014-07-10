@@ -5,6 +5,8 @@ import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
+import java.util.List;
+
 public class PerfilDAO extends AbstractDAO<Perfil> {
 
     public PerfilDAO(SessionFactory sessionFactory) {
@@ -15,4 +17,9 @@ public class PerfilDAO extends AbstractDAO<Perfil> {
         return persist(perfil);
     }
 
+    public List<Perfil> obtenerTodos() {
+        Query todos = currentSession().createQuery("SELECT i from Perfil i");
+
+        return todos.list();
+    }
 }

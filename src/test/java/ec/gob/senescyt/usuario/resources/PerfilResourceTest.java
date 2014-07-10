@@ -1,6 +1,8 @@
 package ec.gob.senescyt.usuario.resources;
 
+import ec.gob.senescyt.usuario.builders.PerfilBuilder;
 import ec.gob.senescyt.usuario.core.Acceso;
+import ec.gob.senescyt.usuario.core.Institucion;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
@@ -13,9 +15,7 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.*;
 
 public class PerfilResourceTest {
 
@@ -74,5 +74,17 @@ public class PerfilResourceTest {
 
         verify(perfilDAO).guardar(eq(perfil));
         assertThat(response.getStatus()).isEqualTo(201);
+    }
+
+    @Test
+    public void debeObtenerTodosLosPerfiles() throws Exception {
+        Perfil perfil = PerfilBuilder.nuevoPerfil().generar();
+        when(perfilDAO.obtenerTodos()).thenReturn(newArrayList(perfil));
+
+        Response response = perfilResource.obtenerTodos();
+
+        verify(perfilDAO).obtenerTodos();
+        assertThat(response.getStatus()).isEqualTo(200);
+        assertThat(( (List<Institucion>) response.getEntity())).isNotEmpty();
     }
 }
