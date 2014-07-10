@@ -26,7 +26,6 @@ import org.hibernate.SessionFactory;
 
 import javax.servlet.DispatcherType;
 import javax.ws.rs.ext.ExceptionMapper;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -72,6 +71,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         ClasificacionDAO clasificacionDAO = new ClasificacionDAO(getSessionFactory());
         PaisDAO paisDAO = new PaisDAO(getSessionFactory());
         ProvinciaDAO provinciaDAO = new ProvinciaDAO(getSessionFactory());
+        CantonDAO cantonDAO = new CantonDAO(getSessionFactory());
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO);
         environment.jersey().register(perfilResource);
@@ -96,6 +96,10 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         final ProvinciaResource provinciaResource = new ProvinciaResource(provinciaDAO);
         environment.jersey().register(provinciaResource);
+
+        final CantonResource cantonResource = new CantonResource(cantonDAO);
+        environment.jersey().register(cantonResource);
+
 
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");

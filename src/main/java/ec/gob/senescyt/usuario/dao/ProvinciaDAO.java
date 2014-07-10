@@ -18,4 +18,18 @@ public class ProvinciaDAO extends AbstractDAO<Provincia> {
 
         return query.list();
     }
+
+    public Provincia obtenerPorId(final String idProvincia) {
+        return get(idProvincia);
+    }
+
+    public void guardar(final Provincia provincia) {
+        persist(provincia);
+    }
+
+    public void eliminar(final String idProvincia) {
+        Query query = currentSession().createQuery("DELETE FROM Provincia p WHERE p.id =:idProvincia");
+        query.setParameter("idProvincia", idProvincia);
+        query.executeUpdate();
+    }
 }

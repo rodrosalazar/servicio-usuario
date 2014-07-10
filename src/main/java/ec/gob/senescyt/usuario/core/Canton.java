@@ -25,6 +25,16 @@ public class Canton {
 
     private String nombre;
 
+    public Canton(){
+
+    }
+
+    public Canton(Provincia provincia, String idCanton, String nombreCanton) {
+        this.provincia = provincia;
+        this.id = idCanton;
+        this.nombre = nombreCanton;
+    }
+
     public String getId() {
         return id;
     }
