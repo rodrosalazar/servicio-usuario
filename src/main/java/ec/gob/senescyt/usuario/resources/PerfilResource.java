@@ -12,8 +12,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Map;
 
-@Path("/perfil")
+import static com.google.common.collect.Maps.newHashMap;
+
+@Path("/perfiles")
 @Produces(MediaType.APPLICATION_JSON)
 public class PerfilResource {
 
@@ -37,8 +40,11 @@ public class PerfilResource {
     @GET
     @UnitOfWork
     public Response obtenerTodos() throws JsonProcessingException {
+        Map<String, List<Perfil>> resultado = newHashMap();
         List<Perfil> perfiles = perfilDAO.obtenerTodos();
 
-        return Response.ok(perfiles).build();
+        resultado.put("perfiles", perfiles);
+
+        return Response.ok(resultado).build();
     }
 }

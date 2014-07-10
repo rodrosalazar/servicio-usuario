@@ -29,7 +29,7 @@ public class PerfilResourceIntegracionTest extends BaseIntegracionTest {
         Client client = new Client();
 
         ClientResponse response = client.resource(
-                String.format("http://localhost:%d/perfil", RULE.getLocalPort()))
+                String.format("http://localhost:%d/perfiles", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, perfilAsJSON());
 

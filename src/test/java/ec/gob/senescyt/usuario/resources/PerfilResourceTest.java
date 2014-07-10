@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.fest.assertions.api.Assertions.assertThat;
@@ -85,6 +86,8 @@ public class PerfilResourceTest {
 
         verify(perfilDAO).obtenerTodos();
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(( (List<Institucion>) response.getEntity())).isNotEmpty();
+        Map<String, List<Perfil>> resultado = (Map<String, List<Perfil>>) response.getEntity();
+        assertThat(resultado).isNotEmpty();
+        assertThat(resultado.get("perfiles").size()).isEqualTo(1);
     }
 }
