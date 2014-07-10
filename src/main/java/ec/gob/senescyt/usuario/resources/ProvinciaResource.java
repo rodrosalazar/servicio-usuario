@@ -37,7 +37,7 @@ public class ProvinciaResource {
         Map provinciasWrapper = new HashMap<String,List<Canton>>();
 
         provinciasWrapper.put(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_PROVINCIAS.getNombre(), provincias);
-        return Response.ok(provincias).build();
+        return Response.ok(provinciasWrapper).build();
     }
 
 

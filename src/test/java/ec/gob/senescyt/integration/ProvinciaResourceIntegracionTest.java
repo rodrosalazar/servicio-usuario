@@ -97,7 +97,7 @@ public class ProvinciaResourceIntegracionTest {
                 .get(ClientResponse.class);
 
         assertThat(response.getStatus(), is(200));
-        assertThat(response.getEntity(List.class).size(), is(not(0)));
+        assertThat(response.getEntity(HashMap.class).size(), is(not(0)));
     }
 
     @Test

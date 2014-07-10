@@ -4,6 +4,7 @@ import ec.gob.senescyt.usuario.core.Canton;
 import ec.gob.senescyt.usuario.core.Provincia;
 import ec.gob.senescyt.usuario.dao.CantonDAO;
 import ec.gob.senescyt.usuario.dao.ProvinciaDAO;
+import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -42,7 +43,7 @@ public class ProvinciaResourceTest {
 
         verify(provinciaDAO).obtenerTodos();
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(((List<Provincia>) response.getEntity())).isNotEmpty();
+        assertThat(((HashMap<String,List<Provincia>>) response.getEntity()).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_PROVINCIAS.getNombre())).isNotEmpty();
     }
 
     @Test
@@ -56,6 +57,6 @@ public class ProvinciaResourceTest {
 
         verify(cantonDAO).obtenerPorProvincia(ID_PROVINCIA);
         assertThat(response.getStatus()).isEqualTo(200);
-        assertThat(((HashMap<String,List<Canton>>) response.getEntity()).get("cantones").get(0).getProvincia().getId()).isEqualTo(ID_PROVINCIA);
+        assertThat(((HashMap<String,List<Canton>>) response.getEntity()).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_CANTONES.getNombre()).get(0).getProvincia().getId()).isEqualTo(ID_PROVINCIA);
     }
 }
