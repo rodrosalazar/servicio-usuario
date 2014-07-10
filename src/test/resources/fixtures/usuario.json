@@ -13,5 +13,6 @@
     "numeroAutorizacionQuipux":"SENESCYT-DFAPO-2014-65946-MI",
     "finDeVigencia":"2016-07-29",
     "idInstitucion":"1",
-    "nombreUsuario":"njumbo"
+    "nombreUsuario":"njumbo",
+    "perfiles": [1234, 5678, 9630]
 }

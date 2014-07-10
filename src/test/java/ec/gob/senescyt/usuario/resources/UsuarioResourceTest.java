@@ -20,7 +20,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
 
 public class UsuarioResourceTest {
@@ -142,6 +141,7 @@ public class UsuarioResourceTest {
                 .post(ClientResponse.class, UsuarioBuilder.usuarioConFechaDeVigenciaInvalida());
 
         assertThat(response.getStatus()).isEqualTo(400);
+        assertThat(response.getEntity(String.class)).contains("El campo es obligatorio");
         verifyZeroInteractions(usuarioDAO);
     }
 
@@ -229,12 +229,22 @@ public class UsuarioResourceTest {
     }
 
     @Test
+    public void debeVerificarQueLosPerfilesNoEstenVacios() {
+        ClientResponse response = client.resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioSinPerfiles());
+
+        assertThat(response.getStatus()).isEqualTo(400);
+        verifyZeroInteractions(usuarioDAO);
+    }
+
+    @Test
     public void debeGuardarUsuario() throws Exception {
-        Usuario usuario = UsuarioBuilder.usuarioValido();
+        ClientResponse response = client.resource("/usuario")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido());
 
-        Response response = usuarioResource.crear(usuario);
-
-        verify(usuarioDAO).guardar(eq(usuario));
+        verify(usuarioDAO).guardar(any(Usuario.class));
         assertThat(response.getStatus()).isEqualTo(201);
     }
 }

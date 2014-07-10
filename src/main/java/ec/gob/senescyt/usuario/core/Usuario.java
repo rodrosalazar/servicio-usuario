@@ -7,14 +7,20 @@ import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaSerializer;
 import ec.gob.senescyt.usuario.validators.annotations.FechaVigenciaValida;
 import ec.gob.senescyt.usuario.validators.annotations.IdentificacionValida;
 import ec.gob.senescyt.usuario.validators.annotations.QuipuxValido;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.validator.constraints.Email;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.List;
 
 @Entity
 @Table(name = "usuarios")
@@ -57,10 +63,17 @@ public class Usuario {
     @NotEmpty
     private String nombreUsuario;
 
+    @NotEmpty
+    @ElementCollection
+    @Cascade(CascadeType.ALL)
+    @CollectionTable(name = "perfiles_usuarios")
+    @Column(name = "perfil_id")
+    private List<Long> perfiles;
+
     private Usuario() {}
 
     public Usuario(Identificacion identificacion, Nombre nombre, String emailInstitucional, String numeroAutorizacionQuipux,
-                   DateTime fechaDeVigencia, Long idInstitucion, String nombreUsuario) {
+                   DateTime fechaDeVigencia, Long idInstitucion, String nombreUsuario, List<Long> perfiles) {
         this.identificacion = identificacion;
         this.nombre = nombre;
         this.emailInstitucional = emailInstitucional;
@@ -68,6 +81,7 @@ public class Usuario {
         this.finDeVigencia = fechaDeVigencia;
         this.idInstitucion = idInstitucion;
         this.nombreUsuario = nombreUsuario;
+        this.perfiles = perfiles;
     }
 
     public long getId() {
@@ -102,4 +116,7 @@ public class Usuario {
         return nombreUsuario;
     }
 
+    public List<Long> getPerfiles() {
+        return perfiles;
+    }
 }

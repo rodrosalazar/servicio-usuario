@@ -53,7 +53,6 @@ public class UsuarioResourceIntegracionTest {
         usuarioDAO.limpiar();
         lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
         mensajeErrorBuilder = new MensajeErrorBuilder(lectorArchivoDePropiedades);
-
     }
 
     @After
@@ -115,10 +114,11 @@ public class UsuarioResourceIntegracionTest {
     public void debeCrearUnNuevoUsuarioCuandoEsValido() {
         Client client = new Client();
 
+        Usuario usuarioValido = UsuarioBuilder.usuarioValido();
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido());
+                .post(ClientResponse.class, usuarioValido);
 
         assertThat(response.getStatus(), is(201));
     }
@@ -141,7 +141,6 @@ public class UsuarioResourceIntegracionTest {
 
         assertThat(responseValidacion.getStatus(), is(400));
         assertThat(responseValidacion.getEntity(String.class), is(mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()));
-
     }
 
     @Test
@@ -154,7 +153,6 @@ public class UsuarioResourceIntegracionTest {
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(200));
-
     }
 
     @Test
@@ -175,7 +173,6 @@ public class UsuarioResourceIntegracionTest {
 
         assertThat(responseValidacion.getStatus(), is(400));
         assertThat(responseValidacion.getEntity(String.class), is(mensajeErrorBuilder.mensajeNumeroIdentificacionYaHaSidoRegistrado()));
-
     }
 
     @Test
@@ -188,7 +185,6 @@ public class UsuarioResourceIntegracionTest {
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(200));
-
     }
 
     @Test
@@ -259,6 +255,4 @@ public class UsuarioResourceIntegracionTest {
 
         assertThat(response.getStatus(), is(400));
     }
-
-
 }

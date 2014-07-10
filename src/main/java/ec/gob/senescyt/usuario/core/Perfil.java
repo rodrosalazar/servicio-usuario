@@ -31,6 +31,11 @@ public class Perfil {
         this.permisos = permisos;
     }
 
+    public Perfil(long id, String nombre, List<Permiso> permisos) {
+        this(nombre, permisos);
+        this.id = id;
+    }
+
     public String getNombre() {
         return nombre;
     }
@@ -61,4 +66,5 @@ public class Perfil {
 
         return true;
     }
+
 }
