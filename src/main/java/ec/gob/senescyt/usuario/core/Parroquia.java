@@ -26,10 +26,9 @@ public class Parroquia {
 
     public Parroquia() {
     }
-
-    public Parroquia(String id, Canton canton, String nombre) {
-        this.id = id;
+    public Parroquia(Canton canton, String id, String nombre) {
         this.canton = canton;
+        this.id = id;
         this.nombre = nombre;
     }
 

@@ -72,6 +72,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         PaisDAO paisDAO = new PaisDAO(getSessionFactory());
         ProvinciaDAO provinciaDAO = new ProvinciaDAO(getSessionFactory());
         CantonDAO cantonDAO = new CantonDAO(getSessionFactory());
+        ParroquiaDAO parroquiaDAO = new ParroquiaDAO(getSessionFactory());
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO);
         environment.jersey().register(perfilResource);
@@ -97,13 +98,19 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final ProvinciaResource provinciaResource = new ProvinciaResource(provinciaDAO, cantonDAO);
         environment.jersey().register(provinciaResource);
 
+        final CantonResource cantonResource = new CantonResource(cantonDAO, parroquiaDAO);
+        environment.jersey().register(cantonResource);
+
+        registrarFiltros(environment);
+
+        registrarValidacionExceptionMapper(environment);
+    }
+
+    private void registrarFiltros(Environment environment) {
         environment.jersey().getResourceConfig().getContainerResponseFilters().add(new HeaderResponseFilter(StandardCharsets.UTF_8.name()));
 
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
-
-
-        registrarValidacionExceptionMapper(environment);
     }
 
     @VisibleForTesting

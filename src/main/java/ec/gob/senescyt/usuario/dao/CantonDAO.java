@@ -29,4 +29,8 @@ public class CantonDAO extends AbstractDAO<Canton>{
         query.setParameter("idCanton", idCanton);
         query.executeUpdate();
     }
+
+    public Canton obtenerPorId(String idCanton) {
+        return get(idCanton);
+    }
 }
