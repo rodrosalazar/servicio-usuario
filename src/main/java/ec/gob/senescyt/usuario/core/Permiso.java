@@ -20,7 +20,7 @@ public class Permiso {
     @Column
     private long funcionId;
 
-    @ElementCollection(targetClass = Acceso.class)
+    @ElementCollection(targetClass = Acceso.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "accesos")
     @Column(name = "accesos")
