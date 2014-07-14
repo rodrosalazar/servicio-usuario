@@ -19,7 +19,7 @@ public class Perfil {
     @Column
     private String nombre;
 
-    @OneToMany(mappedBy = "perfil")
+    @OneToMany(mappedBy = "perfil", fetch = FetchType.EAGER)
     @Cascade(CascadeType.ALL)
     @JsonManagedReference
     private List<Permiso> permisos;
