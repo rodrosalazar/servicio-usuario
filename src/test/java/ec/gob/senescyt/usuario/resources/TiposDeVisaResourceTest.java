@@ -5,6 +5,7 @@ import ec.gob.senescyt.usuario.core.TipoVisa;
 import ec.gob.senescyt.usuario.dao.CategoriaVisaDAO;
 import ec.gob.senescyt.usuario.dao.TipoVisaDAO;
 import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;
+import ec.gob.senescyt.usuario.resources.builders.ConstructorRespuestas;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,10 +27,11 @@ public class TiposDeVisaResourceTest {
     private TipoDeVisaResource tiposDeVisaResource;
     private TipoVisaDAO tipoVisaDAO = mock(TipoVisaDAO.class);
     private CategoriaVisaDAO categoriaVisaDAO = mock(CategoriaVisaDAO.class);
+    private ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
 
     @Before
     public void setUp() throws Exception {
-        tiposDeVisaResource = new TipoDeVisaResource(tipoVisaDAO, categoriaVisaDAO);
+        tiposDeVisaResource = new TipoDeVisaResource(tipoVisaDAO, categoriaVisaDAO, constructorRespuestas);
     }
 
 

@@ -105,7 +105,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final CantonResource cantonResource = new CantonResource(cantonDAO, parroquiaDAO, constructorRespuestas);
         environment.jersey().register(cantonResource);
 
-        final TipoDeVisaResource tipoDeVisaResource = new TipoDeVisaResource(tipoVisaDAO, categoriaVisaDAO);
+        final TipoDeVisaResource tipoDeVisaResource = new TipoDeVisaResource(tipoVisaDAO, categoriaVisaDAO, constructorRespuestas);
         environment.jersey().register(tipoDeVisaResource);
 
         registrarFiltros(environment);
