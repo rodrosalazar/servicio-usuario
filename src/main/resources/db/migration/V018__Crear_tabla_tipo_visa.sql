@@ -1,0 +1,4 @@
+CREATE TABLE tipos_de_visa (
+  id VARCHAR(1) NOT NULL PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL
+);
