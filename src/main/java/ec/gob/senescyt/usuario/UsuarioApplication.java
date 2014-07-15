@@ -40,7 +40,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
     private final HibernateBundle<UsuarioConfiguration> hibernate = new HibernateBundle<UsuarioConfiguration>(Perfil.class, Permiso.class,
             Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class, Detalle.class, Pais.class,
-            Provincia.class, Canton.class, Parroquia.class, TipoVisa.class, CategoriaVisa.class) {
+            Provincia.class, Canton.class, Parroquia.class, TipoVisa.class, CategoriaVisa.class, Etnia.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
@@ -76,6 +76,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         ParroquiaDAO parroquiaDAO = new ParroquiaDAO(getSessionFactory());
         TipoVisaDAO tipoVisaDAO = new TipoVisaDAO(getSessionFactory());
         CategoriaVisaDAO categoriaVisaDAO = new CategoriaVisaDAO(getSessionFactory());
+        EtniaDAO etniaDAO = new EtniaDAO(getSessionFactory());
         ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
@@ -107,6 +108,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         final TipoDeVisaResource tipoDeVisaResource = new TipoDeVisaResource(tipoVisaDAO, categoriaVisaDAO, constructorRespuestas);
         environment.jersey().register(tipoDeVisaResource);
+
+        final EtniaResource etniaResource = new EtniaResource(etniaDAO, constructorRespuestas);
+        environment.jersey().register(etniaResource);
 
         registrarFiltros(environment);
 

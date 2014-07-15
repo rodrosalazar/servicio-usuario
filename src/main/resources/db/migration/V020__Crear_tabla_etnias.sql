@@ -1,0 +1,4 @@
+CREATE TABLE etnias (
+  id VARCHAR(2) NOT NULL PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL
+);

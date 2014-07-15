@@ -24,8 +24,9 @@ public class Parroquia {
 
     private String nombre;
 
-    public Parroquia() {
+    private Parroquia() {
     }
+
     public Parroquia(Canton canton, String id, String nombre) {
         this.canton = canton;
         this.id = id;

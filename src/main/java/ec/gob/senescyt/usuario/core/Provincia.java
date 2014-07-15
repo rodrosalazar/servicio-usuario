@@ -21,7 +21,7 @@ public class Provincia {
     @JsonIgnore
     private List<Canton> cantones;
 
-    public Provincia() {
+    private Provincia() {
     }
 
     public Provincia(String id, String nombre) {

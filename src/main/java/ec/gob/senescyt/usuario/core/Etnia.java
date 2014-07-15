@@ -8,19 +8,19 @@ import javax.persistence.Table;
 
 @JsonPropertyOrder({"id", "nombre"})
 @Entity
-@Table(name="paises")
-public class Pais {
+@Table(name = "etnias")
+public class Etnia {
 
     @Id
     private String id;
     private String nombre;
 
-    public Pais(String idPais, String nombrePais) {
-        this.id = idPais;
-        this.nombre = nombrePais;
+    private Etnia() {
     }
 
-    private Pais() {
+    public Etnia(String idEtnia, String nombreEtnia) {
+        this.id = idEtnia;
+        this.nombre = nombreEtnia;
     }
 
     public String getId() {
