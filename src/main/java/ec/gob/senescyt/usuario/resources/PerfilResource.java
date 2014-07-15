@@ -3,6 +3,8 @@ package ec.gob.senescyt.usuario.resources;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
+import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;
+import ec.gob.senescyt.usuario.resources.builders.ConstructorRespuestas;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
@@ -21,9 +23,11 @@ import static com.google.common.collect.Maps.newHashMap;
 public class PerfilResource {
 
     private final PerfilDAO perfilDAO;
+    private final ConstructorRespuestas constructorRespuestas;
 
-    public PerfilResource(PerfilDAO perfilDAO) {
+    public PerfilResource(PerfilDAO perfilDAO, ConstructorRespuestas constructorRespuestas) {
         this.perfilDAO = perfilDAO;
+        this.constructorRespuestas = constructorRespuestas;
     }
 
     @POST
@@ -40,11 +44,7 @@ public class PerfilResource {
     @GET
     @UnitOfWork
     public Response obtenerTodos() throws JsonProcessingException {
-        Map<String, List<Perfil>> resultado = newHashMap();
         List<Perfil> perfiles = perfilDAO.obtenerTodos();
-
-        resultado.put("perfiles", perfiles);
-
-        return Response.ok(resultado).build();
+        return constructorRespuestas.construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_PERFILES, perfiles);
     }
 }

@@ -2,10 +2,10 @@ package ec.gob.senescyt.usuario.resources;
 
 import ec.gob.senescyt.usuario.builders.PerfilBuilder;
 import ec.gob.senescyt.usuario.core.Acceso;
-import ec.gob.senescyt.usuario.core.Institucion;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
+import ec.gob.senescyt.usuario.resources.builders.ConstructorRespuestas;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,11 +22,12 @@ public class PerfilResourceTest {
 
     private PerfilDAO perfilDAO;
     private PerfilResource perfilResource;
+    private ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
 
     @Before
     public void setUp() throws Exception {
         perfilDAO = mock(PerfilDAO.class);
-        perfilResource = new PerfilResource(perfilDAO);
+        perfilResource = new PerfilResource(perfilDAO, constructorRespuestas);
     }
 
     @Test

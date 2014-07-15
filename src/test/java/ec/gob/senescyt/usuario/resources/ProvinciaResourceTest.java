@@ -5,6 +5,7 @@ import ec.gob.senescyt.usuario.core.Provincia;
 import ec.gob.senescyt.usuario.dao.CantonDAO;
 import ec.gob.senescyt.usuario.dao.ProvinciaDAO;
 import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;
+import ec.gob.senescyt.usuario.resources.builders.ConstructorRespuestas;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,10 +29,11 @@ public class ProvinciaResourceTest {
     private ProvinciaResource provinciaResource;
     private ProvinciaDAO provinciaDAO = mock(ProvinciaDAO.class);
     private CantonDAO cantonDAO = mock(CantonDAO.class);
+    private ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
 
     @Before
     public void setUp() throws Exception {
-        provinciaResource = new ProvinciaResource(provinciaDAO, cantonDAO);
+        provinciaResource = new ProvinciaResource(provinciaDAO, cantonDAO, constructorRespuestas);
     }
 
     @Test

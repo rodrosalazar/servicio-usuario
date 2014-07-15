@@ -4,7 +4,10 @@ public enum ElementosRaicesJSONEnum {
     ELEMENTO_RAIZ_PROVINCIAS("provincias"),
     ELEMENTO_RAIZ_CANTONES("cantones"),
     ELEMENTO_RAIZ_PARROQUIAS("parroquias"),
-    ELEMENTO_RAIZ_CATEGORIA_VISA("categorias");
+    ELEMENTO_RAIZ_CATEGORIA_VISA("categorias"),
+    ELEMENTO_RAIZ_PERFILES("perfiles"),
+    ELEMENTO_RAIZ_PAISES("paises"),
+    ELEMENTO_RAIZ_INSTITUCIONES("instituciones");
 
     private String nombre;
 

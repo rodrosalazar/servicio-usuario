@@ -2,6 +2,8 @@ package ec.gob.senescyt.usuario.resources;
 
 import ec.gob.senescyt.usuario.core.Pais;
 import ec.gob.senescyt.usuario.dao.PaisDAO;
+import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;
+import ec.gob.senescyt.usuario.resources.builders.ConstructorRespuestas;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
@@ -16,17 +18,17 @@ import java.util.List;
 public class PaisResource {
 
     private PaisDAO paisDAO;
+    private final ConstructorRespuestas constructorRespuestas;
 
-    public PaisResource(PaisDAO paisDAO) {
+    public PaisResource(PaisDAO paisDAO, ConstructorRespuestas constructorRespuestas) {
         this.paisDAO = paisDAO;
+        this.constructorRespuestas = constructorRespuestas;
     }
 
     @GET
     @UnitOfWork
     public Response obtenerTodos() {
-
         List<Pais> paises = paisDAO.obtenerTodos();
-
-        return Response.ok(paises).build();
+        return constructorRespuestas.construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_PAISES, paises);
     }
 }

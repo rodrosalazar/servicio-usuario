@@ -5,6 +5,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.usuario.UsuarioApplication;
 import ec.gob.senescyt.usuario.UsuarioConfiguration;
+import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
@@ -14,6 +15,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.not;
@@ -57,6 +59,6 @@ public class PaisResourceIntegracionTest {
                 .get(ClientResponse.class);
 
         assertThat(response.getStatus(), is(200));
-        assertThat(response.getEntity(List.class).size(), is(not(0)));
+        assertThat(((List)(response.getEntity(HashMap.class).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_PAISES.getNombre()))).size(), is(not(0)));
     }
 }

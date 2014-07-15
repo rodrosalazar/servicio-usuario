@@ -13,6 +13,7 @@ import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.usuario.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.resources.*;
+import ec.gob.senescyt.usuario.resources.builders.ConstructorRespuestas;
 import ec.gob.senescyt.usuario.resources.filters.HeaderResponseFilter;
 import ec.gob.senescyt.usuario.resources.management.LimpiezaResource;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
@@ -75,8 +76,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         ParroquiaDAO parroquiaDAO = new ParroquiaDAO(getSessionFactory());
         TipoVisaDAO tipoVisaDAO = new TipoVisaDAO(getSessionFactory());
         CategoriaVisaDAO categoriaVisaDAO = new CategoriaVisaDAO(getSessionFactory());
+        ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
 
-        final PerfilResource perfilResource = new PerfilResource(perfilDAO);
+        final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
         environment.jersey().register(perfilResource);
 
         CedulaValidator cedulaValidator = new CedulaValidator();
@@ -94,13 +96,13 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final ClasificacionResource clasificacionResource = new ClasificacionResource(clasificacionDAO);
         environment.jersey().register(clasificacionResource);
 
-        final PaisResource paisResource = new PaisResource(paisDAO);
+        final PaisResource paisResource = new PaisResource(paisDAO, constructorRespuestas);
         environment.jersey().register(paisResource);
 
-        final ProvinciaResource provinciaResource = new ProvinciaResource(provinciaDAO, cantonDAO);
+        final ProvinciaResource provinciaResource = new ProvinciaResource(provinciaDAO, cantonDAO, constructorRespuestas);
         environment.jersey().register(provinciaResource);
 
-        final CantonResource cantonResource = new CantonResource(cantonDAO, parroquiaDAO);
+        final CantonResource cantonResource = new CantonResource(cantonDAO, parroquiaDAO, constructorRespuestas);
         environment.jersey().register(cantonResource);
 
         final TipoDeVisaResource tipoDeVisaResource = new TipoDeVisaResource(tipoVisaDAO, categoriaVisaDAO);

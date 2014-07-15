@@ -5,6 +5,7 @@ import ec.gob.senescyt.usuario.core.Provincia;
 import ec.gob.senescyt.usuario.dao.CantonDAO;
 import ec.gob.senescyt.usuario.dao.ProvinciaDAO;
 import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;
+import ec.gob.senescyt.usuario.resources.builders.ConstructorRespuestas;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
@@ -23,21 +24,20 @@ public class ProvinciaResource {
 
     private ProvinciaDAO provinciaDAO;
     private final CantonDAO cantonDAO;
+    private final ConstructorRespuestas constructorRespuestas;
 
 
-    public ProvinciaResource(ProvinciaDAO provinciaDAO, CantonDAO cantonDAO) {
+    public ProvinciaResource(ProvinciaDAO provinciaDAO, CantonDAO cantonDAO, ConstructorRespuestas constructorRespuestas) {
         this.provinciaDAO = provinciaDAO;
         this.cantonDAO = cantonDAO;
+        this.constructorRespuestas = constructorRespuestas;
     }
 
     @GET
     @UnitOfWork
     public Response obtenerTodos() {
         List<Provincia> provincias = provinciaDAO.obtenerTodos();
-        Map provinciasWrapper = new HashMap<String,List<Canton>>();
-
-        provinciasWrapper.put(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_PROVINCIAS.getNombre(), provincias);
-        return Response.ok(provinciasWrapper).build();
+        return constructorRespuestas.construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_PROVINCIAS,provincias);
     }
 
 
@@ -46,11 +46,6 @@ public class ProvinciaResource {
     @UnitOfWork
     public Response obtenerCantonesPorProvincia(@PathParam("idProvincia") String idProvincia) {
         List<Canton> cantonesParaProvincia = cantonDAO.obtenerPorProvincia(idProvincia);
-
-        Map cantonesWrapper = new HashMap<String,List<Canton>>();
-
-        cantonesWrapper.put(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_CANTONES.getNombre(),cantonesParaProvincia);
-
-        return Response.ok().entity(cantonesWrapper).build();
+        return constructorRespuestas.construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_CANTONES, cantonesParaProvincia);
     }
 }

@@ -1,7 +1,6 @@
 package ec.gob.senescyt.usuario.resources;
 
 import ec.gob.senescyt.usuario.core.CategoriaVisa;
-import ec.gob.senescyt.usuario.core.Parroquia;
 import ec.gob.senescyt.usuario.dao.CategoriaVisaDAO;
 import ec.gob.senescyt.usuario.dao.TipoVisaDAO;
 import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;

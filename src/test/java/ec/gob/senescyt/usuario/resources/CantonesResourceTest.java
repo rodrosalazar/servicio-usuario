@@ -2,11 +2,10 @@ package ec.gob.senescyt.usuario.resources;
 
 import ec.gob.senescyt.usuario.core.Canton;
 import ec.gob.senescyt.usuario.core.Parroquia;
-import ec.gob.senescyt.usuario.core.Provincia;
 import ec.gob.senescyt.usuario.dao.CantonDAO;
 import ec.gob.senescyt.usuario.dao.ParroquiaDAO;
-import ec.gob.senescyt.usuario.dao.ProvinciaDAO;
 import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;
+import ec.gob.senescyt.usuario.resources.builders.ConstructorRespuestas;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -28,10 +27,11 @@ public class CantonesResourceTest {
     private CantonResource cantonResource;
     private CantonDAO cantonDAO = mock(CantonDAO.class);
     private ParroquiaDAO parroquiaDAO = mock(ParroquiaDAO.class);
+    private ConstructorRespuestas constructorRespuestasParroquias = new ConstructorRespuestas();
 
     @Before
     public void setUp() throws Exception {
-        cantonResource = new CantonResource(cantonDAO, parroquiaDAO);
+        cantonResource = new CantonResource(cantonDAO, parroquiaDAO, constructorRespuestasParroquias);
     }
 
 
