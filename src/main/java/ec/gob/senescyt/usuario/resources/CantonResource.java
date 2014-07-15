@@ -1,11 +1,8 @@
 package ec.gob.senescyt.usuario.resources;
 
-import ec.gob.senescyt.usuario.core.Canton;
 import ec.gob.senescyt.usuario.core.Parroquia;
-import ec.gob.senescyt.usuario.core.Provincia;
 import ec.gob.senescyt.usuario.dao.CantonDAO;
 import ec.gob.senescyt.usuario.dao.ParroquiaDAO;
-import ec.gob.senescyt.usuario.dao.ProvinciaDAO;
 import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;
 import io.dropwizard.hibernate.UnitOfWork;
 

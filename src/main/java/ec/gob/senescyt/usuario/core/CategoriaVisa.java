@@ -25,6 +25,15 @@ public class CategoriaVisa {
 
     private String nombre;
 
+    public CategoriaVisa() {
+    }
+
+    public CategoriaVisa(TipoVisa tipoVisa, String idCategoriaVisa, String nombreCategoriaVisa) {
+        this.tipoVisa = tipoVisa;
+        this.id = idCategoriaVisa;
+        this.nombre = nombreCategoriaVisa;
+    }
+
     public String getTipoVisaIdParaCsv() {
         return tipoVisaIdParaCsv;
     }

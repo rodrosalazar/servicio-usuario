@@ -25,6 +25,14 @@ public class TipoVisa {
     @JsonIgnore
     private List<CategoriaVisa> categoriasVisa;
 
+    public TipoVisa() {
+    }
+
+    public TipoVisa(String idTipoVisa, String nombreTipoVisa) {
+        this.id = idTipoVisa;
+        this.nombre = nombreTipoVisa;
+    }
+
     public String getId() {
         return id;
     }
