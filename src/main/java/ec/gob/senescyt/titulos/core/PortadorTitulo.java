@@ -2,22 +2,30 @@ package ec.gob.senescyt.titulos.core;
 
 import ec.gob.senescyt.titulos.enums.SexoEnum;
 import ec.gob.senescyt.usuario.core.Identificacion;
-import org.joda.time.DateTime;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
+import javax.validation.constraints.Past;
+import java.util.Date;
 
 @Entity
 public class PortadorTitulo {
 
+
     private PortadorTitulo() {}
 
+    private long id;
     private String nombresCompletos;
     private Identificacion identificacion;
     private String codigoPais;
+
+    @NotEmpty
     private String email;
     private SexoEnum sexo;
     private String codigoEtnia;
-    private DateTime fechaNacimiento;
+
+    @Past
+    private Date fechaNacimiento;
     private String telefonoConvencional;
     private String extension;
     private String telefonoCelular;
@@ -26,7 +34,7 @@ public class PortadorTitulo {
 
     public PortadorTitulo(String nombresCompletos, Identificacion identificacion,
                           String codigoPais, String email, SexoEnum sexo,
-                          String codigoEtnia, DateTime fechaNacimiento, String telefonoConvencional,
+                          String codigoEtnia, Date fechaNacimiento, String telefonoConvencional,
                           String extension, String telefonoCelular, boolean aceptaCondiciones,
                           Direccion direccion) {
 
@@ -48,7 +56,7 @@ public class PortadorTitulo {
         return extension;
     }
 
-    public DateTime getFechaNacimiento() {
+    public Date getFechaNacimiento() {
         return fechaNacimiento;
     }
 
@@ -92,4 +100,7 @@ public class PortadorTitulo {
         return direccion;
     }
 
+    public long getId() {
+        return id;
+    }
 }
