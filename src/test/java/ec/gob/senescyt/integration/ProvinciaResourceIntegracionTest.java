@@ -4,13 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.io.Resources;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-import ec.gob.senescyt.usuario.UsuarioApplication;
-import ec.gob.senescyt.usuario.UsuarioConfiguration;
-import ec.gob.senescyt.usuario.core.Canton;
-import ec.gob.senescyt.usuario.core.Provincia;
-import ec.gob.senescyt.usuario.dao.CantonDAO;
-import ec.gob.senescyt.usuario.dao.ProvinciaDAO;
-import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;
+import ec.gob.senescyt.UsuarioApplication;
+import ec.gob.senescyt.UsuarioConfiguration;
+import ec.gob.senescyt.titulos.core.Canton;
+import ec.gob.senescyt.titulos.core.Provincia;
+import ec.gob.senescyt.titulos.dao.CantonDAO;
+import ec.gob.senescyt.titulos.dao.ProvinciaDAO;
+import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hibernate.SessionFactory;
@@ -22,7 +22,6 @@ import org.junit.Test;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;

@@ -1,10 +1,10 @@
 package ec.gob.senescyt.usuario.resources;
 
-import ec.gob.senescyt.usuario.core.Parroquia;
-import ec.gob.senescyt.usuario.dao.CantonDAO;
-import ec.gob.senescyt.usuario.dao.ParroquiaDAO;
-import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;
-import ec.gob.senescyt.usuario.resources.builders.ConstructorRespuestas;
+import ec.gob.senescyt.titulos.core.Parroquia;
+import ec.gob.senescyt.titulos.dao.CantonDAO;
+import ec.gob.senescyt.titulos.dao.ParroquiaDAO;
+import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
+import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
@@ -35,6 +35,6 @@ public class CantonResource {
     public Response obtenerParroquiasParaCanton(@PathParam("idCanton") String idCanton) {
 
         List<Parroquia> parroquiasParaCanton = parroquiaDAO.obtenerPorCanton(idCanton);
-        return constructorRespuestas.construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_PARROQUIAS,parroquiasParaCanton);
+        return constructorRespuestas.construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_PARROQUIAS, parroquiasParaCanton);
     }
 }

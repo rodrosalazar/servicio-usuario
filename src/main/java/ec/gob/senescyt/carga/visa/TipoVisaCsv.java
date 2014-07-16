@@ -1,7 +1,7 @@
 package ec.gob.senescyt.carga.visa;
 
 import ec.gob.senescyt.carga.ConversorCsv;
-import ec.gob.senescyt.usuario.core.TipoVisa;
+import ec.gob.senescyt.titulos.core.TipoVisa;
 
 import java.io.IOException;
 

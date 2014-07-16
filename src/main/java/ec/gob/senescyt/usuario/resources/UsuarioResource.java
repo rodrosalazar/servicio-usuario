@@ -1,10 +1,10 @@
 package ec.gob.senescyt.usuario.resources;
 
 import com.google.common.base.Optional;
-import ec.gob.senescyt.usuario.builders.MensajeErrorBuilder;
+import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
-import ec.gob.senescyt.usuario.lectores.LectorArchivoDePropiedades;
+import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.hibernate.UnitOfWork;
 

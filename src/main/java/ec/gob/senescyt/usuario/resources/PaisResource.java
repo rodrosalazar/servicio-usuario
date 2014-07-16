@@ -1,9 +1,9 @@
 package ec.gob.senescyt.usuario.resources;
 
-import ec.gob.senescyt.usuario.core.Pais;
-import ec.gob.senescyt.usuario.dao.PaisDAO;
-import ec.gob.senescyt.usuario.enums.ElementosRaicesJSONEnum;
-import ec.gob.senescyt.usuario.resources.builders.ConstructorRespuestas;
+import ec.gob.senescyt.titulos.core.Pais;
+import ec.gob.senescyt.titulos.dao.PaisDAO;
+import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
+import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;

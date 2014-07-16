@@ -1,6 +1,6 @@
 package ec.gob.senescyt.usuario.bundles;
 
-import ec.gob.senescyt.usuario.UsuarioConfiguration;
+import ec.gob.senescyt.UsuarioConfiguration;
 import io.dropwizard.ConfiguredBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;

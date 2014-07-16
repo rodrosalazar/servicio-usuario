@@ -2,14 +2,13 @@ package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaDeserializer;
-import ec.gob.senescyt.usuario.serializers.JSONFechaVigenciaSerializer;
+import ec.gob.senescyt.commons.serializers.JSONFechaDeserializer;
+import ec.gob.senescyt.commons.serializers.JSONFechaSerializer;
 import ec.gob.senescyt.usuario.validators.annotations.FechaVigenciaValida;
 import ec.gob.senescyt.usuario.validators.annotations.IdentificacionValida;
 import ec.gob.senescyt.usuario.validators.annotations.QuipuxValido;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.validator.constraints.Email;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
@@ -51,8 +50,8 @@ public class Usuario {
 
     @Temporal(TemporalType.DATE)
     @Type(type = "org.joda.time.DateTime")
-    @JsonSerialize(using = JSONFechaVigenciaSerializer.class)
-    @JsonDeserialize(using = JSONFechaVigenciaDeserializer.class)
+    @JsonSerialize(using = JSONFechaSerializer.class)
+    @JsonDeserialize(using = JSONFechaDeserializer.class)
     @FechaVigenciaValida
     private DateTime finDeVigencia;
 

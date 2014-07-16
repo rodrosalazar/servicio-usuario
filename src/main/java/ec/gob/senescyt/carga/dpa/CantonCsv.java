@@ -1,7 +1,7 @@
 package ec.gob.senescyt.carga.dpa;
 
 import ec.gob.senescyt.carga.ConversorCsv;
-import ec.gob.senescyt.usuario.core.Canton;
+import ec.gob.senescyt.titulos.core.Canton;
 
 import java.io.IOException;
 

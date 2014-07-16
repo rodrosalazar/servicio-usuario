@@ -1,11 +1,11 @@
 package ec.gob.senescyt.usuario.resources;
 
-import ec.gob.senescyt.usuario.builders.PerfilBuilder;
+import ec.gob.senescyt.commons.builders.PerfilBuilder;
 import ec.gob.senescyt.usuario.core.Acceso;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
-import ec.gob.senescyt.usuario.resources.builders.ConstructorRespuestas;
+import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,8 +1,8 @@
 package ec.gob.senescyt.integration;
 
 import com.google.common.io.Resources;
-import ec.gob.senescyt.usuario.UsuarioApplication;
-import ec.gob.senescyt.usuario.UsuarioConfiguration;
+import ec.gob.senescyt.UsuarioApplication;
+import ec.gob.senescyt.UsuarioConfiguration;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
