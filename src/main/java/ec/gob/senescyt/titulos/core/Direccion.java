@@ -1,25 +1,36 @@
 package ec.gob.senescyt.titulos.core;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class Direccion {
+
+    @NotEmpty
     private String callePrincipal;
+    @NotEmpty
     private String numeroCasa;
+    @NotEmpty
     private String calleSecundaria;
-    private String codigoProvincia;
-    private String codigoCanton;
-    private String codigoParroquia;
+    @NotEmpty
+    private String idProvincia;
+    @NotEmpty
+    private String idCanton;
+    @NotEmpty
+    private String idParroquia;
+    @NotEmpty
+    private String idPais;
 
-    private Direccion() {
-    }
+    private Direccion() { }
 
-    public Direccion(String callePrincipal, String numeroCasa, String calleSecundaria, String codigoProvincia,
-                     String codigoCanton, String codigoParroquia) {
+    public Direccion(String callePrincipal, String numeroCasa, String calleSecundaria, String idProvincia,
+                     String idCanton, String idParroquia, String idPais) {
 
         this.callePrincipal = callePrincipal;
         this.numeroCasa = numeroCasa;
         this.calleSecundaria = calleSecundaria;
-        this.codigoProvincia = codigoProvincia;
-        this.codigoCanton = codigoCanton;
-        this.codigoParroquia = codigoParroquia;
+        this.idProvincia = idProvincia;
+        this.idCanton = idCanton;
+        this.idParroquia = idParroquia;
+        this.idPais = idPais;
     }
 
     public String getCallePrincipal() {
@@ -34,16 +45,20 @@ public class Direccion {
         return calleSecundaria;
     }
 
-    public String getCodigoProvincia() {
-        return codigoProvincia;
+    public String getIdProvincia() {
+        return idProvincia;
     }
 
-    public String getCodigoCanton() {
-        return codigoCanton;
+    public String getIdCanton() {
+        return idCanton;
     }
 
-    public String getCodigoParroquia() {
-        return codigoParroquia;
+    public String getIdParroquia() {
+        return idParroquia;
+    }
+
+    public String getIdPais() {
+        return idPais;
     }
 
     @Override
@@ -57,11 +72,11 @@ public class Direccion {
             return false;
         if (calleSecundaria != null ? !calleSecundaria.equals(direccion.calleSecundaria) : direccion.calleSecundaria != null)
             return false;
-        if (codigoCanton != null ? !codigoCanton.equals(direccion.codigoCanton) : direccion.codigoCanton != null)
+        if (idCanton != null ? !idCanton.equals(direccion.idCanton) : direccion.idCanton != null) return false;
+        if (idPais != null ? !idPais.equals(direccion.idPais) : direccion.idPais != null) return false;
+        if (idParroquia != null ? !idParroquia.equals(direccion.idParroquia) : direccion.idParroquia != null)
             return false;
-        if (codigoParroquia != null ? !codigoParroquia.equals(direccion.codigoParroquia) : direccion.codigoParroquia != null)
-            return false;
-        if (codigoProvincia != null ? !codigoProvincia.equals(direccion.codigoProvincia) : direccion.codigoProvincia != null)
+        if (idProvincia != null ? !idProvincia.equals(direccion.idProvincia) : direccion.idProvincia != null)
             return false;
         if (numeroCasa != null ? !numeroCasa.equals(direccion.numeroCasa) : direccion.numeroCasa != null) return false;
 

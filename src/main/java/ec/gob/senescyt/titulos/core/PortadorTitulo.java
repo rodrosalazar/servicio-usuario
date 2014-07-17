@@ -8,10 +8,8 @@ import org.joda.time.DateTime;
 import org.joda.time.ReadableInstant;
 
 import javax.persistence.Entity;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 
 @Entity
 public class PortadorTitulo {
@@ -19,9 +17,10 @@ public class PortadorTitulo {
     private static final String REGEX_EMAIL = "^[a-z](\\.?[_-]*[a-z0-9]+)*@\\w+(\\.\\w+)*(\\.[a-z]{2,})$";
 
     private long id;
+
+    @NotEmpty
     private String nombresCompletos;
     private Identificacion identificacion;
-    private String codigoPais;
 
     @Pattern(regexp = REGEX_EMAIL, message = "{ec.gob.senescyt.error.email}")
     @NotEmpty
@@ -29,13 +28,15 @@ public class PortadorTitulo {
 
     @NotNull
     private SexoEnum sexo;
-    private String codigoEtnia;
+
+    @NotEmpty
+    private String idEtnia;
 
     @Past(message = "{ec.gob.senescyt.error.fechaNacimiento}")
     private DateTime fechaNacimiento;
 
-    @Length(min = 8, message = "{ec.gob.senescyt.error.telefonoConvencional}")
-    @Digits(integer = 8, fraction = 0, message = "{ec.gob.senescyt.error.telefonoConvencional}")
+    @Length(min = 9, message = "{ec.gob.senescyt.error.telefonoConvencional}")
+    @Digits(integer = 9, fraction = 0, message = "{ec.gob.senescyt.error.telefonoConvencional}")
     private String telefonoConvencional;
 
     @Digits(integer = 5, fraction = 0, message = "{ec.gob.senescyt.error.extension}")
@@ -44,22 +45,27 @@ public class PortadorTitulo {
     @Length(min = 10, message = "{ec.gob.senescyt.error.telefonoCelular}")
     @Digits(integer = 10, fraction = 0, message = "{ec.gob.senescyt.error.telefonoCelular}")
     private String telefonoCelular;
+
+    @AssertTrue (message = "{ec.gob.senescyt.error.aceptaCondiciones}")
     private boolean aceptaCondiciones;
+
+    @NotNull
+    @Valid
     private Direccion direccion;
 
     private PortadorTitulo() {}
+
     public PortadorTitulo(String nombresCompletos, Identificacion identificacion,
-                          String codigoPais, String email, SexoEnum sexo,
-                          String codigoEtnia, DateTime fechaNacimiento, String telefonoConvencional,
+                          String email, SexoEnum sexo,
+                          String idEtnia, DateTime fechaNacimiento, String telefonoConvencional,
                           String extension, String telefonoCelular, boolean aceptaCondiciones,
                           Direccion direccion) {
 
         this.nombresCompletos = nombresCompletos;
         this.identificacion = identificacion;
-        this.codigoPais = codigoPais;
         this.email = email;
         this.sexo = sexo;
-        this.codigoEtnia = codigoEtnia;
+        this.idEtnia = idEtnia;
         this.fechaNacimiento = fechaNacimiento;
         this.telefonoConvencional = telefonoConvencional;
         this.extension = extension;
@@ -88,16 +94,12 @@ public class PortadorTitulo {
         return email;
     }
 
-    public String getCodigoPais() {
-        return codigoPais;
-    }
-
     public SexoEnum getSexo() {
         return sexo;
     }
 
-    public String getCodigoEtnia() {
-        return codigoEtnia;
+    public String getIdEtnia() {
+        return idEtnia;
     }
 
     public String getTelefonoConvencional() {

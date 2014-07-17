@@ -84,9 +84,9 @@ public class TituloExtranjeroResourceTest {
     }
 
     @Test
-    public void noDebeCrearTituloConTelefonoConvencionalConMasOMenosDe8Digitos() {
+    public void noDebeCrearTituloConTelefonoConvencionalConMasOMenosDe9Digitos() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .conTelefonoConvencional("1234567")
+                .conTelefonoConvencional("12345678")
                 .generar();
 
         ClientResponse response = client.resource("/titulo/extranjero")
@@ -94,14 +94,14 @@ public class TituloExtranjeroResourceTest {
                 .post(ClientResponse.class, portadorTitulo);
 
         assertThat(response.getStatus(), is(400));
-        assertErrorMessage(response, "Debe contener 8 dígitos");
+        assertErrorMessage(response, "Debe contener 9 dígitos");
         verifyZeroInteractions(portadorTituloDAO);
     }
 
     @Test
     public void noDebeCrearTituloConTelefonoConvencionalConOtrosCaracteresQueNoSeanNumeros() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .conTelefonoConvencional("noNumero")
+                .conTelefonoConvencional("1234$6789")
                 .generar();
 
         ClientResponse response = client.resource("/titulo/extranjero")
@@ -109,7 +109,7 @@ public class TituloExtranjeroResourceTest {
                 .post(ClientResponse.class, portadorTitulo);
 
         assertThat(response.getStatus(), is(400));
-        assertErrorMessage(response, "Debe contener 8 dígitos");
+        assertErrorMessage(response, "Debe contener 9 dígitos");
         verifyZeroInteractions(portadorTituloDAO);
     }
 
@@ -177,6 +177,185 @@ public class TituloExtranjeroResourceTest {
     public void noDebeCrearTituloSinSexo() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .conSexo(null)
+                .generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloCuandoElNombreEstaVacio() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .conNombreCompleto(CAMPO_EN_BLANCO)
+                .generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConnombreVacio() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .conNombreCompleto(CAMPO_EN_BLANCO)
+                .generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearPortadorTituloSinAceptarTerminos() throws Exception {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .conAceptaCondiciones(false).generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "Debe aceptar las condiciones");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConIdEtniaVacio() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .conIdEtnia(CAMPO_EN_BLANCO)
+                .generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConDireccionVacia() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .conDireccion(null)
+                .generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConCallePrincipalVacia() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .conCallePrincipal(CAMPO_EN_BLANCO)
+                .generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConCalleSecundariaVacia() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .conCalleSecundaria(CAMPO_EN_BLANCO)
+                .generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConNumeroDeCasaVacia() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .conNumeroDeCasa(CAMPO_EN_BLANCO)
+                .generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConIdProvinciaVacia() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .conIdProvincia(CAMPO_EN_BLANCO)
+                .generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConIdCantonVacio() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .conIdCanton(CAMPO_EN_BLANCO)
+                .generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConIdParroquiaVacio() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .conIdParroquia(CAMPO_EN_BLANCO)
+                .generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConIdPaisVacio() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .conIdPais(CAMPO_EN_BLANCO)
                 .generar();
 
         ClientResponse response = client.resource("/titulo/extranjero")

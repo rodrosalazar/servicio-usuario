@@ -26,6 +26,4 @@ public class TituloExtranjeroResource {
         PortadorTitulo nuevoTitulo = portadorTituloDAO.guardar(portadorTitulo);
         return Response.status(CREATED).entity(nuevoTitulo).build();
     }
-
-
 }
