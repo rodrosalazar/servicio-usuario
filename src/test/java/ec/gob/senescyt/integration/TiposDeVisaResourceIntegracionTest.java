@@ -21,7 +21,10 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
 
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -82,6 +85,18 @@ public class TiposDeVisaResourceIntegracionTest {
         sessionFactory.getCurrentSession().flush();
     }
 
+    @Test
+    public void debeObtenerTodosLosTipoDeVisa() throws Exception {
+        Client client = new Client();
+
+        ClientResponse response = client.resource(
+                String.format("http://localhost:%d/tiposDeVisa", RULE.getLocalPort()))
+                .get(ClientResponse.class);
+
+        assertThat(response.getStatus(), is(200));
+        List tiposDeVisa = (List) response.getEntity(HashMap.class).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_TIPO_VISA.getNombre());
+        assertThat(tiposDeVisa.isEmpty(), is(not(true)));
+    }
 
     @Test
     public void debeObtenerCategoriasDeVisaParaTipoDeVisa() throws Exception {

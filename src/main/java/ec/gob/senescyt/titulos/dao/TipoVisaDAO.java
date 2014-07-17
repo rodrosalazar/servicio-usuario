@@ -5,6 +5,8 @@ import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
+import java.util.List;
+
 public class TipoVisaDAO extends AbstractDAO<TipoVisa>{
     public TipoVisaDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
@@ -19,8 +21,13 @@ public class TipoVisaDAO extends AbstractDAO<TipoVisa>{
     }
 
     public void eliminar(String idTipoVisa) {
-        Query query = currentSession().createQuery("DELETE FROM CategoriaVisa cv WHERE cv.id =:idTipoVisa");
+        Query query = currentSession().createQuery("DELETE FROM TipoVisa tv WHERE tv.id =:idTipoVisa");
         query.setParameter("idTipoVisa", idTipoVisa);
         query.executeUpdate();
+    }
+
+    public List<TipoVisa> obtenerTodos() {
+        Query query = currentSession().createQuery("SELECT t FROM TipoVisa t");
+        return query.list();
     }
 }

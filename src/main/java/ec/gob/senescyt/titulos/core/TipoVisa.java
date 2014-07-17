@@ -40,4 +40,8 @@ public class TipoVisa {
     public String getNombre() {
         return nombre;
     }
+
+    public List<CategoriaVisa> getCategoriasVisa() {
+        return categoriasVisa;
+    }
 }

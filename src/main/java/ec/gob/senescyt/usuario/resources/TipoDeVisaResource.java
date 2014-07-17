@@ -1,6 +1,7 @@
 package ec.gob.senescyt.usuario.resources;
 
 import ec.gob.senescyt.titulos.core.CategoriaVisa;
+import ec.gob.senescyt.titulos.core.TipoVisa;
 import ec.gob.senescyt.titulos.dao.CategoriaVisaDAO;
 import ec.gob.senescyt.titulos.dao.TipoVisaDAO;
 import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
@@ -29,6 +30,14 @@ public class TipoDeVisaResource {
         this.constructorRespuestas = constructorRespuestas;
     }
 
+
+    @GET
+    @UnitOfWork
+    public Response obtenerTodos() {
+        List<TipoVisa> tiposVisa = this.tipoVisaDAO.obtenerTodos();
+        return constructorRespuestas.construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_TIPO_VISA, tiposVisa);
+    }
+
     @GET
     @Path("{idTipoVisa}/categorias")
     @UnitOfWork
@@ -36,4 +45,5 @@ public class TipoDeVisaResource {
         List<CategoriaVisa> categoriasParaTipoVisa = this.categoriaVisaDAO.obtenerPorTipoVisa(idTipoVisa);
         return constructorRespuestas.construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_CATEGORIA_VISA, categoriasParaTipoVisa);
     }
+
 }
