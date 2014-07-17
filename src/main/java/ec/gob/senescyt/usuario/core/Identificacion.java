@@ -7,12 +7,14 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Embeddable
 public class Identificacion implements Serializable {
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private TipoDocumentoEnum tipoDocumento;
 
     @NotEmpty

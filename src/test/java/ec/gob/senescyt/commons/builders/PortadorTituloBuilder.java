@@ -14,7 +14,7 @@ public class PortadorTituloBuilder {
     private static PortadorTituloBuilder portadorTituloBuilder;
 
     public String nombresCompletos = "Nombres_completos";
-    public String numeroIdentificacion = "1111111116";
+    public Identificacion identificacion = new Identificacion(TipoDocumentoEnum.CEDULA, "1111111116");
     public String idPais = "999999";
     public String email = "email@email.com";
     public String idEtnia = "1";
@@ -33,7 +33,7 @@ public class PortadorTituloBuilder {
 
     public PortadorTitulo generar() {
         PortadorTitulo portadorTitulo = new PortadorTitulo(nombresCompletos,
-                new Identificacion(TipoDocumentoEnum.CEDULA, numeroIdentificacion),
+                identificacion,
                 email,
                 sexo,
                 idEtnia, fechaNacimiento,

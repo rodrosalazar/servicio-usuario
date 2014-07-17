@@ -20,6 +20,9 @@ public class PortadorTitulo {
 
     @NotEmpty
     private String nombresCompletos;
+
+    @Valid
+    @NotNull
     private Identificacion identificacion;
 
     @Pattern(regexp = REGEX_EMAIL, message = "{ec.gob.senescyt.error.email}")

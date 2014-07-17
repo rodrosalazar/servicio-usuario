@@ -5,6 +5,8 @@ import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.commons.builders.PortadorTituloBuilder;
 import ec.gob.senescyt.titulos.core.PortadorTitulo;
 import ec.gob.senescyt.titulos.dao.PortadorTituloDAO;
+import ec.gob.senescyt.usuario.core.Identificacion;
+import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.joda.time.DateTime;
@@ -13,7 +15,6 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
-
 import java.io.IOException;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
@@ -344,6 +345,51 @@ public class TituloExtranjeroResourceTest {
     @Test
     public void noDebeCrearTituloConDireccionNula() throws IOException {
         String portadorTitulo = fixture("fixtures/portador_titulo_sin_direccion.json");
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void debeVerificarQueIdentificacionNoSeaNula() throws Exception {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.identificacion = null)
+                .generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void debeVerificarQueTipoDeIdentificacionNoSeaNulo() throws Exception {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.identificacion = new Identificacion(null, "2222222222"))
+                .generar();
+
+        ClientResponse response = client.resource("/titulo/extranjero")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void debeVerificarQueNumeroDeIdentificacionNoEsteVacio() throws Exception {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.identificacion = new Identificacion(TipoDocumentoEnum.PASAPORTE, ""))
+                .generar();
 
         ClientResponse response = client.resource("/titulo/extranjero")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
