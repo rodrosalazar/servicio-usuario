@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @JsonPropertyOrder({"id", "nombre"})
@@ -19,7 +20,7 @@ public class TipoVisa {
 
     @OneToMany(mappedBy = "tipoVisa", fetch = FetchType.EAGER)
     @JsonManagedReference
-    private List<CategoriaVisa> categoriasVisa;
+    private List<CategoriaVisa> categoriasVisa = new ArrayList<>();
 
     public TipoVisa() {
     }

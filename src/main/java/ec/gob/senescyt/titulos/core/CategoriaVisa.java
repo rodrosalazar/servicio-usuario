@@ -25,7 +25,7 @@ public class CategoriaVisa {
 
     private String nombre;
 
-    public CategoriaVisa() {
+    private CategoriaVisa() {
     }
 
     public CategoriaVisa(TipoVisa tipoVisa, String idCategoriaVisa, String nombreCategoriaVisa) {

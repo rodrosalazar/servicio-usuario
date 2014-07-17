@@ -1,10 +1,12 @@
 package ec.gob.senescyt.titulos.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ec.gob.senescyt.titulos.core.TipoVisa;
 import io.dropwizard.jackson.Jackson;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,6 +23,8 @@ public class TipoVisaTest {
         String nombreTipoVisa = "TIPO_VISA_DE_PRUEBA";
 
         tipoVisa = new TipoVisa(idTipoVisa, nombreTipoVisa);
+
+        tipoVisa.getCategoriasVisa().add(new CategoriaVisa(tipoVisa, "1", "CATEGORIA_PRUEBA"));
     }
 
     @Test
