@@ -8,8 +8,6 @@ import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
-import java.util.Date;
-
 public class PortadorTituloBuilder {
     private static PortadorTituloBuilder portadorTituloBuilder;
     private  String nombresCompletos = "Nombres_completos";
@@ -17,8 +15,8 @@ public class PortadorTituloBuilder {
     private  String codigoPais = "999999";
     private  String email = "email@email.com";
     private  String codigoEtnia = "1";
-    private  String telefonoConvencional = "022787345";
-    private  String extensionValida = "123";
+    private  String telefonoConvencional = "01234567";
+    private  String extension = "123";
     private  String telefonoCelular = "0912345678";
     private  boolean aceptaCondiciones = true;
     private  String callePrincipal = "Calle_principal";
@@ -27,8 +25,8 @@ public class PortadorTituloBuilder {
     private  String codigoProvincia = "99";
     private  String codigoCanton = "9999";
     private  String codigoParroquia = "999999";
-    private Date fechaNacimiento =
-            new DateTime(1990, 3, 16, 0, 0, DateTimeZone.UTC).toDate();
+    private DateTime fechaNacimiento = new DateTime(1990, 3, 16, 0, 0, DateTimeZone.UTC);
+    private SexoEnum sexo = SexoEnum.FEMENINO;
 
 
     public PortadorTitulo generar() {
@@ -36,9 +34,9 @@ public class PortadorTituloBuilder {
                 new Identificacion(TipoDocumentoEnum.CEDULA, numeroIdentificacion),
                 codigoPais,
                 email,
-                SexoEnum.MASCULINO,
+                sexo,
                 codigoEtnia, fechaNacimiento,
-                telefonoConvencional, extensionValida,
+                telefonoConvencional, extension,
                 telefonoCelular, aceptaCondiciones,
                 new Direccion(callePrincipal, numeroCasa, calleSecundaria, codigoProvincia,
                         codigoCanton, codigoParroquia));
@@ -56,8 +54,28 @@ public class PortadorTituloBuilder {
         return portadorTituloBuilder;
     }
 
-    public PortadorTituloBuilder conFechaNacimiento(Date fechaNacimiento) {
+    public PortadorTituloBuilder conFechaNacimiento(DateTime fechaNacimiento) {
         this.fechaNacimiento = fechaNacimiento;
+        return portadorTituloBuilder;
+    }
+
+    public PortadorTituloBuilder conTelefonoConvencional(String telefononConvencional) {
+        this.telefonoConvencional = telefononConvencional;
+        return portadorTituloBuilder;
+    }
+
+    public PortadorTituloBuilder conTelefonoCelular(String telefonoCelular) {
+        this.telefonoCelular = telefonoCelular;
+        return portadorTituloBuilder;
+    }
+
+    public PortadorTituloBuilder conExtension(String extension) {
+        this.extension = extension;
+        return portadorTituloBuilder;
+    }
+
+    public PortadorTituloBuilder conSexo(SexoEnum sexo) {
+        this.sexo = sexo;
         return portadorTituloBuilder;
     }
 }

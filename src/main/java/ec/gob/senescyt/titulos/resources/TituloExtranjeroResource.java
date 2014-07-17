@@ -10,7 +10,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
+import static javax.ws.rs.core.Response.Status.CREATED;
 
 @Path("/titulo/extranjero")
 @Produces(MediaType.APPLICATION_JSON)
@@ -23,8 +23,8 @@ public class TituloExtranjeroResource {
 
     @POST
     public Response crear(@Valid PortadorTitulo portadorTitulo) {
-        portadorTituloDAO.guardar(portadorTitulo);
-        return Response.status(BAD_REQUEST).build();
+        PortadorTitulo nuevoTitulo = portadorTituloDAO.guardar(portadorTitulo);
+        return Response.status(CREATED).entity(nuevoTitulo).build();
     }
 
 
