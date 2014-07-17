@@ -2,16 +2,13 @@ package ec.gob.senescyt.titulos.resources;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-import ec.gob.senescyt.commons.builders.UsuarioBuilder;
+import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import ec.gob.senescyt.titulos.core.CategoriaVisa;
 import ec.gob.senescyt.titulos.core.TipoVisa;
 import ec.gob.senescyt.titulos.dao.CategoriaVisaDAO;
 import ec.gob.senescyt.titulos.dao.TipoVisaDAO;
-import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
-import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.resources.TipoDeVisaResource;
-import ec.gob.senescyt.usuario.resources.UsuarioResource;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.hamcrest.MatcherAssert;
 import org.junit.Before;
@@ -19,14 +16,12 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;

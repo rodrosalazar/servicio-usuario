@@ -5,10 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @JsonPropertyOrder({"id", "nombre"})
@@ -20,9 +17,8 @@ public class TipoVisa {
     private String id;
     private String nombre;
 
-    @OneToMany(mappedBy = "tipoVisa")
+    @OneToMany(mappedBy = "tipoVisa", fetch = FetchType.EAGER)
     @JsonManagedReference
-    @JsonIgnore
     private List<CategoriaVisa> categoriasVisa;
 
     public TipoVisa() {
