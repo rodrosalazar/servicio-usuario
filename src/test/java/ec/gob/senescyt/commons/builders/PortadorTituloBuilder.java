@@ -25,9 +25,9 @@ public class PortadorTituloBuilder {
     public String callePrincipal = "Calle_principal";
     public String numeroCasa = "Numero_casa_123";
     public String calleSecundaria = "Calle_secundaria";
-    public String idProvincia = "1";
-    public String idCanton = "405";
-    public String idParroquia = "10250";
+    public String idProvincia = "01";
+    public String idCanton = "0101";
+    public String idParroquia = "010151";
     public DateTime fechaNacimiento = new DateTime(1990, 3, 16, 0, 0, DateTimeZone.UTC);
     public SexoEnum sexo = SexoEnum.FEMENINO;
 
