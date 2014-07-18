@@ -2,22 +2,29 @@ package ec.gob.senescyt;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.sun.jersey.api.core.ResourceConfig;
+import ec.gob.senescyt.commons.exceptions.DBConstraintViolationMapper;
+import ec.gob.senescyt.commons.filters.HeaderResponseFilter;
+import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
+import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
+import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import ec.gob.senescyt.titulos.core.*;
 import ec.gob.senescyt.titulos.dao.*;
 import ec.gob.senescyt.titulos.resources.TituloExtranjeroResource;
 import ec.gob.senescyt.usuario.bundles.DBMigrationsBundle;
-import ec.gob.senescyt.usuario.core.*;
+import ec.gob.senescyt.usuario.core.Institucion;
+import ec.gob.senescyt.usuario.core.Perfil;
+import ec.gob.senescyt.usuario.core.Permiso;
+import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.core.cine.Area;
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
 import ec.gob.senescyt.usuario.core.cine.Detalle;
 import ec.gob.senescyt.usuario.core.cine.Subarea;
-import ec.gob.senescyt.usuario.dao.*;
+import ec.gob.senescyt.usuario.dao.ClasificacionDAO;
+import ec.gob.senescyt.usuario.dao.InstitucionDAO;
+import ec.gob.senescyt.usuario.dao.PerfilDAO;
+import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
-import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
-import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.resources.*;
-import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
-import ec.gob.senescyt.commons.filters.HeaderResponseFilter;
 import ec.gob.senescyt.usuario.resources.management.LimpiezaResource;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.Application;
@@ -143,6 +150,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         ValidacionExceptionMapper validacionExceptionMapper = new ValidacionExceptionMapper();
         environment.jersey().register(validacionExceptionMapper);
+        environment.jersey().register(new DBConstraintViolationMapper());
 
     }
 

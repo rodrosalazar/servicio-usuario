@@ -10,11 +10,15 @@ import ec.gob.senescyt.titulos.core.PortadorTitulo;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
 import java.io.File;
 
+import static ec.gob.senescyt.commons.helpers.ResourceTestHelper.assertErrorMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -58,5 +62,21 @@ public class TituloExtranjeroResourceIntegrationTest {
 
         assertThat(respuesta.getStatus(), is(201));
         assertThat(respuesta.getEntity(PortadorTitulo.class).getEmail(), is(portadorTitulo.getEmail()));
+    }
+
+    @Test
+    public void debeHacerAlgoCuandoElCodigoDelPaisNoExiste() {
+        Client client = new Client();
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.idPais = "invali")
+                .generar();
+
+        ClientResponse respuesta = client.resource(
+                String.format("http://localhost:%d/titulo/extranjero", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(respuesta.getStatus(), is(400));
+        assertErrorMessage(respuesta, "idpais no es un valor válido");
     }
 }

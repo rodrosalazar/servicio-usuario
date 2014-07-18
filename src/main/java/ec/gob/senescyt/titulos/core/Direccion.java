@@ -1,5 +1,6 @@
 package ec.gob.senescyt.titulos.core;
 
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
@@ -13,18 +14,25 @@ public class Direccion {
     @Id
     private long id;
     @NotEmpty
+    @Length(max = 255, message = "{ec.gob.senescyt.error.direccion.callePrincipal}")
     private String callePrincipal;
     @NotEmpty
+    @Length(max = 50, message = "{ec.gob.senescyt.error.direccion.numeroCasa}")
     private String numeroCasa;
     @NotEmpty
+    @Length(max = 255, message = "{ec.gob.senescyt.error.direccion.calleSecundaria}")
     private String calleSecundaria;
     @NotEmpty
+    @Length(max = 2, message = "{ec.gob.senescyt.error.direccion.idProvincia}")
     private String idProvincia;
     @NotEmpty
+    @Length(max = 4, message = "{ec.gob.senescyt.error.direccion.idCanton}")
     private String idCanton;
     @NotEmpty
+    @Length(max = 6, message = "{ec.gob.senescyt.error.direccion.idParroquia}")
     private String idParroquia;
     @NotEmpty
+    @Length(max = 6, message = "{ec.gob.senescyt.error.direccion.idPais}")
     private String idPais;
 
     private Direccion() { }

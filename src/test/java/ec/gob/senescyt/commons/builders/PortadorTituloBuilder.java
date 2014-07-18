@@ -15,7 +15,7 @@ public class PortadorTituloBuilder {
 
     public String nombresCompletos = "Nombres_completos";
     public Identificacion identificacion = new Identificacion(TipoDocumentoEnum.CEDULA, "1111111116");
-    public String idPais = "999999";
+    public String idPais = "888209";
     public String email = "email@email.com";
     public String idEtnia = "1";
     public String telefonoConvencional = "012345678";
@@ -25,9 +25,9 @@ public class PortadorTituloBuilder {
     public String callePrincipal = "Calle_principal";
     public String numeroCasa = "Numero_casa_123";
     public String calleSecundaria = "Calle_secundaria";
-    public String idProvincia = "99";
-    public String idCanton = "9999";
-    public String idParroquia = "999999";
+    public String idProvincia = "1";
+    public String idCanton = "405";
+    public String idParroquia = "10250";
     public DateTime fechaNacimiento = new DateTime(1990, 3, 16, 0, 0, DateTimeZone.UTC);
     public SexoEnum sexo = SexoEnum.FEMENINO;
 

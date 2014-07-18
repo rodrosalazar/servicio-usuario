@@ -8,6 +8,7 @@ import ec.gob.senescyt.usuario.core.Identificacion;
 import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.*;
 public class TituloExtranjeroResourceAnidadosTest {
 
     private static PortadorTituloDAO portadorTituloDAO = mock(PortadorTituloDAO.class);
+    private static final String STRING_CON_255_CARACTERES = RandomStringUtils.random(256);
     private static final String CAMPO_EN_BLANCO = "";
 
     @ClassRule
@@ -52,6 +54,19 @@ public class TituloExtranjeroResourceAnidadosTest {
     }
 
     @Test
+    public void noDebeCrearTituloConCallePrincipalDeMasDe255Caracteres() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.callePrincipal = STRING_CON_255_CARACTERES)
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "Debe ser un maximo de 255 caracter");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
     public void noDebeCrearTituloConCalleSecundariaVacia() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> p.calleSecundaria = CAMPO_EN_BLANCO)
@@ -61,6 +76,19 @@ public class TituloExtranjeroResourceAnidadosTest {
 
         assertThat(response.getStatus(), is(400));
         assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConCalleSecundariaDeMasDe255Caracteres() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.calleSecundaria = STRING_CON_255_CARACTERES)
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "Debe ser un maximo de 255 caracter");
         verifyZeroInteractions(portadorTituloDAO);
     }
 
@@ -78,6 +106,20 @@ public class TituloExtranjeroResourceAnidadosTest {
     }
 
     @Test
+    public void noDebeCrearTituloConNumeroDeCasaMayorDe50Caracteres() {
+        String masDe50Caracteres = RandomStringUtils.random(51);
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.numeroCasa = masDe50Caracteres)
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "Debe ser un maximo de 50 caracter");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
     public void noDebeCrearTituloConIdProvinciaVacia() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> p.idProvincia = CAMPO_EN_BLANCO)
@@ -87,6 +129,20 @@ public class TituloExtranjeroResourceAnidadosTest {
 
         assertThat(response.getStatus(), is(400));
         assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConIdProvinciaMayorDe2Caracteres() {
+        String provinciaDe3Caracteres = RandomStringUtils.random(3);
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.idProvincia = provinciaDe3Caracteres)
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "Debe ser un maximo de 2 caracter");
         verifyZeroInteractions(portadorTituloDAO);
     }
 
@@ -104,6 +160,20 @@ public class TituloExtranjeroResourceAnidadosTest {
     }
 
     @Test
+    public void noDebeCrearTituloConIdCantonMayorDe4Caracteres() {
+        String cantonDe5Caracteres = RandomStringUtils.random(5);
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.idCanton = cantonDe5Caracteres)
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "Debe ser un maximo de 4 caracter");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
     public void noDebeCrearTituloConIdParroquiaVacio() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> p.idParroquia = CAMPO_EN_BLANCO)
@@ -117,6 +187,20 @@ public class TituloExtranjeroResourceAnidadosTest {
     }
 
     @Test
+    public void noDebeCrearTituloConIdParroquiaMayorDe6Caracteres() {
+        String parroquiaDe6Caracteres = RandomStringUtils.random(7);
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.idParroquia = parroquiaDe6Caracteres)
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "Debe ser un maximo de 6 caracter");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
     public void noDebeCrearTituloConIdPaisVacio() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> p.idPais = CAMPO_EN_BLANCO)
@@ -126,6 +210,20 @@ public class TituloExtranjeroResourceAnidadosTest {
 
         assertThat(response.getStatus(), is(400));
         assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConIdPaisMayorDe6Caracteres() {
+        String paisDe6Caracteres = RandomStringUtils.random(7);
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.idPais = paisDe6Caracteres)
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "Debe ser un maximo de 6 caracter");
         verifyZeroInteractions(portadorTituloDAO);
     }
 
