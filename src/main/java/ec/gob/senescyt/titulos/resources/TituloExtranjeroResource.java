@@ -2,6 +2,7 @@ package ec.gob.senescyt.titulos.resources;
 
 import ec.gob.senescyt.titulos.core.PortadorTitulo;
 import ec.gob.senescyt.titulos.dao.PortadorTituloDAO;
+import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.validation.Valid;
 import javax.ws.rs.POST;
@@ -22,6 +23,7 @@ public class TituloExtranjeroResource {
     }
 
     @POST
+    @UnitOfWork
     public Response crear(@Valid PortadorTitulo portadorTitulo) {
         PortadorTitulo nuevoTitulo = portadorTituloDAO.guardar(portadorTitulo);
         return Response.status(CREATED).entity(nuevoTitulo).build();

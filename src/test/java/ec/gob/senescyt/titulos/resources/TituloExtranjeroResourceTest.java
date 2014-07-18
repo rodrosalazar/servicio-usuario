@@ -7,6 +7,7 @@ import ec.gob.senescyt.titulos.dao.PortadorTituloDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -63,7 +64,7 @@ public class TituloExtranjeroResourceTest {
     @Test
     public void noDebeCrearTituloConFechaDeNacimientoAnteriorALaFechaActual() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.fechaNacimiento = DateTime.now().minusDays(-1))
+                .con(p -> p.fechaNacimiento = DateTime.now(DateTimeZone.UTC).minusDays(-1))
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);

@@ -50,8 +50,8 @@ public class PortadorTituloBuilder {
         return portadorTituloBuilder;
     }
 
-    public PortadorTituloBuilder con(Consumer<PortadorTituloBuilder> accion) {
-        accion.accept(portadorTituloBuilder);
+    public PortadorTituloBuilder con(Consumer<PortadorTituloBuilder> consumidor) {
+        consumidor.accept(portadorTituloBuilder);
         return portadorTituloBuilder;
     }
 }

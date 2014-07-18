@@ -2,8 +2,16 @@ package ec.gob.senescyt.titulos.core;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "direcciones")
 public class Direccion {
 
+    @Id
+    private long id;
     @NotEmpty
     private String callePrincipal;
     @NotEmpty
@@ -59,6 +67,10 @@ public class Direccion {
 
     public String getIdPais() {
         return idPais;
+    }
+
+    public long getId() {
+        return id;
     }
 
     @Override

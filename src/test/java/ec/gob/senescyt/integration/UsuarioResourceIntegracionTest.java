@@ -8,12 +8,12 @@ import ec.gob.senescyt.UsuarioConfiguration;
 import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.commons.builders.PerfilBuilder;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
+import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
+import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
-import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
-import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
@@ -25,7 +25,6 @@ import org.junit.Test;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -70,9 +69,7 @@ public class UsuarioResourceIntegracionTest {
     @After
     public void tearDown() {
         usuarioDAO.limpiar();
-
         ManagedSessionContext.unbind(sessionFactory);
-
     }
 
     @Test

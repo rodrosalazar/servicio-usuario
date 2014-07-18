@@ -4,6 +4,7 @@ import com.google.common.annotations.VisibleForTesting;
 import com.sun.jersey.api.core.ResourceConfig;
 import ec.gob.senescyt.titulos.core.*;
 import ec.gob.senescyt.titulos.dao.*;
+import ec.gob.senescyt.titulos.resources.TituloExtranjeroResource;
 import ec.gob.senescyt.usuario.bundles.DBMigrationsBundle;
 import ec.gob.senescyt.usuario.core.*;
 import ec.gob.senescyt.usuario.core.cine.Area;
@@ -42,7 +43,8 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
     private final HibernateBundle<UsuarioConfiguration> hibernate = new HibernateBundle<UsuarioConfiguration>(Perfil.class, Permiso.class,
             Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class, Detalle.class, Pais.class,
-            Provincia.class, Canton.class, Parroquia.class, TipoVisa.class, CategoriaVisa.class, Etnia.class) {
+            Provincia.class, Canton.class, Parroquia.class, TipoVisa.class, CategoriaVisa.class, Etnia.class,
+            PortadorTitulo.class, Direccion.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
@@ -80,6 +82,8 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         CategoriaVisaDAO categoriaVisaDAO = new CategoriaVisaDAO(getSessionFactory());
         EtniaDAO etniaDAO = new EtniaDAO(getSessionFactory());
         ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
+        PortadorTituloDAO portadorTituloDAO = new PortadorTituloDAO(getSessionFactory());
+
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
         environment.jersey().register(perfilResource);
@@ -113,6 +117,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         final EtniaResource etniaResource = new EtniaResource(etniaDAO, constructorRespuestas);
         environment.jersey().register(etniaResource);
+
+        final TituloExtranjeroResource tituloExtranjeroResource = new TituloExtranjeroResource(portadorTituloDAO);
+        environment.jersey().register(tituloExtranjeroResource);
 
         registrarFiltros(environment);
 

@@ -1,5 +1,9 @@
 package ec.gob.senescyt.titulos.core;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ec.gob.senescyt.commons.serializers.JSONFechaDeserializer;
+import ec.gob.senescyt.commons.serializers.JSONFechaSerializer;
 import ec.gob.senescyt.titulos.enums.SexoEnum;
 import ec.gob.senescyt.usuario.core.Identificacion;
 import org.hibernate.validator.constraints.Length;
@@ -7,20 +11,23 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableInstant;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 
 @Entity
+@Table(name = "portadores_titulo")
 public class PortadorTitulo {
 
     private static final String REGEX_EMAIL = "^[a-z](\\.?[_-]*[a-z0-9]+)*@\\w+(\\.\\w+)*(\\.[a-z]{2,})$";
 
+    @Id
     private long id;
 
     @NotEmpty
     private String nombresCompletos;
 
+    @Embedded
     @Valid
     @NotNull
     private Identificacion identificacion;
@@ -30,11 +37,15 @@ public class PortadorTitulo {
     private String email;
 
     @NotNull
+    @Enumerated(EnumType.STRING)
     private SexoEnum sexo;
 
     @NotEmpty
+    @Column(name = "etnia_id")
     private String idEtnia;
 
+    @JsonSerialize(using = JSONFechaSerializer.class)
+    @JsonDeserialize(using = JSONFechaDeserializer.class)
     @Past(message = "{ec.gob.senescyt.error.fechaNacimiento}")
     private DateTime fechaNacimiento;
 
@@ -52,6 +63,8 @@ public class PortadorTitulo {
     @AssertTrue (message = "{ec.gob.senescyt.error.aceptaCondiciones}")
     private boolean aceptaCondiciones;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "direccion_id")
     @NotNull
     @Valid
     private Direccion direccion;
