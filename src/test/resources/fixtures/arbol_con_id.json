@@ -1,0 +1,2 @@
+{"id":1,"nombre":"normativas","nivelesArbol":[{"id":1,"nombre":"Generales","idNivelPadre":null},{"id":2,"nombre":"Leyes","idNivelPadre":1},{"id":3,"nombre":"Reglamentos","idNivelPadre":1}]}
+
