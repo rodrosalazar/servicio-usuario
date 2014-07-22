@@ -99,7 +99,7 @@ task(runCsv, type: JavaExec) {
     } else if (gradle.startParameter.taskNames[0] == 'runCsv') {
         final CONVERSORES = ['institucion.InstitucionCsv', 'cine.ClasificacionCsv', 'cine.AreaCsv', 'cine.SubareaCsv',
                              'pais.PaisCsv', 'dpa.ProvinciaCsv', 'dpa.CantonCsv', 'dpa.ParroquiaCsv', 'visa.TipoVisaCsv',
-                             'visa.CategoriaVisaCsv'
+                             'visa.CategoriaVisaCsv', 'arboles.NivelArbolCsv'
                             ]
         def error = ''
         error += 'Uso correcto: ./gradlew runCsv -P params="paquete.Clase ruta-entrada.csv [ruta-salida.sql]"\n'

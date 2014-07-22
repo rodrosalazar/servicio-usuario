@@ -63,6 +63,13 @@ public abstract class ConversorCsv {
         return String.valueOf(number);
     }
 
+    protected String intASql(Integer number) {
+        if (number == null || number == 0) {
+            return "NULL";
+        }
+        return String.valueOf(number);
+    }
+
     private static String definirRutaDestino(File archivoOrigen, String... args) {
         String nombreArchivoDestino = archivoOrigen.getName().replace(".csv", ".sql");
 

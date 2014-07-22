@@ -17,15 +17,14 @@ public class ArbolResource {
     private ArbolDAO arbolDAO;
 
     public ArbolResource(ArbolDAO arbolDAO) {
-
         this.arbolDAO = arbolDAO;
     }
 
     @GET
     @Path("{id}")
     @UnitOfWork
-    public Response obtenerArbol(@PathParam("id") Integer idArbol){
+    public Response obtenerArbol(@PathParam("id") int idArbol){
         Arbol arbolEncontrado = arbolDAO.obtenerPorId(idArbol);
-        return Response.ok(arbolEncontrado).build();
+        return Response.ok().entity(arbolEncontrado).build();
     }
 }

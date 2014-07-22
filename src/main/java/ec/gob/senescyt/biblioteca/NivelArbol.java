@@ -1,21 +1,46 @@
 package ec.gob.senescyt.biblioteca;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "niveles_arbol")
+@JsonPropertyOrder({"id", "nombre", "arbolIdParaCsv", "nivelPadreIdParaCsv"})
 public class NivelArbol {
+
+    @Id
     private Integer id;
     private String nombre;
-    private Integer idNivelPadre;
+
+    @ManyToOne
+    @JoinColumn(name = "id_nivel_padre")
+    private NivelArbol nivelPadre;
+
+    @ManyToOne
+    @JoinColumn(name = "id_arbol")
+    @JsonIgnore
     private Arbol arbol;
+
+    @Transient
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer arbolIdParaCsv;
+
+    @Transient
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Integer nivelPadreIdParaCsv;
 
     public NivelArbol() {
     }
 
-    public NivelArbol(Integer id, String nombre, Integer idNivelPadre) {
+    public NivelArbol(Integer id, String nombre, NivelArbol nivelPadre, Arbol arbol) {
 
         this.id = id;
         this.nombre = nombre;
-        this.idNivelPadre = idNivelPadre;
+        this.nivelPadre = nivelPadre;
+        this.arbol = arbol;
     }
 
     public Integer getId() {
@@ -26,9 +51,6 @@ public class NivelArbol {
         return nombre;
     }
 
-    public Integer getIdNivelPadre() {
-        return idNivelPadre;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -42,8 +64,19 @@ public class NivelArbol {
         return true;
     }
 
-    @JsonBackReference
+    public NivelArbol getNivelPadre() {
+        return nivelPadre;
+    }
+
     public Arbol getArbol() {
         return arbol;
+    }
+
+    public Integer getArbolIdParaCsv() {
+        return arbolIdParaCsv;
+    }
+
+    public Integer getNivelPadreIdParaCsv() {
+        return nivelPadreIdParaCsv;
     }
 }

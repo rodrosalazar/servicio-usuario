@@ -2,6 +2,10 @@ package ec.gob.senescyt;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.sun.jersey.api.core.ResourceConfig;
+import ec.gob.senescyt.biblioteca.Arbol;
+import ec.gob.senescyt.biblioteca.NivelArbol;
+import ec.gob.senescyt.biblioteca.dao.ArbolDAO;
+import ec.gob.senescyt.biblioteca.resource.ArbolResource;
 import ec.gob.senescyt.commons.exceptions.DBConstraintViolationMapper;
 import ec.gob.senescyt.commons.filters.HeaderResponseFilter;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
@@ -51,7 +55,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     private final HibernateBundle<UsuarioConfiguration> hibernate = new HibernateBundle<UsuarioConfiguration>(Perfil.class, Permiso.class,
             Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class, Detalle.class, Pais.class,
             Provincia.class, Canton.class, Parroquia.class, TipoVisa.class, CategoriaVisa.class, Etnia.class,
-            PortadorTitulo.class, Direccion.class) {
+            PortadorTitulo.class, Direccion.class, Arbol.class, NivelArbol.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
@@ -90,6 +94,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         EtniaDAO etniaDAO = new EtniaDAO(getSessionFactory());
         ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
         PortadorTituloDAO portadorTituloDAO = new PortadorTituloDAO(getSessionFactory());
+        ArbolDAO arbolDAO = new ArbolDAO(getSessionFactory());
 
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
@@ -127,6 +132,10 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         final TituloExtranjeroResource tituloExtranjeroResource = new TituloExtranjeroResource(portadorTituloDAO);
         environment.jersey().register(tituloExtranjeroResource);
+
+        final ArbolResource arbolResource = new ArbolResource(arbolDAO);
+        environment.jersey().register(arbolResource);
+
 
         registrarFiltros(environment);
 

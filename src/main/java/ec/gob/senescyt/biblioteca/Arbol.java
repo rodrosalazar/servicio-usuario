@@ -1,22 +1,26 @@
 package ec.gob.senescyt.biblioteca;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@Table(name="arboles")
 public class Arbol {
+
+    @Id
     private Integer id;
     private String nombre;
-    private List<NivelArbol> nivelesArbol;
+
+    @OneToMany(mappedBy = "arbol", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<NivelArbol> nivelesArbol = new ArrayList<>();
 
     public Arbol() {
     }
 
-    public Arbol(Integer id, String nombre, List<NivelArbol> nivelesArbol) {
-
+    public Arbol(Integer id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.nivelesArbol = nivelesArbol;
     }
 
     public Integer getId() {
@@ -28,7 +32,6 @@ public class Arbol {
     }
 
 
-    @JsonManagedReference
     public List<NivelArbol> getNivelesArbol() {
         return nivelesArbol;
     }

@@ -39,7 +39,7 @@ public class TituloExtranjeroResourceTest {
     public void noDebeCrearTituloSinMail() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> p.email = CAMPO_EN_BLANCO)
-                .generar();
+                .generar    ();
 
         ClientResponse response = hacerPost(portadorTitulo);
 

@@ -1,2 +1,1 @@
-{"id":1,"nombre":"normativas","nivelesArbol":[{"id":1,"nombre":"Generales","idNivelPadre":null},{"id":2,"nombre":"Leyes","idNivelPadre":1},{"id":3,"nombre":"Reglamentos","idNivelPadre":1}]}
-
+{"id":1000,"nombre":"normativas","nivelesArbol":[{"id":1001,"nombre":"Generales","nivelPadre":null},{"id":1002,"nombre":"Leyes","nivelPadre":{"id":1001,"nombre":"Generales","nivelPadre":null}},{"id":1003,"nombre":"Reglamentos","nivelPadre":{"id":1001,"nombre":"Generales","nivelPadre":null}},{"id":1004,"nombre":"subNivelDeReglamentos","nivelPadre":{"id":1003,"nombre":"Reglamentos","nivelPadre":{"id":1001,"nombre":"Generales","nivelPadre":null}}}]}
