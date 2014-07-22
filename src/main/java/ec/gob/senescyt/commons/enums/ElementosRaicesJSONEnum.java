@@ -9,7 +9,9 @@ public enum ElementosRaicesJSONEnum {
     ELEMENTO_RAIZ_PAISES("paises"),
     ELEMENTO_RAIZ_INSTITUCIONES("instituciones"),
     ELEMENTO_RAIZ_ETNIAS("etnias"),
-    ELEMENTO_RAIZ_TIPO_VISA("tiposDeVisa");
+    ELEMENTO_RAIZ_TIPO_VISA("tiposDeVisa"),
+    ELEMENTO_RAIZ_ARBOLES("arboles")
+    ;
 
     private String nombre;
 

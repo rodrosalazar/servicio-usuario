@@ -5,6 +5,8 @@ import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
+import java.util.List;
+
 public class ArbolDAO extends AbstractDAO<Arbol> {
     public ArbolDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
@@ -22,5 +24,11 @@ public class ArbolDAO extends AbstractDAO<Arbol> {
         Query query = currentSession().createQuery("DELETE FROM Arbol c WHERE c.id =:idArbol");
         query.setParameter("idArbol", idArbol);
         query.executeUpdate();
+    }
+
+    public List<Arbol> obtenerTodos() {
+        Query todas = currentSession().createQuery("SELECT a from Arbol a");
+
+        return todas.list();
     }
 }

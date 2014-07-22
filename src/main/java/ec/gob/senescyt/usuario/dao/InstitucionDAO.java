@@ -13,8 +13,8 @@ public class InstitucionDAO extends AbstractDAO<Institucion>{
     }
 
     public List<Institucion> obtenerTodas() {
-        Query todas = currentSession().createQuery("SELECT i from Institucion i");
+        Query todos = currentSession().createQuery("SELECT i from Institucion i");
 
-        return todas.list();
+        return todos.list();
     }
 }

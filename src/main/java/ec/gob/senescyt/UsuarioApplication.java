@@ -133,7 +133,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final TituloExtranjeroResource tituloExtranjeroResource = new TituloExtranjeroResource(portadorTituloDAO);
         environment.jersey().register(tituloExtranjeroResource);
 
-        final ArbolResource arbolResource = new ArbolResource(arbolDAO);
+        final ArbolResource arbolResource = new ArbolResource(arbolDAO, constructorRespuestas);
         environment.jersey().register(arbolResource);
 
 

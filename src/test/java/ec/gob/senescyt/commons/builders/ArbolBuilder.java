@@ -30,16 +30,19 @@ public class ArbolBuilder {
 
     public Arbol generar() {
         Arbol arbol = new Arbol(idArbol, nombreArbol);
+
         NivelArbol nivelGenerales = new NivelArbol(idNivelGenerales, nombreNivelGenerales, nivelPadreDeGenerales, arbol);
-        NivelArbol nivelReglamentos = new NivelArbol(idSubnivelReglamentos, nombreSubnivelReglamentos, nivelGenerales, arbol);
         NivelArbol nivelLeyes = new NivelArbol(idSubnivelLeyes, nombreSubnivelLeyes, nivelGenerales, arbol);
+        NivelArbol nivelReglamentos = new NivelArbol(idSubnivelReglamentos, nombreSubnivelReglamentos, nivelGenerales, arbol);
+
+        nivelGenerales.getNivelesHijos().add(nivelLeyes);
+        nivelGenerales.getNivelesHijos().add(nivelReglamentos);
+
         NivelArbol subnivelTest = new NivelArbol(idSubnivelTest, nombreSubnivelTest, nivelReglamentos, arbol);
+        nivelReglamentos.getNivelesHijos().add(subnivelTest);
 
         List<NivelArbol> nivelesArbolNormativas = new ArrayList<>();
         nivelesArbolNormativas.add(nivelGenerales);
-        nivelesArbolNormativas.add(nivelLeyes);
-        nivelesArbolNormativas.add(nivelReglamentos);
-        nivelesArbolNormativas.add(subnivelTest);
 
         arbol.getNivelesArbol().addAll(nivelesArbolNormativas);
 

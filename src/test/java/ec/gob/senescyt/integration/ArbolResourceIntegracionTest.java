@@ -53,15 +53,13 @@ public class ArbolResourceIntegracionTest {
     }
 
     @Test
-    public void debeObtenerUnArbolSegunId() throws Exception {
+    public void debeObtenerTodos() throws Exception {
         Client client = new Client();
 
-        int idArbol = 1;
         ClientResponse response = client.resource(
-                String.format("http://localhost:%d/arboles/" + idArbol, RULE.getLocalPort()))
+                String.format("http://localhost:%d/arboles", RULE.getLocalPort()))
                 .get(ClientResponse.class);
 
         assertThat(response.getStatus(), is(200));
-//        assertThat(response.getEntity(Arbol.class).getId(), is(arbolTest.getId()));
     }
 }

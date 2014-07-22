@@ -1,10 +1,10 @@
 package ec.gob.senescyt.biblioteca;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "niveles_arbol")
@@ -17,6 +17,7 @@ public class NivelArbol {
 
     @ManyToOne
     @JoinColumn(name = "id_nivel_padre")
+    @JsonBackReference("nivelesHijos")
     private NivelArbol nivelPadre;
 
     @ManyToOne
@@ -31,6 +32,10 @@ public class NivelArbol {
     @Transient
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer nivelPadreIdParaCsv;
+
+    @OneToMany(mappedBy = "nivelPadre", fetch = FetchType.EAGER)
+    @JsonManagedReference("nivelesHijos")
+    private List<NivelArbol> nivelesHijos = new ArrayList<>();
 
     public NivelArbol() {
     }
@@ -78,5 +83,9 @@ public class NivelArbol {
 
     public Integer getNivelPadreIdParaCsv() {
         return nivelPadreIdParaCsv;
+    }
+
+    public List<NivelArbol> getNivelesHijos() {
+        return nivelesHijos;
     }
 }
