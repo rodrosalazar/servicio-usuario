@@ -83,7 +83,7 @@ $ ./gradlew flywayInfo
 Resolución de Problemas
 ----------------
 
-- Tal vez necesites instalar [Java 7](http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html)
+- Tal vez necesites instalar [Java 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
 - Si instalaste PostgreSql por Homebrew, como buen Jedi, al momento de levantar PostgreSql te pedirá el archivo de configuración. Para ello necesitas establecer la variable PGDATA
 ```export PGDATA=/usr/local/var/postgres```
