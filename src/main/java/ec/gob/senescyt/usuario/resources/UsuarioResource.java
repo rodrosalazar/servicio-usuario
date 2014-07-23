@@ -40,24 +40,23 @@ public class UsuarioResource {
             if (cedulaValidator.isValidaCedula(cedula.get())) {
                 return Response.ok().build();
             }
-            return Response.status(Response.Status.BAD_REQUEST).entity(this.mensajeErrorBuilder.mensajeNumeroIdentificacionInvalido()).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(mensajeErrorBuilder.mensajeNumeroIdentificacionInvalido()).build();
         }
 
         if (nombreUsuario.isPresent()) {
             if (!usuarioDAO.isRegistradoNombreUsuario(nombreUsuario.get())) {
                 return Response.ok().build();
             }
-            return Response.status(Response.Status.BAD_REQUEST).entity(this.mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()).build();
         }
 
         if (numeroIdentificacion.isPresent()) {
             if (!usuarioDAO.isRegistradoNumeroIdentificacion(numeroIdentificacion.get())) {
                 return Response.ok().build();
             }
-            return Response.status(Response.Status.BAD_REQUEST).entity(this.mensajeErrorBuilder.mensajeNumeroIdentificacionYaHaSidoRegistrado()).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(mensajeErrorBuilder.mensajeNumeroIdentificacionYaHaSidoRegistrado()).build();
         }
         return Response.status(Response.Status.BAD_REQUEST).build();
-
     }
 
     @POST
@@ -65,7 +64,7 @@ public class UsuarioResource {
     public Response crear(@Valid final Usuario usuario) {
         if (usuario.getNombreUsuario() != null
                 && usuarioDAO.isRegistradoNombreUsuario(usuario.getNombreUsuario())) {
-            return Response.status(Response.Status.BAD_REQUEST).entity(this.mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()).build();
         }
 
         if (usuario.getIdentificacion().getNumeroIdentificacion() != null
