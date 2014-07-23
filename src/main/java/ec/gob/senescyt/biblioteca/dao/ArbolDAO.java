@@ -30,7 +30,9 @@ public class ArbolDAO extends AbstractDAO<Arbol> {
 
     public List<Arbol> obtenerTodos() {
         StringBuilder hql = new StringBuilder();
-        hql.append("SELECT a from Arbol a ");
+        hql.append("SELECT a from Arbol a, NivelArbol na ");
+        hql.append(" WHERE na.arbol.id = a.id ");
+        hql.append(" AND na.nivelPadre is null ");
 
         Query query = currentSession().createQuery(hql.toString());
 
@@ -38,12 +40,19 @@ public class ArbolDAO extends AbstractDAO<Arbol> {
 
         for (Arbol arbol : arboles) {
 
-            List<NivelArbol> nivelesConHijos = arbol.getNivelesArbol().stream()
-                    .filter(nivelArbol -> nivelArbol.getNivelesHijos().size() > 0)
+            arbol.getNivelesArbol().forEach(nivel -> System.out.println("NivelArbol:" + arbol.getId() + ":" + nivel.getNombre() + ":" + nivel.getNivelPadre()));
+
+            List<NivelArbol> nivelesArbolConHijos = arbol.getNivelesArbol().stream()
+                    .filter(nivelArbol -> nivelArbol.getNivelesHijos().size() > 0
+                            && !nivelArbol.getId().equals(5)
+                            && !nivelArbol.getId().equals(8)
+                            && !nivelArbol.getId().equals(17)
+                            && !nivelArbol.getId().equals(14)
+                            && !nivelArbol.getId().equals(23))
                     .collect(Collectors.toList());
 
             arbol.getNivelesArbol().clear();
-            arbol.getNivelesArbol().addAll(nivelesConHijos);
+            arbol.getNivelesArbol().addAll(nivelesArbolConHijos);
         }
 
         return arboles;

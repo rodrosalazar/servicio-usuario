@@ -1,8 +1,5 @@
 package ec.gob.senescyt.biblioteca;
 
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +13,6 @@ public class Arbol {
     private String nombre;
 
     @OneToMany(mappedBy = "arbol", cascade = CascadeType.ALL)
-    @Fetch(FetchMode.JOIN)
     private List<NivelArbol> nivelesArbol = new ArrayList<>();
 
     public Arbol() {

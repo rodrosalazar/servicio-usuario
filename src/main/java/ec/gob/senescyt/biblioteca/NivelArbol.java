@@ -36,7 +36,6 @@ public class NivelArbol {
     private Integer nivelPadreIdParaCsv;
 
     @OneToMany(mappedBy = "nivelPadre")
-    @Fetch(FetchMode.JOIN)
     @JsonManagedReference("nivelesHijos")
     private List<NivelArbol> nivelesHijos = new ArrayList<>();
 
@@ -91,5 +90,4 @@ public class NivelArbol {
     public List<NivelArbol> getNivelesHijos() {
         return nivelesHijos;
     }
-
 }
