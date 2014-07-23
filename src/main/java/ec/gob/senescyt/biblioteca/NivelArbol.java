@@ -1,6 +1,8 @@
 package ec.gob.senescyt.biblioteca;
 
 import com.fasterxml.jackson.annotation.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -33,7 +35,8 @@ public class NivelArbol {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer nivelPadreIdParaCsv;
 
-    @OneToMany(mappedBy = "nivelPadre", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "nivelPadre")
+    @Fetch(FetchMode.JOIN)
     @JsonManagedReference("nivelesHijos")
     private List<NivelArbol> nivelesHijos = new ArrayList<>();
 
@@ -88,4 +91,5 @@ public class NivelArbol {
     public List<NivelArbol> getNivelesHijos() {
         return nivelesHijos;
     }
+
 }
