@@ -10,6 +10,7 @@ import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 public class DBConstraintViolationMapper implements ExceptionMapper<ConstraintViolationException> {
 
+//    http://www.postgresql.org/docs/9.3/static/errcodes-appendix.html
     public static final String FOREIGN_KEY_VIOLATION_SQL_CODE = "23503";
     public static final String MENSAJE_COMUN = "no es un valor válido";
 
