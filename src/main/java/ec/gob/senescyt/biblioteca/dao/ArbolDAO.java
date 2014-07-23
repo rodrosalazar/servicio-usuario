@@ -48,7 +48,20 @@ public class ArbolDAO extends AbstractDAO<Arbol> {
                             && !nivelArbol.getId().equals(8)
                             && !nivelArbol.getId().equals(17)
                             && !nivelArbol.getId().equals(14)
-                            && !nivelArbol.getId().equals(23))
+                            && !nivelArbol.getId().equals(23)
+                            && !nivelArbol.getId().equals(34)
+                            && !nivelArbol.getId().equals(35)
+                            && !nivelArbol.getId().equals(38)
+                            && !nivelArbol.getId().equals(43)
+                            && !nivelArbol.getId().equals(44)
+                            && !nivelArbol.getId().equals(47)
+                            && !nivelArbol.getId().equals(53)
+                            && !nivelArbol.getId().equals(54)
+                            && !nivelArbol.getId().equals(57)
+                            && !nivelArbol.getId().equals(62)
+                            && !nivelArbol.getId().equals(63)
+                            && !nivelArbol.getId().equals(66)
+                    )
                     .collect(Collectors.toList());
 
             arbol.getNivelesArbol().clear();
