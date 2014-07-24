@@ -8,6 +8,7 @@ import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.commons.configuracion.ConfiguracionEmail;
 import ec.gob.senescyt.commons.email.ConstructorDeContenidoDeEmail;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
+import ec.gob.senescyt.commons.helpers.ResourceTestHelper;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
@@ -38,7 +39,7 @@ public class UsuarioResourceTest {
     private static CedulaValidator cedulaValidator = new CedulaValidator();
     private static LectorArchivoDePropiedades lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
     private static ConstructorDeContenidoDeEmail constructorDeContenidoDeEmail = new ConstructorDeContenidoDeEmail();
-    private static ConfiguracionEmail configuracionEmail = mock(ConfiguracionEmail.class);
+    private static ConfiguracionEmail configuracionEmail = spy(new ConfiguracionEmail());
     private static DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail, configuracionEmail);
 
     @ClassRule
@@ -53,6 +54,7 @@ public class UsuarioResourceTest {
     public void setUp() {
         usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades, despachadorEmail);
         client = resources.client();
+        ResourceTestHelper.mockConfiguracionMail(configuracionEmail);
         Mailbox.clearAll();
         usuarioValido = UsuarioBuilder.usuarioValido();
         when(usuarioDAO.guardar(any())).thenReturn(usuarioValido);

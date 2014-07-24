@@ -1,6 +1,7 @@
 package ec.gob.senescyt.commons.email;
 
 import ec.gob.senescyt.commons.configuracion.ConfiguracionEmail;
+import ec.gob.senescyt.commons.helpers.ResourceTestHelper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -39,12 +40,7 @@ public class DespachadorEmailTest {
 
     @Test
     public void debeEnviarMailDeNotificacionAUsuario() throws Exception {
-        when(configuracionEmail.getServidor()).thenReturn("puertoTest");
-        when(configuracionEmail.getPuerto()).thenReturn(123);
-        when(configuracionEmail.getNombreUsuario()).thenReturn("usuarioTest");
-        when(configuracionEmail.getClave()).thenReturn("claveTest");
-        when(configuracionEmail.getCorreoRemitente()).thenReturn("test@test.com");
-        when(configuracionEmail.getNombreRemitente()).thenReturn("remitenteTest");
+        ResourceTestHelper.mockConfiguracionMail(configuracionEmail);
 
         String respuesta = despachadorEmail.enviarEmailNotificacionUsuarioCreado(emailUsuarioCreado, userName, nombresCompletosUsuario);
         assertThat(respuesta.isEmpty(), is(not(true)));

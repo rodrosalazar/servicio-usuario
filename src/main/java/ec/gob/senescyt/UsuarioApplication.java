@@ -98,9 +98,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         PortadorTituloDAO portadorTituloDAO = new PortadorTituloDAO(getSessionFactory());
         ArbolDAO arbolDAO = new ArbolDAO(getSessionFactory());
         ConstructorDeContenidoDeEmail constructorDeContenidoDeEmail = new ConstructorDeContenidoDeEmail();
-        ConfiguracionEmail configuracionEmail = new ConfiguracionEmail();
-        DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail, configuracionEmail);
-
+        DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail, configuration.getConfiguracionEmail());
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
         environment.jersey().register(perfilResource);
