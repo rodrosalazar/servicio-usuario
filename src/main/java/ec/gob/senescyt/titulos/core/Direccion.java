@@ -14,14 +14,8 @@ public class Direccion {
     @Id
     private long id;
     @NotEmpty
-    @Length(max = 255, message = "{ec.gob.senescyt.error.direccion.callePrincipal}")
-    private String callePrincipal;
-    @NotEmpty
-    @Length(max = 50, message = "{ec.gob.senescyt.error.direccion.numeroCasa}")
-    private String numeroCasa;
-    @NotEmpty
-    @Length(max = 255, message = "{ec.gob.senescyt.error.direccion.calleSecundaria}")
-    private String calleSecundaria;
+    @Length(max = 255, message = "{ec.gob.senescyt.error.direccion.direccionCompleta}")
+    private String direccionCompleta;
     @NotEmpty
     @Length(max = 2, message = "{ec.gob.senescyt.error.direccion.idProvincia}")
     private String idProvincia;
@@ -34,27 +28,17 @@ public class Direccion {
 
     private Direccion() { }
 
-    public Direccion(String callePrincipal, String numeroCasa, String calleSecundaria, String idProvincia,
+    public Direccion(String direccionCompleta, String idProvincia,
                      String idCanton, String idParroquia) {
 
-        this.callePrincipal = callePrincipal;
-        this.numeroCasa = numeroCasa;
-        this.calleSecundaria = calleSecundaria;
+        this.direccionCompleta = direccionCompleta;
         this.idProvincia = idProvincia;
         this.idCanton = idCanton;
         this.idParroquia = idParroquia;
     }
 
-    public String getCallePrincipal() {
-        return callePrincipal;
-    }
-
-    public String getNumeroCasa() {
-        return numeroCasa;
-    }
-
-    public String getCalleSecundaria() {
-        return calleSecundaria;
+    public String getDireccionCompleta() {
+        return direccionCompleta;
     }
 
     public String getIdProvincia() {
@@ -80,16 +64,13 @@ public class Direccion {
 
         Direccion direccion = (Direccion) o;
 
-        if (callePrincipal != null ? !callePrincipal.equals(direccion.callePrincipal) : direccion.callePrincipal != null)
-            return false;
-        if (calleSecundaria != null ? !calleSecundaria.equals(direccion.calleSecundaria) : direccion.calleSecundaria != null)
+        if (direccionCompleta != null ? !direccionCompleta.equals(direccion.direccionCompleta) : direccion.direccionCompleta != null)
             return false;
         if (idCanton != null ? !idCanton.equals(direccion.idCanton) : direccion.idCanton != null) return false;
         if (idParroquia != null ? !idParroquia.equals(direccion.idParroquia) : direccion.idParroquia != null)
             return false;
         if (idProvincia != null ? !idProvincia.equals(direccion.idProvincia) : direccion.idProvincia != null)
             return false;
-        if (numeroCasa != null ? !numeroCasa.equals(direccion.numeroCasa) : direccion.numeroCasa != null) return false;
 
         return true;
     }

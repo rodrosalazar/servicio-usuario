@@ -41,9 +41,9 @@ public class TituloExtranjeroResourceAnidadosTest {
     }
 
     @Test
-    public void noDebeCrearTituloConCallePrincipalVacia() {
+    public void noDebeCrearTituloConDireccionCompletaVacia() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.callePrincipal = CAMPO_EN_BLANCO)
+                .con(p -> p.direccionCompleta = CAMPO_EN_BLANCO)
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);
@@ -54,68 +54,15 @@ public class TituloExtranjeroResourceAnidadosTest {
     }
 
     @Test
-    public void noDebeCrearTituloConCallePrincipalDeMasDe255Caracteres() {
+    public void noDebeCrearTituloConDireccionCompletaDeMasDe255Caracteres() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.callePrincipal = STRING_CON_255_CARACTERES)
+                .con(p -> p.direccionCompleta = STRING_CON_255_CARACTERES)
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);
 
         assertThat(response.getStatus(), is(400));
         assertErrorMessage(response, "Debe ser un maximo de 255 caracter");
-        verifyZeroInteractions(portadorTituloDAO);
-    }
-
-    @Test
-    public void noDebeCrearTituloConCalleSecundariaVacia() {
-        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.calleSecundaria = CAMPO_EN_BLANCO)
-                .generar();
-
-        ClientResponse response = hacerPost(portadorTitulo);
-
-        assertThat(response.getStatus(), is(400));
-        assertErrorMessage(response, "El campo es obligatorio");
-        verifyZeroInteractions(portadorTituloDAO);
-    }
-
-    @Test
-    public void noDebeCrearTituloConCalleSecundariaDeMasDe255Caracteres() {
-        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.calleSecundaria = STRING_CON_255_CARACTERES)
-                .generar();
-
-        ClientResponse response = hacerPost(portadorTitulo);
-
-        assertThat(response.getStatus(), is(400));
-        assertErrorMessage(response, "Debe ser un maximo de 255 caracter");
-        verifyZeroInteractions(portadorTituloDAO);
-    }
-
-    @Test
-    public void noDebeCrearTituloConNumeroDeCasaVacia() {
-        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.numeroCasa = CAMPO_EN_BLANCO)
-                .generar();
-
-        ClientResponse response = hacerPost(portadorTitulo);
-
-        assertThat(response.getStatus(), is(400));
-        assertErrorMessage(response, "El campo es obligatorio");
-        verifyZeroInteractions(portadorTituloDAO);
-    }
-
-    @Test
-    public void noDebeCrearTituloConNumeroDeCasaMayorDe50Caracteres() {
-        String masDe50Caracteres = RandomStringUtils.random(51);
-        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.numeroCasa = masDe50Caracteres)
-                .generar();
-
-        ClientResponse response = hacerPost(portadorTitulo);
-
-        assertThat(response.getStatus(), is(400));
-        assertErrorMessage(response, "Debe ser un maximo de 50 caracter");
         verifyZeroInteractions(portadorTituloDAO);
     }
 
