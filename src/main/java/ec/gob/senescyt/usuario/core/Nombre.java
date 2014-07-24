@@ -6,7 +6,7 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
-public class Nombre implements Serializable{
+public class Nombre implements Serializable {
 
     @NotEmpty
     private String primerNombre;
@@ -33,7 +33,6 @@ public class Nombre implements Serializable{
             return false;
         if (segundoNombre != null ? !segundoNombre.equals(nombre.segundoNombre) : nombre.segundoNombre != null)
             return false;
-
         return true;
     }
 
@@ -42,7 +41,8 @@ public class Nombre implements Serializable{
         return 0;
     }
 
-    private Nombre() {}
+    private Nombre() {
+    }
 
     public Nombre(String primerNombre, String segundoNombre, String primerApellido, String segundoApellido) {
         this.primerNombre = primerNombre;
@@ -69,6 +69,27 @@ public class Nombre implements Serializable{
 
     @Override
     public String toString() {
-        return primerNombre + " " + segundoNombre + " " + primerApellido + " " + segundoApellido;
+
+        String nombresCompletos = generarNombresCompletos();
+
+        return nombresCompletos;
+    }
+
+    private String generarNombresCompletos() {
+
+        StringBuilder nombresCompletos = new StringBuilder();
+        nombresCompletos.append(primerNombre).append(" ");
+
+        if (segundoNombre != null) {
+            nombresCompletos.append(segundoNombre).append(" ");
+        }
+
+        nombresCompletos.append(primerApellido);
+
+        if (segundoApellido != null) {
+            nombresCompletos.append(" ").append(segundoApellido);
+        }
+
+        return nombresCompletos.toString();
     }
 }
