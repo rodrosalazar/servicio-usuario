@@ -19,7 +19,7 @@ buildscript {
 }
 
 flyway {
-    def yamlConfig = new Yaml().load(new File('servicio-usuario.yml').newReader())
+    def yamlConfig = new Yaml().load(new File('servicio-usuario-dev.yml').newReader())
     def dbConfig = yamlConfig.database
 
     user = dbConfig.user
@@ -30,6 +30,7 @@ flyway {
 // Set our project variables
 project.ext {
     dropwizardVersion = '0.7.0'
+    archivoConfiguracion = 'servicio-usuario-dev.yml'
 }
 // In this section you declare where to find the dependencies of your project
 repositories {
@@ -75,7 +76,25 @@ mainClassName = 'ec.gob.senescyt.UsuarioApplication'
 
 // Configure the run task to start the Dropwizard service
 run {
-    args 'server', 'servicio-usuario.yml'
+    if (project.hasProperty('ambiente')) {
+        if(ambiente.split().size() == 0){
+            error = 'Debe especificar uno de los siguientes ambientes:\ndev: Desarrollo\nqa:Control de Calidad\nci:Integracion Continua\nEjemplo:./gradlew run -P ambiente=dev'
+
+            throw new StopExecutionException(error)
+        }
+
+        def ambienteParaLevantar = ambiente.split()[0]
+
+        if(ambienteParaLevantar == 'dev') {
+            ext.archivoConfiguracion = 'servicio-usuario-dev.yml'
+        } else if(ambienteParaLevantar == 'qa') {
+            ext.archivoConfiguracion = 'servicio-usuario-qa.yml'
+        } else if(ambienteParaLevantar == 'ci') {
+            ext.archivoConfiguracion = 'servicio-usuario-ci.yml'
+        }
+    }
+
+    args 'server', archivoConfiguracion
 }
 
 test {

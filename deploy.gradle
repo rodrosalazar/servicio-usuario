@@ -28,7 +28,7 @@ task deployQA(type: SshTask) {
         def targetDir = '/var/sniese/servicios/servicio-usuario/'
         execute "mkdir -p ${targetDir}"
         put 'build/libs/servicio-usuario-standalone.jar', targetDir
-        put 'servicio-usuario.yml', targetDir
+        put 'servicio-usuario-dev.yml', targetDir
         executeSudo 'service sniese restart', pty: true
     }
 }
