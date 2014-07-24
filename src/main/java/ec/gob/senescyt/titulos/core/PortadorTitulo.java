@@ -32,6 +32,10 @@ public class PortadorTitulo {
     @NotNull
     private Identificacion identificacion;
 
+    @NotEmpty
+    @Length(max = 6, message = "{ec.gob.senescyt.error.direccion.idPais}")
+    private String idPaisNacionalidad;
+
     @Pattern(regexp = REGEX_EMAIL, message = "{ec.gob.senescyt.error.email}")
     @NotEmpty
     private String email;
@@ -41,6 +45,7 @@ public class PortadorTitulo {
     private SexoEnum sexo;
 
     @NotEmpty
+    @Length(max = 2, message = "{ec.gob.senescyt.error.idEtnia}")
     @Column(name = "etnia_id")
     private String idEtnia;
 
@@ -72,13 +77,14 @@ public class PortadorTitulo {
     private PortadorTitulo() {}
 
     public PortadorTitulo(String nombresCompletos, Identificacion identificacion,
-                          String email, SexoEnum sexo,
+                          String idPaisNacionalidad, String email, SexoEnum sexo,
                           String idEtnia, DateTime fechaNacimiento, String telefonoConvencional,
                           String extension, String telefonoCelular, boolean aceptaCondiciones,
                           Direccion direccion) {
 
         this.nombresCompletos = nombresCompletos;
         this.identificacion = identificacion;
+        this.idPaisNacionalidad = idPaisNacionalidad;
         this.email = email;
         this.sexo = sexo;
         this.idEtnia = idEtnia;
@@ -136,5 +142,9 @@ public class PortadorTitulo {
 
     public long getId() {
         return id;
+    }
+
+    public String getIdPaisNacionalidad() {
+        return idPaisNacionalidad;
     }
 }

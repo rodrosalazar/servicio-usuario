@@ -68,7 +68,7 @@ public class TituloExtranjeroResourceIntegrationTest {
     public void debeHacerAlgoCuandoElCodigoDelPaisNoExiste() {
         Client client = new Client();
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.idPais = "invali")
+                .con(p -> p.idPaisNacionalidad = "invali")
                 .generar();
 
         ClientResponse respuesta = client.resource(
@@ -77,6 +77,22 @@ public class TituloExtranjeroResourceIntegrationTest {
                 .post(ClientResponse.class, portadorTitulo);
 
         assertThat(respuesta.getStatus(), is(400));
-        assertErrorMessage(respuesta, "idpais no es un valor válido");
+        assertErrorMessage(respuesta, "idpaisnacionalidad no es un valor válido");
+    }
+
+    @Test
+    public void debeHacerAlgoCuandoElCodigoDeEtniaNoExiste() {
+        Client client = new Client();
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.idEtnia = "xx")
+                .generar();
+
+        ClientResponse respuesta = client.resource(
+                String.format("http://localhost:%d/titulo/extranjero", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, portadorTitulo);
+
+        assertThat(respuesta.getStatus(), is(400));
+        assertErrorMessage(respuesta, "etnia_id no es un valor válido");
     }
 }

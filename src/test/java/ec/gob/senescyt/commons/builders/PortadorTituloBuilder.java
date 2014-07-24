@@ -15,7 +15,7 @@ public class PortadorTituloBuilder {
 
     public String nombresCompletos = "Nombres_completos";
     public Identificacion identificacion = new Identificacion(TipoDocumentoEnum.CEDULA, "1111111116");
-    public String idPais = "888209";
+    public String idPaisNacionalidad = "888209";
     public String email = "email@email.com";
     public String idEtnia = "1";
     public String telefonoConvencional = "012345678";
@@ -34,13 +34,14 @@ public class PortadorTituloBuilder {
     public PortadorTitulo generar() {
         PortadorTitulo portadorTitulo = new PortadorTitulo(nombresCompletos,
                 identificacion,
+                idPaisNacionalidad,
                 email,
                 sexo,
                 idEtnia, fechaNacimiento,
                 telefonoConvencional, extension,
                 telefonoCelular, aceptaCondiciones,
                 new Direccion(callePrincipal, numeroCasa, calleSecundaria, idProvincia,
-                        idCanton, idParroquia, idPais));
+                        idCanton, idParroquia));
 
         return portadorTitulo;
     }

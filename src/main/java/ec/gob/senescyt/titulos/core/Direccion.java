@@ -31,14 +31,11 @@ public class Direccion {
     @NotEmpty
     @Length(max = 6, message = "{ec.gob.senescyt.error.direccion.idParroquia}")
     private String idParroquia;
-    @NotEmpty
-    @Length(max = 6, message = "{ec.gob.senescyt.error.direccion.idPais}")
-    private String idPais;
 
     private Direccion() { }
 
     public Direccion(String callePrincipal, String numeroCasa, String calleSecundaria, String idProvincia,
-                     String idCanton, String idParroquia, String idPais) {
+                     String idCanton, String idParroquia) {
 
         this.callePrincipal = callePrincipal;
         this.numeroCasa = numeroCasa;
@@ -46,7 +43,6 @@ public class Direccion {
         this.idProvincia = idProvincia;
         this.idCanton = idCanton;
         this.idParroquia = idParroquia;
-        this.idPais = idPais;
     }
 
     public String getCallePrincipal() {
@@ -73,10 +69,6 @@ public class Direccion {
         return idParroquia;
     }
 
-    public String getIdPais() {
-        return idPais;
-    }
-
     public long getId() {
         return id;
     }
@@ -93,7 +85,6 @@ public class Direccion {
         if (calleSecundaria != null ? !calleSecundaria.equals(direccion.calleSecundaria) : direccion.calleSecundaria != null)
             return false;
         if (idCanton != null ? !idCanton.equals(direccion.idCanton) : direccion.idCanton != null) return false;
-        if (idPais != null ? !idPais.equals(direccion.idPais) : direccion.idPais != null) return false;
         if (idParroquia != null ? !idParroquia.equals(direccion.idParroquia) : direccion.idParroquia != null)
             return false;
         if (idProvincia != null ? !idProvincia.equals(direccion.idProvincia) : direccion.idProvincia != null)

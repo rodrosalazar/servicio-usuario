@@ -6,6 +6,7 @@ import ec.gob.senescyt.titulos.core.PortadorTitulo;
 import ec.gob.senescyt.titulos.dao.PortadorTituloDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import org.apache.commons.lang.RandomStringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Before;
@@ -58,6 +59,33 @@ public class TituloExtranjeroResourceTest {
 
         assertThat(response.getStatus(), is(400));
         assertErrorMessage(response, "email Formato inválido");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConIdPaisVacio() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.idPaisNacionalidad = CAMPO_EN_BLANCO)
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConIdPaisMayorDe6Caracteres() {
+        String paisDe6Caracteres = RandomStringUtils.random(7);
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.idPaisNacionalidad = paisDe6Caracteres)
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "Debe ser un maximo de 6 caracter");
         verifyZeroInteractions(portadorTituloDAO);
     }
 
@@ -201,6 +229,20 @@ public class TituloExtranjeroResourceTest {
 
         assertThat(response.getStatus(), is(400));
         assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloConIdEtniaConMasDe2Caracteres() {
+        String etniaConMasDe2Caracteres = "invalido";
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.idEtnia = etniaConMasDe2Caracteres)
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "Debe ser un maximo de 2 caracteres");
         verifyZeroInteractions(portadorTituloDAO);
     }
 
