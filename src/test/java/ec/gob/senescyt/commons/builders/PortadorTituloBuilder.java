@@ -22,9 +22,7 @@ public class PortadorTituloBuilder {
     public String extension = "123";
     public String telefonoCelular = "0912345678";
     public boolean aceptaCondiciones = true;
-    public String callePrincipal = "Calle_principal";
-    public String numeroCasa = "Numero_casa_123";
-    public String calleSecundaria = "Calle_secundaria";
+    public String direccionCompleta = "Calle_principal";
     public String idProvincia = "01";
     public String idCanton = "0101";
     public String idParroquia = "010151";
@@ -40,8 +38,7 @@ public class PortadorTituloBuilder {
                 idEtnia, fechaNacimiento,
                 telefonoConvencional, extension,
                 telefonoCelular, aceptaCondiciones,
-                new Direccion(callePrincipal, numeroCasa, calleSecundaria, idProvincia,
-                        idCanton, idParroquia));
+                new Direccion(direccionCompleta, idProvincia, idCanton, idParroquia));
 
         return portadorTitulo;
     }
