@@ -37,7 +37,7 @@ public class PortadorTituloBuilder {
                 sexo,
                 idEtnia, fechaNacimiento,
                 telefonoConvencional, extension,
-                telefonoCelular, aceptaCondiciones,
+                telefonoCelular,
                 new Direccion(direccionCompleta, idProvincia, idCanton, idParroquia));
 
         return portadorTitulo;

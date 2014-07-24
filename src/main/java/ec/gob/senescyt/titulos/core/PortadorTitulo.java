@@ -65,9 +65,6 @@ public class PortadorTitulo {
     @Digits(integer = 10, fraction = 0, message = "{ec.gob.senescyt.error.telefonoCelular}")
     private String telefonoCelular;
 
-    @AssertTrue (message = "{ec.gob.senescyt.error.aceptaCondiciones}")
-    private boolean aceptaCondiciones;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "direccion_id")
     @NotNull
@@ -79,7 +76,7 @@ public class PortadorTitulo {
     public PortadorTitulo(String nombresCompletos, Identificacion identificacion,
                           String idPaisNacionalidad, String email, SexoEnum sexo,
                           String idEtnia, DateTime fechaNacimiento, String telefonoConvencional,
-                          String extension, String telefonoCelular, boolean aceptaCondiciones,
+                          String extension, String telefonoCelular,
                           Direccion direccion) {
 
         this.nombresCompletos = nombresCompletos;
@@ -92,7 +89,6 @@ public class PortadorTitulo {
         this.telefonoConvencional = telefonoConvencional;
         this.extension = extension;
         this.telefonoCelular = telefonoCelular;
-        this.aceptaCondiciones = aceptaCondiciones;
         this.direccion = direccion;
     }
 
@@ -130,10 +126,6 @@ public class PortadorTitulo {
 
     public String getTelefonoCelular() {
         return telefonoCelular;
-    }
-
-    public boolean isAceptaCondiciones() {
-        return aceptaCondiciones;
     }
 
     public Direccion getDireccion() {

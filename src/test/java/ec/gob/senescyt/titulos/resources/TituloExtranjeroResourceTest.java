@@ -207,19 +207,6 @@ public class TituloExtranjeroResourceTest {
     }
 
     @Test
-    public void noDebeCrearPortadorTituloSinAceptarTerminos() {
-        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.aceptaCondiciones = false)
-                .generar();
-
-        ClientResponse response = hacerPost(portadorTitulo);
-
-        assertThat(response.getStatus(), is(400));
-        assertErrorMessage(response, "Debe aceptar las condiciones");
-        verifyZeroInteractions(portadorTituloDAO);
-    }
-
-    @Test
     public void noDebeCrearTituloConIdEtniaVacio() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> p.idEtnia = CAMPO_EN_BLANCO)

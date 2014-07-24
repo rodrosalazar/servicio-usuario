@@ -36,7 +36,6 @@ public class PortadorTituloTest {
         assertThat(portadorTituloDeserializado.getTelefonoConvencional(),is(portadorTituloConCedula.getTelefonoConvencional()));
         assertThat(portadorTituloDeserializado.getExtension(),is(portadorTituloConCedula.getExtension()));
         assertThat(portadorTituloDeserializado.getTelefonoCelular(),is(portadorTituloConCedula.getTelefonoCelular()));
-        assertThat(portadorTituloDeserializado.isAceptaCondiciones(),is(portadorTituloConCedula.isAceptaCondiciones()));
         assertThat(portadorTituloDeserializado.getDireccion(),is(portadorTituloConCedula.getDireccion()));
     }
 
