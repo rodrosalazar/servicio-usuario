@@ -14,7 +14,14 @@ public class UsuarioConfiguration extends Configuration {
     @JsonProperty("database")
     private final DataSourceFactory database = new DataSourceFactory();
 
+//    @Valid
+//    @NotNull
+//    @JsonProperty("email")
+//    private final ConfiguracionEmail email = new ConfiguracionEmail();
+
     public DataSourceFactory getDataSourceFactory() {
         return database;
     }
+
+//    public ConfiguracionEmail getEmailConfiguracion() { return email; }
 }

@@ -6,6 +6,8 @@ import ec.gob.senescyt.biblioteca.Arbol;
 import ec.gob.senescyt.biblioteca.NivelArbol;
 import ec.gob.senescyt.biblioteca.dao.ArbolDAO;
 import ec.gob.senescyt.biblioteca.resource.ArbolResource;
+import ec.gob.senescyt.commons.email.ConstructorDeContenidoDeEmail;
+import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.commons.exceptions.DBConstraintViolationMapper;
 import ec.gob.senescyt.commons.filters.HeaderResponseFilter;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
@@ -48,7 +50,6 @@ import java.util.List;
 import java.util.Set;
 
 public class UsuarioApplication extends Application<UsuarioConfiguration> {
-
 
     private final DBMigrationsBundle flywayBundle = new DBMigrationsBundle();
 
@@ -95,6 +96,8 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
         PortadorTituloDAO portadorTituloDAO = new PortadorTituloDAO(getSessionFactory());
         ArbolDAO arbolDAO = new ArbolDAO(getSessionFactory());
+        ConstructorDeContenidoDeEmail constructorDeContenidoDeEmail = new ConstructorDeContenidoDeEmail();
+        DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail);
 
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
@@ -103,7 +106,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         CedulaValidator cedulaValidator = new CedulaValidator();
         LectorArchivoDePropiedades lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
 
-        final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades);
+        final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades, despachadorEmail);
         environment.jersey().register(usuarioResource);
 
         final InstitucionResource institucionResource = new InstitucionResource(institucionDAO);

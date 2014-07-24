@@ -66,4 +66,9 @@ public class Nombre implements Serializable{
     public String getSegundoApellido() {
         return segundoApellido;
     }
+
+    @Override
+    public String toString() {
+        return primerNombre + " " + segundoNombre + " " + primerApellido + " " + segundoApellido;
+    }
 }

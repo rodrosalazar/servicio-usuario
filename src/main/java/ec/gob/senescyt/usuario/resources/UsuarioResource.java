@@ -2,11 +2,13 @@ package ec.gob.senescyt.usuario.resources;
 
 import com.google.common.base.Optional;
 import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
+import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.hibernate.UnitOfWork;
+import org.apache.commons.mail.EmailException;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -20,12 +22,14 @@ public class UsuarioResource {
     private final UsuarioDAO usuarioDAO;
     private CedulaValidator cedulaValidator;
     private LectorArchivoDePropiedades lectorArchivoDePropiedades;
+    private DespachadorEmail despachadorEmail;
     private MensajeErrorBuilder mensajeErrorBuilder;
 
-    public UsuarioResource(final UsuarioDAO usuarioDAO, final CedulaValidator cedulaValidator, final LectorArchivoDePropiedades lectorArchivoDePropiedades) {
+    public UsuarioResource(final UsuarioDAO usuarioDAO, final CedulaValidator cedulaValidator, final LectorArchivoDePropiedades lectorArchivoDePropiedades, DespachadorEmail despachadorEmail) {
         this.usuarioDAO = usuarioDAO;
         this.cedulaValidator = cedulaValidator;
         this.lectorArchivoDePropiedades = lectorArchivoDePropiedades;
+        this.despachadorEmail = despachadorEmail;
         this.mensajeErrorBuilder = new MensajeErrorBuilder(this.lectorArchivoDePropiedades);
     }
 
@@ -61,7 +65,7 @@ public class UsuarioResource {
 
     @POST
     @UnitOfWork
-    public Response crear(@Valid final Usuario usuario) {
+    public Response crear(@Valid final Usuario usuario) throws EmailException {
         if (usuario.getNombreUsuario() != null
                 && usuarioDAO.isRegistradoNombreUsuario(usuario.getNombreUsuario())) {
             return Response.status(Response.Status.BAD_REQUEST).entity(mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()).build();
@@ -73,6 +77,8 @@ public class UsuarioResource {
         }
 
         Usuario usuarioCreado = usuarioDAO.guardar(usuario);
+
+        despachadorEmail.enviarEmailNotificacionUsuarioCreado(usuarioCreado.getEmailInstitucional(),usuarioCreado.getNombreUsuario(), usuarioCreado.getNombre().toString());
 
         return Response.status(Response.Status.CREATED).entity(usuarioCreado).build();
     }
