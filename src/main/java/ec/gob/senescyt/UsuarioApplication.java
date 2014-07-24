@@ -6,6 +6,7 @@ import ec.gob.senescyt.biblioteca.Arbol;
 import ec.gob.senescyt.biblioteca.NivelArbol;
 import ec.gob.senescyt.biblioteca.dao.ArbolDAO;
 import ec.gob.senescyt.biblioteca.resource.ArbolResource;
+import ec.gob.senescyt.commons.configuracion.ConfiguracionEmail;
 import ec.gob.senescyt.commons.email.ConstructorDeContenidoDeEmail;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.commons.exceptions.DBConstraintViolationMapper;
@@ -97,7 +98,8 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         PortadorTituloDAO portadorTituloDAO = new PortadorTituloDAO(getSessionFactory());
         ArbolDAO arbolDAO = new ArbolDAO(getSessionFactory());
         ConstructorDeContenidoDeEmail constructorDeContenidoDeEmail = new ConstructorDeContenidoDeEmail();
-        DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail);
+        ConfiguracionEmail configuracionEmail = new ConfiguracionEmail();
+        DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail, configuracionEmail);
 
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );

@@ -5,7 +5,7 @@ public class ConstructorDeContenidoDeEmail {
     public String construirEmailNotificacionUsuarioCreado(String nombresCompletosUsuarioNotificado, String userNameUsuarioNotificado) {
 
         StringBuilder contenidoNotificacionUsuarioCreado = new StringBuilder();
-        contenidoNotificacionUsuarioCreado.append("Estimad@ ").append(nombresCompletosUsuarioNotificado).append("<br/>");
+        contenidoNotificacionUsuarioCreado.append("Estimado/a ").append(nombresCompletosUsuarioNotificado).append("<br/>");
         contenidoNotificacionUsuarioCreado.append("El usuario ").append(userNameUsuarioNotificado)
                 .append(" ha sido creado en el Sistema Nacional de Educación Superior (SNIESE).<br/>");
         contenidoNotificacionUsuarioCreado.append("Para acceder al sistema SNIESE, usted necesita crear una contraseña en la siguiente <br/>");

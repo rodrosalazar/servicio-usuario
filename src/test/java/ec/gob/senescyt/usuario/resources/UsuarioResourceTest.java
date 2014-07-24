@@ -5,6 +5,7 @@ import com.google.common.base.Optional;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
+import ec.gob.senescyt.commons.configuracion.ConfiguracionEmail;
 import ec.gob.senescyt.commons.email.ConstructorDeContenidoDeEmail;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.usuario.core.Usuario;
@@ -37,7 +38,8 @@ public class UsuarioResourceTest {
     private static CedulaValidator cedulaValidator = new CedulaValidator();
     private static LectorArchivoDePropiedades lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
     private static ConstructorDeContenidoDeEmail constructorDeContenidoDeEmail = new ConstructorDeContenidoDeEmail();
-    private static DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail);
+    private static ConfiguracionEmail configuracionEmail = mock(ConfiguracionEmail.class);
+    private static DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail, configuracionEmail);
 
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
