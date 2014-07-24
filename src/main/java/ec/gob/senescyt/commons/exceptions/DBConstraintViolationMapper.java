@@ -10,14 +10,15 @@ import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
 public class DBConstraintViolationMapper implements ExceptionMapper<ConstraintViolationException> {
 
-//    http://www.postgresql.org/docs/9.3/static/errcodes-appendix.html
+    //  Codigos de error de postgres: http://www.postgresql.org/docs/9.3/static/errcodes-appendix.html
     public static final String FOREIGN_KEY_VIOLATION_SQL_CODE = "23503";
     public static final String MENSAJE_COMUN = "no es un valor válido";
 
     @Override
     public Response toResponse(ConstraintViolationException exception) {
         if (FOREIGN_KEY_VIOLATION_SQL_CODE.equals(exception.getSQLState())) {
-            String mensaje = String.format("%s %s", exception.getConstraintName().split("_")[1], MENSAJE_COMUN);
+            String nombreCampo = exception.getConstraintName().replace("_fkey", "");
+            String mensaje = String.format("%s %s", nombreCampo, MENSAJE_COMUN);
             return Response.status(BAD_REQUEST)
                     .entity(mensaje)
                     .build();

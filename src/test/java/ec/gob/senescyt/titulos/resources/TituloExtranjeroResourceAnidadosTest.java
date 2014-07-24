@@ -196,34 +196,7 @@ public class TituloExtranjeroResourceAnidadosTest {
         ClientResponse response = hacerPost(portadorTitulo);
 
         assertThat(response.getStatus(), is(400));
-        assertErrorMessage(response, "Debe ser un maximo de 6 caracter");
-        verifyZeroInteractions(portadorTituloDAO);
-    }
-
-    @Test
-    public void noDebeCrearTituloConIdPaisVacio() {
-        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.idPais = CAMPO_EN_BLANCO)
-                .generar();
-
-        ClientResponse response = hacerPost(portadorTitulo);
-
-        assertThat(response.getStatus(), is(400));
-        assertErrorMessage(response, "El campo es obligatorio");
-        verifyZeroInteractions(portadorTituloDAO);
-    }
-
-    @Test
-    public void noDebeCrearTituloConIdPaisMayorDe6Caracteres() {
-        String paisDe6Caracteres = RandomStringUtils.random(7);
-        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.idPais = paisDe6Caracteres)
-                .generar();
-
-        ClientResponse response = hacerPost(portadorTitulo);
-
-        assertThat(response.getStatus(), is(400));
-        assertErrorMessage(response, "Debe ser un maximo de 6 caracter");
+        assertErrorMessage(response, "Debe ser un maximo de 6 caracteres");
         verifyZeroInteractions(portadorTituloDAO);
     }
 
