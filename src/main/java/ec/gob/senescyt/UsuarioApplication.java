@@ -6,7 +6,6 @@ import ec.gob.senescyt.biblioteca.Arbol;
 import ec.gob.senescyt.biblioteca.NivelArbol;
 import ec.gob.senescyt.biblioteca.dao.ArbolDAO;
 import ec.gob.senescyt.biblioteca.resource.ArbolResource;
-import ec.gob.senescyt.commons.configuracion.ConfiguracionEmail;
 import ec.gob.senescyt.commons.email.ConstructorDeContenidoDeEmail;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.commons.exceptions.DBConstraintViolationMapper;
@@ -33,6 +32,7 @@ import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.resources.*;
 import ec.gob.senescyt.usuario.resources.management.LimpiezaResource;
+import ec.gob.senescyt.usuario.services.ServicioCedula;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
@@ -99,6 +99,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         ArbolDAO arbolDAO = new ArbolDAO(getSessionFactory());
         ConstructorDeContenidoDeEmail constructorDeContenidoDeEmail = new ConstructorDeContenidoDeEmail();
         DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail, configuration.getConfiguracionEmail());
+        ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG());
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
         environment.jersey().register(perfilResource);
@@ -139,6 +140,8 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final ArbolResource arbolResource = new ArbolResource(arbolDAO, constructorRespuestas);
         environment.jersey().register(arbolResource);
 
+        final BusquedaResource busquedaResource = new BusquedaResource(servicioCedula);
+        environment.jersey().register(busquedaResource);
 
         registrarFiltros(environment);
 

@@ -98,6 +98,14 @@ run {
 }
 
 test {
+    exclude 'ec/gob/senescyt/contracts/**'
+}
+
+task contractTests(type: Test, dependsOn: testClasses) {
+    include 'ec/gob/senescyt/contracts/**'
+}
+
+tasks.withType(Test) {
     // show standard out and standard error of the test JVM(s) on the console
     testLogging {
         showStandardStreams = true
