@@ -107,6 +107,8 @@ test {
     }
 
     outputs.upToDateWhen { false }
+
+    exclude 'ec/gob/senescyt/contracts/**'
 }
 
 task(runCsv, type: JavaExec) {
