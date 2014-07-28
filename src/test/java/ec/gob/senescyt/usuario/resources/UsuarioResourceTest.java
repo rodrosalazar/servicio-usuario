@@ -53,7 +53,7 @@ public class UsuarioResourceTest {
     @Before
     public void setUp() {
         usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades, despachadorEmail);
-        client = resources.client();
+            client = resources.client();
         ResourceTestHelper.mockConfiguracionMail(configuracionEmail);
         Mailbox.clearAll();
         usuarioValido = UsuarioBuilder.usuarioValido();

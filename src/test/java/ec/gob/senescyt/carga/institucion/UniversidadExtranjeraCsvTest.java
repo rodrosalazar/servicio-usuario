@@ -19,6 +19,6 @@ public class UniversidadExtranjeraCsvTest {
     @Test
     public void debeConvertirUnaLineaDeCsvASql() throws IOException {
         String resultado = universidadExtranjeraCsv.lineaASql("\"4001\"    ,\"AALTO UNIVERSIDAD\", \"00008\", \"FI\"");
-        assertThat(resultado, is("INSERT INTO paises VALUES ('4001', 'AALTO UNIVERSIDAD', '00008', 'FI');"));
+        assertThat(resultado, is("INSERT INTO universidades_extranjeras VALUES ('4001', 'AALTO UNIVERSIDAD', '00008', 'FI');"));
     }
 }
