@@ -57,7 +57,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     private final HibernateBundle<UsuarioConfiguration> hibernate = new HibernateBundle<UsuarioConfiguration>(Perfil.class, Permiso.class,
             Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class, Detalle.class, Pais.class,
             Provincia.class, Canton.class, Parroquia.class, TipoVisa.class, CategoriaVisa.class, Etnia.class,
-            PortadorTitulo.class, Direccion.class, Arbol.class, NivelArbol.class) {
+            PortadorTitulo.class, Direccion.class, Arbol.class, NivelArbol.class, UniversidadExtranjera.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
@@ -100,6 +100,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         ConstructorDeContenidoDeEmail constructorDeContenidoDeEmail = new ConstructorDeContenidoDeEmail();
         DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail, configuration.getConfiguracionEmail());
         ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG());
+        UniversidadExtranjeraDAO universidadExtranjeraDAO = new UniversidadExtranjeraDAO(getSessionFactory());
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
         environment.jersey().register(perfilResource);
@@ -110,7 +111,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades, despachadorEmail);
         environment.jersey().register(usuarioResource);
 
-        final InstitucionResource institucionResource = new InstitucionResource(institucionDAO);
+        final InstitucionResource institucionResource = new InstitucionResource(institucionDAO,constructorRespuestas,universidadExtranjeraDAO);
         environment.jersey().register(institucionResource);
 
         final LimpiezaResource limpiezaResource = new LimpiezaResource(usuarioDAO);
