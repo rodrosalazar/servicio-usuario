@@ -1,0 +1,1 @@
+ALTER TABLE portadores_titulo RENAME COLUMN sexo TO genero;

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ec.gob.senescyt.commons.serializers.JSONFechaDeserializer;
 import ec.gob.senescyt.commons.serializers.JSONFechaSerializer;
-import ec.gob.senescyt.titulos.enums.SexoEnum;
+import ec.gob.senescyt.titulos.enums.GeneroEnum;
 import ec.gob.senescyt.usuario.core.Identificacion;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -42,7 +42,7 @@ public class PortadorTitulo {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private SexoEnum sexo;
+    private GeneroEnum genero;
 
     @NotEmpty
     @Length(max = 2, message = "{ec.gob.senescyt.error.idEtnia}")
@@ -74,7 +74,7 @@ public class PortadorTitulo {
     private PortadorTitulo() {}
 
     public PortadorTitulo(String nombresCompletos, Identificacion identificacion,
-                          String idPaisNacionalidad, String email, SexoEnum sexo,
+                          String idPaisNacionalidad, String email, GeneroEnum genero,
                           String idEtnia, DateTime fechaNacimiento, String telefonoConvencional,
                           String extension, String telefonoCelular,
                           Direccion direccion) {
@@ -83,7 +83,7 @@ public class PortadorTitulo {
         this.identificacion = identificacion;
         this.idPaisNacionalidad = idPaisNacionalidad;
         this.email = email;
-        this.sexo = sexo;
+        this.genero = genero;
         this.idEtnia = idEtnia;
         this.fechaNacimiento = fechaNacimiento;
         this.telefonoConvencional = telefonoConvencional;
@@ -112,8 +112,8 @@ public class PortadorTitulo {
         return email;
     }
 
-    public SexoEnum getSexo() {
-        return sexo;
+    public GeneroEnum getGenero() {
+        return genero;
     }
 
     public String getIdEtnia() {

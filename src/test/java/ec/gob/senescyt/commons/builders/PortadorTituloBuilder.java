@@ -2,7 +2,7 @@ package ec.gob.senescyt.commons.builders;
 
 import ec.gob.senescyt.titulos.core.Direccion;
 import ec.gob.senescyt.titulos.core.PortadorTitulo;
-import ec.gob.senescyt.titulos.enums.SexoEnum;
+import ec.gob.senescyt.titulos.enums.GeneroEnum;
 import ec.gob.senescyt.usuario.core.Identificacion;
 import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import org.joda.time.DateTime;
@@ -27,14 +27,14 @@ public class PortadorTituloBuilder {
     public String idCanton = "0101";
     public String idParroquia = "010151";
     public DateTime fechaNacimiento = new DateTime(1990, 3, 16, 0, 0, DateTimeZone.UTC);
-    public SexoEnum sexo = SexoEnum.FEMENINO;
+    public GeneroEnum genero = GeneroEnum.FEMENINO;
 
     public PortadorTitulo generar() {
         PortadorTitulo portadorTitulo = new PortadorTitulo(nombresCompletos,
                 identificacion,
                 idPaisNacionalidad,
                 email,
-                sexo,
+                genero,
                 idEtnia, fechaNacimiento,
                 telefonoConvencional, extension,
                 telefonoCelular,

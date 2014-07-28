@@ -181,9 +181,9 @@ public class TituloExtranjeroResourceTest {
     }
 
     @Test
-    public void noDebeCrearTituloSinSexo() {
+    public void noDebeCrearTituloSinGenero() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.sexo = null)
+                .con(p -> p.genero = null)
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);

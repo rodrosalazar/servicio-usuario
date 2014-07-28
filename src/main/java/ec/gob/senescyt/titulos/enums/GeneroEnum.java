@@ -1,13 +1,13 @@
 package ec.gob.senescyt.titulos.enums;
 
-public enum SexoEnum {
+public enum GeneroEnum {
 
     MASCULINO("Masculino"),
     FEMENINO("Femenino");
 
     private String descripcion;
 
-    private SexoEnum(final String descripcion){
+    private GeneroEnum(final String descripcion){
         this.descripcion = descripcion;
     }
 

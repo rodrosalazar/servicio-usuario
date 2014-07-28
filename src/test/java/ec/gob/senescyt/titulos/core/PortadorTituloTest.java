@@ -30,7 +30,7 @@ public class PortadorTituloTest {
         assertThat(portadorTituloDeserializado.getNombresCompletos(), is(portadorTituloConCedula.getNombresCompletos()));
         assertThat(portadorTituloDeserializado.getIdentificacion(),is(portadorTituloConCedula.getIdentificacion()));
         assertThat(portadorTituloDeserializado.getEmail(),is(portadorTituloConCedula.getEmail()));
-        assertThat(portadorTituloDeserializado.getSexo(),is(portadorTituloConCedula.getSexo()));
+        assertThat(portadorTituloDeserializado.getGenero(),is(portadorTituloConCedula.getGenero()));
         assertThat(portadorTituloDeserializado.getIdEtnia(),is(portadorTituloConCedula.getIdEtnia()));
         assertThat(portadorTituloDeserializado.getFechaNacimiento(),is(portadorTituloConCedula.getFechaNacimiento()));
         assertThat(portadorTituloDeserializado.getTelefonoConvencional(),is(portadorTituloConCedula.getTelefonoConvencional()));

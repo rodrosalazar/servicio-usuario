@@ -58,12 +58,15 @@ public class BusquedaResourceIntegracionTest {
                 .get(ClientResponse.class);
 
         assertThat(respuesta.getStatus(), is(200));
-        CedulaInfo informacion = respuesta.getEntity(CedulaInfo.class);
-        assertThat(informacion.getNombre(), CoreMatchers.is("ASDFASDFS ASDASDF"));
-        assertThat(informacion.getDireccion(), CoreMatchers.is("WEQWEQW E,  "));
-        assertThat(informacion.getProvincia(), CoreMatchers.is("BOLIVAR"));
-        assertThat(informacion.getCanton(), CoreMatchers.is("CHILLANES"));
-        assertThat(informacion.getParroquia(), CoreMatchers.is("SAN JOSE DE TAMBO"));
+        CedulaInfo cedulaInfo = respuesta.getEntity(CedulaInfo.class);
+        assertThat(cedulaInfo.getNombre(), CoreMatchers.is("ASDFASDFS ASDASDF"));
+        assertThat(cedulaInfo.getDireccionCompleta(), CoreMatchers.is("WEQWEQW E,  "));
+        assertThat(cedulaInfo.getProvincia(), CoreMatchers.is("BOLIVAR"));
+        assertThat(cedulaInfo.getCanton(), CoreMatchers.is("CHILLANES"));
+        assertThat(cedulaInfo.getParroquia(), CoreMatchers.is("SAN JOSE DE TAMBO"));
+        assertThat(cedulaInfo.getFechaNacimiento(), CoreMatchers.is("25/12/2000"));
+        assertThat(cedulaInfo.getGenero(), CoreMatchers.is("MASCULINO"));
+        assertThat(cedulaInfo.getNacionalidad(), CoreMatchers.is("SUAZI"));
     }
 
     @Test

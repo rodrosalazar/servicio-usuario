@@ -60,7 +60,8 @@ public class ServicioCedula {
     private CedulaInfo construirCedulaInfo(Cedula respuesta) {
         String[] domicilio = respuesta.getDomicilio().split("/");
         String direccionCompleta = String.format("%s, %s", respuesta.getCalleDomicilio(), respuesta.getNumeroDomicilio());
-        return new CedulaInfo(respuesta.getNombre(), direccionCompleta, domicilio[0], domicilio[1], domicilio[2]);
+        return new CedulaInfo(respuesta.getNombre(), direccionCompleta, domicilio[0], domicilio[1], domicilio[2],
+                respuesta.getFechaNacimiento(), respuesta.getGenero(), respuesta.getNacionalidad());
     }
 
     private DatosHeader construirDatosHeader(ValidarPermisoRespuesta validarPermisoRespuesta) {
