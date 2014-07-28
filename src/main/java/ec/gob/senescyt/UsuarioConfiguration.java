@@ -2,6 +2,7 @@ package ec.gob.senescyt;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ec.gob.senescyt.commons.configuracion.ConfiguracionEmail;
+import ec.gob.senescyt.usuario.configuracion.ConfiguracionBSG;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 
@@ -20,11 +21,20 @@ public class UsuarioConfiguration extends Configuration {
     @JsonProperty("configuracionEmail")
     private final ConfiguracionEmail configuracionEmail = new ConfiguracionEmail();
 
+    @Valid
+    @NotNull
+    @JsonProperty("configuracionBSG")
+    private final ConfiguracionBSG configuracionBSG = new ConfiguracionBSG();
+
     public DataSourceFactory getDataSourceFactory() {
         return database;
     }
 
     public ConfiguracionEmail getConfiguracionEmail() {
         return configuracionEmail;
+    }
+
+    public ConfiguracionBSG getConfiguracionBSG() {
+        return configuracionBSG;
     }
 }

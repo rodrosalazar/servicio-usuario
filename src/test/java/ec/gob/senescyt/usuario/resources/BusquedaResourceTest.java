@@ -3,6 +3,7 @@ package ec.gob.senescyt.usuario.resources;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.usuario.core.CedulaInfo;
 import ec.gob.senescyt.usuario.exceptions.CedulaInvalidaException;
+import ec.gob.senescyt.usuario.exceptions.CredencialesIncorrectasException;
 import ec.gob.senescyt.usuario.exceptions.ServicioNoDisponibleException;
 import ec.gob.senescyt.usuario.services.ServicioCedula;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -31,9 +32,9 @@ public class BusquedaResourceTest {
     }
 
     @Test
-    public void debeDevolverServicioNoDisponibleCuandoRegistroCivilNoEstaDisponible() throws CedulaInvalidaException, ServicioNoDisponibleException {
+    public void debeDevolverServicioNoDisponibleCuandoRegistroCivilNoEstaDisponible() throws CedulaInvalidaException, ServicioNoDisponibleException, CredencialesIncorrectasException {
         String cedulaIndiferente = "1111";
-        when(servicioCedula.buscar(cedulaIndiferente)).thenThrow(new ServicioNoDisponibleException("El Servicio del Registro Civil no esta disponible"));
+        when(servicioCedula.buscar(cedulaIndiferente)).thenThrow(new ServicioNoDisponibleException("Servicio no disponible"));
         ClientResponse response = resources.client().resource("/busqueda")
                 .queryParam("cedula", cedulaIndiferente)
                 .header("Content-Type", MediaType.APPLICATION_JSON)
@@ -45,7 +46,7 @@ public class BusquedaResourceTest {
     }
 
     @Test
-    public void debeDevolverBadRequestCuandoLaCedulaEsInvalida() throws CedulaInvalidaException, ServicioNoDisponibleException {
+    public void debeDevolverBadRequestCuandoLaCedulaEsInvalida() throws CedulaInvalidaException, ServicioNoDisponibleException, CredencialesIncorrectasException {
         String cedulaInvalida = "1111";
         when(servicioCedula.buscar(cedulaInvalida)).thenThrow(new CedulaInvalidaException("Cedula enviada no corresponde a un usuario no existe o no esta registrado"));
 
@@ -60,7 +61,7 @@ public class BusquedaResourceTest {
     }
 
     @Test
-    public void debeDevolverLosDatosDeLaCedulaCuandoEsValida() throws CedulaInvalidaException, ServicioNoDisponibleException {
+    public void debeDevolverLosDatosDeLaCedulaCuandoEsValida() throws CedulaInvalidaException, ServicioNoDisponibleException, CredencialesIncorrectasException {
         String cedulaValida = "1111111116";
         String nombre = "Cedula correcta";
         String parroquia = "Parroquia Irrelevante";

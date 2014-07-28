@@ -2,6 +2,7 @@ package ec.gob.senescyt.usuario.resources;
 
 import ec.gob.senescyt.usuario.core.CedulaInfo;
 import ec.gob.senescyt.usuario.exceptions.CedulaInvalidaException;
+import ec.gob.senescyt.usuario.exceptions.CredencialesIncorrectasException;
 import ec.gob.senescyt.usuario.exceptions.ServicioNoDisponibleException;
 import ec.gob.senescyt.usuario.services.ServicioCedula;
 
@@ -31,8 +32,8 @@ public class BusquedaResource {
             CedulaInfo info = servicioCedula.buscar(cedula);
             return Response.ok(info).build();
         } catch (ServicioNoDisponibleException snde) {
-            return Response.status(SERVICE_UNAVAILABLE).entity("Servicio no disponible").build();
-        } catch (CedulaInvalidaException cie) {
+            return Response.status(SERVICE_UNAVAILABLE).entity(snde.getMessage()).build();
+        } catch (CedulaInvalidaException | CredencialesIncorrectasException cie) {
             return Response.status(BAD_REQUEST).entity(cie.getMessage()).build();
         }
     }
