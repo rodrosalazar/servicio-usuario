@@ -18,7 +18,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @ReportAsSingleViolation
 public @interface IdentificacionValida {
-    String message() default "{ec.gob.senescyt.error.fechaDeVigencia}";
+    String message() default "{ec.gob.senescyt.error.cedula}";
 
     Class<?>[] groups() default {};
 
