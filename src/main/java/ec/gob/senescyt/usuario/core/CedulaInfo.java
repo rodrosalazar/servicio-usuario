@@ -4,6 +4,7 @@ public class CedulaInfo {
 
     private String nombre;
     private String direccionCompleta;
+    private String idProvincia;
     private String provincia;
     private String canton;
     private String parroquia;
@@ -13,10 +14,14 @@ public class CedulaInfo {
 
     private CedulaInfo() {}
 
-    public CedulaInfo(String nombre, String direccionCompleta, String provincia, String canton, String parroquia, String fechaNacimiento, String genero, String nacionalidad) {
+    public CedulaInfo(String nombre, String direccionCompleta, String provincia, String idProvincia,
+                      String canton, String parroquia, String fechaNacimiento,
+                      String genero, String nacionalidad) {
+
         this.nombre = nombre;
         this.direccionCompleta = direccionCompleta;
         this.provincia = provincia;
+        this.idProvincia = idProvincia;
         this.canton = canton;
         this.parroquia = parroquia;
         this.fechaNacimiento = fechaNacimiento;
@@ -54,5 +59,9 @@ public class CedulaInfo {
 
     public String getNacionalidad() {
         return nacionalidad;
+    }
+
+    public String getIdProvincia() {
+        return idProvincia;
     }
 }

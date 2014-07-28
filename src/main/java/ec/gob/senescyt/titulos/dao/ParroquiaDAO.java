@@ -1,5 +1,6 @@
 package ec.gob.senescyt.titulos.dao;
 
+import ec.gob.senescyt.titulos.core.Canton;
 import ec.gob.senescyt.titulos.core.Parroquia;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;

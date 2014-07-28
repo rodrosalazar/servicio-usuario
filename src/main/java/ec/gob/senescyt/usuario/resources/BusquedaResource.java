@@ -5,6 +5,7 @@ import ec.gob.senescyt.usuario.exceptions.CedulaInvalidaException;
 import ec.gob.senescyt.usuario.exceptions.CredencialesIncorrectasException;
 import ec.gob.senescyt.usuario.exceptions.ServicioNoDisponibleException;
 import ec.gob.senescyt.usuario.services.ServicioCedula;
+import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -27,6 +28,7 @@ public class BusquedaResource {
     }
 
     @GET
+    @UnitOfWork
     public Response validar(@QueryParam("cedula") String cedula) {
         try {
             CedulaInfo info = servicioCedula.buscar(cedula);

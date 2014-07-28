@@ -62,6 +62,7 @@ public class BusquedaResourceIntegracionTest {
         assertThat(cedulaInfo.getNombre(), CoreMatchers.is("ASDFASDFS ASDASDF"));
         assertThat(cedulaInfo.getDireccionCompleta(), CoreMatchers.is("WEQWEQW E,  "));
         assertThat(cedulaInfo.getProvincia(), CoreMatchers.is("BOLIVAR"));
+        assertThat(cedulaInfo.getIdProvincia(), CoreMatchers.is("02"));
         assertThat(cedulaInfo.getCanton(), CoreMatchers.is("CHILLANES"));
         assertThat(cedulaInfo.getParroquia(), CoreMatchers.is("SAN JOSE DE TAMBO"));
         assertThat(cedulaInfo.getFechaNacimiento(), CoreMatchers.is("25/12/2000"));

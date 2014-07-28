@@ -1,5 +1,8 @@
 package ec.gob.senescyt.contracts;
 
+import ec.gob.senescyt.titulos.dao.CantonDAO;
+import ec.gob.senescyt.titulos.dao.ParroquiaDAO;
+import ec.gob.senescyt.titulos.dao.ProvinciaDAO;
 import ec.gob.senescyt.usuario.configuracion.ConfiguracionBSG;
 import ec.gob.senescyt.usuario.exceptions.CedulaInvalidaException;
 import ec.gob.senescyt.usuario.exceptions.CredencialesIncorrectasException;
@@ -19,11 +22,14 @@ public class ServicioCedulaTest {
 
     private ServicioCedula servicioCedula;
     private ConfiguracionBSG configuracionBSG = mock(ConfiguracionBSG.class);
+    private ProvinciaDAO provinciaDAO = mock(ProvinciaDAO.class);
+    private CantonDAO cantonDAO = mock(CantonDAO.class);
+    private ParroquiaDAO parroquiaDAO = mock(ParroquiaDAO.class);
 
     @Before
     public void setUp() throws Exception {
         reset(configuracionBSG);
-        servicioCedula = new ServicioCedula(configuracionBSG);
+        servicioCedula = new ServicioCedula(configuracionBSG, provinciaDAO);
     }
 
     @Test
@@ -41,7 +47,7 @@ public class ServicioCedulaTest {
     @Test
     public void debeLanzarExcepcionDeCredencialesIncorrectasCuandoConsultamosCedulaConCredencialesInvalidas() throws CedulaInvalidaException, ServicioNoDisponibleException, CredencialesIncorrectasException {
         String cedulaIndiferente = "1111111111";
-        String numeroAccesoValido = "1001633807";
+        String numeroAccesoValido = "valido";
         when(configuracionBSG.getNumeroAcceso()).thenReturn(numeroAccesoValido);
         when(configuracionBSG.getUsuario()).thenReturn("invalido");
         when(configuracionBSG.getContrasenia()).thenReturn("invalido");

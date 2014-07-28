@@ -7,6 +7,9 @@ import ec.gob.bsg.accesobsgservice.ValidarPermisoRespuesta;
 import ec.gob.registrocivil.consultacedula.Cedula;
 import ec.gob.registrocivil.consultacedula.WSRegistroCivilConsultaCedula;
 import ec.gob.registrocivil.consultacedula.WSRegistroCivilConsultaCedula_Service;
+import ec.gob.senescyt.titulos.dao.CantonDAO;
+import ec.gob.senescyt.titulos.dao.ParroquiaDAO;
+import ec.gob.senescyt.titulos.dao.ProvinciaDAO;
 import ec.gob.senescyt.usuario.client.DatosHeader;
 import ec.gob.senescyt.usuario.client.HeaderHandlerResolver;
 import ec.gob.senescyt.usuario.configuracion.ConfiguracionBSG;
@@ -20,9 +23,11 @@ import javax.xml.ws.WebServiceException;
 public class ServicioCedula {
 
     private ConfiguracionBSG configuracionBSG;
+    private ProvinciaDAO provinciaDAO;
 
-    public ServicioCedula(ConfiguracionBSG configuracionBSG) {
+    public ServicioCedula(ConfiguracionBSG configuracionBSG, ProvinciaDAO provinciaDAO) {
         this.configuracionBSG = configuracionBSG;
+        this.provinciaDAO = provinciaDAO;
     }
 
     public CedulaInfo buscar(String cedula) throws CedulaInvalidaException, ServicioNoDisponibleException, CredencialesIncorrectasException {
@@ -60,7 +65,15 @@ public class ServicioCedula {
     private CedulaInfo construirCedulaInfo(Cedula respuesta) {
         String[] domicilio = respuesta.getDomicilio().split("/");
         String direccionCompleta = String.format("%s, %s", respuesta.getCalleDomicilio(), respuesta.getNumeroDomicilio());
-        return new CedulaInfo(respuesta.getNombre(), direccionCompleta, domicilio[0], domicilio[1], domicilio[2],
+
+        String provincia = domicilio[0];
+        String canton = domicilio[1];
+        String parroquia = domicilio[2];
+
+        String idProvincia = provinciaDAO.obtenerIdParaNombre(provincia);
+
+        return new CedulaInfo(respuesta.getNombre(), direccionCompleta, provincia, idProvincia, canton,
+                parroquia,
                 respuesta.getFechaNacimiento(), respuesta.getGenero(), respuesta.getNacionalidad());
     }
 

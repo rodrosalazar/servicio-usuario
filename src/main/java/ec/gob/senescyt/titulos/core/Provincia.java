@@ -16,6 +16,10 @@ public class Provincia {
     private String id;
     private String nombre;
 
+    @Column(name = "nombre_registro_civil")
+    @JsonIgnore
+    private String nombreRegistroCivil;
+
     @OneToMany(mappedBy = "provincia")
     @JsonManagedReference
     @JsonIgnore
@@ -41,5 +45,9 @@ public class Provincia {
 
     public List<Canton> getCantones() {
         return cantones;
+    }
+
+    public String getNombreRegistroCivil() {
+        return nombreRegistroCivil;
     }
 }

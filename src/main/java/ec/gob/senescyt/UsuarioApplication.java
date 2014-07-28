@@ -99,7 +99,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         ArbolDAO arbolDAO = new ArbolDAO(getSessionFactory());
         ConstructorDeContenidoDeEmail constructorDeContenidoDeEmail = new ConstructorDeContenidoDeEmail();
         DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail, configuration.getConfiguracionEmail());
-        ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG());
+        ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG(), provinciaDAO);
         UniversidadExtranjeraDAO universidadExtranjeraDAO = new UniversidadExtranjeraDAO(getSessionFactory());
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );

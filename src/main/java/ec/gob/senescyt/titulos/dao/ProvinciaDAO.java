@@ -32,4 +32,11 @@ public class ProvinciaDAO extends AbstractDAO<Provincia> {
         query.setParameter("idProvincia", idProvincia);
         query.executeUpdate();
     }
+
+    public String obtenerIdParaNombre(String nombreProvincia) {
+        Query query = currentSession().createQuery("SELECT id FROM Provincia p WHERE p.nombreRegistroCivil = UPPER(:nombreProvincia)");
+        query.setParameter("nombreProvincia", nombreProvincia);
+
+        return (String) query.uniqueResult();
+    }
 }

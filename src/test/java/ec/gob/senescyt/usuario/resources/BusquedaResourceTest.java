@@ -66,12 +66,14 @@ public class BusquedaResourceTest {
         String nombre = "Cedula correcta";
         String parroquia = "Parroquia Irrelevante";
         String direccion = "Direccion Irrelevante";
+        String idProvincia = "02";
         String provincia = "Provincia Irrelevante";
         String canton = "Canton Irrelevante";
         String fechaNacimiento = "01/01/1980";
         String genero = "MASCULINO";
         String nacionalidad = "SUAZI";
-        when(servicioCedula.buscar(cedulaValida)).thenReturn(new CedulaInfo(nombre, direccion, provincia, canton, parroquia, fechaNacimiento, genero, nacionalidad));
+        when(servicioCedula.buscar(cedulaValida)).thenReturn(new CedulaInfo(nombre, direccion, provincia, idProvincia, canton,
+                parroquia, fechaNacimiento, genero, nacionalidad));
 
         ClientResponse response = resources.client().resource("/busqueda")
                 .queryParam("cedula", cedulaValida)
@@ -83,6 +85,7 @@ public class BusquedaResourceTest {
         CedulaInfo cedulaInfo = response.getEntity(CedulaInfo.class);
         assertThat(cedulaInfo.getNombre(), is(nombre));
         assertThat(cedulaInfo.getDireccionCompleta(), is(direccion));
+        assertThat(cedulaInfo.getIdProvincia(), is(idProvincia));
         assertThat(cedulaInfo.getProvincia(), is(provincia));
         assertThat(cedulaInfo.getCanton(), is(canton));
         assertThat(cedulaInfo.getParroquia(), is(parroquia));
