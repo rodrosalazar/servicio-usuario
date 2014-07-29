@@ -1,6 +1,5 @@
 package ec.gob.senescyt.usuario.dao;
 
-import com.sun.jersey.api.NotFoundException;
 import ec.gob.senescyt.usuario.core.Token;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
@@ -11,7 +10,7 @@ public class TokenDAO extends AbstractDAO<Token> {
         super(sessionFactory);
     }
 
-    public Token buscar(String token) throws NotFoundException{
+    public Token buscar(String token) {
         return null;
     }
 }
