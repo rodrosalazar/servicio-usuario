@@ -1,0 +1,4 @@
+CREATE TABLE tokens (
+  id VARCHAR(36) NOT NULL PRIMARY KEY,
+  id_usuario INTEGER NOT NULL REFERENCES usuarios(id)
+);

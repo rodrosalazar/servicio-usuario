@@ -1,7 +1,7 @@
 package ec.gob.senescyt.usuario.resources;
 
-import ec.gob.senescyt.usuario.core.TokenUsuario;
-import ec.gob.senescyt.usuario.dao.TokenUsuarioDAO;
+import ec.gob.senescyt.usuario.core.Token;
+import ec.gob.senescyt.usuario.dao.TokenDAO;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -14,16 +14,16 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class ContraseniaResource {
 
-    private TokenUsuarioDAO tokenUsuarioDAO;
+    private TokenDAO tokenDAO;
 
-    public ContraseniaResource(TokenUsuarioDAO tokenUsuarioDAO) {
-        this.tokenUsuarioDAO = tokenUsuarioDAO;
+    public ContraseniaResource(TokenDAO tokenDAO) {
+        this.tokenDAO = tokenDAO;
     }
 
     @GET
-    @Path("/{token}")
-    public Response consultar(@PathParam("token") String token) {
-        TokenUsuario tokenUsuario = tokenUsuarioDAO.buscar(token);
-        return Response.ok(tokenUsuario).build();
+    @Path("/{idToken}")
+    public Response consultar(@PathParam("idToken") String idToken) {
+        Token token = tokenDAO.buscar(idToken);
+        return Response.ok(token).build();
     }
 }

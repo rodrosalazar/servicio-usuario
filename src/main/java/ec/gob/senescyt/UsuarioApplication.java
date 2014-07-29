@@ -52,7 +52,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
             Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class, Detalle.class, Pais.class,
             Provincia.class, Canton.class, Parroquia.class, TipoVisa.class, CategoriaVisa.class, Etnia.class,
             PortadorTitulo.class, Direccion.class, Arbol.class, NivelArbol.class, UniversidadExtranjera.class,
-            TokenUsuario.class) {
+            Token.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
@@ -96,7 +96,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail, configuration.getConfiguracionEmail());
         ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG(), provinciaDAO);
         UniversidadExtranjeraDAO universidadExtranjeraDAO = new UniversidadExtranjeraDAO(getSessionFactory());
-        TokenUsuarioDAO tokenUsuarioDAO = new TokenUsuarioDAO(getSessionFactory());
+        TokenDAO tokenDAO = new TokenDAO(getSessionFactory());
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
         environment.jersey().register(perfilResource);
@@ -140,7 +140,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final BusquedaResource busquedaResource = new BusquedaResource(servicioCedula);
         environment.jersey().register(busquedaResource);
 
-        final ContraseniaResource contraseniaResource = new ContraseniaResource(tokenUsuarioDAO);
+        final ContraseniaResource contraseniaResource = new ContraseniaResource(tokenDAO);
         environment.jersey().register(contraseniaResource);
 
         registrarFiltros(environment);
