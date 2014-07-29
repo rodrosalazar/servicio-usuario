@@ -17,18 +17,12 @@ import ec.gob.senescyt.titulos.core.*;
 import ec.gob.senescyt.titulos.dao.*;
 import ec.gob.senescyt.titulos.resources.TituloExtranjeroResource;
 import ec.gob.senescyt.usuario.bundles.DBMigrationsBundle;
-import ec.gob.senescyt.usuario.core.Institucion;
-import ec.gob.senescyt.usuario.core.Perfil;
-import ec.gob.senescyt.usuario.core.Permiso;
-import ec.gob.senescyt.usuario.core.Usuario;
+import ec.gob.senescyt.usuario.core.*;
 import ec.gob.senescyt.usuario.core.cine.Area;
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
 import ec.gob.senescyt.usuario.core.cine.Detalle;
 import ec.gob.senescyt.usuario.core.cine.Subarea;
-import ec.gob.senescyt.usuario.dao.ClasificacionDAO;
-import ec.gob.senescyt.usuario.dao.InstitucionDAO;
-import ec.gob.senescyt.usuario.dao.PerfilDAO;
-import ec.gob.senescyt.usuario.dao.UsuarioDAO;
+import ec.gob.senescyt.usuario.dao.*;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.resources.*;
 import ec.gob.senescyt.usuario.resources.management.LimpiezaResource;
@@ -57,7 +51,8 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     private final HibernateBundle<UsuarioConfiguration> hibernate = new HibernateBundle<UsuarioConfiguration>(Perfil.class, Permiso.class,
             Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class, Detalle.class, Pais.class,
             Provincia.class, Canton.class, Parroquia.class, TipoVisa.class, CategoriaVisa.class, Etnia.class,
-            PortadorTitulo.class, Direccion.class, Arbol.class, NivelArbol.class, UniversidadExtranjera.class) {
+            PortadorTitulo.class, Direccion.class, Arbol.class, NivelArbol.class, UniversidadExtranjera.class,
+            TokenUsuario.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
@@ -101,6 +96,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail, configuration.getConfiguracionEmail());
         ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG(), provinciaDAO);
         UniversidadExtranjeraDAO universidadExtranjeraDAO = new UniversidadExtranjeraDAO(getSessionFactory());
+        TokenUsuarioDAO tokenUsuarioDAO = new TokenUsuarioDAO(getSessionFactory());
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
         environment.jersey().register(perfilResource);
@@ -143,6 +139,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         final BusquedaResource busquedaResource = new BusquedaResource(servicioCedula);
         environment.jersey().register(busquedaResource);
+
+        final ContraseniaResource contraseniaResource = new ContraseniaResource(tokenUsuarioDAO);
+        environment.jersey().register(contraseniaResource);
 
         registrarFiltros(environment);
 

@@ -37,7 +37,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+                ID_INSTITUCION, NOMBRE_USUARIO, null, null);
     }
 
     public static Usuario usuarioConNumeroQuipuxEnBlanco() {
@@ -45,7 +45,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, CAMPO_EN_BLANCO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+                ID_INSTITUCION, NOMBRE_USUARIO, null, null);
     }
 
     public static Usuario usuarioConPasaporte() {
@@ -53,7 +53,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l,2l,3l));
+                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l,2l,3l), null);
     }
 
     public static Usuario usuarioConEmailInvalido() {
@@ -61,7 +61,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_INVALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+                ID_INSTITUCION, NOMBRE_USUARIO, null, null);
     }
 
     public static Usuario usuarioConFechaDeVigenciaInvalida() {
@@ -69,7 +69,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_HACE_UN_MES,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+                ID_INSTITUCION, NOMBRE_USUARIO, null, null);
     }
 
     public static Usuario usuarioConNumeroQuipuxInvalido() {
@@ -77,7 +77,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_INVALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+                ID_INSTITUCION, NOMBRE_USUARIO, null, null);
     }
 
     public static Usuario usuarioConCedulaInvalida() {
@@ -85,7 +85,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+                ID_INSTITUCION, NOMBRE_USUARIO, null, null);
     }
 
     public static Usuario usuarioConDocumentoInvalido() {
@@ -93,7 +93,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+                ID_INSTITUCION, NOMBRE_USUARIO, null, null);
     }
 
     public static Usuario usuarioConPrimerNombreEnBlanco() {
@@ -101,7 +101,7 @@ public class UsuarioBuilder {
                 new Nombre(CAMPO_EN_BLANCO, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+                ID_INSTITUCION, NOMBRE_USUARIO, null, null);
     }
 
     public static Usuario usuarioConPrimerApellidoEnBlanco() {
@@ -109,7 +109,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, CAMPO_EN_BLANCO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+                ID_INSTITUCION, NOMBRE_USUARIO, null, null);
     }
 
     public static Object usuarioConEmailEnBlanco() {
@@ -117,7 +117,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 CAMPO_EN_BLANCO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+                ID_INSTITUCION, NOMBRE_USUARIO, null, null);
 
     }
 
@@ -126,7 +126,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 null,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+                ID_INSTITUCION, NOMBRE_USUARIO, null, null);
     }
 
     public static Usuario usuarioConIdInstitucionNulo() {
@@ -134,7 +134,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                null, NOMBRE_USUARIO, null);
+                null, NOMBRE_USUARIO, null, null);
     }
 
     public static Usuario usuarioConNombreUsuarioEnBlanco() {
@@ -142,7 +142,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, CAMPO_EN_BLANCO, null);
+                ID_INSTITUCION, CAMPO_EN_BLANCO, null, null);
     }
 
     public static String usuarioConIdInstitucionEnBlanco() {
@@ -170,7 +170,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l,2l,3l));
+                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l,2l,3l), null);
     }
 
     public static Usuario usuarioValido1804068953UsuarioSenescyt() {
@@ -178,7 +178,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l,2l,3l));
+                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l,2l,3l), null);
     }
 
     public static Usuario usuarioValido1718642174UsuarioAdmin() {
@@ -186,7 +186,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO_2, newArrayList(1l,2l,3l));
+                ID_INSTITUCION, NOMBRE_USUARIO_2, newArrayList(1l,2l,3l), null);
     }
 
     public static Usuario usuarioConIdentificacionDeMasDe20Digitos() {
@@ -194,7 +194,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO_2, null);
+                ID_INSTITUCION, NOMBRE_USUARIO_2, null, null);
     }
 
     public static Usuario usuarioConPasaporteVacio() {
@@ -202,7 +202,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO_2, null);
+                ID_INSTITUCION, NOMBRE_USUARIO_2, null, null);
     }
 
     public static Usuario usuarioValido() {
@@ -210,7 +210,7 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l, 2l, 3l));
+                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l, 2l, 3l), null);
     }
 
 
@@ -219,6 +219,6 @@ public class UsuarioBuilder {
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+                ID_INSTITUCION, NOMBRE_USUARIO, null, null);
     }
 }

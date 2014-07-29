@@ -2,8 +2,11 @@ package ec.gob.senescyt.usuario.resources;
 
 import com.sun.jersey.api.NotFoundException;
 import com.sun.jersey.api.client.ClientResponse;
+import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.commons.exceptions.NotFoundExceptionMapper;
-import ec.gob.senescyt.usuario.dao.TokenDAO;
+import ec.gob.senescyt.usuario.core.TokenUsuario;
+import ec.gob.senescyt.usuario.core.Usuario;
+import ec.gob.senescyt.usuario.dao.TokenUsuarioDAO;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
@@ -20,11 +23,11 @@ import static org.mockito.Mockito.when;
 
 public class ContraseniaResourceTest {
 
-    private static TokenDAO tokenDAO = mock(TokenDAO.class);
+    private static TokenUsuarioDAO tokenUsuarioDAO = mock(TokenUsuarioDAO.class);
 
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new ContraseniaResource(tokenDAO))
+            .addResource(new ContraseniaResource(tokenUsuarioDAO))
             .addProvider(NotFoundExceptionMapper.class)
             .build();
     private String tokenInvalido;
@@ -34,12 +37,11 @@ public class ContraseniaResourceTest {
     public void setUp() throws Exception {
         tokenInvalido = RandomStringUtils.randomAlphanumeric(16);
         tokenValido = RandomStringUtils.randomAlphanumeric(16);
-
     }
 
     @Test
     public void debeDevolverRecursoNoEncontradoCuandoTokenNoEsValido() {
-        when(tokenDAO.buscar(tokenInvalido)).thenThrow(new NotFoundException("Error"));
+        when(tokenUsuarioDAO.buscar(tokenInvalido)).thenThrow(new NotFoundException("Error"));
 
         ClientResponse response = resources.client().resource("/contrasenia/" + tokenInvalido)
                 .header("Content-Type", MediaType.APPLICATION_JSON)
@@ -50,12 +52,27 @@ public class ContraseniaResourceTest {
 
     @Test
     public void debeDevolverElIdDelUsuarioCuandoElTokenEsValido() {
+        when(tokenUsuarioDAO.buscar(tokenValido)).thenReturn(new TokenUsuario(tokenValido, UsuarioBuilder.usuarioValido()));
         ClientResponse response = resources.client().resource("/contrasenia/" + tokenValido)
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
 
-        Integer idUsuarioEsperado = 1;
+        long idUsuarioEsperado = 0;
         assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
-        assertThat(response.getEntity(Integer.class), is(idUsuarioEsperado));
+        TokenUsuario tokenUsuario = response.getEntity(TokenUsuario.class);
+        Usuario usuario = tokenUsuario.getUsuario();
+        assertThat(usuario.getId(), is(idUsuarioEsperado));
+    }
+
+    @Test
+    public void debeDevolverElNombreDeUsuarioCuandoElTokenEsValido() {
+        when(tokenUsuarioDAO.buscar(tokenValido)).thenReturn(new TokenUsuario(tokenValido, UsuarioBuilder.usuarioValido()));
+        ClientResponse response = resources.client().resource("/contrasenia/" + tokenValido)
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .get(ClientResponse.class);
+
+        String nombreUsuarioEsperado = "usuarioSenescyt";
+        assertThat(response.getStatus(), is(Response.Status.OK.getStatusCode()));
+        assertThat(response.getEntity(TokenUsuario.class).getUsuario().getNombreUsuario(), is(nombreUsuarioEsperado));
     }
 }

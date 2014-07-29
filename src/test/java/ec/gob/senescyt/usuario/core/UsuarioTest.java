@@ -26,7 +26,7 @@ public class UsuarioTest {
                 new Nombre("Nelson", "Alberto", "Jumbo", "Hidalgo"),
                 "testEmail@senescyt.gob.ec", "SENESCYT-DFAPO-2014-65946-MI",
                 new DateTime(2016, 7, 29,0, 0, DateTimeZone.UTC),
-                idInstitucion, "nombreUsuario", asList(1234l, 5678l, 9630l));
+                idInstitucion, "nombreUsuario", asList(1234l, 5678l, 9630l), null);
     }
 
     @Test

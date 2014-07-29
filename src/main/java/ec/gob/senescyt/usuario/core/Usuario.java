@@ -1,5 +1,8 @@
 package ec.gob.senescyt.usuario.core;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ec.gob.senescyt.commons.serializers.JSONFechaDeserializer;
@@ -69,10 +72,15 @@ public class Usuario {
     @Column(name = "perfil_id")
     private List<Long> perfiles;
 
+    @OneToOne
+    @JsonBackReference
+    @Transient
+    private TokenUsuario tokenUsuario;
+
     private Usuario() {}
 
     public Usuario(Identificacion identificacion, Nombre nombre, String emailInstitucional, String numeroAutorizacionQuipux,
-                   DateTime fechaDeVigencia, Long idInstitucion, String nombreUsuario, List<Long> perfiles) {
+                   DateTime fechaDeVigencia, Long idInstitucion, String nombreUsuario, List<Long> perfiles, TokenUsuario tokenUsuario) {
         this.identificacion = identificacion;
         this.nombre = nombre;
         this.emailInstitucional = emailInstitucional;
@@ -81,6 +89,7 @@ public class Usuario {
         this.idInstitucion = idInstitucion;
         this.nombreUsuario = nombreUsuario;
         this.perfiles = perfiles;
+        this.tokenUsuario = tokenUsuario;
     }
 
     public long getId() {
@@ -117,5 +126,9 @@ public class Usuario {
 
     public List<Long> getPerfiles() {
         return perfiles;
+    }
+
+    public TokenUsuario getTokenUsuario() {
+        return tokenUsuario;
     }
 }
