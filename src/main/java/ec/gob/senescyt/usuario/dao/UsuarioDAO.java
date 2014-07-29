@@ -36,7 +36,11 @@ public class UsuarioDAO extends AbstractDAO<Usuario> {
 
 
     public void limpiar() {
-        Query query = currentSession().createQuery("DELETE FROM Usuario");
+        Query query = currentSession().createSQLQuery("TRUNCATE usuarios CASCADE");
         query.executeUpdate();
+    }
+
+    public void eliminar(long id) {
+
     }
 }

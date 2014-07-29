@@ -1,6 +1,5 @@
 package ec.gob.senescyt.usuario.core;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ec.gob.senescyt.commons.serializers.JSONFechaDeserializer;
@@ -8,15 +7,13 @@ import ec.gob.senescyt.commons.serializers.JSONFechaSerializer;
 import ec.gob.senescyt.usuario.validators.annotations.FechaVigenciaValida;
 import ec.gob.senescyt.usuario.validators.annotations.IdentificacionValida;
 import ec.gob.senescyt.usuario.validators.annotations.QuipuxValido;
-import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
-import javax.persistence.Entity;
-import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -70,15 +67,10 @@ public class Usuario {
     @Column(name = "perfil_id")
     private List<Long> perfiles;
 
-    @OneToOne
-    @JsonBackReference
-    @Transient
-    private Token token;
-
     private Usuario() {}
 
     public Usuario(Identificacion identificacion, Nombre nombre, String emailInstitucional, String numeroAutorizacionQuipux,
-                   DateTime fechaDeVigencia, Long idInstitucion, String nombreUsuario, List<Long> perfiles, Token token) {
+                   DateTime fechaDeVigencia, Long idInstitucion, String nombreUsuario, List<Long> perfiles) {
         this.identificacion = identificacion;
         this.nombre = nombre;
         this.emailInstitucional = emailInstitucional;
@@ -87,7 +79,6 @@ public class Usuario {
         this.idInstitucion = idInstitucion;
         this.nombreUsuario = nombreUsuario;
         this.perfiles = perfiles;
-        this.token = token;
     }
 
     public long getId() {
@@ -124,9 +115,5 @@ public class Usuario {
 
     public List<Long> getPerfiles() {
         return perfiles;
-    }
-
-    public Token getToken() {
-        return token;
     }
 }

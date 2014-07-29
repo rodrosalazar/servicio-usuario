@@ -10,7 +10,15 @@ public class TokenDAO extends AbstractDAO<Token> {
         super(sessionFactory);
     }
 
-    public Token buscar(String token) {
-        return null;
+    public Token buscar(String idToken) {
+        return get(idToken);
+    }
+
+    public void guardar(final Token token) {
+        persist(token);
+    }
+
+    public void eliminar(String id) {
+
     }
 }

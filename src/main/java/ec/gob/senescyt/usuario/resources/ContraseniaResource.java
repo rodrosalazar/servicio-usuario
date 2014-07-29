@@ -2,6 +2,7 @@ package ec.gob.senescyt.usuario.resources;
 
 import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
+import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -22,6 +23,7 @@ public class ContraseniaResource {
 
     @GET
     @Path("/{idToken}")
+    @UnitOfWork
     public Response consultar(@PathParam("idToken") String idToken) {
         Token token = tokenDAO.buscar(idToken);
         return Response.ok(token).build();
