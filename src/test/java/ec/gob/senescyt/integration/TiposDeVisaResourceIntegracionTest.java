@@ -81,6 +81,7 @@ public class TiposDeVisaResourceIntegracionTest {
 
     private void eliminarInformacionCargadaParaPrueba() {
         categoriaVisaDAO.eliminar(ID_CATEGORIA_VISA_TEST);
+        sessionFactory.getCurrentSession().flush();
         tipoVisaDAO.eliminar(ID_TIPO_VISA_TEST);
         sessionFactory.getCurrentSession().flush();
     }

@@ -2,8 +2,8 @@ package ec.gob.senescyt.titulos.dao;
 
 import ec.gob.senescyt.titulos.core.CategoriaVisa;
 import io.dropwizard.hibernate.AbstractDAO;
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
 
@@ -14,10 +14,8 @@ public class CategoriaVisaDAO extends AbstractDAO<CategoriaVisa>{
     }
 
     public List<CategoriaVisa> obtenerPorTipoVisa(String idTipoVisa) {
-        Query query = currentSession().createQuery("SELECT cv FROM CategoriaVisa cv WHERE cv.tipoVisa.id = :idTipoVisa");
-        query.setParameter("idTipoVisa", idTipoVisa);
-
-        return query.list();
+        return currentSession().createCriteria(CategoriaVisa.class, "cv")
+                .add(Restrictions.eq("cv.tipoVisa.id", idTipoVisa)).list();
     }
 
     public void guardar(CategoriaVisa categoriaVisa) {
@@ -25,8 +23,8 @@ public class CategoriaVisaDAO extends AbstractDAO<CategoriaVisa>{
     }
 
     public void eliminar(String idCategoriaVisa) {
-        Query query = currentSession().createQuery("DELETE FROM CategoriaVisa cv WHERE cv.id =:idCategoriaVisa");
-        query.setParameter("idCategoriaVisa", idCategoriaVisa);
-        query.executeUpdate();
+        CategoriaVisa categoriaVisa = (CategoriaVisa) currentSession().createCriteria(CategoriaVisa.class, "cv")
+                .add(Restrictions.eq("cv.id", idCategoriaVisa)).uniqueResult();
+        currentSession().delete(categoriaVisa);
     }
 }

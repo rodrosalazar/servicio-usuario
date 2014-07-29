@@ -2,8 +2,8 @@ package ec.gob.senescyt.titulos.dao;
 
 import ec.gob.senescyt.titulos.core.TipoVisa;
 import io.dropwizard.hibernate.AbstractDAO;
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
 
@@ -21,13 +21,12 @@ public class TipoVisaDAO extends AbstractDAO<TipoVisa>{
     }
 
     public void eliminar(String idTipoVisa) {
-        Query query = currentSession().createQuery("DELETE FROM TipoVisa tv WHERE tv.id =:idTipoVisa");
-        query.setParameter("idTipoVisa", idTipoVisa);
-        query.executeUpdate();
+        TipoVisa tipoVisa = (TipoVisa) currentSession().createCriteria(TipoVisa.class, "tv")
+                .add(Restrictions.eq("tv.id", idTipoVisa)).uniqueResult();
+        currentSession().delete(tipoVisa);
     }
 
     public List<TipoVisa> obtenerTodos() {
-        Query query = currentSession().createQuery("SELECT t FROM TipoVisa t");
-        return query.list();
+        return currentSession().createCriteria(TipoVisa.class).list();
     }
 }

@@ -83,6 +83,7 @@ public class ProvinciaResourceIntegracionTest {
 
     private void eliminarInformacionCargadaParaPrueba() {
         cantonDAO.eliminar(ID_CANTON_TEST);
+        sessionFactory.getCurrentSession().flush();
         provinciaDAO.eliminar(ID_PROVINCIA_TEST);
         sessionFactory.getCurrentSession().flush();
     }
