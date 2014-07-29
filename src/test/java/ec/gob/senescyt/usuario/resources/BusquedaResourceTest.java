@@ -1,6 +1,9 @@
 package ec.gob.senescyt.usuario.resources;
 
 import com.sun.jersey.api.client.ClientResponse;
+import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
+import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
+import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.core.CedulaInfo;
 import ec.gob.senescyt.usuario.exceptions.CedulaInvalidaException;
 import ec.gob.senescyt.usuario.exceptions.CredencialesIncorrectasException;
@@ -21,6 +24,7 @@ import static org.mockito.Mockito.*;
 public class BusquedaResourceTest {
 
     private static ServicioCedula servicioCedula = mock(ServicioCedula.class);
+
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
             .addResource(new BusquedaResource(servicioCedula))

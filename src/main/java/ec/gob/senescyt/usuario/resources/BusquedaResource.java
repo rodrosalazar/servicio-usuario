@@ -1,5 +1,7 @@
 package ec.gob.senescyt.usuario.resources;
 
+import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
+import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.core.CedulaInfo;
 import ec.gob.senescyt.usuario.exceptions.CedulaInvalidaException;
 import ec.gob.senescyt.usuario.exceptions.CredencialesIncorrectasException;
@@ -22,7 +24,6 @@ import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
 public class BusquedaResource {
 
     private ServicioCedula servicioCedula;
-
     public BusquedaResource(ServicioCedula servicioCedula) {
         this.servicioCedula = servicioCedula;
     }

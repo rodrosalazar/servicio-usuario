@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableInstant;
+import org.omg.CORBA.portable.IDLEntity;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -22,6 +23,8 @@ public class PortadorTitulo {
     private static final String REGEX_EMAIL = "^[a-z](\\.?[_-]*[a-z0-9]+)*@\\w+(\\.\\w+)*(\\.[a-z]{2,})$";
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "portadores_titulo_id_gen")
+    @SequenceGenerator(name = "portadores_titulo_id_gen", sequenceName = "portadores_titulo_id_seq", allocationSize = 1)
     private long id;
 
     @NotEmpty

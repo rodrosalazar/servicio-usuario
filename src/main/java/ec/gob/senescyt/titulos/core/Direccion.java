@@ -3,15 +3,15 @@ package ec.gob.senescyt.titulos.core;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "direcciones")
 public class Direccion {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "direcciones_id_gen")
+    @SequenceGenerator(name = "direcciones_id_gen", sequenceName = "direcciones_id_seq", allocationSize = 1)
     private long id;
     @NotEmpty
     @Length(max = 255, message = "{ec.gob.senescyt.error.direccion.direccionCompleta}")
