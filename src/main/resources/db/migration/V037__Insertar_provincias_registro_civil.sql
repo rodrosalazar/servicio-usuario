@@ -1,3 +1,4 @@
+DELETE FROM direcciones;
 DELETE FROM parroquias;
 DELETE FROM cantones;
 DELETE FROM provincias;
