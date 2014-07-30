@@ -6,6 +6,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.UsuarioApplication;
 import ec.gob.senescyt.UsuarioConfiguration;
 import ec.gob.senescyt.commons.builders.PortadorTituloBuilder;
+import ec.gob.senescyt.titulos.core.Cedula;
 import ec.gob.senescyt.titulos.core.PortadorTitulo;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hibernate.SessionFactory;
@@ -31,6 +32,8 @@ public class TituloExtranjeroResourceIntegrationTest {
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
 
+    private String numeroIdentificacionCedulaValida = "1111111116";
+
     public static String resourceFilePath(String resourceClassPathLocation) {
         try {
             return new File(Resources.getResource(resourceClassPathLocation).toURI()).getAbsolutePath();
@@ -53,7 +56,11 @@ public class TituloExtranjeroResourceIntegrationTest {
     @Test
     public void debeAlmacenarUnNuevoExpedienteDeTituloExtranjero() {
         Client client = new Client();
-        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo().generar();
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> {
+                    p.identificacion = new Cedula(numeroIdentificacionCedulaValida);
+                })
+                .generar();
 
         ClientResponse respuesta = client.resource(
                 String.format("http://localhost:%d/titulo/extranjero", RULE.getLocalPort()))
@@ -68,6 +75,7 @@ public class TituloExtranjeroResourceIntegrationTest {
     public void debeHacerAlgoCuandoElCodigoDelPaisNoExiste() {
         Client client = new Client();
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p->p.identificacion = new Cedula(numeroIdentificacionCedulaValida))
                 .con(p -> p.idPaisNacionalidad = "invali")
                 .generar();
 
@@ -84,6 +92,7 @@ public class TituloExtranjeroResourceIntegrationTest {
     public void debeHacerAlgoCuandoElCodigoDeEtniaNoExiste() {
         Client client = new Client();
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p->p.identificacion = new Cedula(numeroIdentificacionCedulaValida))
                 .con(p -> p.idEtnia = "xx")
                 .generar();
 

@@ -1,10 +1,9 @@
 package ec.gob.senescyt.commons.builders;
 
 import ec.gob.senescyt.titulos.core.Direccion;
+import ec.gob.senescyt.titulos.core.Identificacion;
 import ec.gob.senescyt.titulos.core.PortadorTitulo;
 import ec.gob.senescyt.titulos.enums.GeneroEnum;
-import ec.gob.senescyt.usuario.core.Identificacion;
-import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -14,7 +13,7 @@ public class PortadorTituloBuilder {
     private static PortadorTituloBuilder portadorTituloBuilder;
 
     public String nombresCompletos = "Nombres_completos";
-    public Identificacion identificacion = new Identificacion(TipoDocumentoEnum.CEDULA, "1111111116");
+    public Identificacion identificacion;
     public String idPaisNacionalidad = "888209";
     public String email = "email@email.com";
     public String idEtnia = "1";

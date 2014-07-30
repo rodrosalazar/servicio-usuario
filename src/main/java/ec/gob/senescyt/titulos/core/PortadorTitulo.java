@@ -5,13 +5,10 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ec.gob.senescyt.commons.serializers.JSONFechaDeserializer;
 import ec.gob.senescyt.commons.serializers.JSONFechaSerializer;
 import ec.gob.senescyt.titulos.enums.GeneroEnum;
-import ec.gob.senescyt.usuario.core.Identificacion;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.joda.time.ReadableInstant;
-import org.omg.CORBA.portable.IDLEntity;
-
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
@@ -23,14 +20,14 @@ public class PortadorTitulo {
     private static final String REGEX_EMAIL = "^[a-z](\\.?[_-]*[a-z0-9]+)*@\\w+(\\.\\w+)*(\\.[a-z]{2,})$";
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "portadores_titulo_id_gen")
-    @SequenceGenerator(name = "portadores_titulo_id_gen", sequenceName = "portadores_titulo_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotEmpty
     private String nombresCompletos;
 
-    @Embedded
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_identificacion")
     @Valid
     @NotNull
     private Identificacion identificacion;
@@ -74,7 +71,9 @@ public class PortadorTitulo {
     @Valid
     private Direccion direccion;
 
-    private PortadorTitulo() {}
+
+    private PortadorTitulo() {
+    }
 
     public PortadorTitulo(String nombresCompletos, Identificacion identificacion,
                           String idPaisNacionalidad, String email, GeneroEnum genero,
@@ -83,7 +82,6 @@ public class PortadorTitulo {
                           Direccion direccion) {
 
         this.nombresCompletos = nombresCompletos;
-        this.identificacion = identificacion;
         this.idPaisNacionalidad = idPaisNacionalidad;
         this.email = email;
         this.genero = genero;
@@ -93,7 +91,9 @@ public class PortadorTitulo {
         this.extension = extension;
         this.telefonoCelular = telefonoCelular;
         this.direccion = direccion;
+        this.identificacion = identificacion;
     }
+
 
     public String getExtension() {
         return extension;
@@ -107,9 +107,6 @@ public class PortadorTitulo {
         return nombresCompletos;
     }
 
-    public Identificacion getIdentificacion() {
-        return identificacion;
-    }
 
     public String getEmail() {
         return email;
@@ -141,5 +138,9 @@ public class PortadorTitulo {
 
     public String getIdPaisNacionalidad() {
         return idPaisNacionalidad;
+    }
+
+    public Identificacion getIdentificacion() {
+        return identificacion;
     }
 }

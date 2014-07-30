@@ -2,13 +2,13 @@ package ec.gob.senescyt.titulos.resources;
 
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.commons.builders.PortadorTituloBuilder;
-import ec.gob.senescyt.titulos.core.PortadorTitulo;
+import ec.gob.senescyt.titulos.core.*;
 import ec.gob.senescyt.titulos.dao.PortadorTituloDAO;
-import ec.gob.senescyt.usuario.core.Identificacion;
-import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.apache.commons.lang.RandomStringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
@@ -28,6 +28,16 @@ public class TituloExtranjeroResourceAnidadosTest {
     private static PortadorTituloDAO portadorTituloDAO = mock(PortadorTituloDAO.class);
     private static final String STRING_CON_255_CARACTERES = RandomStringUtils.random(256);
     private static final String CAMPO_EN_BLANCO = "";
+    private String numeroCedulaValido = "1111111116";
+    private String numeroPasaporte = "ASE23";
+    private DateTime fechaFinVigenciaPasaporteValida = new DateTime(2015, 3, 16, 0, 0, DateTimeZone.UTC);
+    private DateTime fechaFinVigenciaVisaValida = new DateTime(2015, 3, 16, 0, 0, DateTimeZone.UTC);
+    private String pasaporteEnBlanco = "";
+    private String campoConformadoSoloDeEspaciosEnBlanco = "   ";
+    private DateTime fechaFinVigenciaVisaEnBlanco = null;
+    private DateTime fechaFinVigenciaPasaporteEnBlanco = null;
+    private DateTime fechaFinVigenciaVisaMenorFechaActual = new DateTime(1990, 3, 16, 0, 0, DateTimeZone.UTC);
+
 
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
@@ -174,22 +184,9 @@ public class TituloExtranjeroResourceAnidadosTest {
     }
 
     @Test
-    public void debeVerificarQueTipoDeIdentificacionNoSeaNulo() {
-        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.identificacion = new Identificacion(null, "2222222222"))
-                .generar();
-
-        ClientResponse response = hacerPost(portadorTitulo);
-
-        assertThat(response.getStatus(), is(400));
-        assertErrorMessage(response, "El campo es obligatorio");
-        verifyZeroInteractions(portadorTituloDAO);
-    }
-
-    @Test
     public void debeVerificarQueNumeroDeIdentificacionNoEsteVacio() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.identificacion = new Identificacion(TipoDocumentoEnum.PASAPORTE, ""))
+                .con(p -> p.identificacion = new Cedula(""))
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);
@@ -201,12 +198,102 @@ public class TituloExtranjeroResourceAnidadosTest {
 
     @Test
     public void debeCrearPortadorTituloConCedula() {
-        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo().generar();
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.identificacion = new Cedula(numeroCedulaValido)).generar();
 
         ClientResponse response = hacerPost(portadorTitulo);
 
         verify(portadorTituloDAO).guardar(any(PortadorTitulo.class));
         assertThat(response.getStatus(), is(201));
+    }
+
+    @Test
+    public void noDebeCrearTituloCuandoElNumeroDePasaporteEstaEnBlanco() {
+        String pasaporteEnBlanco = "";
+        DateTime fechaFinVigenciaPasaporteValida = new DateTime(2015, 3, 16, 0, 0, DateTimeZone.UTC);
+        DateTime fechaFinVigenciaVisaValida = new DateTime(2015, 3, 16, 0, 0, DateTimeZone.UTC);
+
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.identificacion = new Pasaporte(pasaporteEnBlanco, fechaFinVigenciaPasaporteValida, fechaFinVigenciaVisaValida, "9", false))
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloCuandoElNumeroDePasaporteEstaConformadoSoloDeEspaciosEnBlanco() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.identificacion = new Pasaporte(campoConformadoSoloDeEspaciosEnBlanco, fechaFinVigenciaPasaporteValida, fechaFinVigenciaVisaValida, "9", false))
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloCuandoFechaDeFinDeVigenciaVisaEstaEnBlanco() {
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> {
+                    p.identificacion = new Pasaporte(numeroPasaporte, fechaFinVigenciaPasaporteValida, fechaFinVigenciaVisaEnBlanco, "9", true);
+                })
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloCuandoFechaDeFinDeVigenciaPasaporteEstaEnBlanco() {
+
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.identificacion = new Pasaporte("AS23", fechaFinVigenciaPasaporteEnBlanco, fechaFinVigenciaVisaValida, "9", true))
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "El campo es obligatorio");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+
+    @Test
+    public void noDebeCrearTituloCuandoFechaDeFinDeVigenciaVisaEsMenorALaActual() {
+
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.identificacion = new Pasaporte(numeroPasaporte, fechaFinVigenciaPasaporteValida, fechaFinVigenciaVisaMenorFechaActual, "9", true))
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "No puede ser menor a la fecha actual");
+        verifyZeroInteractions(portadorTituloDAO);
+    }
+
+    @Test
+    public void noDebeCrearTituloCuandoFechaDeFinDeVigenciaPasaporteEsMenorALaActual() {
+        DateTime fechaFinVigenciaVisaValida = new DateTime(2015, 3, 16, 0, 0, DateTimeZone.UTC);
+        DateTime fechaFinVigenciaPasaporteMenorFechaActual = new DateTime(1990, 3, 16, 0, 0, DateTimeZone.UTC);
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.identificacion = new Pasaporte(numeroPasaporte, fechaFinVigenciaPasaporteMenorFechaActual, fechaFinVigenciaVisaValida, "9", true))
+                .generar();
+
+        ClientResponse response = hacerPost(portadorTitulo);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "No puede ser menor a la fecha actual");
+        verifyZeroInteractions(portadorTituloDAO);
     }
 
     private ClientResponse hacerPost(PortadorTitulo portadorTitulo) {
