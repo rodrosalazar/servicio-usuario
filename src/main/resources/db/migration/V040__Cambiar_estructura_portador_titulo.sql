@@ -1,3 +1,5 @@
+DELETE FROM portadores_titulo;
+
 ALTER TABLE portadores_titulo
     DROP COLUMN tipoDocumento;
 
