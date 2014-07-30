@@ -39,8 +39,10 @@ public class PerfilTest {
         assertThat(actual.getPermisos().size(), is(2));
         assertThat(actual.getPermisos().get(0).getModuloId(), is(perfil.getPermisos().get(0).getModuloId()));
         assertThat(actual.getPermisos().get(0).getId(), is(id1));
+        assertThat(actual.getPermisos().get(0).getAccesos(), is(perfil.getPermisos().get(0).getAccesos()));
         assertThat(actual.getPermisos().get(1).getId(), is(id2));
         assertThat(actual.getPermisos().get(1).getModuloId(), is(perfil.getPermisos().get(1).getModuloId()));
+        assertThat(actual.getPermisos().get(1).getAccesos(), is(perfil.getPermisos().get(1).getAccesos()));
     }
 
     @Test

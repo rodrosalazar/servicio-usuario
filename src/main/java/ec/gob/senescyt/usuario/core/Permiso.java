@@ -1,9 +1,11 @@
 package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -14,16 +16,18 @@ public class Permiso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
-    private long moduloId;
+    @NotNull
+    private Long moduloId;
 
-    @Column
-    private long funcionId;
+    @NotNull
+    private Long funcionId;
 
     @ElementCollection(targetClass = Acceso.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(name = "accesos")
     @Column(name = "accesos")
+    @NotEmpty
+    @Valid
     private List<Acceso> accesos;
 
     @ManyToOne
@@ -33,7 +37,7 @@ public class Permiso {
 
     private Permiso() {}
 
-    public Permiso (long moduloId,long funcionId, List<Acceso> accesos) {
+    public Permiso (Long moduloId, Long funcionId, List<Acceso> accesos) {
         this.moduloId = moduloId;
         this.funcionId = funcionId;
         this.accesos = accesos;
@@ -43,11 +47,11 @@ public class Permiso {
         return id;
     }
 
-    public long getModuloId() {
+    public Long getModuloId() {
         return moduloId;
     }
 
-    public long getFuncionId() {
+    public Long getFuncionId() {
         return funcionId;
     }
 
@@ -59,8 +63,4 @@ public class Permiso {
         return perfil;
     }
 
-    @JsonIgnore
-    public boolean isValido(){
-        return this.getAccesos() != null && !this.getAccesos().isEmpty();
-    }
 }

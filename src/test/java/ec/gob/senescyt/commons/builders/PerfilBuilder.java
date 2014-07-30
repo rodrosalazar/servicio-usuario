@@ -13,7 +13,7 @@ public class PerfilBuilder {
     private static PerfilBuilder perfilBuilder;
     private static final List<Acceso> ACCESOS = newArrayList(Acceso.CREAR, Acceso.ELIMINAR);
     public String nombre = "atencion ciudadana";
-    public List<Permiso> permisos = newArrayList(new Permiso(1, 2, ACCESOS));
+    public List<Permiso> permisos = newArrayList(new Permiso(1l, 2l, ACCESOS));
 
     public static PerfilBuilder nuevoPerfil() {
         perfilBuilder = new PerfilBuilder();

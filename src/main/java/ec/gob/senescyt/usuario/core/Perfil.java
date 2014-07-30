@@ -1,13 +1,15 @@
 package ec.gob.senescyt.usuario.core;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.util.List;
 
 @Entity
@@ -18,7 +20,8 @@ public class Perfil {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column
+    @NotEmpty
+    @Length(max = 100)
     private String nombre;
 
     // Ir a https://hibernate.atlassian.net/browse/HHH-1718 para mas informacion sobre el FetchMode.SUBSELECT
@@ -26,6 +29,8 @@ public class Perfil {
     @Fetch(value = FetchMode.SUBSELECT)
     @Cascade(CascadeType.ALL)
     @JsonManagedReference
+    @NotEmpty
+    @Valid
     private List<Permiso> permisos;
 
     private Perfil() {}
@@ -46,24 +51,4 @@ public class Perfil {
     public List<Permiso> getPermisos() {
         return permisos;
     }
-
-    @JsonIgnore
-    public boolean isValido() {
-        if (this.getNombre() == null || this.getNombre().isEmpty()) {
-            return false;
-        }
-
-        if (this.getPermisos() == null || this.getPermisos().isEmpty()) {
-            return false;
-        }
-
-        for (Permiso permiso : permisos) {
-            if (!permiso.isValido()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
 }

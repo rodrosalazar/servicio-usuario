@@ -1,12 +1,13 @@
 package ec.gob.senescyt.usuario.resources;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import ec.gob.senescyt.usuario.core.Perfil;
-import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
+import ec.gob.senescyt.usuario.core.Perfil;
+import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -29,11 +30,7 @@ public class PerfilResource {
 
     @POST
     @UnitOfWork
-    public Response crearPerfil(Perfil perfil) {
-        if (!perfil.isValido()) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-
+    public Response crearPerfil(@Valid Perfil perfil) {
         Perfil perfilCreado = perfilDAO.guardar(perfil);
         return Response.status(Response.Status.CREATED).entity(perfilCreado).build();
     }

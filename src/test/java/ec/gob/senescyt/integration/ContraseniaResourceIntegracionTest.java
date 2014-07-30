@@ -21,6 +21,7 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import javax.ws.rs.core.MediaType;
 import java.io.File;
 
 import static org.hamcrest.core.Is.is;
@@ -40,6 +41,7 @@ public class ContraseniaResourceIntegracionTest {
 
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
+    private Client client;
 
     private static String resourceFilePath(String resourceClassPathLocation) {
         try {
@@ -53,6 +55,7 @@ public class ContraseniaResourceIntegracionTest {
     public void setUp() {
         sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
         ManagedSessionContext.bind(sessionFactory.openSession());
+        client = new Client();
         cargarDataParaPruebas();
     }
 
@@ -61,12 +64,17 @@ public class ContraseniaResourceIntegracionTest {
         usuarioDAO = new UsuarioDAO(sessionFactory);
         perfilDAO = new PerfilDAO(sessionFactory);
 
-        Perfil perfil = PerfilBuilder.nuevoPerfil()
-                .con(p -> p.nombre = "Perfil")
-                .con(p -> p.permisos = null)
-                .generar();
-        Perfil perfilGuardado = perfilDAO.guardar(perfil);
+        Perfil perfil = PerfilBuilder.nuevoPerfil().generar();
+
+        ClientResponse response = client.resource(
+                String.format("http://localhost:%d/perfiles", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, perfil);
+
+        assertThat(response.getStatus(), is(201));
+        Perfil perfilGuardado = response.getEntity(Perfil.class);
         perfilGuardadoId = perfilGuardado.getId();
+
         Usuario usuario = UsuarioBuilder.usuarioValido(perfilGuardado);
 
         Usuario usuarioGuardado = usuarioDAO.guardar(usuario);
@@ -93,7 +101,6 @@ public class ContraseniaResourceIntegracionTest {
 
     @Test
     public void debeObtenerUnTokenPorSuId() throws Exception {
-        Client client = new Client();
 
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/contrasenia/" + ID_TOKEN, RULE.getLocalPort()))

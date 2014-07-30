@@ -12,7 +12,6 @@ import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Usuario;
-import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hibernate.SessionFactory;
@@ -41,6 +40,8 @@ public class UsuarioResourceIntegracionTest {
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
     private Perfil perfil1;
+    private Client client;
+    private Perfil perfilGuardado;
 
     private static String resourceFilePath(String resourceClassPathLocation) {
         try {
@@ -54,20 +55,19 @@ public class UsuarioResourceIntegracionTest {
     public void setUp() {
         sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
         ManagedSessionContext.bind(sessionFactory.openSession());
-        PerfilDAO perfilDAO = new PerfilDAO(sessionFactory);
         usuarioDAO = new UsuarioDAO(sessionFactory);
-        perfil1 = PerfilBuilder.nuevoPerfil()
-                .con(p -> p.permisos = null).generar();
-        perfilDAO.guardar(perfil1);
-        Perfil perfil2 = PerfilBuilder.nuevoPerfil()
-                .con(p -> p.permisos = null).generar();
-        perfilDAO.guardar(perfil2);
-        Perfil perfil3 = PerfilBuilder.nuevoPerfil()
-                .con(p -> p.permisos = null).generar();
-        perfilDAO.guardar(perfil3);
-
+        perfil1 = PerfilBuilder.nuevoPerfil().generar();
         lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
         mensajeErrorBuilder = new MensajeErrorBuilder(lectorArchivoDePropiedades);
+        client = new Client();
+
+        ClientResponse response = client.resource(
+                String.format("http://localhost:%d/perfiles", RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, perfil1);
+
+        assertThat(response.getStatus(), is(201));
+        perfilGuardado = response.getEntity(Perfil.class);
     }
 
     @After
@@ -78,7 +78,6 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeVerificarNumeroDeCedulaCorrecto() {
-        Client client = new Client();
 
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
@@ -90,7 +89,6 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeVerificarNumeroDeCedulaIncorrecto() {
-        Client client = new Client();
 
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
@@ -104,7 +102,6 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeVerificarQueLaFechaDeFinDeVigenciaNoPuedeSerMenorALaFechaActual() {
-        Client client = new Client();
 
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
@@ -116,7 +113,6 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeLanzarErrorCuandoEmailDeUsuarioEsInvalido() throws Exception {
-        Client client = new Client();
 
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
@@ -128,9 +124,8 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeCrearUnNuevoUsuarioCuandoEsValido() {
-        Client client = new Client();
 
-        Usuario usuarioValido = UsuarioBuilder.usuarioValido(perfil1);
+        Usuario usuarioValido = UsuarioBuilder.usuarioValido(perfilGuardado);
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
@@ -141,12 +136,11 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeIndicarQueUnNombreDeUsuarioYaHaSidoRegistrado() throws Exception {
-        Client client = new Client();
 
         ClientResponse responseInsertUsuario = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido(perfil1));
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido(perfilGuardado));
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
@@ -161,7 +155,6 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeIndicarQueUnNombreDeUsuarioNoSeEncuentraRegistrado() throws Exception {
-        Client client = new Client();
 
         ClientResponse responseValidacion = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
@@ -173,12 +166,11 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeIndicarQueUnNumeroDeIdentificacionYaHaSidoRegistrado() throws Exception {
-        Client client = new Client();
 
         ClientResponse responseInsertUsuario = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido(perfil1));
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido(perfilGuardado));
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
@@ -193,7 +185,6 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeIndicarQueUnNumeroDeIdentificacionNoSeEncuentraRegistrado() throws Exception {
-        Client client = new Client();
 
         ClientResponse responseValidacion = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
@@ -205,12 +196,11 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeValidarQueNombreDeUsuarioNoSeRepitaCuandoSeGuardaUsuario() throws Exception {
-        Client client = new Client();
 
         ClientResponse responseInsertUsuario = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioSenescyt(perfil1));
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioSenescyt(perfilGuardado));
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
@@ -225,12 +215,11 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeValidarQueNumeroDeIdentificacionNoSeRepitaCuandoSeGuardaUsuario() throws Exception {
-        Client client = new Client();
 
         ClientResponse responseInsertUsuario = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioSenescyt(perfil1));
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioSenescyt(perfilGuardado));
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
@@ -247,8 +236,6 @@ public class UsuarioResourceIntegracionTest {
     public void debeDevolverUnMensajeDeErrorCuandoElNumeroDeIdentificacionEsMayorDe20() {
         Usuario usuarioCon21Digitos = UsuarioBuilder.usuarioConIdentificacionDeMasDe20Digitos();
 
-        Client client = new Client();
-
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
@@ -260,8 +247,6 @@ public class UsuarioResourceIntegracionTest {
     @Test
     public void debeDevolverUnMensajeDeErrorCuandoElNumeroDePasaporteEstaVacio() {
         Usuario usuarioCon21Digitos = UsuarioBuilder.usuarioConPasaporteVacio();
-
-        Client client = new Client();
 
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
