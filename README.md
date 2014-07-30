@@ -9,6 +9,10 @@ Micro servicio para el manejo de usuarios usando Dropwizard
 
 ## Primera Vez
 
+$ cp servicio-usuario-dev.yml.example servicio-usuario-dev.yml
+
+$ cp src/test/resources/test-integracion.yml.example src/test/resources/test-integracion.yml
+
 Para crear la base de datos en PostgreSQL (este proceso será automatizado):
 ```
 $ createdb senescyt
