@@ -174,6 +174,14 @@ public class UsuarioBuilder {
                 ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l,2l,3l));
     }
 
+    public static Usuario usuarioValido1718642174UsuarioSenescyt(Perfil perfil) {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(perfil.getId()));
+    }
+
     public static Usuario usuarioValido1804068953UsuarioSenescyt() {
         return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA_2),
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),

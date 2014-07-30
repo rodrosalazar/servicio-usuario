@@ -83,12 +83,11 @@ public class ContraseniaResourceIntegracionTest {
         ManagedSessionContext.unbind(sessionFactory);
     }
 
-
     private void eliminarDataParaPruebas() {
         sessionFactory.getCurrentSession().flush();
         perfilDAO.eliminar(perfilGuardadoId);
-        usuarioDAO.eliminar(idUsuarioGuardado);
         tokenDAO.eliminar(ID_TOKEN);
+        usuarioDAO.eliminar(idUsuarioGuardado);
         sessionFactory.getCurrentSession().flush();
     }
 

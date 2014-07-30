@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,7 +21,9 @@ public class Perfil {
     @Column
     private String nombre;
 
+    // Ir a https://hibernate.atlassian.net/browse/HHH-1718 para mas informacion sobre el FetchMode.SUBSELECT
     @OneToMany(mappedBy = "perfil", fetch = FetchType.EAGER)
+    @Fetch(value = FetchMode.SUBSELECT)
     @Cascade(CascadeType.ALL)
     @JsonManagedReference
     private List<Permiso> permisos;
@@ -29,11 +33,6 @@ public class Perfil {
     public Perfil(String nombre, List<Permiso> permisos) {
         this.nombre = nombre;
         this.permisos = permisos;
-    }
-
-    public Perfil(long id, String nombre, List<Permiso> permisos) {
-        this(nombre, permisos);
-        this.id = id;
     }
 
     public String getNombre() {

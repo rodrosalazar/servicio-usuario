@@ -40,6 +40,7 @@ public class UsuarioResourceIntegracionTest {
 
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
+    private Perfil perfil1;
 
     private static String resourceFilePath(String resourceClassPathLocation) {
         try {
@@ -55,7 +56,7 @@ public class UsuarioResourceIntegracionTest {
         ManagedSessionContext.bind(sessionFactory.openSession());
         PerfilDAO perfilDAO = new PerfilDAO(sessionFactory);
         usuarioDAO = new UsuarioDAO(sessionFactory);
-        Perfil perfil1 = PerfilBuilder.nuevoPerfil()
+        perfil1 = PerfilBuilder.nuevoPerfil()
                 .con(p -> p.permisos = null).generar();
         perfilDAO.guardar(perfil1);
         Perfil perfil2 = PerfilBuilder.nuevoPerfil()
@@ -129,7 +130,7 @@ public class UsuarioResourceIntegracionTest {
     public void debeCrearUnNuevoUsuarioCuandoEsValido() {
         Client client = new Client();
 
-        Usuario usuarioValido = UsuarioBuilder.usuarioValido();
+        Usuario usuarioValido = UsuarioBuilder.usuarioValido(perfil1);
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
@@ -145,7 +146,7 @@ public class UsuarioResourceIntegracionTest {
         ClientResponse responseInsertUsuario = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido(perfil1));
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
@@ -177,7 +178,7 @@ public class UsuarioResourceIntegracionTest {
         ClientResponse responseInsertUsuario = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido(perfil1));
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
@@ -209,7 +210,7 @@ public class UsuarioResourceIntegracionTest {
         ClientResponse responseInsertUsuario = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioSenescyt());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioSenescyt(perfil1));
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
@@ -222,7 +223,6 @@ public class UsuarioResourceIntegracionTest {
         assertThat(responseUsuarioRepetido.getEntity(String.class), is(mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()));
     }
 
-
     @Test
     public void debeValidarQueNumeroDeIdentificacionNoSeRepitaCuandoSeGuardaUsuario() throws Exception {
         Client client = new Client();
@@ -230,7 +230,7 @@ public class UsuarioResourceIntegracionTest {
         ClientResponse responseInsertUsuario = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioSenescyt());
+                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioSenescyt(perfil1));
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 

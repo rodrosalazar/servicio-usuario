@@ -4,6 +4,7 @@ import ec.gob.senescyt.usuario.core.Usuario;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 public class UsuarioDAO extends AbstractDAO<Usuario> {
 
@@ -41,6 +42,11 @@ public class UsuarioDAO extends AbstractDAO<Usuario> {
     }
 
     public void eliminar(long id) {
+        Usuario usuarioAEliminar = (Usuario) currentSession()
+                .createCriteria(Usuario.class)
+                .add(Restrictions.eq("id", id))
+                .uniqueResult();
 
+        currentSession().delete(usuarioAEliminar);
     }
 }
