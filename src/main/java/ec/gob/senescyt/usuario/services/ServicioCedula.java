@@ -7,8 +7,6 @@ import ec.gob.bsg.accesobsgservice.ValidarPermisoRespuesta;
 import ec.gob.registrocivil.consultacedula.Cedula;
 import ec.gob.registrocivil.consultacedula.WSRegistroCivilConsultaCedula;
 import ec.gob.registrocivil.consultacedula.WSRegistroCivilConsultaCedula_Service;
-import ec.gob.senescyt.titulos.dao.CantonDAO;
-import ec.gob.senescyt.titulos.dao.ParroquiaDAO;
 import ec.gob.senescyt.titulos.dao.ProvinciaDAO;
 import ec.gob.senescyt.usuario.client.DatosHeader;
 import ec.gob.senescyt.usuario.client.HeaderHandlerResolver;

@@ -153,8 +153,8 @@ task oneJar(type: OneJar, dependsOn: clean) {
 
 task generateJavaFromWsdl() {
     def wsdlDir = file('src/main/resources/wsdl')
-    def wsdlsToGenerate = [[ 'src/main/resources/wsdl/BSGSW08_Acceder_BSG.wsdl'],
-                           ['src/main/resources/wsdl/BSGSW01_Consultar_Cedula.wsdl']]
+    def wsdlsToGenerate = [[ 'https://www.bsg.gob.ec/sw/STI/BSGSW08_Acceder_BSG?wsdl'],
+                           ['https://www.bsg.gob.ec/sw/RC/BSGSW01_Consultar_Cedula?wsdl']]
     def generatedWsdlDir = file("${buildDir}/generated-sources")
 
     if (!wsdlDir.listFiles()) {
