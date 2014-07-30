@@ -2,6 +2,7 @@ package ec.gob.senescyt.commons.builders;
 
 import ec.gob.senescyt.usuario.core.Identificacion;
 import ec.gob.senescyt.usuario.core.Nombre;
+import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import org.joda.time.DateTime;
@@ -213,12 +214,19 @@ public class UsuarioBuilder {
                 ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l, 2l, 3l));
     }
 
-
     public static Usuario usuarioSinPerfiles() {
         return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
                 ID_INSTITUCION, NOMBRE_USUARIO, null);
+    }
+
+    public static Usuario usuarioValido(Perfil perfil) {
+        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
+                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
+                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
+                FECHA_ACTUAL,
+                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(perfil.getId()));
     }
 }

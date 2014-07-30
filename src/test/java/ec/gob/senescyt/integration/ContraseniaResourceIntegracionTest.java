@@ -6,8 +6,10 @@ import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.UsuarioApplication;
 import ec.gob.senescyt.UsuarioConfiguration;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
+import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.core.Usuario;
+import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import io.dropwizard.testing.junit.DropwizardAppRule;
@@ -54,8 +56,12 @@ public class ContraseniaResourceIntegracionTest {
     private void cargarDataParaPruebas() {
         tokenDAO = new TokenDAO(sessionFactory);
         usuarioDAO = new UsuarioDAO(sessionFactory);
+        PerfilDAO perfilDAO = new PerfilDAO(sessionFactory);
 
-        Usuario usuario = UsuarioBuilder.usuarioValido();
+        Perfil perfil = new Perfil("Perfil", null);
+        Perfil perfilGuardado = perfilDAO.guardar(perfil);
+        Usuario usuario = UsuarioBuilder.usuarioValido(perfilGuardado);
+
         Usuario usuarioGuardado = usuarioDAO.guardar(usuario);
         idUsuarioGuardado = usuarioGuardado.getId();
 
