@@ -8,3 +8,6 @@ logs/
 *.ids
 .idea/
 .DS_Store
+servicio-usuario-dev.yml
+src/test/resources/test-integracion.yml
+
