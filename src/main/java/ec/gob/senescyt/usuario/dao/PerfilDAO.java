@@ -22,4 +22,7 @@ public class PerfilDAO extends AbstractDAO<Perfil> {
 
         return todos.list();
     }
+
+    public void eliminar(long id) {
+    }
 }

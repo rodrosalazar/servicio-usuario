@@ -39,10 +39,10 @@ import org.hibernate.SessionFactory;
 import javax.servlet.DispatcherType;
 import javax.ws.rs.ext.ExceptionMapper;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
@@ -172,13 +172,12 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     private void eliminarDefaultConstraintValidationMapper(Environment environment) {
         ResourceConfig jrConfig = environment.jersey().getResourceConfig();
         Set<Object> dwSingletons = jrConfig.getSingletons();
-        List<Object> singletonsToRemove = new ArrayList<>();
 
-        for (Object s : dwSingletons) {
-            if (s instanceof ExceptionMapper && s.getClass().getName().equals("io.dropwizard.jersey.validation.ConstraintViolationExceptionMapper")) {
-                singletonsToRemove.add(s);
-            }
-        }
+        List<Object> singletonsToRemove = dwSingletons
+                .stream()
+                .filter(s -> s instanceof ExceptionMapper &&
+                        s.getClass().getName().equals("io.dropwizard.jersey.validation.ConstraintViolationExceptionMapper"))
+                .collect(Collectors.toList());
 
         for (Object s : singletonsToRemove) {
             jrConfig.getSingletons().remove(s);

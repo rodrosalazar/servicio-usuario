@@ -5,6 +5,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.UsuarioApplication;
 import ec.gob.senescyt.UsuarioConfiguration;
+import ec.gob.senescyt.commons.builders.PerfilBuilder;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Token;
@@ -33,6 +34,8 @@ public class ContraseniaResourceIntegracionTest {
     private SessionFactory sessionFactory;
     private TokenDAO tokenDAO;
     private UsuarioDAO usuarioDAO;
+    private PerfilDAO perfilDAO;
+    private long perfilGuardadoId;
     private long idUsuarioGuardado;
 
     @ClassRule
@@ -56,10 +59,14 @@ public class ContraseniaResourceIntegracionTest {
     private void cargarDataParaPruebas() {
         tokenDAO = new TokenDAO(sessionFactory);
         usuarioDAO = new UsuarioDAO(sessionFactory);
-        PerfilDAO perfilDAO = new PerfilDAO(sessionFactory);
+        perfilDAO = new PerfilDAO(sessionFactory);
 
-        Perfil perfil = new Perfil("Perfil", null);
+        Perfil perfil = PerfilBuilder.nuevoPerfil()
+                .con(p -> p.nombre = "Perfil")
+                .con(p -> p.permisos = null)
+                .generar();
         Perfil perfilGuardado = perfilDAO.guardar(perfil);
+        perfilGuardadoId = perfilGuardado.getId();
         Usuario usuario = UsuarioBuilder.usuarioValido(perfilGuardado);
 
         Usuario usuarioGuardado = usuarioDAO.guardar(usuario);
@@ -79,6 +86,7 @@ public class ContraseniaResourceIntegracionTest {
 
     private void eliminarDataParaPruebas() {
         sessionFactory.getCurrentSession().flush();
+        perfilDAO.eliminar(perfilGuardadoId);
         usuarioDAO.eliminar(idUsuarioGuardado);
         tokenDAO.eliminar(ID_TOKEN);
         sessionFactory.getCurrentSession().flush();

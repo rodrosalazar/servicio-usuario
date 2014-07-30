@@ -55,11 +55,14 @@ public class UsuarioResourceIntegracionTest {
         ManagedSessionContext.bind(sessionFactory.openSession());
         PerfilDAO perfilDAO = new PerfilDAO(sessionFactory);
         usuarioDAO = new UsuarioDAO(sessionFactory);
-        Perfil perfil1 = PerfilBuilder.nuevoPerfil().conPermisos(null).generar();
+        Perfil perfil1 = PerfilBuilder.nuevoPerfil()
+                .con(p -> p.permisos = null).generar();
         perfilDAO.guardar(perfil1);
-        Perfil perfil2 = PerfilBuilder.nuevoPerfil().conPermisos(null).generar();
+        Perfil perfil2 = PerfilBuilder.nuevoPerfil()
+                .con(p -> p.permisos = null).generar();
         perfilDAO.guardar(perfil2);
-        Perfil perfil3 = PerfilBuilder.nuevoPerfil().conPermisos(null).generar();
+        Perfil perfil3 = PerfilBuilder.nuevoPerfil()
+                .con(p -> p.permisos = null).generar();
         perfilDAO.guardar(perfil3);
 
         lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());

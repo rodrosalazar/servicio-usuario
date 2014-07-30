@@ -21,7 +21,6 @@ public class PortadorTituloBuilder {
     public String telefonoConvencional = "012345678";
     public String extension = "123";
     public String telefonoCelular = "0912345678";
-    public boolean aceptaCondiciones = true;
     public String direccionCompleta = "Calle_principal";
     public String idProvincia = "01";
     public String idCanton = "0101";

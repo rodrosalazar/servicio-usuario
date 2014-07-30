@@ -40,7 +40,7 @@ public class TituloExtranjeroResourceTest {
     public void noDebeCrearTituloSinMail() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> p.email = CAMPO_EN_BLANCO)
-                .generar    ();
+                .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);
 
@@ -52,7 +52,7 @@ public class TituloExtranjeroResourceTest {
     @Test
     public void noDebeCrearTituloConMailDeFormatoInvalido() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(portadorTituloBuilder -> portadorTituloBuilder.email = "formatoInvalido")
+                .con(p -> p.email = "formatoInvalido")
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);
