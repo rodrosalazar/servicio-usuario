@@ -13,7 +13,9 @@ import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
+import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.apache.commons.lang.RandomStringUtils;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
 import org.joda.time.DateTime;
@@ -81,7 +83,6 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeVerificarNumeroDeCedulaCorrecto() {
-
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
                 .queryParam("cedula", "1718642174")
@@ -92,7 +93,6 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeVerificarNumeroDeCedulaIncorrecto() {
-
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
                 .queryParam("cedula", "1111111111")
@@ -105,32 +105,38 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeVerificarQueLaFechaDeFinDeVigenciaNoPuedeSerMenorALaFechaActual() {
+        Usuario usuarioconFechaDeVigenciaValido = UsuarioBuilder.nuevoUsuario()
+                .con(u -> u.fechaDeVigencia = new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay().minusMonths(1))
+                .generar();
 
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.nuevoUsuario()
-                        .con(u -> u.fechaDeVigencia = new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay().minusMonths(1))
-                        .generar());
+                .post(ClientResponse.class, usuarioconFechaDeVigenciaValido);
 
         assertThat(response.getStatus(), is(400));
     }
 
     @Test
     public void debeLanzarErrorCuandoEmailDeUsuarioEsInvalido() throws Exception {
+        Usuario usuarioConEmailInvalido = UsuarioBuilder.nuevoUsuario()
+                .con(u -> u.emailInstitucional = "invalido")
+                .generar();
 
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.nuevoUsuario().con(u -> u.emailInstitucional = "invalido").generar());
+                .post(ClientResponse.class, usuarioConEmailInvalido);
 
         assertThat(response.getStatus(), is(400));
     }
 
     @Test
     public void debeCrearUnNuevoUsuarioCuandoEsValido() {
+        Usuario usuarioValido = UsuarioBuilder.nuevoUsuario()
+                .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
+                .generar();
 
-        Usuario usuarioValido = UsuarioBuilder.usuarioValido(perfilGuardado);
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
@@ -141,11 +147,14 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeIndicarQueUnNombreDeUsuarioYaHaSidoRegistrado() throws Exception {
+        Usuario usuarioValido = UsuarioBuilder.nuevoUsuario()
+                .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
+                .generar();
 
         ClientResponse responseInsertUsuario = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido(perfilGuardado));
+                .post(ClientResponse.class, usuarioValido);
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
@@ -160,10 +169,11 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeIndicarQueUnNombreDeUsuarioNoSeEncuentraRegistrado() throws Exception {
+        Usuario usuarioValido = UsuarioBuilder.nuevoUsuario().generar();
 
         ClientResponse responseValidacion = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("nombreUsuario", UsuarioBuilder.nuevoUsuario().generar().getNombreUsuario())
+                .queryParam("nombreUsuario", usuarioValido.getNombreUsuario())
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(200));
@@ -171,8 +181,10 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeIndicarQueUnNumeroDeIdentificacionYaHaSidoRegistrado() throws Exception {
+        Usuario usuario = UsuarioBuilder.nuevoUsuario()
+                .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
+                .generar();
 
-        Usuario usuario = UsuarioBuilder.nuevoUsuario().con(u -> u.perfiles = newArrayList(perfilGuardado.getId())).generar();
         ClientResponse responseInsertUsuario = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
@@ -191,7 +203,6 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeIndicarQueUnNumeroDeIdentificacionNoSeEncuentraRegistrado() throws Exception {
-
         ClientResponse responseValidacion = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
                 .queryParam("numeroIdentificacion", UsuarioBuilder.nuevoUsuario().generar().getIdentificacion().getNumeroIdentificacion())
@@ -202,18 +213,22 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeValidarQueNombreDeUsuarioNoSeRepitaCuandoSeGuardaUsuario() throws Exception {
+        Usuario usuarioConNombreA = UsuarioBuilder.nuevoUsuario()
+                .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
+                .con(u -> u.nombreUsuario = "A")
+                .generar();
 
         ClientResponse responseInsertUsuario = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioSenescyt(perfilGuardado));
+                .post(ClientResponse.class, usuarioConNombreA);
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
         ClientResponse responseUsuarioRepetido = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1804068953UsuarioSenescyt());
+                .post(ClientResponse.class, usuarioConNombreA);
 
         assertThat(responseUsuarioRepetido.getStatus(), is(400));
         assertThat(responseUsuarioRepetido.getEntity(String.class), is(mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()));
@@ -221,18 +236,26 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeValidarQueNumeroDeIdentificacionNoSeRepitaCuandoSeGuardaUsuario() throws Exception {
+        Usuario usuarioConNombreA = UsuarioBuilder.nuevoUsuario()
+                .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
+                .con(u -> u.numeroIdentificacion = "1111111116")
+                .generar();
+        Usuario usuarioConElMismoId = UsuarioBuilder.nuevoUsuario().con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
+                .con(u -> u.nombreUsuario = "otroDiferente")
+                .con(u -> u.numeroIdentificacion = "1111111116")
+                .generar();
 
         ClientResponse responseInsertUsuario = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioSenescyt(perfilGuardado));
+                .post(ClientResponse.class, usuarioConNombreA);
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
         ClientResponse responseUsuarioRepetido = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido1718642174UsuarioAdmin());
+                .post(ClientResponse.class, usuarioConElMismoId);
 
         assertThat(responseUsuarioRepetido.getStatus(), is(400));
         assertThat(responseUsuarioRepetido.getEntity(String.class), is(mensajeErrorBuilder.mensajeNumeroIdentificacionYaHaSidoRegistrado()));
@@ -240,7 +263,10 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeDevolverUnMensajeDeErrorCuandoElNumeroDeIdentificacionEsMayorDe20() {
-        Usuario usuarioCon21Digitos = UsuarioBuilder.usuarioConIdentificacionDeMasDe20Digitos();
+        Usuario usuarioCon21Digitos = UsuarioBuilder.nuevoUsuario()
+                .con(u -> u.numeroIdentificacion = RandomStringUtils.random(21))
+                .con(u -> u.tipoDocumento = TipoDocumentoEnum.PASAPORTE)
+                .generar();
 
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
@@ -252,7 +278,10 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeDevolverUnMensajeDeErrorCuandoElNumeroDePasaporteEstaVacio() {
-        Usuario usuarioCon21Digitos = UsuarioBuilder.usuarioConPasaporteVacio();
+        Usuario usuarioCon21Digitos = UsuarioBuilder.nuevoUsuario()
+                .con(u -> u.tipoDocumento = TipoDocumentoEnum.PASAPORTE)
+                .con(u -> u.numeroIdentificacion = "")
+                .generar();
 
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))

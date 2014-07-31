@@ -24,6 +24,7 @@ import org.junit.Test;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -75,7 +76,9 @@ public class ContraseniaResourceIntegracionTest {
         Perfil perfilGuardado = response.getEntity(Perfil.class);
         perfilGuardadoId = perfilGuardado.getId();
 
-        Usuario usuario = UsuarioBuilder.usuarioValido(perfilGuardado);
+        Usuario usuario = UsuarioBuilder.nuevoUsuario()
+                .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
+                .generar();
 
         Usuario usuarioGuardado = usuarioDAO.guardar(usuario);
         idUsuarioGuardado = usuarioGuardado.getId();
