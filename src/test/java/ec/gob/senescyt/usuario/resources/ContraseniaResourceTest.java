@@ -52,7 +52,7 @@ public class ContraseniaResourceTest {
 
     @Test
     public void debeDevolverElIdDelUsuarioCuandoElTokenEsValido() {
-        when(tokenDAO.buscar(tokenValido)).thenReturn(new Token(tokenValido, UsuarioBuilder.usuarioValido()));
+        when(tokenDAO.buscar(tokenValido)).thenReturn(new Token(tokenValido, UsuarioBuilder.nuevoUsuario().generar()));
         ClientResponse response = resources.client().resource("/contrasenia/" + tokenValido)
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
@@ -65,7 +65,7 @@ public class ContraseniaResourceTest {
 
     @Test
     public void debeDevolverElNombreDeUsuarioCuandoElTokenEsValido() {
-        when(tokenDAO.buscar(tokenValido)).thenReturn(new Token(tokenValido, UsuarioBuilder.usuarioValido()));
+        when(tokenDAO.buscar(tokenValido)).thenReturn(new Token(tokenValido, UsuarioBuilder.nuevoUsuario().generar()));
         ClientResponse response = resources.client().resource("/contrasenia/" + tokenValido)
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);

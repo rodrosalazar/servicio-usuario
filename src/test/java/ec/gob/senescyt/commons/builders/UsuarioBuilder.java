@@ -8,6 +8,9 @@ import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import static com.google.common.collect.Lists.newArrayList;
 
 public class UsuarioBuilder {
@@ -22,72 +25,48 @@ public class UsuarioBuilder {
     private static final String SEGUNDO_APELLIDO = "Hidalgo";
     private static final String EMAIL_VALIDO = "test@senescyt.gob.ec";
     private static final String EMAIL_INVALIDO = "EMAIL_INVALIDO";
-    private static final String NUMERO_QUIPUX_INVALIDO = "123456";
     private static final String NUMERO_QUIPUX_VALIDO = "SENESCYT-DFAPO-2014-65946-MI";
     private static final DateTime FECHA_ACTUAL = new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay();
-    private static final DateTime FECHA_HACE_UN_MES = new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay().minusMonths(1);
     private static final long ID_INSTITUCION = 1l;
     private static final String NOMBRE_USUARIO = "usuarioSenescyt";
     private static final String NOMBRE_USUARIO_2 = "usuarioAdmin";
     private static final String CAMPO_EN_BLANCO = "";
-    private static final String PASAPORTE = "AAD11234";
     private static final String PASAPORTE_DE_21_DIGITOS = "123456789012345678901";
 
-    public static Usuario usuarioConCedulaEnBlanco(){
-         return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CAMPO_EN_BLANCO),
-                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
-                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
-                FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+    public TipoDocumentoEnum tipoDocumento = TipoDocumentoEnum.CEDULA;
+    public String numeroIdentificacion = "1111111116";
+    public String primerNombre = "Lorem";
+    public String segundoNombre = "Ipsum";
+    public String primerApellido = "Dolor";
+    public String segundoApellido = "Sit";
+    public String emailInstitucional = "test@example.com";
+    public String numeroAutorizacionQuipux = "SENESCYT-DFAPO-2014-65946-MI";
+    public DateTime fechaDeVigencia = new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay();
+    public long idInstitucion = 1l;
+    public List<Long> perfiles = newArrayList(1l);
+    public String nombreUsuario = "usuarioSenescyt";
+
+    private static UsuarioBuilder usuarioBuilder;
+
+    public static UsuarioBuilder nuevoUsuario() {
+        usuarioBuilder = new UsuarioBuilder();
+        return usuarioBuilder;
     }
 
-    public static Usuario usuarioConNumeroQuipuxEnBlanco() {
-        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
-                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
-                EMAIL_VALIDO, CAMPO_EN_BLANCO,
-                FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
+    public UsuarioBuilder con(Consumer<UsuarioBuilder> consumer){
+        consumer.accept(usuarioBuilder);
+        return usuarioBuilder;
     }
 
-    public static Usuario usuarioConPasaporte() {
-        return new Usuario(new Identificacion(TIPO_DOCUMENTO_PASAPORTE, PASAPORTE),
-                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
-                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
-                FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l,2l,3l));
+    public Usuario generar() {
+        return new Usuario(new Identificacion(tipoDocumento, numeroIdentificacion),
+                new Nombre(primerNombre, segundoNombre, primerApellido, segundoApellido),
+                emailInstitucional, numeroAutorizacionQuipux, fechaDeVigencia,
+                idInstitucion, nombreUsuario, perfiles);
     }
 
-    public static Usuario usuarioConEmailInvalido() {
-        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
-                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
-                EMAIL_INVALIDO, NUMERO_QUIPUX_VALIDO,
-                FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
-    }
 
-    public static Usuario usuarioConFechaDeVigenciaInvalida() {
-        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
-                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
-                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
-                FECHA_HACE_UN_MES,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
-    }
-
-    public static Usuario usuarioConNumeroQuipuxInvalido() {
-        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
-                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
-                EMAIL_VALIDO, NUMERO_QUIPUX_INVALIDO,
-                FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
-    }
-
-    public static Usuario usuarioConCedulaInvalida() {
-        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_INVALIDA),
-                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
-                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
-                FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, null);
-    }
+    ///////////////////////////////// HERE BE DRAGONS /////////////////////////////////
 
     public static Usuario usuarioConDocumentoInvalido() {
         return new Usuario(new Identificacion(null, CEDULA_VALIDA),
@@ -166,14 +145,6 @@ public class UsuarioBuilder {
                 "}";
     }
 
-    public static Usuario usuarioValido1718642174UsuarioSenescyt() {
-        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
-                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
-                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
-                FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l,2l,3l));
-    }
-
     public static Usuario usuarioValido1718642174UsuarioSenescyt(Perfil perfil) {
         return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
                 new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
@@ -212,14 +183,6 @@ public class UsuarioBuilder {
                 EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
                 FECHA_ACTUAL,
                 ID_INSTITUCION, NOMBRE_USUARIO_2, null);
-    }
-
-    public static Usuario usuarioValido() {
-        return new Usuario(new Identificacion(TIPO_DOCUMENTO_CEDULA, CEDULA_VALIDA),
-                new Nombre(PRIMER_NOMBRE, SEGUNDO_NOMBRE, PRIMER_APELLIDO, SEGUNDO_APELLIDO),
-                EMAIL_VALIDO, NUMERO_QUIPUX_VALIDO,
-                FECHA_ACTUAL,
-                ID_INSTITUCION, NOMBRE_USUARIO, newArrayList(1l, 2l, 3l));
     }
 
     public static Usuario usuarioSinPerfiles() {

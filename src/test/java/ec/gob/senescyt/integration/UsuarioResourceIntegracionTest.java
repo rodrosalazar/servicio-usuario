@@ -16,6 +16,8 @@ import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
@@ -24,6 +26,7 @@ import org.junit.Test;
 import javax.ws.rs.core.MediaType;
 import java.io.File;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -106,7 +109,9 @@ public class UsuarioResourceIntegracionTest {
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioConFechaDeVigenciaInvalida());
+                .post(ClientResponse.class, UsuarioBuilder.nuevoUsuario()
+                        .con(u -> u.fechaDeVigencia = new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay().minusMonths(1))
+                        .generar());
 
         assertThat(response.getStatus(), is(400));
     }
@@ -117,7 +122,7 @@ public class UsuarioResourceIntegracionTest {
         ClientResponse response = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioConEmailInvalido());
+                .post(ClientResponse.class, UsuarioBuilder.nuevoUsuario().con(u -> u.emailInstitucional = "invalido").generar());
 
         assertThat(response.getStatus(), is(400));
     }
@@ -146,7 +151,7 @@ public class UsuarioResourceIntegracionTest {
 
         ClientResponse responseValidacion = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("nombreUsuario",UsuarioBuilder.usuarioValido().getNombreUsuario())
+                .queryParam("nombreUsuario", UsuarioBuilder.nuevoUsuario().generar().getNombreUsuario())
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(400));
@@ -158,7 +163,7 @@ public class UsuarioResourceIntegracionTest {
 
         ClientResponse responseValidacion = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("nombreUsuario", UsuarioBuilder.usuarioValido().getNombreUsuario())
+                .queryParam("nombreUsuario", UsuarioBuilder.nuevoUsuario().generar().getNombreUsuario())
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(200));
@@ -167,16 +172,17 @@ public class UsuarioResourceIntegracionTest {
     @Test
     public void debeIndicarQueUnNumeroDeIdentificacionYaHaSidoRegistrado() throws Exception {
 
+        Usuario usuario = UsuarioBuilder.nuevoUsuario().con(u -> u.perfiles = newArrayList(perfilGuardado.getId())).generar();
         ClientResponse responseInsertUsuario = client.resource(
                 String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, UsuarioBuilder.usuarioValido(perfilGuardado));
+                .post(ClientResponse.class, usuario);
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
         ClientResponse responseValidacion = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("numeroIdentificacion", UsuarioBuilder.usuarioValido().getIdentificacion().getNumeroIdentificacion())
+                .queryParam("numeroIdentificacion", usuario.getIdentificacion().getNumeroIdentificacion())
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(400));
@@ -188,7 +194,7 @@ public class UsuarioResourceIntegracionTest {
 
         ClientResponse responseValidacion = client.resource(
                 String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("numeroIdentificacion", UsuarioBuilder.usuarioValido().getIdentificacion().getNumeroIdentificacion())
+                .queryParam("numeroIdentificacion", UsuarioBuilder.nuevoUsuario().generar().getIdentificacion().getNumeroIdentificacion())
                 .get(ClientResponse.class);
 
         assertThat(responseValidacion.getStatus(), is(200));
