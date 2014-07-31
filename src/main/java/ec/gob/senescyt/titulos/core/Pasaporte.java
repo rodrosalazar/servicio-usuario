@@ -5,23 +5,25 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ec.gob.senescyt.commons.serializers.JSONFechaDeserializer;
 import ec.gob.senescyt.commons.serializers.JSONFechaSerializer;
+import ec.gob.senescyt.titulos.validators.anotaciones.VigenciaVisaValida;
 import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
+import ec.gob.senescyt.usuario.validators.annotations.FechaVigenciaValida;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @DiscriminatorValue("PASAPORTE")
+@VigenciaVisaValida
 public class Pasaporte extends Identificacion {
 
     @Temporal(TemporalType.DATE)
     @Type(type = "org.joda.time.DateTime")
     @JsonSerialize(using = JSONFechaSerializer.class)
     @JsonDeserialize(using = JSONFechaDeserializer.class)
-    @Future
+    @FechaVigenciaValida
     @NotNull
     private DateTime finVigenciaPasaporte;
 
@@ -29,8 +31,6 @@ public class Pasaporte extends Identificacion {
     @Type(type = "org.joda.time.DateTime")
     @JsonSerialize(using = JSONFechaSerializer.class)
     @JsonDeserialize(using = JSONFechaDeserializer.class)
-    @Future
-    @NotNull
     private DateTime finVigenciaVisa;
 
     @ManyToOne
@@ -41,6 +41,7 @@ public class Pasaporte extends Identificacion {
     @Column(name = "id_tipo_visa", insertable = true, updatable = true)
     private String idTipoVisa;
 
+    @Column(name = "visaIndefinida")
     private boolean visaIndefinida;
 
     private Pasaporte() {

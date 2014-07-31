@@ -51,6 +51,7 @@ public class Usuario {
     @JsonSerialize(using = JSONFechaSerializer.class)
     @JsonDeserialize(using = JSONFechaDeserializer.class)
     @FechaVigenciaValida
+    @NotNull
     private DateTime finDeVigencia;
 
     @NotNull

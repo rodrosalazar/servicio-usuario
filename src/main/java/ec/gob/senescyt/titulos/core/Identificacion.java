@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "identificaciones")
@@ -36,6 +37,7 @@ public abstract class Identificacion {
     @NotNull
     @NotEmpty
     @Length(max = 20)
+    @Pattern(regexp = "^[^_\\W]+$", message = "{ec.gob.senescyt.error.numeroIdentificacion}")
     private String numeroIdentificacion;
 
     protected Identificacion(){};
