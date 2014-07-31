@@ -2,12 +2,13 @@ package ec.gob.senescyt.titulos.dao;
 
 import ec.gob.senescyt.titulos.core.TipoVisa;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
 
-public class TipoVisaDAO extends AbstractDAO<TipoVisa>{
+public class TipoVisaDAO extends AbstractDAO<TipoVisa> {
     public TipoVisaDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
     }
@@ -27,6 +28,6 @@ public class TipoVisaDAO extends AbstractDAO<TipoVisa>{
     }
 
     public List<TipoVisa> obtenerTodos() {
-        return currentSession().createCriteria(TipoVisa.class).list();
+        return currentSession().createCriteria(TipoVisa.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 }
