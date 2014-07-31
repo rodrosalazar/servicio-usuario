@@ -69,14 +69,10 @@ public class Nombre implements Serializable {
 
     @Override
     public String toString() {
-
-        String nombresCompletos = generarNombresCompletos();
-
-        return nombresCompletos;
+        return generarNombresCompletos();
     }
 
     private String generarNombresCompletos() {
-
         StringBuilder nombresCompletos = new StringBuilder();
         nombresCompletos.append(primerNombre).append(" ");
 

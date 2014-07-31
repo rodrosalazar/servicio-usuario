@@ -11,7 +11,9 @@ import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.commons.helpers.ResourceTestHelper;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
+import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.core.Usuario;
+import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
@@ -36,24 +38,25 @@ import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 
 public class UsuarioResourceTest {
-    private UsuarioResource usuarioResource;
+
     private static UsuarioDAO usuarioDAO = mock(UsuarioDAO.class);
+    private static TokenDAO tokenDAO = mock(TokenDAO.class);
     private static CedulaValidator cedulaValidator = new CedulaValidator();
     private static LectorArchivoDePropiedades lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
-    private static ConstructorDeContenidoDeEmail constructorDeContenidoDeEmail = new ConstructorDeContenidoDeEmail();
     private static ConfiguracionEmail configuracionEmail = spy(new ConfiguracionEmail());
-    private static DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail, configuracionEmail);
+    private static DespachadorEmail despachadorEmail = new DespachadorEmail(configuracionEmail);
+    private static UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades, despachadorEmail, tokenDAO);
 
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades, despachadorEmail))
+            .addResource(usuarioResource)
             .addProvider(ValidacionExceptionMapper.class)
             .build();
     private Client client;
+
     @Before
     public void setUp() {
-        usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades, despachadorEmail);
-            client = resources.client();
+        client = resources.client();
         ResourceTestHelper.mockConfiguracionMail(configuracionEmail);
         Mailbox.clearAll();
     }
@@ -61,6 +64,7 @@ public class UsuarioResourceTest {
     @After
     public void tearDown() throws Exception {
         reset(usuarioDAO);
+        reset(tokenDAO);
     }
 
     @Test
@@ -323,9 +327,10 @@ public class UsuarioResourceTest {
                 .post(ClientResponse.class, usuarioValido);
 
         verify(usuarioDAO).guardar(any(Usuario.class));
+        verify(tokenDAO).guardar(any(Token.class));
 
         List<Message> bandejaEntradaTest = Mailbox.get(usuarioValido.getEmailInstitucional());
-        assertThat(bandejaEntradaTest.size() , is(1));
+        assertThat(bandejaEntradaTest.size(), is(1));
 
         assertThat(response.getStatus(), is(201));
     }

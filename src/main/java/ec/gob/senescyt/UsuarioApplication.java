@@ -6,7 +6,6 @@ import ec.gob.senescyt.biblioteca.Arbol;
 import ec.gob.senescyt.biblioteca.NivelArbol;
 import ec.gob.senescyt.biblioteca.dao.ArbolDAO;
 import ec.gob.senescyt.biblioteca.resource.ArbolResource;
-import ec.gob.senescyt.commons.email.ConstructorDeContenidoDeEmail;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.commons.exceptions.DBConstraintViolationMapper;
 import ec.gob.senescyt.commons.filters.HeaderResponseFilter;
@@ -93,8 +92,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
         PortadorTituloDAO portadorTituloDAO = new PortadorTituloDAO(getSessionFactory());
         ArbolDAO arbolDAO = new ArbolDAO(getSessionFactory());
-        ConstructorDeContenidoDeEmail constructorDeContenidoDeEmail = new ConstructorDeContenidoDeEmail();
-        DespachadorEmail despachadorEmail = new DespachadorEmail(constructorDeContenidoDeEmail, configuration.getConfiguracionEmail());
+        DespachadorEmail despachadorEmail = new DespachadorEmail(configuration.getConfiguracionEmail());
         ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG(), provinciaDAO);
         UniversidadExtranjeraDAO universidadExtranjeraDAO = new UniversidadExtranjeraDAO(getSessionFactory());
         TokenDAO tokenDAO = new TokenDAO(getSessionFactory());
@@ -105,7 +103,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         CedulaValidator cedulaValidator = new CedulaValidator();
         LectorArchivoDePropiedades lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
 
-        final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades, despachadorEmail);
+        final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades, despachadorEmail, tokenDAO);
         environment.jersey().register(usuarioResource);
 
         final InstitucionResource institucionResource = new InstitucionResource(institucionDAO,constructorRespuestas,universidadExtranjeraDAO);

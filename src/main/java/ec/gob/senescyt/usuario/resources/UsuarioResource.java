@@ -2,8 +2,11 @@ package ec.gob.senescyt.usuario.resources;
 
 import com.google.common.base.Optional;
 import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
+import ec.gob.senescyt.commons.email.ConstructorDeContenidoDeEmail;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
+import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.core.Usuario;
+import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
@@ -14,19 +17,24 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.UUID;
 
 @Path("/usuario")
 @Produces(MediaType.APPLICATION_JSON)
 public class UsuarioResource {
 
-    private final UsuarioDAO usuarioDAO;
+    private UsuarioDAO usuarioDAO;
+    private TokenDAO tokenDAO;
     private CedulaValidator cedulaValidator;
     private LectorArchivoDePropiedades lectorArchivoDePropiedades;
     private DespachadorEmail despachadorEmail;
     private MensajeErrorBuilder mensajeErrorBuilder;
 
-    public UsuarioResource(final UsuarioDAO usuarioDAO, final CedulaValidator cedulaValidator, final LectorArchivoDePropiedades lectorArchivoDePropiedades, DespachadorEmail despachadorEmail) {
+    public UsuarioResource(UsuarioDAO usuarioDAO, CedulaValidator cedulaValidator,
+                           LectorArchivoDePropiedades lectorArchivoDePropiedades, DespachadorEmail despachadorEmail,
+                           TokenDAO tokenDAO) {
         this.usuarioDAO = usuarioDAO;
+        this.tokenDAO = tokenDAO;
         this.cedulaValidator = cedulaValidator;
         this.lectorArchivoDePropiedades = lectorArchivoDePropiedades;
         this.despachadorEmail = despachadorEmail;
@@ -78,8 +86,28 @@ public class UsuarioResource {
 
         Usuario usuarioCreado = usuarioDAO.guardar(usuario);
 
-        despachadorEmail.enviarEmailNotificacionUsuarioCreado(usuarioCreado.getEmailInstitucional(),usuarioCreado.getNombreUsuario(), usuarioCreado.getNombre().toString());
+        mandarConfirmacion(usuarioCreado);
 
         return Response.status(Response.Status.CREATED).entity(usuarioCreado).build();
+    }
+
+    private void mandarConfirmacion(Usuario usuarioCreado) throws EmailException {
+        String idToken = generarToken(usuarioCreado);
+
+        String nombreDestinatario = usuarioCreado.getNombre().toString();
+        String nombreUsuario = usuarioCreado.getNombreUsuario();
+        String emailDestinatario = usuarioCreado.getEmailInstitucional();
+
+        String mensaje = ConstructorDeContenidoDeEmail.construirEmailNotificacionUsuarioCreado(nombreDestinatario, nombreUsuario, idToken);
+        String asunto = "Creación de usuario para el sistema SNIESE";
+
+        despachadorEmail.enviarEmail(emailDestinatario, nombreDestinatario, asunto, mensaje);
+    }
+
+    private String generarToken(Usuario usuarioCreado) {
+        String idToken = UUID.randomUUID().toString();
+        Token token = new Token(idToken, usuarioCreado);
+        tokenDAO.guardar(token);
+        return idToken;
     }
 }

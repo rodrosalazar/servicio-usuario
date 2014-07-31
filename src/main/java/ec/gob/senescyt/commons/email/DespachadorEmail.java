@@ -7,15 +7,13 @@ import org.apache.commons.mail.HtmlEmail;
 
 public class DespachadorEmail {
 
-    private ConstructorDeContenidoDeEmail constructorDeContenidoDeEmail;
     private ConfiguracionEmail configuracionEmail;
 
-    public DespachadorEmail(ConstructorDeContenidoDeEmail constructorDeContenidoDeEmail, ConfiguracionEmail configuracionEmail) {
-        this.constructorDeContenidoDeEmail = constructorDeContenidoDeEmail;
+    public DespachadorEmail(ConfiguracionEmail configuracionEmail) {
         this.configuracionEmail = configuracionEmail;
     }
 
-    public String enviarEmailNotificacionUsuarioCreado(String emailUsuarioCreado, String userName, String nombresCompletosUsuario) throws EmailException {
+    public String enviarEmail(String emailDestinatario, String nombreDestinatario, String asunto, String mensaje) throws EmailException {
         HtmlEmail correoElectronico = new HtmlEmail();
         correoElectronico.setHostName(configuracionEmail.getServidor());
         correoElectronico.setSmtpPort(configuracionEmail.getPuerto());
@@ -23,9 +21,9 @@ public class DespachadorEmail {
         correoElectronico.setSSLOnConnect(configuracionEmail.isSSLRequerido());
         correoElectronico.setAuthenticator(new DefaultAuthenticator(configuracionEmail.getNombreUsuario(), configuracionEmail.getClave()));
         correoElectronico.setFrom(configuracionEmail.getCorreoRemitente(), configuracionEmail.getNombreRemitente());
-        correoElectronico.addTo(emailUsuarioCreado, nombresCompletosUsuario);
-        correoElectronico.setSubject("Creación de usuario para el sistema SNIESE");
-        correoElectronico.setHtmlMsg(constructorDeContenidoDeEmail.construirEmailNotificacionUsuarioCreado(nombresCompletosUsuario, userName));
+        correoElectronico.addTo(emailDestinatario, nombreDestinatario);
+        correoElectronico.setSubject(asunto);
+        correoElectronico.setHtmlMsg(mensaje);
 
         return correoElectronico.send();
     }
