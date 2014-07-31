@@ -9,9 +9,14 @@ Micro servicio para el manejo de usuarios usando Dropwizard
 
 ## Primera Vez
 
+```
 $ cp servicio-usuario-dev.yml.example servicio-usuario-dev.yml
+```
+\* Para este archivo, pregunta a alguien del equipo por las credenciales para la configuración BSG, además de reemplazar las credenciales del correo electrónico por las tuyas o algún servicio SMTP.
 
+```
 $ cp src/test/resources/test-integracion.yml.example src/test/resources/test-integracion.yml
+```
 
 Para crear la base de datos en PostgreSQL (este proceso será automatizado):
 ```
@@ -31,7 +36,7 @@ $ psql
 ```
 $ ./gradlew run
 ```
-      
+
 - Ir a <http://localtest.me:8081>
 
 
@@ -60,14 +65,14 @@ $ ./gradlew runCsv -P params="ruta-entrada [ruta-salida]"
 ```
 
 ## Para correr las migraciones
- 
+
 - Correr:
- 
+
 ```
 $ ./gradlew flywayMigrate
 ```
 
-## Para borrar la base de datos 
+## Para borrar la base de datos
 
 - Correr:
 
@@ -75,7 +80,7 @@ $ ./gradlew flywayMigrate
 $ ./gradlew flywayClean
 ```
 
-## Para ver el estado de las migraciones 
+## Para ver el estado de las migraciones
 
 - Correr:
 
