@@ -9,6 +9,7 @@ import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
+import ec.gob.senescyt.usuario.enums.PropiedadesEmailEnum;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.apache.commons.mail.EmailException;
@@ -27,16 +28,18 @@ public class UsuarioResource {
     private TokenDAO tokenDAO;
     private CedulaValidator cedulaValidator;
     private LectorArchivoDePropiedades lectorArchivoDePropiedades;
+    private LectorArchivoDePropiedades lectorPropiedadesEmail;
     private DespachadorEmail despachadorEmail;
     private MensajeErrorBuilder mensajeErrorBuilder;
 
     public UsuarioResource(UsuarioDAO usuarioDAO, CedulaValidator cedulaValidator,
-                           LectorArchivoDePropiedades lectorArchivoDePropiedades, DespachadorEmail despachadorEmail,
-                           TokenDAO tokenDAO) {
+                           LectorArchivoDePropiedades lectorPropiedadesValidacion, DespachadorEmail despachadorEmail,
+                           TokenDAO tokenDAO, LectorArchivoDePropiedades lectorPropiedadesEmail) {
         this.usuarioDAO = usuarioDAO;
         this.tokenDAO = tokenDAO;
         this.cedulaValidator = cedulaValidator;
-        this.lectorArchivoDePropiedades = lectorArchivoDePropiedades;
+        this.lectorArchivoDePropiedades = lectorPropiedadesValidacion;
+        this.lectorPropiedadesEmail = lectorPropiedadesEmail;
         this.despachadorEmail = despachadorEmail;
         this.mensajeErrorBuilder = new MensajeErrorBuilder(this.lectorArchivoDePropiedades);
     }
@@ -98,8 +101,11 @@ public class UsuarioResource {
         String nombreUsuario = usuarioCreado.getNombreUsuario();
         String emailDestinatario = usuarioCreado.getEmailInstitucional();
 
-        String mensaje = ConstructorDeContenidoDeEmail.construirEmailNotificacionUsuarioCreado(nombreDestinatario, nombreUsuario, idToken);
-        String asunto = "Creación de usuario para el sistema SNIESE";
+        String asunto = lectorPropiedadesEmail.leerPropiedad(PropiedadesEmailEnum.ASUNTO.getKey());
+        String urlToken = lectorPropiedadesEmail.leerPropiedad(PropiedadesEmailEnum.URL.getKey()).concat(idToken) ;
+
+        String mensaje = ConstructorDeContenidoDeEmail.construirEmailNotificacionUsuarioCreado(nombreDestinatario,
+                nombreUsuario, urlToken);
 
         despachadorEmail.enviarEmail(emailDestinatario, nombreDestinatario, asunto, mensaje);
     }

@@ -101,9 +101,10 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         environment.jersey().register(perfilResource);
 
         CedulaValidator cedulaValidator = new CedulaValidator();
-        LectorArchivoDePropiedades lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
+        LectorArchivoDePropiedades lectorPropiedadesValidacion = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
+        LectorArchivoDePropiedades lectorPropiedadesEmail = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_PROPIEDADES_EMAIL.getBaseName());
 
-        final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades, despachadorEmail, tokenDAO);
+        final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion, despachadorEmail, tokenDAO, lectorPropiedadesEmail);
         environment.jersey().register(usuarioResource);
 
         final InstitucionResource institucionResource = new InstitucionResource(institucionDAO,constructorRespuestas,universidadExtranjeraDAO);

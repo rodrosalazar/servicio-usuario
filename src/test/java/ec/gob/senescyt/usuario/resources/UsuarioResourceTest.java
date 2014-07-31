@@ -6,7 +6,6 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.commons.configuracion.ConfiguracionEmail;
-import ec.gob.senescyt.commons.email.ConstructorDeContenidoDeEmail;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.commons.helpers.ResourceTestHelper;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
@@ -42,10 +41,11 @@ public class UsuarioResourceTest {
     private static UsuarioDAO usuarioDAO = mock(UsuarioDAO.class);
     private static TokenDAO tokenDAO = mock(TokenDAO.class);
     private static CedulaValidator cedulaValidator = new CedulaValidator();
-    private static LectorArchivoDePropiedades lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
+    private static LectorArchivoDePropiedades lectorPropiedadesValidacion = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
+    private static LectorArchivoDePropiedades lectorPropiedadesEmail = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_PROPIEDADES_EMAIL.getBaseName());
     private static ConfiguracionEmail configuracionEmail = spy(new ConfiguracionEmail());
     private static DespachadorEmail despachadorEmail = new DespachadorEmail(configuracionEmail);
-    private static UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorArchivoDePropiedades, despachadorEmail, tokenDAO);
+    private static UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion, despachadorEmail, tokenDAO, lectorPropiedadesEmail);
 
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
