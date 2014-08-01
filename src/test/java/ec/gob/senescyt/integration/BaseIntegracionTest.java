@@ -23,9 +23,9 @@ public abstract class BaseIntegracionTest {
     protected static final String CONFIGURACION = "test-integracion.yml";
     protected SessionFactory sessionFactory;
     protected Client client;
-    private UsuarioDAO usuarioDAO;
-    private PerfilDAO perfilDAO;
-    private TokenDAO tokenDAO;
+    protected UsuarioDAO usuarioDAO;
+    protected PerfilDAO perfilDAO;
+    protected TokenDAO tokenDAO;
 
     protected static String resourceFilePath(String resourceClassPathLocation) {
         try {
@@ -41,6 +41,7 @@ public abstract class BaseIntegracionTest {
         usuarioDAO = new UsuarioDAO(sessionFactory);
         perfilDAO = new PerfilDAO(sessionFactory);
         tokenDAO = new TokenDAO(sessionFactory);
+
         client = new Client();
         ManagedSessionContext.bind(sessionFactory.openSession());
         limpiarTablas();
@@ -67,15 +68,21 @@ public abstract class BaseIntegracionTest {
     }
 
     protected ClientResponse hacerPost(final String recurso, Object objectoAEnviar) {
-        return client.resource(String.format("http://localhost:%d/" + recurso, UsuarioResourceIntegracionTest.RULE.getLocalPort()))
+        return client.resource(String.format("http://localhost:%d/" + recurso, getRule().getLocalPort()))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, objectoAEnviar);
     }
 
     protected ClientResponse hacerGet(String recurso, MultivaluedMap<String, String> parametros) {
         return client.resource(
-                String.format("http://localhost:%d/" + recurso, UsuarioResourceIntegracionTest.RULE.getLocalPort()))
+                String.format("http://localhost:%d/" + recurso, getRule().getLocalPort()))
                 .queryParams(parametros)
+                .get(ClientResponse.class);
+    }
+
+    protected ClientResponse hacerGet(String recurso) {
+        return client.resource(
+                String.format("http://localhost:%d/" + recurso, getRule().getLocalPort()))
                 .get(ClientResponse.class);
     }
 }

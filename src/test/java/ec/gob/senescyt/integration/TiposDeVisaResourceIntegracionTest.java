@@ -1,26 +1,21 @@
 package ec.gob.senescyt.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.Resources;
-import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import ec.gob.senescyt.UsuarioApplication;
+import ec.gob.senescyt.UsuarioConfiguration;
+import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import ec.gob.senescyt.titulos.core.CategoriaVisa;
 import ec.gob.senescyt.titulos.core.TipoVisa;
 import ec.gob.senescyt.titulos.dao.CategoriaVisaDAO;
 import ec.gob.senescyt.titulos.dao.TipoVisaDAO;
-import ec.gob.senescyt.UsuarioApplication;
-import ec.gob.senescyt.UsuarioConfiguration;
-import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.hibernate.SessionFactory;
-import org.hibernate.context.internal.ManagedSessionContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,11 +23,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class TiposDeVisaResourceIntegracionTest {
-
-    private static final String CONFIGURACION = "test-integracion.yml";
-
-    private SessionFactory sessionFactory;
+public class TiposDeVisaResourceIntegracionTest extends BaseIntegracionTest {
 
     private static final String ID_TIPO_VISA_TEST = "3";
     private static final String NOMBRE_TIPO_VISA_TEST = "TIPO_VISA_TEST";
@@ -44,25 +35,19 @@ public class TiposDeVisaResourceIntegracionTest {
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
 
-    private static String resourceFilePath(String resourceClassPathLocation) {
-        try {
-            return new File(Resources.getResource(resourceClassPathLocation).toURI()).getAbsolutePath();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    protected DropwizardAppRule<UsuarioConfiguration> getRule() {
+        return RULE;
     }
 
     @Before
     public void setUp() {
-        sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
-        ManagedSessionContext.bind(sessionFactory.openSession());
+        tipoVisaDAO = new TipoVisaDAO(sessionFactory);
+        categoriaVisaDAO = new CategoriaVisaDAO(sessionFactory);
         cargarDataParaPruebas();
     }
 
     private void cargarDataParaPruebas() {
-        tipoVisaDAO = new TipoVisaDAO(sessionFactory);
-        categoriaVisaDAO = new CategoriaVisaDAO(sessionFactory);
-
         TipoVisa tipoVisaTest = new TipoVisa(ID_TIPO_VISA_TEST, NOMBRE_TIPO_VISA_TEST);
         tipoVisaDAO.guardar(tipoVisaTest);
 
@@ -75,9 +60,7 @@ public class TiposDeVisaResourceIntegracionTest {
     @After
     public void tearDown() {
         eliminarInformacionCargadaParaPrueba();
-        ManagedSessionContext.unbind(sessionFactory);
     }
-
 
     private void eliminarInformacionCargadaParaPrueba() {
         categoriaVisaDAO.eliminar(ID_CATEGORIA_VISA_TEST);
@@ -88,11 +71,7 @@ public class TiposDeVisaResourceIntegracionTest {
 
     @Test
     public void debeObtenerTodosLosTipoDeVisa() throws Exception {
-        Client client = new Client();
-
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/tiposDeVisa", RULE.getLocalPort()))
-                .get(ClientResponse.class);
+        ClientResponse response = hacerGet("tiposDeVisa");
 
         assertThat(response.getStatus(), is(200));
         List tiposDeVisa = (List) response.getEntity(HashMap.class).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_TIPO_VISA.getNombre());
@@ -101,16 +80,11 @@ public class TiposDeVisaResourceIntegracionTest {
 
     @Test
     public void debeObtenerCategoriasDeVisaParaTipoDeVisa() throws Exception {
-        Client client = new Client();
-
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/tiposDeVisa/" + ID_TIPO_VISA_TEST + "/categorias", RULE.getLocalPort()))
-                .get(ClientResponse.class);
+        ClientResponse response = hacerGet("tiposDeVisa/" + ID_TIPO_VISA_TEST + "/categorias");
 
         assertThat(response.getStatus(), is(200));
 
         String idTipoVisaDeCategoriaEncontrada = obtenerIdTipoVisaDesdeCategoria(response);
-
         assertThat(idTipoVisaDeCategoriaEncontrada, is(ID_CATEGORIA_VISA_TEST));
     }
 

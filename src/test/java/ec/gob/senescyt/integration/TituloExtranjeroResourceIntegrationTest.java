@@ -57,9 +57,7 @@ public class TituloExtranjeroResourceIntegrationTest {
     public void debeAlmacenarUnNuevoExpedienteDeTituloExtranjero() {
         Client client = new Client();
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> {
-                    p.identificacion = new Cedula(numeroIdentificacionCedulaValida);
-                })
+                .con(p -> p.identificacion = new Cedula(numeroIdentificacionCedulaValida))
                 .generar();
 
         ClientResponse respuesta = client.resource(
@@ -75,7 +73,7 @@ public class TituloExtranjeroResourceIntegrationTest {
     public void debeHacerAlgoCuandoElCodigoDelPaisNoExiste() {
         Client client = new Client();
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p->p.identificacion = new Cedula(numeroIdentificacionCedulaValida))
+                .con(p -> p.identificacion = new Cedula(numeroIdentificacionCedulaValida))
                 .con(p -> p.idPaisNacionalidad = "invali")
                 .generar();
 
@@ -92,7 +90,7 @@ public class TituloExtranjeroResourceIntegrationTest {
     public void debeHacerAlgoCuandoElCodigoDeEtniaNoExiste() {
         Client client = new Client();
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p->p.identificacion = new Cedula(numeroIdentificacionCedulaValida))
+                .con(p -> p.identificacion = new Cedula(numeroIdentificacionCedulaValida))
                 .con(p -> p.idEtnia = "xx")
                 .generar();
 

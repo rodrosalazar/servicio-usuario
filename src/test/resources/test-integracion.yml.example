@@ -18,7 +18,7 @@ database:
     hibernate.show_sql: true
 
   # the maximum amount of time to wait on an empty pool before throwing an exception
-  maxWaitForConnection: 1s
+  maxWaitForConnection: 2s
 
   # the SQL query to run when validating a connection's liveness
   validationQuery: "/* Servicio Usuario Health Check */ SELECT 1"
@@ -27,7 +27,7 @@ database:
   minSize: 8
 
   # the maximum number of connections to keep open
-  maxSize: 32
+  maxSize: 256
 
   # whether or not idle connections should be validated
   checkConnectionWhileIdle: false

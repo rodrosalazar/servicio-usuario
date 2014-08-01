@@ -1,37 +1,28 @@
 package ec.gob.senescyt.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.io.Resources;
-import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.UsuarioApplication;
 import ec.gob.senescyt.UsuarioConfiguration;
+import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import ec.gob.senescyt.titulos.core.Canton;
 import ec.gob.senescyt.titulos.core.Provincia;
 import ec.gob.senescyt.titulos.dao.CantonDAO;
 import ec.gob.senescyt.titulos.dao.ProvinciaDAO;
-import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import io.dropwizard.jackson.Jackson;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.hibernate.SessionFactory;
-import org.hibernate.context.internal.ManagedSessionContext;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.io.File;
 import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class ProvinciaResourceIntegracionTest {
-
-    private static final String CONFIGURACION = "test-integracion.yml";
-
-    private SessionFactory sessionFactory;
+public class ProvinciaResourceIntegracionTest extends BaseIntegracionTest {
 
     private static final String ID_PROVINCIA_TEST = "80";
     private static final String NOMBRE_PROVINCIA_TEST = "PROVINCIA_TEST";
@@ -40,33 +31,24 @@ public class ProvinciaResourceIntegracionTest {
     private CantonDAO cantonDAO;
     private ProvinciaDAO provinciaDAO;
 
-
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
 
-    private static String resourceFilePath(String resourceClassPathLocation) {
-        try {
-            return new File(Resources.getResource(resourceClassPathLocation).toURI()).getAbsolutePath();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    protected DropwizardAppRule<UsuarioConfiguration> getRule() {
+        return RULE;
     }
 
     @Before
     public void setUp() {
-        sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
-        ManagedSessionContext.bind(sessionFactory.openSession());
+        provinciaDAO = new ProvinciaDAO(sessionFactory);
+        cantonDAO = new CantonDAO(sessionFactory);
         cargarDataParaPruebas();
     }
 
     private void cargarDataParaPruebas() {
-        provinciaDAO = new ProvinciaDAO(sessionFactory);
-        cantonDAO = new CantonDAO(sessionFactory);
-
-
         Provincia provinciaTest = new Provincia(ID_PROVINCIA_TEST, NOMBRE_PROVINCIA_TEST);
         provinciaDAO.guardar(provinciaTest);
-
 
         Canton cantonTest = new Canton(provinciaTest, ID_CANTON_TEST, NOMBRE_CANTON_TEST);
         cantonDAO.guardar(cantonTest);
@@ -77,7 +59,6 @@ public class ProvinciaResourceIntegracionTest {
     @After
     public void tearDown() {
         eliminarInformacionCargadaParaPrueba();
-        ManagedSessionContext.unbind(sessionFactory);
     }
 
 
@@ -90,11 +71,7 @@ public class ProvinciaResourceIntegracionTest {
 
     @Test
     public void debeObtenerTodosLosPaises() throws Exception {
-        Client client = new Client();
-
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/provincias", RULE.getLocalPort()))
-                .get(ClientResponse.class);
+        ClientResponse response = hacerGet("provincias");
 
         assertThat(response.getStatus(), is(200));
         assertThat(response.getEntity(HashMap.class).size(), is(not(0)));
@@ -102,11 +79,7 @@ public class ProvinciaResourceIntegracionTest {
 
     @Test
     public void debeObtenerCantonesParaProvinciaTest() throws Exception {
-        Client client = new Client();
-
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/provincias/" + ID_PROVINCIA_TEST + "/cantones", RULE.getLocalPort()))
-                .get(ClientResponse.class);
+        ClientResponse response = hacerGet("provincias/" + ID_PROVINCIA_TEST + "/cantones");
 
         assertThat(response.getStatus(), is(200));
 
