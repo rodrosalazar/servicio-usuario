@@ -1,26 +1,33 @@
 package ec.gob.senescyt.integration;
 
 import com.google.common.io.Resources;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.UsuarioApplication;
 import ec.gob.senescyt.UsuarioConfiguration;
+import ec.gob.senescyt.usuario.dao.PerfilDAO;
+import ec.gob.senescyt.usuario.dao.TokenDAO;
+import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.ClassRule;
 
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
 
 public abstract class BaseIntegracionTest {
 
-    private static final String CONFIGURACION = "test-integracion.yml";
-    @ClassRule
-    public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
+    protected static final String CONFIGURACION = "test-integracion.yml";
     protected SessionFactory sessionFactory;
+    protected Client client;
+    private UsuarioDAO usuarioDAO;
+    private PerfilDAO perfilDAO;
+    private TokenDAO tokenDAO;
 
-    private static String resourceFilePath(String resourceClassPathLocation) {
+    protected static String resourceFilePath(String resourceClassPathLocation) {
         try {
             return new File(Resources.getResource(resourceClassPathLocation).toURI()).getAbsolutePath();
         } catch (Exception e) {
@@ -30,22 +37,45 @@ public abstract class BaseIntegracionTest {
 
     @Before
     public void setUpDB() {
-        sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
+        sessionFactory = ((UsuarioApplication) getRule().getApplication()).getSessionFactory();
+        usuarioDAO = new UsuarioDAO(sessionFactory);
+        perfilDAO = new PerfilDAO(sessionFactory);
+        tokenDAO = new TokenDAO(sessionFactory);
+        client = new Client();
         ManagedSessionContext.bind(sessionFactory.openSession());
-//        limpiarTablas();
+        limpiarTablas();
     }
 
     @After
     public void tearDownDB() {
-//        limpiarTablas();
+        limpiarTablas();
         ManagedSessionContext.unbind(sessionFactory);
     }
 
     private void limpiarTablas() {
-        String stringQuery = "DELETE FROM " + getTableName();
-        Query query = sessionFactory.getCurrentSession().createQuery(stringQuery);
-        query.executeUpdate();
+        sessionFactory.getCurrentSession().flush();
+        tokenDAO.limpiar();
+        usuarioDAO.limpiar();
+        perfilDAO.limpiar();
+        sessionFactory.getCurrentSession().flush();
     }
 
-    protected abstract String getTableName();
+    protected abstract DropwizardAppRule<UsuarioConfiguration> getRule();
+
+    protected SessionFactory getSessionFactory(DropwizardAppRule<UsuarioConfiguration> rule) {
+        return ((UsuarioApplication) rule.getApplication()).getSessionFactory();
+    }
+
+    protected ClientResponse hacerPost(final String recurso, Object objectoAEnviar) {
+        return client.resource(String.format("http://localhost:%d/" + recurso, UsuarioResourceIntegracionTest.RULE.getLocalPort()))
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, objectoAEnviar);
+    }
+
+    protected ClientResponse hacerGet(MultivaluedMap<String, String> parametros) {
+        return client.resource(
+                String.format("http://localhost:%d/usuario/validacion", UsuarioResourceIntegracionTest.RULE.getLocalPort()))
+                .queryParams(parametros)
+                .get(ClientResponse.class);
+    }
 }

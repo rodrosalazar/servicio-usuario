@@ -2,6 +2,7 @@ package ec.gob.senescyt.usuario.dao;
 
 import ec.gob.senescyt.usuario.core.Token;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
@@ -26,5 +27,10 @@ public class TokenDAO extends AbstractDAO<Token> {
                 .uniqueResult();
 
         currentSession().delete(tokenAEliminar);
+    }
+
+    public void limpiar() {
+        Query query = currentSession().createSQLQuery("TRUNCATE tokens CASCADE");
+        query.executeUpdate();
     }
 }

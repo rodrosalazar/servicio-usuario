@@ -272,7 +272,7 @@ public class UsuarioResourceTest {
     @Test
     public void debeVerificarQueCodigoInstitucionNoEsteEnBlanco() throws Exception {
         String usuarioConInstucionEnBlanco = UsuarioBuilder.usuarioConIdInstitucionEnBlanco();
-        
+
         ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, usuarioConInstucionEnBlanco);

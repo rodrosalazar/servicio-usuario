@@ -32,4 +32,9 @@ public class PerfilDAO extends AbstractDAO<Perfil> {
 
         currentSession().delete(perfilAEliminar);
     }
+
+    public void limpiar() {
+        Query query = currentSession().createSQLQuery("TRUNCATE perfiles CASCADE");
+        query.executeUpdate();
+    }
 }

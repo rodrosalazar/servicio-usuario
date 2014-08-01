@@ -1,8 +1,7 @@
 package ec.gob.senescyt.integration;
 
-import com.google.common.io.Resources;
-import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
 import ec.gob.senescyt.UsuarioApplication;
 import ec.gob.senescyt.UsuarioConfiguration;
 import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
@@ -12,73 +11,46 @@ import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Usuario;
-import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.apache.commons.lang.RandomStringUtils;
-import org.hibernate.SessionFactory;
-import org.hibernate.context.internal.ManagedSessionContext;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import javax.ws.rs.core.MediaType;
-import java.io.File;
+import javax.ws.rs.core.MultivaluedMap;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class UsuarioResourceIntegracionTest {
-
-    private static final String CONFIGURACION = "test-integracion.yml";
-
-    private SessionFactory sessionFactory;
+public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
 
     private LectorArchivoDePropiedades lectorArchivoDePropiedades;
     private MensajeErrorBuilder mensajeErrorBuilder;
-    private UsuarioDAO usuarioDAO;
+    private Perfil perfil;
+    private Perfil perfilGuardado;
 
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
-    private Perfil perfil1;
-    private Client client;
-    private Perfil perfilGuardado;
 
-    private static String resourceFilePath(String resourceClassPathLocation) {
-        try {
-            return new File(Resources.getResource(resourceClassPathLocation).toURI()).getAbsolutePath();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    protected DropwizardAppRule<UsuarioConfiguration> getRule() {
+        return RULE;
     }
 
     @Before
     public void setUp() {
-        sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
-        ManagedSessionContext.bind(sessionFactory.openSession());
-        usuarioDAO = new UsuarioDAO(sessionFactory);
-        perfil1 = PerfilBuilder.nuevoPerfil().generar();
+        perfil = PerfilBuilder.nuevoPerfil().generar();
         lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
         mensajeErrorBuilder = new MensajeErrorBuilder(lectorArchivoDePropiedades);
-        client = new Client();
 
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/perfiles", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, perfil1);
+        ClientResponse response = hacerPost("perfiles", perfil);
 
         assertThat(response.getStatus(), is(201));
         perfilGuardado = response.getEntity(Perfil.class);
-    }
-
-    @After
-    public void tearDown() {
-        usuarioDAO.limpiar();
-        ManagedSessionContext.unbind(sessionFactory);
     }
 
     @Test
@@ -99,8 +71,7 @@ public class UsuarioResourceIntegracionTest {
                 .get(ClientResponse.class);
 
         assertThat(response.getStatus(), is(400));
-        assertThat(response.getEntity(String.class),
-                is(mensajeErrorBuilder.mensajeNumeroIdentificacionInvalido()));
+        assertThat(response.getEntity(String.class), is(mensajeErrorBuilder.mensajeNumeroIdentificacionInvalido()));
     }
 
     @Test
@@ -109,10 +80,7 @@ public class UsuarioResourceIntegracionTest {
                 .con(u -> u.fechaDeVigencia = new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay().minusMonths(1))
                 .generar();
 
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioconFechaDeVigenciaValido);
+        ClientResponse response = hacerPost("usuario", usuarioconFechaDeVigenciaValido);
 
         assertThat(response.getStatus(), is(400));
     }
@@ -123,10 +91,7 @@ public class UsuarioResourceIntegracionTest {
                 .con(u -> u.emailInstitucional = "invalido")
                 .generar();
 
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioConEmailInvalido);
+        ClientResponse response = hacerPost("usuario", usuarioConEmailInvalido);
 
         assertThat(response.getStatus(), is(400));
     }
@@ -137,10 +102,7 @@ public class UsuarioResourceIntegracionTest {
                 .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
                 .generar();
 
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioValido);
+        ClientResponse response = hacerPost("usuario", usuarioValido);
 
         assertThat(response.getStatus(), is(201));
     }
@@ -151,10 +113,7 @@ public class UsuarioResourceIntegracionTest {
                 .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
                 .generar();
 
-        ClientResponse responseInsertUsuario = client.resource(
-                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioValido);
+        ClientResponse responseInsertUsuario = hacerPost("usuario", usuarioValido);
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
@@ -185,17 +144,13 @@ public class UsuarioResourceIntegracionTest {
                 .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
                 .generar();
 
-        ClientResponse responseInsertUsuario = client.resource(
-                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuario);
+        ClientResponse responseInsertUsuario = hacerPost("usuario", usuario);
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
-        ClientResponse responseValidacion = client.resource(
-                String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("numeroIdentificacion", usuario.getIdentificacion().getNumeroIdentificacion())
-                .get(ClientResponse.class);
+        MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
+        parametros.add("numeroIdentificacion", usuario.getIdentificacion().getNumeroIdentificacion());
+        ClientResponse responseValidacion = hacerGet(parametros);
 
         assertThat(responseValidacion.getStatus(), is(400));
         assertThat(responseValidacion.getEntity(String.class), is(mensajeErrorBuilder.mensajeNumeroIdentificacionYaHaSidoRegistrado()));
@@ -203,10 +158,11 @@ public class UsuarioResourceIntegracionTest {
 
     @Test
     public void debeIndicarQueUnNumeroDeIdentificacionNoSeEncuentraRegistrado() throws Exception {
-        ClientResponse responseValidacion = client.resource(
-                String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("numeroIdentificacion", UsuarioBuilder.nuevoUsuario().generar().getIdentificacion().getNumeroIdentificacion())
-                .get(ClientResponse.class);
+        Usuario usuario = UsuarioBuilder.nuevoUsuario().generar();
+        MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
+        parametros.add("numeroIdentificacion", usuario.getIdentificacion().getNumeroIdentificacion());
+
+        ClientResponse responseValidacion = hacerGet(parametros);
 
         assertThat(responseValidacion.getStatus(), is(200));
     }
@@ -218,17 +174,11 @@ public class UsuarioResourceIntegracionTest {
                 .con(u -> u.nombreUsuario = "A")
                 .generar();
 
-        ClientResponse responseInsertUsuario = client.resource(
-                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioConNombreA);
+        ClientResponse responseInsertUsuario = hacerPost("usuario", usuarioConNombreA);
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
-        ClientResponse responseUsuarioRepetido = client.resource(
-                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioConNombreA);
+        ClientResponse responseUsuarioRepetido = hacerPost("usuario", usuarioConNombreA);
 
         assertThat(responseUsuarioRepetido.getStatus(), is(400));
         assertThat(responseUsuarioRepetido.getEntity(String.class), is(mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()));
@@ -245,17 +195,11 @@ public class UsuarioResourceIntegracionTest {
                 .con(u -> u.numeroIdentificacion = "1111111116")
                 .generar();
 
-        ClientResponse responseInsertUsuario = client.resource(
-                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioConNombreA);
+        ClientResponse responseInsertUsuario = hacerPost("usuario", usuarioConNombreA);
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
-        ClientResponse responseUsuarioRepetido = client.resource(
-                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioConElMismoId);
+        ClientResponse responseUsuarioRepetido = hacerPost("usuario", usuarioConElMismoId);
 
         assertThat(responseUsuarioRepetido.getStatus(), is(400));
         assertThat(responseUsuarioRepetido.getEntity(String.class), is(mensajeErrorBuilder.mensajeNumeroIdentificacionYaHaSidoRegistrado()));
@@ -268,10 +212,7 @@ public class UsuarioResourceIntegracionTest {
                 .con(u -> u.tipoDocumento = TipoDocumentoEnum.PASAPORTE)
                 .generar();
 
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioCon21Digitos);
+        ClientResponse response = hacerPost("usuario", usuarioCon21Digitos);
 
         assertThat(response.getStatus(), is(400));
     }
@@ -283,10 +224,7 @@ public class UsuarioResourceIntegracionTest {
                 .con(u -> u.numeroIdentificacion = "")
                 .generar();
 
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/usuario", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, usuarioCon21Digitos);
+        ClientResponse response = hacerPost("usuario", usuarioCon21Digitos);
 
         assertThat(response.getStatus(), is(400));
     }
