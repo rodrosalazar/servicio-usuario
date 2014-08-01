@@ -72,9 +72,9 @@ public abstract class BaseIntegracionTest {
                 .post(ClientResponse.class, objectoAEnviar);
     }
 
-    protected ClientResponse hacerGet(MultivaluedMap<String, String> parametros) {
+    protected ClientResponse hacerGet(String recurso, MultivaluedMap<String, String> parametros) {
         return client.resource(
-                String.format("http://localhost:%d/usuario/validacion", UsuarioResourceIntegracionTest.RULE.getLocalPort()))
+                String.format("http://localhost:%d/" + recurso, UsuarioResourceIntegracionTest.RULE.getLocalPort()))
                 .queryParams(parametros)
                 .get(ClientResponse.class);
     }

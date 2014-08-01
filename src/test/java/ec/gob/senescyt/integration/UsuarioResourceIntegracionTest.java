@@ -55,20 +55,20 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
 
     @Test
     public void debeVerificarNumeroDeCedulaCorrecto() {
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("cedula", "1718642174")
-                .get(ClientResponse.class);
+        MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
+        parametros.add("cedula", "1111111116");
+
+        ClientResponse response = hacerGet("usuario/validacion", parametros);
 
         assertThat(response.getStatus(), is(200));
     }
 
     @Test
     public void debeVerificarNumeroDeCedulaIncorrecto() {
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("cedula", "1111111111")
-                .get(ClientResponse.class);
+        MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
+        parametros.add("cedula", "1111111111");
+
+        ClientResponse response = hacerGet("usuario/validacion", parametros);
 
         assertThat(response.getStatus(), is(400));
         assertThat(response.getEntity(String.class), is(mensajeErrorBuilder.mensajeNumeroIdentificacionInvalido()));
@@ -117,10 +117,10 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
 
         assertThat(responseInsertUsuario.getStatus(), is(201));
 
-        ClientResponse responseValidacion = client.resource(
-                String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("nombreUsuario", UsuarioBuilder.nuevoUsuario().generar().getNombreUsuario())
-                .get(ClientResponse.class);
+        MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
+        parametros.add("nombreUsuario", UsuarioBuilder.nuevoUsuario().generar().getNombreUsuario());
+
+        ClientResponse responseValidacion = hacerGet("usuario/validacion", parametros);
 
         assertThat(responseValidacion.getStatus(), is(400));
         assertThat(responseValidacion.getEntity(String.class), is(mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()));
@@ -129,11 +129,10 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
     @Test
     public void debeIndicarQueUnNombreDeUsuarioNoSeEncuentraRegistrado() throws Exception {
         Usuario usuarioValido = UsuarioBuilder.nuevoUsuario().generar();
+        MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
+        parametros.add("nombreUsuario", usuarioValido.getNombreUsuario());
 
-        ClientResponse responseValidacion = client.resource(
-                String.format("http://localhost:%d/usuario/validacion", RULE.getLocalPort()))
-                .queryParam("nombreUsuario", usuarioValido.getNombreUsuario())
-                .get(ClientResponse.class);
+        ClientResponse responseValidacion = hacerGet("usuario/validacion", parametros);
 
         assertThat(responseValidacion.getStatus(), is(200));
     }
@@ -150,7 +149,7 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
 
         MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
         parametros.add("numeroIdentificacion", usuario.getIdentificacion().getNumeroIdentificacion());
-        ClientResponse responseValidacion = hacerGet(parametros);
+        ClientResponse responseValidacion = hacerGet("usuario/validacion", parametros);
 
         assertThat(responseValidacion.getStatus(), is(400));
         assertThat(responseValidacion.getEntity(String.class), is(mensajeErrorBuilder.mensajeNumeroIdentificacionYaHaSidoRegistrado()));
@@ -162,7 +161,7 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
         MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
         parametros.add("numeroIdentificacion", usuario.getIdentificacion().getNumeroIdentificacion());
 
-        ClientResponse responseValidacion = hacerGet(parametros);
+        ClientResponse responseValidacion = hacerGet("usuario/validacion", parametros);
 
         assertThat(responseValidacion.getStatus(), is(200));
     }
@@ -219,12 +218,12 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
 
     @Test
     public void debeDevolverUnMensajeDeErrorCuandoElNumeroDePasaporteEstaVacio() {
-        Usuario usuarioCon21Digitos = UsuarioBuilder.nuevoUsuario()
+        Usuario usuarioConPasaporteVacio = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.tipoDocumento = TipoDocumentoEnum.PASAPORTE)
                 .con(u -> u.numeroIdentificacion = "")
                 .generar();
 
-        ClientResponse response = hacerPost("usuario", usuarioCon21Digitos);
+        ClientResponse response = hacerPost("usuario", usuarioConPasaporteVacio);
 
         assertThat(response.getStatus(), is(400));
     }
