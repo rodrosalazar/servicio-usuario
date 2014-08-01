@@ -12,7 +12,7 @@ public class Arbol {
     private Integer id;
     private String nombre;
 
-    @OneToMany(mappedBy = "arbol", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "arbol", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<NivelArbol> nivelesArbol = new ArrayList<>();
 
     public Arbol() {

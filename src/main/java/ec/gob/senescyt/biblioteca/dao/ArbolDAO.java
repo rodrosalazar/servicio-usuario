@@ -7,7 +7,9 @@ import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.DistinctRootEntityResultTransformer;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,28 +36,27 @@ public class ArbolDAO extends AbstractDAO<Arbol> {
     public List<Arbol> obtenerTodos() {
 
         Criteria criteria = currentSession().createCriteria(Arbol.class, "a")
-                .setFetchMode("NivelArbol", FetchMode.JOIN)
-                .createAlias("nivelesArbol","na")
-                .add(Restrictions.isNull("na.nivelPadre"));
+                .setFetchMode("a.nivelesArbol", FetchMode.JOIN)
+                .createAlias("a.nivelesArbol", "na")
+                .setFetchMode("na.nivelesHijos", FetchMode.JOIN)
+                .setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
         List<Arbol> arboles = criteria.list();
 
         for (Arbol arbol : arboles) {
 
             List<NivelArbol> nivelesArbolConHijos = arbol.getNivelesArbol().stream()
-                    .filter(nivelArbol -> nivelArbol.getNivelesHijos().size() > 0
+                    .filter(nivelArbol -> (nivelArbol.getNivelesHijos().size() > 0 || nivelArbol.getId().equals(32))
                                     && !nivelArbol.getId().equals(5)
                                     && !nivelArbol.getId().equals(8)
                                     && !nivelArbol.getId().equals(17)
                                     && !nivelArbol.getId().equals(14)
                                     && !nivelArbol.getId().equals(23)
-                                    && !nivelArbol.getId().equals(34)
                                     && !nivelArbol.getId().equals(35)
                                     && !nivelArbol.getId().equals(38)
                                     && !nivelArbol.getId().equals(43)
                                     && !nivelArbol.getId().equals(44)
                                     && !nivelArbol.getId().equals(47)
-                                    && !nivelArbol.getId().equals(53)
                                     && !nivelArbol.getId().equals(54)
                                     && !nivelArbol.getId().equals(57)
                                     && !nivelArbol.getId().equals(62)

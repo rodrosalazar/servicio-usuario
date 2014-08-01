@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "niveles_arbol")
 @JsonPropertyOrder({"id", "nombre", "arbolIdParaCsv", "nivelPadreIdParaCsv"})
-public class NivelArbol {
+public class NivelArbol implements Comparable<NivelArbol>{
 
     @Id
     private Integer id;
@@ -35,7 +35,7 @@ public class NivelArbol {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer nivelPadreIdParaCsv;
 
-    @OneToMany(mappedBy = "nivelPadre")
+    @OneToMany(mappedBy = "nivelPadre", fetch = FetchType.EAGER)
     @JsonManagedReference("nivelesHijos")
     private List<NivelArbol> nivelesHijos = new ArrayList<>();
 
@@ -89,5 +89,10 @@ public class NivelArbol {
 
     public List<NivelArbol> getNivelesHijos() {
         return nivelesHijos;
+    }
+
+    @Override
+    public int compareTo(NivelArbol o) {
+        return this.id - o.getId();
     }
 }
