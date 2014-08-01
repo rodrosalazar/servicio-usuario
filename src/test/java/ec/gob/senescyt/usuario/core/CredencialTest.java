@@ -23,7 +23,7 @@ public class CredencialTest {
     }
 
     @Test
-    public void debeDeserializarUnPaisDesdeJSON() throws Exception {
+    public void debeDeserializarUnaCredencialDesdeJSON() throws Exception {
         Credencial credencialDeserializada = MAPPER.readValue(fixture("fixtures/credencial_con_id.json"), Credencial.class);
 
         assertThat(credencialDeserializada.getNombreUsuario(),is(credencial.getNombreUsuario()));
@@ -31,7 +31,7 @@ public class CredencialTest {
     }
 
     @Test
-    public void debeSerializarUnPaisAJSON() throws Exception {
+    public void debeSerializarUnaCredencialAJSON() throws Exception {
         String actual = MAPPER.writeValueAsString(credencial);
         assertThat(actual, is(fixture("fixtures/credencial_con_id.json")));
     }
