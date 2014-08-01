@@ -106,6 +106,15 @@ task contractTests(type: Test, dependsOn: testClasses) {
     include 'ec/gob/senescyt/contracts/**'
 }
 
+task unitTests(type: Test, dependsOn: testClasses) {
+    exclude 'ec/gob/senescyt/contracts/**'
+    exclude 'ec/gob/senescyt/integration/**'
+}
+
+task integrationTests(type: Test, dependsOn: testClasses) {
+    include 'ec/gob/senescyt/integration/**'
+}
+
 tasks.withType(Test) {
     // show standard out and standard error of the test JVM(s) on the console
     testLogging {
