@@ -6,14 +6,17 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
+import java.util.Optional;
+
 public class TokenDAO extends AbstractDAO<Token> {
 
     public TokenDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
     }
 
-    public Token buscar(String idToken) {
-        return get(idToken);
+    public Optional<Token> buscar(String idToken) {
+        Token token = get(idToken);
+        return Optional.ofNullable(token);
     }
 
     public void guardar(final Token token) {

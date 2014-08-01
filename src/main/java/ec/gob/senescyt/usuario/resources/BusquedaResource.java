@@ -16,6 +16,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import java.util.Optional;
+
 import static javax.ws.rs.core.Response.Status.*;
 
 @Path("/busqueda")
@@ -54,7 +56,10 @@ public class BusquedaResource {
     }
 
     private Response buscarToken(String idToken) {
-        Token token = tokenDAO.buscar(idToken);
-        return Response.ok(token).build();
+        Optional<Token> token = tokenDAO.buscar(idToken);
+        if (token.isPresent()) {
+            return Response.ok(token.get()).build();
+        }
+        return Response.status(NOT_FOUND).build();
     }
 }

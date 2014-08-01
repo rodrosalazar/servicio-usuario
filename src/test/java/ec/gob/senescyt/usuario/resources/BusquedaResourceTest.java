@@ -18,6 +18,7 @@ import org.junit.Test;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static ec.gob.senescyt.commons.helpers.ResourceTestHelper.assertErrorMessage;
@@ -113,7 +114,7 @@ public class BusquedaResourceTest {
 
     @Test
     public void debeDevolverRecursoNoEncontradoCuandoTokenNoEsValido() {
-        when(tokenDAO.buscar(tokenInvalido)).thenThrow(new NotFoundException("Error"));
+        when(tokenDAO.buscar(tokenInvalido)).thenReturn(Optional.empty());
 
         ClientResponse response = resources.client().resource("/busqueda")
                 .queryParam("token", tokenInvalido)
@@ -126,7 +127,7 @@ public class BusquedaResourceTest {
     @Test
     public void debeDevolverElIdDelUsuarioCuandoElTokenEsValido() {
         Token tokenTest = new Token(tokenValido, UsuarioBuilder.nuevoUsuario().generar());
-        when(tokenDAO.buscar(tokenValido)).thenReturn(tokenTest);
+        when(tokenDAO.buscar(tokenValido)).thenReturn(Optional.of(tokenTest));
         ClientResponse response = resources.client().resource("/busqueda")
                 .queryParam("token", tokenValido)
                 .header("Content-Type", MediaType.APPLICATION_JSON)
@@ -140,7 +141,8 @@ public class BusquedaResourceTest {
 
     @Test
     public void debeDevolverElNombreDeUsuarioCuandoElTokenEsValido() {
-        when(tokenDAO.buscar(tokenValido)).thenReturn(new Token(tokenValido, UsuarioBuilder.nuevoUsuario().generar()));
+        Token tokenTest = new Token(tokenValido, UsuarioBuilder.nuevoUsuario().generar());
+        when(tokenDAO.buscar(tokenValido)).thenReturn(Optional.of(tokenTest));
         ClientResponse response = resources.client().resource("/busqueda")
                 .queryParam("token", tokenValido)
                 .header("Content-Type", MediaType.APPLICATION_JSON)
