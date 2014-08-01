@@ -1,10 +1,11 @@
 package ec.gob.senescyt.usuario.resources;
 
+import com.sun.jersey.api.NotFoundException;
 import com.sun.jersey.api.client.ClientResponse;
-import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
-import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
-import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
+import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.usuario.core.CedulaInfo;
+import ec.gob.senescyt.usuario.core.Token;
+import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.exceptions.CedulaInvalidaException;
 import ec.gob.senescyt.usuario.exceptions.CredencialesIncorrectasException;
 import ec.gob.senescyt.usuario.exceptions.ServicioNoDisponibleException;
@@ -15,6 +16,10 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import java.util.Optional;
+import java.util.UUID;
 
 import static ec.gob.senescyt.commons.helpers.ResourceTestHelper.assertErrorMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -23,16 +28,24 @@ import static org.mockito.Mockito.*;
 
 public class BusquedaResourceTest {
 
+    private static final int OK_STATUS_CODE = Response.Status.OK.getStatusCode();
     private static ServicioCedula servicioCedula = mock(ServicioCedula.class);
+    private static TokenDAO tokenDAO = mock(TokenDAO.class);
 
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
-            .addResource(new BusquedaResource(servicioCedula))
+            .addResource(new BusquedaResource(servicioCedula, tokenDAO))
             .build();
+
+    private String tokenInvalido;
+    private String tokenValido;
 
     @Before
     public void setUp() {
         reset(servicioCedula);
+        reset(tokenDAO);
+        tokenInvalido = UUID.randomUUID().toString();
+        tokenValido = UUID.randomUUID().toString();
     }
 
     @Test
@@ -96,5 +109,48 @@ public class BusquedaResourceTest {
         assertThat(cedulaInfo.getFechaNacimiento(), is(fechaNacimiento));
         assertThat(cedulaInfo.getGenero(), is(genero));
         assertThat(cedulaInfo.getNacionalidad(), is(nacionalidad));
+    }
+
+
+    @Test
+    public void debeDevolverRecursoNoEncontradoCuandoTokenNoEsValido() {
+        when(tokenDAO.buscar(tokenInvalido)).thenReturn(Optional.empty());
+
+        ClientResponse response = resources.client().resource("/busqueda")
+                .queryParam("token", tokenInvalido)
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .get(ClientResponse.class);
+
+        assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
+    }
+
+    @Test
+    public void debeDevolverElIdDelUsuarioCuandoElTokenEsValido() {
+        Token tokenTest = new Token(tokenValido, UsuarioBuilder.nuevoUsuario().generar());
+        when(tokenDAO.buscar(tokenValido)).thenReturn(Optional.of(tokenTest));
+        ClientResponse response = resources.client().resource("/busqueda")
+                .queryParam("token", tokenValido)
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .get(ClientResponse.class);
+
+        long idUsuarioEsperado = 0;
+        assertThat(response.getStatus(), is(OK_STATUS_CODE));
+        Token token = response.getEntity(Token.class);
+        assertThat(token.getUsuario().getId(), is(idUsuarioEsperado));
+    }
+
+    @Test
+    public void debeDevolverElNombreDeUsuarioCuandoElTokenEsValido() {
+        Token tokenTest = new Token(tokenValido, UsuarioBuilder.nuevoUsuario().generar());
+        when(tokenDAO.buscar(tokenValido)).thenReturn(Optional.of(tokenTest));
+        ClientResponse response = resources.client().resource("/busqueda")
+                .queryParam("token", tokenValido)
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .get(ClientResponse.class);
+
+        String nombreUsuarioEsperado = "usuarioSenescyt";
+        assertThat(response.getStatus(), is(OK_STATUS_CODE));
+        Token token = response.getEntity(Token.class);
+        assertThat(token.getUsuario().getNombreUsuario(), is(nombreUsuarioEsperado));
     }
 }

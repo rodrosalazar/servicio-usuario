@@ -19,7 +19,7 @@ import static ec.gob.senescyt.commons.helpers.ResourceTestHelper.assertErrorMess
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class BusquedaResourceIntegracionTest {
+public class BusquedaCedulaTest {
 
     private static final String CONFIGURACION = "test-integracion.yml";
     public static final String CEDULA_VALIDA = "1111111116";

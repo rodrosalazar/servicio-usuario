@@ -18,7 +18,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class ContraseniaResourceIntegracionTest extends BaseIntegracionTest {
+public class BusquedaResourceIntegracionTest extends BaseIntegracionTest {
 
     private static final String ID_TOKEN = "32d88be3-2233-4b58-bf3c-99c35b162805";
 
@@ -62,7 +62,8 @@ public class ContraseniaResourceIntegracionTest extends BaseIntegracionTest {
     @Test
     public void debeObtenerUnTokenPorSuId() throws Exception {
         ClientResponse response = client.resource(
-                String.format("http://localhost:%d/contrasenia/" + ID_TOKEN, RULE.getLocalPort()))
+                String.format("http://localhost:%d/busqueda", RULE.getLocalPort()))
+                .queryParam("token", ID_TOKEN)
                 .get(ClientResponse.class);
 
         assertThat(response.getStatus(), is(200));

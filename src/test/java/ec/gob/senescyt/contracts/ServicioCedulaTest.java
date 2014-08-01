@@ -23,8 +23,6 @@ public class ServicioCedulaTest {
     private ServicioCedula servicioCedula;
     private ConfiguracionBSG configuracionBSG = mock(ConfiguracionBSG.class);
     private ProvinciaDAO provinciaDAO = mock(ProvinciaDAO.class);
-    private CantonDAO cantonDAO = mock(CantonDAO.class);
-    private ParroquiaDAO parroquiaDAO = mock(ParroquiaDAO.class);
 
     @Before
     public void setUp() throws Exception {

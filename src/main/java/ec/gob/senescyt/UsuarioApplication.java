@@ -141,11 +141,8 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final ArbolResource arbolResource = new ArbolResource(arbolDAO, constructorRespuestas);
         environment.jersey().register(arbolResource);
 
-        final BusquedaResource busquedaResource = new BusquedaResource(servicioCedula);
+        final BusquedaResource busquedaResource = new BusquedaResource(servicioCedula, tokenDAO);
         environment.jersey().register(busquedaResource);
-
-        final ContraseniaResource contraseniaResource = new ContraseniaResource(tokenDAO);
-        environment.jersey().register(contraseniaResource);
 
         final IdentificacionResource identificacionResource = new IdentificacionResource(credencialesDAO);
         environment.jersey().register(identificacionResource);
