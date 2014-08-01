@@ -42,9 +42,10 @@ public abstract class BaseIntegracionTest {
         perfilDAO = new PerfilDAO(sessionFactory);
         tokenDAO = new TokenDAO(sessionFactory);
 
-        client = new Client();
         ManagedSessionContext.bind(sessionFactory.openSession());
         limpiarTablas();
+
+        client = new Client();
     }
 
     @After
@@ -62,10 +63,6 @@ public abstract class BaseIntegracionTest {
     }
 
     protected abstract DropwizardAppRule<UsuarioConfiguration> getRule();
-
-    protected SessionFactory getSessionFactory(DropwizardAppRule<UsuarioConfiguration> rule) {
-        return ((UsuarioApplication) rule.getApplication()).getSessionFactory();
-    }
 
     protected ClientResponse hacerPost(final String recurso, Object objectoAEnviar) {
         return client.resource(String.format("http://localhost:%d/" + recurso, getRule().getLocalPort()))
