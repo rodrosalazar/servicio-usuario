@@ -1,27 +1,37 @@
 package ec.gob.senescyt.usuario.core;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
 public class Credencial {
-    private long id;
-    private long idUsuario;
+
+    @Id
+    @NotEmpty
+    private String nombreUsuario;
+
+    @NotEmpty
     private String contrasenia;
+
+    @OneToOne
+    @JoinColumn(name = "nombreUsuario")
+    private Usuario usuario;
 
     private Credencial() {
     }
 
-    public Credencial(long idUsuario, String contrasenia) {
-        this.idUsuario = idUsuario;
+    public Credencial(String nombreUsuario, String contrasenia) {
+        this.nombreUsuario = nombreUsuario;
         this.contrasenia = contrasenia;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public long getIdUsuario() {
-        return idUsuario;
     }
 
     public String getContrasenia() {
         return contrasenia;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
     }
 }

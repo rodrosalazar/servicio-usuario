@@ -4,6 +4,7 @@ import com.google.common.base.Optional;
 import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.commons.email.ConstructorDeContenidoDeEmail;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
+import ec.gob.senescyt.usuario.core.Session;
 import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.TokenDAO;

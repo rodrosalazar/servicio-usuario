@@ -47,6 +47,7 @@ dependencies {
             'io.dropwizard:dropwizard-core:' + dropwizardVersion,
             'io.dropwizard:dropwizard-testing:' + dropwizardVersion,
             'io.dropwizard:dropwizard-hibernate:' + dropwizardVersion,
+            'io.dropwizard:dropwizard-auth:' + dropwizardVersion,
             'org.slf4j:slf4j-api:1.7.5',
             'org.postgresql:postgresql:9.3-1101-jdbc41',
             'com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.4.0',

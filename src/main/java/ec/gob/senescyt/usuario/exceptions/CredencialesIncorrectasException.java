@@ -6,3 +6,4 @@ public class CredencialesIncorrectasException extends Throwable {
         super(mensaje);
     }
 }
+

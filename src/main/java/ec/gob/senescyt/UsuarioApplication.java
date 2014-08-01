@@ -16,6 +16,7 @@ import ec.gob.senescyt.titulos.core.*;
 import ec.gob.senescyt.titulos.core.Identificacion;
 import ec.gob.senescyt.titulos.dao.*;
 import ec.gob.senescyt.titulos.resources.TituloExtranjeroResource;
+import ec.gob.senescyt.usuario.autenticacion.UsuarioAuthenticator;
 import ec.gob.senescyt.usuario.bundles.DBMigrationsBundle;
 import ec.gob.senescyt.usuario.core.*;
 import ec.gob.senescyt.usuario.core.cine.Area;
@@ -29,6 +30,8 @@ import ec.gob.senescyt.usuario.resources.management.LimpiezaResource;
 import ec.gob.senescyt.usuario.services.ServicioCedula;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.Application;
+import io.dropwizard.auth.basic.BasicAuthProvider;
+import io.dropwizard.auth.oauth.OAuthProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -96,6 +99,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG(), provinciaDAO);
         UniversidadExtranjeraDAO universidadExtranjeraDAO = new UniversidadExtranjeraDAO(getSessionFactory());
         TokenDAO tokenDAO = new TokenDAO(getSessionFactory());
+        CredencialDAO credencialesDAO = new CredencialDAO();
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
         environment.jersey().register(perfilResource);
@@ -143,9 +147,14 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final ContraseniaResource contraseniaResource = new ContraseniaResource(tokenDAO);
         environment.jersey().register(contraseniaResource);
 
+        final IdentificacionResource identificacionResource = new IdentificacionResource(credencialesDAO);
+        environment.jersey().register(identificacionResource);
+
         registrarFiltros(environment);
 
         registrarValidacionExceptionMapper(environment);
+
+        environment.jersey().register(new OAuthProvider<Credencial>(new UsuarioAuthenticator(), "SENESCYT"));
     }
 
     private void registrarFiltros(Environment environment) {

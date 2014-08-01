@@ -16,18 +16,17 @@ public class CredencialTest {
 
     @Before
     public void setup() {
-        long idUsuario = 1;
         String contrasenia = "contrasenia hasheada";
-
-        credencial = new Credencial(idUsuario, contrasenia);
+        String username = "username";
+        
+        credencial = new Credencial(username, contrasenia);
     }
 
     @Test
     public void debeDeserializarUnPaisDesdeJSON() throws Exception {
         Credencial credencialDeserializada = MAPPER.readValue(fixture("fixtures/credencial_con_id.json"), Credencial.class);
 
-        assertThat(credencialDeserializada.getId(),is(credencial.getId()));
-        assertThat(credencialDeserializada.getIdUsuario(),is(credencial.getIdUsuario()));
+        assertThat(credencialDeserializada.getNombreUsuario(),is(credencial.getNombreUsuario()));
         assertThat(credencialDeserializada.getContrasenia(),is(credencial.getContrasenia()));
     }
 
