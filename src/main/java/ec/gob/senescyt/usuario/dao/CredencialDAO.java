@@ -7,4 +7,8 @@ public class CredencialDAO {
     public Optional validar(Credencial credencialesUsuario) {
         return Optional.absent();
     }
+
+    public Credencial guardar(Credencial credencial) {
+        return null;
+    }
 }
