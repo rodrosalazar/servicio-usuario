@@ -9,6 +9,7 @@ import ec.gob.senescyt.biblioteca.resource.ArbolResource;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.commons.exceptions.DBConstraintViolationMapper;
 import ec.gob.senescyt.commons.filters.HeaderResponseFilter;
+import ec.gob.senescyt.commons.filters.RedirectFilter;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
@@ -30,6 +31,7 @@ import ec.gob.senescyt.usuario.resources.management.LimpiezaResource;
 import ec.gob.senescyt.usuario.services.ServicioCedula;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.Application;
+import io.dropwizard.Bundle;
 import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.auth.oauth.OAuthProvider;
 import io.dropwizard.db.DataSourceFactory;
@@ -76,6 +78,17 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     public void initialize(Bootstrap<UsuarioConfiguration> bootstrap) {
         bootstrap.addBundle(hibernate);
         bootstrap.addBundle(flywayBundle);
+//        bootstrap.addBundle(new Bundle() {
+//            @Override
+//            public void initialize(Bootstrap<?> bootstrap) {
+//
+//            }
+//
+//            @Override
+//            public void run(Environment environment) {
+//                environment.servlets().addFilter("redirect", RedirectFilter.class).addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "*");
+//            }
+//        });
     }
 
 
@@ -156,9 +169,11 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
     private void registrarFiltros(Environment environment) {
         environment.jersey().getResourceConfig().getContainerResponseFilters().add(new HeaderResponseFilter(StandardCharsets.UTF_8.name()));
+        environment.jersey().getResourceConfig().getContainerRequestFilters().add(RedirectFilter.class);
 
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
+
     }
 
     @VisibleForTesting

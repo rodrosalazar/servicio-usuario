@@ -27,10 +27,7 @@ public class PerfilResourceIntegracionTest extends BaseIntegracionTest {
 
     @Test
     public void debeSalvarElPerfilConPermisos() {
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/perfiles", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, PerfilBuilder.nuevoPerfil().generar());
+        ClientResponse response = hacerPost("perfiles",PerfilBuilder.nuevoPerfil().generar());
 
         assertThat(response.getStatus(), is(201));
         Perfil perfilRespuesta = response.getEntity(Perfil.class);

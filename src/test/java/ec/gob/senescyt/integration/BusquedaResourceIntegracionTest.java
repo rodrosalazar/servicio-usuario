@@ -1,6 +1,7 @@
 package ec.gob.senescyt.integration;
 
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.core.util.MultivaluedMapImpl;
 import ec.gob.senescyt.UsuarioApplication;
 import ec.gob.senescyt.UsuarioConfiguration;
 import ec.gob.senescyt.commons.builders.PerfilBuilder;
@@ -13,6 +14,9 @@ import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
+
+import javax.ws.rs.core.MultivaluedMap;
+import java.util.HashMap;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
@@ -61,10 +65,10 @@ public class BusquedaResourceIntegracionTest extends BaseIntegracionTest {
 
     @Test
     public void debeObtenerUnTokenPorSuId() throws Exception {
-        ClientResponse response = client.resource(
-                String.format("http://localhost:%d/busqueda", RULE.getLocalPort()))
-                .queryParam("token", ID_TOKEN)
-                .get(ClientResponse.class);
+        MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
+
+        parametros.add("token",ID_TOKEN);
+        ClientResponse response = hacerGet("busqueda", parametros);
 
         assertThat(response.getStatus(), is(200));
         Token token = response.getEntity(Token.class);

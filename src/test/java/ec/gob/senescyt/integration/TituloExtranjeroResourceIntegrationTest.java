@@ -23,11 +23,7 @@ import static ec.gob.senescyt.commons.helpers.ResourceTestHelper.assertErrorMess
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class TituloExtranjeroResourceIntegrationTest {
-
-    private static final String CONFIGURACION = "test-integracion.yml";
-
-    private SessionFactory sessionFactory;
+public class TituloExtranjeroResourceIntegrationTest extends BaseIntegracionTest {
 
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
@@ -42,28 +38,18 @@ public class TituloExtranjeroResourceIntegrationTest {
         }
     }
 
-    @Before
-    public void setUp() {
-        sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
-        ManagedSessionContext.bind(sessionFactory.openSession());
-    }
-
-    @After
-    public void tearDown() {
-        ManagedSessionContext.unbind(sessionFactory);
+    @Override
+    protected DropwizardAppRule<UsuarioConfiguration> getRule() {
+        return RULE;
     }
 
     @Test
     public void debeAlmacenarUnNuevoExpedienteDeTituloExtranjero() {
-        Client client = new Client();
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> p.identificacion = new Cedula(numeroIdentificacionCedulaValida))
                 .generar();
 
-        ClientResponse respuesta = client.resource(
-                String.format("http://localhost:%d/titulo/extranjero", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, portadorTitulo);
+        ClientResponse respuesta =  hacerPost("titulo/extranjero", portadorTitulo);
 
         assertThat(respuesta.getStatus(), is(201));
         assertThat(respuesta.getEntity(PortadorTitulo.class).getEmail(), is(portadorTitulo.getEmail()));
@@ -71,16 +57,12 @@ public class TituloExtranjeroResourceIntegrationTest {
 
     @Test
     public void debeHacerAlgoCuandoElCodigoDelPaisNoExiste() {
-        Client client = new Client();
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> p.identificacion = new Cedula(numeroIdentificacionCedulaValida))
                 .con(p -> p.idPaisNacionalidad = "invali")
                 .generar();
 
-        ClientResponse respuesta = client.resource(
-                String.format("http://localhost:%d/titulo/extranjero", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, portadorTitulo);
+        ClientResponse respuesta = hacerPost("titulo/extranjero",portadorTitulo);
 
         assertThat(respuesta.getStatus(), is(400));
         assertErrorMessage(respuesta, "idpaisnacionalidad no es un valor válido");
@@ -88,16 +70,12 @@ public class TituloExtranjeroResourceIntegrationTest {
 
     @Test
     public void debeHacerAlgoCuandoElCodigoDeEtniaNoExiste() {
-        Client client = new Client();
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> p.identificacion = new Cedula(numeroIdentificacionCedulaValida))
                 .con(p -> p.idEtnia = "xx")
                 .generar();
 
-        ClientResponse respuesta = client.resource(
-                String.format("http://localhost:%d/titulo/extranjero", RULE.getLocalPort()))
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, portadorTitulo);
+        ClientResponse respuesta = hacerPost("titulo/extranjero", portadorTitulo);
 
         assertThat(respuesta.getStatus(), is(400));
         assertErrorMessage(respuesta, "etnia_id no es un valor válido");

@@ -5,6 +5,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.UsuarioApplication;
 import ec.gob.senescyt.UsuarioConfiguration;
+import ec.gob.senescyt.commons.Constantes;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
@@ -14,6 +15,9 @@ import org.hibernate.context.internal.ManagedSessionContext;
 import org.junit.After;
 import org.junit.Before;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
@@ -65,21 +69,21 @@ public abstract class BaseIntegracionTest {
     protected abstract DropwizardAppRule<UsuarioConfiguration> getRule();
 
     protected ClientResponse hacerPost(final String recurso, Object objectoAEnviar) {
-        return client.resource(String.format("http://localhost:%d/" + recurso, getRule().getLocalPort()))
+        return client.resource(String.format("https://localhost:%d/" + recurso, Constantes.HTTPS_PORT))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, objectoAEnviar);
     }
 
     protected ClientResponse hacerGet(String recurso, MultivaluedMap<String, String> parametros) {
         return client.resource(
-                String.format("http://localhost:%d/" + recurso, getRule().getLocalPort()))
+                String.format("https://localhost:%d/" + recurso, Constantes.HTTPS_PORT))
                 .queryParams(parametros)
                 .get(ClientResponse.class);
     }
 
     protected ClientResponse hacerGet(String recurso) {
         return client.resource(
-                String.format("http://localhost:%d/" + recurso, getRule().getLocalPort()))
+                String.format("https://localhost:%d/" + recurso, Constantes.HTTPS_PORT))
                 .get(ClientResponse.class);
     }
 }

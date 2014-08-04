@@ -113,3 +113,26 @@ $ ./gradlew oneJar
 ```
 $ java -jar build/lib/servicio-usuario-standalone.jar server servicio-usuario.yml
 ```
+
+Habilitar HTTPS
+-----------------
+1. Crear el certificado autofirmado
+
+keytool -genkey -keyalg RSA -alias sniese -keystore sniese.keystore -storepass password -validity 360 -keysize 2048
+
+Cuando en la consola aparezca la siguiente pregunta:
+
+What is your first and last name?
+
+Responder con: localhost
+
+2. Exportar el certificado a un formato binario:
+
+keytool -exportcert -alias sniese -keystore sniese.keystore -file sniese.der -rfc 
+
+3. Importar el certificado a la JVM:
+
+sudo keytool -import -alias sniese -keystore /Library/Java/JavaVirtualMachines/jdk1.8.0_05.jdk/Contents/Home/jre/lib/security/cacerts -file sniese.der
+
+Si se solicita un password es: changeit
+
