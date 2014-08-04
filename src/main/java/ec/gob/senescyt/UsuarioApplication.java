@@ -11,6 +11,7 @@ import ec.gob.senescyt.commons.exceptions.DBConstraintViolationMapper;
 import ec.gob.senescyt.commons.filters.HeaderResponseFilter;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
+import ec.gob.senescyt.commons.resources.BlitzResource;
 import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import ec.gob.senescyt.titulos.core.*;
 import ec.gob.senescyt.titulos.core.Identificacion;
@@ -146,6 +147,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         final IdentificacionResource identificacionResource = new IdentificacionResource(credencialesDAO);
         environment.jersey().register(identificacionResource);
+
+        final BlitzResource blitzResource = new BlitzResource();
+        environment.jersey().register(blitzResource);
 
         registrarFiltros(environment);
 
