@@ -41,7 +41,7 @@ public class IdentificacionResourceTest {
 
     @Test
     public void debeDevolverTokenConLasCredencialesCorrectas() throws Exception {
-        String password = "password";
+        String password = "Clave456";
         String token = "ASD123123asdasd";
         String username = "username";
 
@@ -107,7 +107,7 @@ public class IdentificacionResourceTest {
 
     @Test
     public void debeDevolverNoAutorizadoCuandoCredencialesSonIncorrectas() {
-        Credencial credencialesIncorectas = new Credencial("incorrecta", "incorrecta");
+        Credencial credencialesIncorectas = new Credencial("incorrecta", "Incorr3cta");
         when(credencialDAO.validar(any(Credencial.class))).thenReturn(Optional.absent());
 
         ClientResponse response = client.resource("/identificacion")

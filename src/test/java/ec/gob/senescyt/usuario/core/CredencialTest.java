@@ -18,21 +18,21 @@ public class CredencialTest {
     public void setup() {
         String contrasenia = "contrasenia hasheada";
         String username = "username";
-        
+
         credencial = new Credencial(username, contrasenia);
     }
 
     @Test
     public void debeDeserializarUnaCredencialDesdeJSON() throws Exception {
-        Credencial credencialDeserializada = MAPPER.readValue(fixture("fixtures/credencial_con_id.json"), Credencial.class);
+        Credencial credencialDeserializada = MAPPER.readValue(fixture("fixtures/credencial.json"), Credencial.class);
 
-        assertThat(credencialDeserializada.getNombreUsuario(),is(credencial.getNombreUsuario()));
-        assertThat(credencialDeserializada.getContrasenia(),is(credencial.getContrasenia()));
+        assertThat(credencialDeserializada.getNombreUsuario(), is(credencial.getNombreUsuario()));
+        assertThat(credencialDeserializada.getContrasenia(), is(credencial.getContrasenia()));
     }
 
     @Test
     public void debeSerializarUnaCredencialAJSON() throws Exception {
         String actual = MAPPER.writeValueAsString(credencial);
-        assertThat(actual, is(fixture("fixtures/credencial_con_id.json")));
+        assertThat(actual, is(fixture("fixtures/credencial.json")));
     }
 }
