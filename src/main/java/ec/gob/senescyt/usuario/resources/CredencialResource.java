@@ -42,15 +42,16 @@ public class CredencialResource {
     @POST
     @UnitOfWork
     public Response crear(@Valid final ContraseniaToken contraseniaToken) {
-        Optional<Token> token = tokenDAO.buscar(contraseniaToken.getIdToken());
+        Optional<Token> tokenOpcional = tokenDAO.buscar(contraseniaToken.getIdToken());
 
-        if (!token.isPresent()) {
+        if (!tokenOpcional.isPresent()) {
             Map<String, List<String>> entidadError = mensajeErrorBuilder.construirErrorCampo("idToken", MensajesErrorEnum.MENSAJE_ERROR_TOKEN);
             return Response.status(BAD_REQUEST).entity(entidadError).build();
         }
 
-        Credencial credencial = servicioCredencial.convertirACredencial(contraseniaToken, token.get());
+        Credencial credencial = servicioCredencial.convertirACredencial(contraseniaToken, tokenOpcional.get());
         Credencial nuevaCredencial = credencialDAO.guardar(credencial);
+        tokenDAO.eliminar(tokenOpcional.get().getId());
         return Response.status(CREATED).entity(nuevaCredencial).build();
     }
 }

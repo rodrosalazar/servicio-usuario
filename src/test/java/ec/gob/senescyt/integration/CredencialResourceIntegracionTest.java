@@ -14,10 +14,7 @@ import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.services.ServicioCredencial;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.ClassRule;
-import org.junit.Test;
+import org.junit.*;
 
 import java.io.File;
 
@@ -94,5 +91,19 @@ public class CredencialResourceIntegracionTest extends BaseIntegracionTest {
         assertThat(credencialCreada.getNombreUsuario(), is(NOMBRE_USUARIO));
         assertThat(servicioCredencial.verificarContrasenia(CONTRASENIA, credencialCreada.getHash()), is(true));
         assertThat(respuesta.getStatus(), is(201));
+    }
+
+    @Test
+    public void debePermitirElUsoDelTokenUnaSolaVez() {
+        ContraseniaToken contraseniaToken = ContraseniaTokenBuilder.nuevaContraseniaToken()
+                .con(c -> c.idToken = tokenGuardado.getId())
+                .con(c -> c.contrasenia = CONTRASENIA)
+                .generar();
+
+        ClientResponse primeraRespuesta =  hacerPost("credenciales", contraseniaToken);
+        ClientResponse segundaRespuesta =  hacerPost("credenciales", contraseniaToken);
+
+        assertThat(primeraRespuesta.getStatus(), is(201));
+        assertThat(segundaRespuesta.getStatus(), is(400));
     }
 }

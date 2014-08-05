@@ -178,6 +178,21 @@ public class CredencialResourceTest {
     }
 
     @Test
+    public void debeBorrarElTokenUnaVezUtilizado() {
+        Usuario usuario = UsuarioBuilder.nuevoUsuario().generar();
+        Token token = new Token(TOKEN_VALIDO, usuario);
+        ContraseniaToken contraseniaToken = ContraseniaTokenBuilder.nuevaContraseniaToken().generar();
+        when(tokenDAO.buscar(anyString())).thenReturn(Optional.of(token));
+
+        ClientResponse response = client.resource("/credenciales")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, contraseniaToken);
+
+        assertThat(response.getStatus(), is(201));
+        verify(tokenDAO).eliminar(token.getId());
+    }
+
+    @Test
     public void debeGuardarLaCredencialSiLaContraseniaEsValida() {
         String contrasenia = "Perez9";
         String hash = "hash de Perez9";

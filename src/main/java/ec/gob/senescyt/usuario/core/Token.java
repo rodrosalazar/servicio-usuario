@@ -9,7 +9,7 @@ public class Token {
     @Id
     private String id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 

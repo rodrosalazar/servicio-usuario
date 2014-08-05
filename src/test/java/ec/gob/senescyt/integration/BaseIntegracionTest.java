@@ -6,6 +6,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.UsuarioApplication;
 import ec.gob.senescyt.UsuarioConfiguration;
 import ec.gob.senescyt.commons.Constantes;
+import ec.gob.senescyt.usuario.dao.CredencialDAO;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
@@ -27,6 +28,7 @@ public abstract class BaseIntegracionTest {
     protected UsuarioDAO usuarioDAO;
     protected PerfilDAO perfilDAO;
     protected TokenDAO tokenDAO;
+    private CredencialDAO credencialDAO;
 
     protected static String resourceFilePath(String resourceClassPathLocation) {
         try {
@@ -40,6 +42,7 @@ public abstract class BaseIntegracionTest {
     public void setUpDB() {
         sessionFactory = ((UsuarioApplication) getRule().getApplication()).getSessionFactory();
         usuarioDAO = new UsuarioDAO(sessionFactory);
+        credencialDAO = new CredencialDAO(sessionFactory);
         perfilDAO = new PerfilDAO(sessionFactory);
         tokenDAO = new TokenDAO(sessionFactory);
 
@@ -57,6 +60,7 @@ public abstract class BaseIntegracionTest {
 
     private void limpiarTablas() {
         sessionFactory.getCurrentSession().flush();
+        credencialDAO.limpiar();
         tokenDAO.limpiar();
         usuarioDAO.limpiar();
         perfilDAO.limpiar();
