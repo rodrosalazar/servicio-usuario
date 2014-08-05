@@ -10,26 +10,29 @@ import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.core.Credencial;
 import ec.gob.senescyt.usuario.core.Token;
+import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.CredencialDAO;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.ws.rs.core.MediaType;
 
 import java.util.Optional;
 
 import static ec.gob.senescyt.commons.helpers.ResourceTestHelper.assertErrorMessage;
+import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
 
 public class CredencialResourceTest {
-
     public static final String CAMPO_EN_BLANCO = "";
     public static final LectorArchivoDePropiedades LECTOR_ARCHIVO_DE_PROPIEDADES = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
     public static final MensajeErrorBuilder MENSAJE_ERROR_BUILDER = new MensajeErrorBuilder(LECTOR_ARCHIVO_DE_PROPIEDADES);
@@ -52,12 +55,12 @@ public class CredencialResourceTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         reset(credencialDAO, tokenDAO);
     }
 
     @Test
-    public void debeVerificarQueLaContraseniaNoEsteEnBlanco() throws Exception {
+    public void debeVerificarQueLaContraseniaNoEsteEnBlanco() {
         ContraseniaToken contraseniaToken = ContraseniaTokenBuilder.nuevaContraseniaToken()
                 .con(c -> c.contrasenia = CAMPO_EN_BLANCO)
                 .generar();
@@ -67,7 +70,7 @@ public class CredencialResourceTest {
                 .post(ClientResponse.class, contraseniaToken);
 
         assertThat(response.getStatus(), is(400));
-        assertErrorMessage(response, "El campo es obligatorio");
+        assertErrorMessage(response, "contrasenia El campo es obligatorio");
         verifyZeroInteractions(credencialDAO);
     }
 
@@ -147,6 +150,21 @@ public class CredencialResourceTest {
     }
 
     @Test
+    public void debeVerificarQueElTokenNoEsteEnBlanco() {
+        ContraseniaToken contraseniaToken = ContraseniaTokenBuilder.nuevaContraseniaToken()
+                .con(c -> c.idToken = CAMPO_EN_BLANCO)
+                .generar();
+
+        ClientResponse response = client.resource("/credenciales")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, contraseniaToken);
+
+        assertThat(response.getStatus(), is(400));
+        assertErrorMessage(response, "idToken El campo es obligatorio");
+        verifyZeroInteractions(credencialDAO);
+    }
+
+    @Test
     public void debeVerificarQueElTokenSeaValido() {
         ContraseniaToken contraseniaToken = ContraseniaTokenBuilder.nuevaContraseniaToken().generar();
         when(tokenDAO.buscar("e590f1a6-517d-4c52-95ad-32c05504a2dc")).thenReturn(Optional.<Token>empty());
@@ -162,16 +180,27 @@ public class CredencialResourceTest {
     }
 
     @Test
-      public void debeGuardarLaCredencialSiLaContraseniaEsValida() {
-        ContraseniaToken contraseniaToken = ContraseniaTokenBuilder.nuevaContraseniaToken().generar();
-        Token token = new Token(TOKEN_VALIDO, UsuarioBuilder.nuevoUsuario().generar());
+    public void debeGuardarElHashSiLaContraseniaEsValida() {
+        String contrasenia = "Perez9";
+        String hash = BCrypt.hashpw(contrasenia, BCrypt.gensalt());
+        String nombreUsuario = "loremPerez";
+        ContraseniaToken contraseniaToken = ContraseniaTokenBuilder.nuevaContraseniaToken().con(c -> c.contrasenia = contrasenia).generar();
+        Usuario usuario = UsuarioBuilder.nuevoUsuario().con(u -> u.nombreUsuario = nombreUsuario).generar();
+        Token token = new Token(TOKEN_VALIDO, usuario);
         when(tokenDAO.buscar(anyString())).thenReturn(Optional.of(token));
+        when(credencialDAO.guardar(any(Credencial.class))).thenReturn(new Credencial(nombreUsuario, hash));
 
         ClientResponse response = client.resource("/credenciales")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, contraseniaToken);
 
-        assertThat(response.getStatus(), is(201));
         verify(credencialDAO).guardar(any(Credencial.class));
+        assertThat(response.getStatus(), is(201));
+        Credencial credencial = response.getEntity(Credencial.class);
+        assertThat(credencial.getNombreUsuario(), is(nombreUsuario));
+        assertThat(credencial.getContrasenia(), is(not(contrasenia)));
+        System.err.println(hash.length());
+        assertThat(credencial.getContrasenia(), is(hash));
+        assertThat(BCrypt.checkpw(contrasenia, hash), is(true));
     }
 }

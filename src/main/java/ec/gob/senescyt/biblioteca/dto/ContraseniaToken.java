@@ -1,6 +1,5 @@
 package ec.gob.senescyt.biblioteca.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -11,7 +10,7 @@ public class ContraseniaToken {
     public static final String REGEX_MINUSCULA = "^(?=.*[a-z]).*$";
     public static final String REGEX_NUMERO = "^(?=.*\\d).*$";
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @NotEmpty
     String idToken;
 
     @Pattern.List({

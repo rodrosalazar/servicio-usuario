@@ -11,7 +11,6 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-
 public class ContraseniaTokenTest {
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
     private ContraseniaToken credencialConToken;
@@ -22,7 +21,6 @@ public class ContraseniaTokenTest {
         String idToken = "tokenValido";
         credencialConToken = new ContraseniaToken(contrasenia, idToken);
     }
-
 
     @Test
     public void debeDeserializarUnaCredencialConTokenDesdeJSON() throws IOException {
