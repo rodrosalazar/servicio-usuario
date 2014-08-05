@@ -32,8 +32,6 @@ import ec.gob.senescyt.usuario.resources.management.LimpiezaResource;
 import ec.gob.senescyt.usuario.services.ServicioCedula;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.Application;
-import io.dropwizard.Bundle;
-import io.dropwizard.auth.basic.BasicAuthProvider;
 import io.dropwizard.auth.oauth.OAuthProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
@@ -128,7 +126,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final InstitucionResource institucionResource = new InstitucionResource(institucionDAO,constructorRespuestas,universidadExtranjeraDAO);
         environment.jersey().register(institucionResource);
 
-        final LimpiezaResource limpiezaResource = new LimpiezaResource(usuarioDAO);
+        final LimpiezaResource limpiezaResource = new LimpiezaResource(usuarioDAO, perfilDAO);
         environment.jersey().register(limpiezaResource);
 
         final ClasificacionResource clasificacionResource = new ClasificacionResource(clasificacionDAO);
