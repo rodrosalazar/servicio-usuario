@@ -50,8 +50,9 @@ public class CredencialResource {
         }
 
         Credencial credencial = servicioCredencial.convertirACredencial(contraseniaToken, tokenOpcional.get());
-        Credencial nuevaCredencial = credencialDAO.guardar(credencial);
+        credencialDAO.guardar(credencial);
         tokenDAO.eliminar(tokenOpcional.get().getId());
-        return Response.status(CREATED).entity(nuevaCredencial).build();
+
+        return Response.status(CREATED).build();
     }
 }

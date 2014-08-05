@@ -8,13 +8,14 @@ import ec.gob.senescyt.biblioteca.dto.ContraseniaToken;
 import ec.gob.senescyt.commons.builders.ContraseniaTokenBuilder;
 import ec.gob.senescyt.commons.builders.PerfilBuilder;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
-import ec.gob.senescyt.usuario.core.Credencial;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.core.Usuario;
-import ec.gob.senescyt.usuario.services.ServicioCredencial;
 import io.dropwizard.testing.junit.DropwizardAppRule;
-import org.junit.*;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Test;
 
 import java.io.File;
 
@@ -79,7 +80,6 @@ public class CredencialResourceIntegracionTest extends BaseIntegracionTest {
 
     @Test
     public void debeAlmacenarUnaNuevaCredencialConElHashDeLaContrasenia() {
-        ServicioCredencial servicioCredencial = new ServicioCredencial();
         ContraseniaToken contraseniaToken = ContraseniaTokenBuilder.nuevaContraseniaToken()
                 .con(c -> c.idToken = tokenGuardado.getId())
                 .con(c -> c.contrasenia = CONTRASENIA)
@@ -87,9 +87,6 @@ public class CredencialResourceIntegracionTest extends BaseIntegracionTest {
 
         ClientResponse respuesta =  hacerPost("credenciales", contraseniaToken);
 
-        Credencial credencialCreada = respuesta.getEntity(Credencial.class);
-        assertThat(credencialCreada.getNombreUsuario(), is(NOMBRE_USUARIO));
-        assertThat(servicioCredencial.verificarContrasenia(CONTRASENIA, credencialCreada.getHash()), is(true));
         assertThat(respuesta.getStatus(), is(201));
     }
 

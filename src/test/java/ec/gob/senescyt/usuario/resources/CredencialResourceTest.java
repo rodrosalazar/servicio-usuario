@@ -211,8 +211,5 @@ public class CredencialResourceTest {
 
         verify(credencialDAO).guardar(any(Credencial.class));
         assertThat(response.getStatus(), is(201));
-        Credencial credencialRespuesta = response.getEntity(Credencial.class);
-        assertThat(credencialRespuesta.getNombreUsuario(), is(nombreUsuario));
-        assertThat(credencialRespuesta.getHash(), is(hash));
     }
 }
