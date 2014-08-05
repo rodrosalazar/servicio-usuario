@@ -22,6 +22,7 @@ import org.junit.Test;
 import java.io.File;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static ec.gob.senescyt.commons.helpers.ResourceTestHelper.assertErrorMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -65,6 +66,18 @@ public class CredencialResourceIntegracionTest extends BaseIntegracionTest {
         usuarioGuardado = respuestaUsuario.getEntity(Usuario.class);
 
         tokenGuardado = tokenDAO.buscarPorIdUsuario(usuarioGuardado.getId()).get();
+    }
+
+    @Test
+    public void debeIndicarMalaPeticionSiLaCredencialEsInvalida() {
+        ContraseniaToken contraseniaToken = ContraseniaTokenBuilder.nuevaContraseniaToken()
+                .con(c -> c.idToken = "un-token-inventado")
+                .con(c -> c.contrasenia = CONTRASENIA)
+                .generar();
+
+        ClientResponse respuesta =  hacerPost("credenciales", contraseniaToken);
+        assertThat(respuesta.getStatus(), is(400));
+        assertErrorMessage(respuesta, "Token inválido");
     }
 
     @Test
