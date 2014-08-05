@@ -7,6 +7,7 @@ import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.dao.CredencialDAO;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.enums.MensajesErrorEnum;
+import ec.gob.senescyt.usuario.services.ServicioCredencial;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.validation.Valid;
@@ -15,10 +16,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import java.util.*;
-
-import static com.google.common.collect.Lists.newArrayList;
 import static javax.ws.rs.core.Response.Status.BAD_REQUEST;
 import static javax.ws.rs.core.Response.Status.CREATED;
 
@@ -29,11 +30,13 @@ public class CredencialResource {
     private CredencialDAO credencialDAO;
     private TokenDAO tokenDAO;
     private MensajeErrorBuilder mensajeErrorBuilder;
+    private ServicioCredencial servicioCredencial;
 
-    public CredencialResource(CredencialDAO credencialDAO, TokenDAO tokenDAO, MensajeErrorBuilder mensajeErrorBuilder) {
+    public CredencialResource(CredencialDAO credencialDAO, TokenDAO tokenDAO, MensajeErrorBuilder mensajeErrorBuilder, ServicioCredencial servicioCredencial) {
         this.credencialDAO = credencialDAO;
         this.tokenDAO = tokenDAO;
         this.mensajeErrorBuilder = mensajeErrorBuilder;
+        this.servicioCredencial = servicioCredencial;
     }
 
     @POST
@@ -46,14 +49,8 @@ public class CredencialResource {
             return Response.status(BAD_REQUEST).entity(entidadError).build();
         }
 
-        Credencial nuevaCredencial = credencialDAO.guardar(convertirACredencial(contraseniaToken, token.get()));
+        Credencial credencial = servicioCredencial.convertirACredencial(contraseniaToken, token.get());
+        Credencial nuevaCredencial = credencialDAO.guardar(credencial);
         return Response.status(CREATED).entity(nuevaCredencial).build();
-    }
-
-    private Credencial convertirACredencial(ContraseniaToken contraseniaToken, Token token) {
-        String nombreUsuario = token.getUsuario().getNombreUsuario();
-        String contrasenia = contraseniaToken.getContrasenia();
-
-        return new Credencial(nombreUsuario, contrasenia);
     }
 }

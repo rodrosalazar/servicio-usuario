@@ -166,7 +166,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         registrarValidacionExceptionMapper(environment);
 
-        environment.jersey().register(new OAuthProvider<Credencial>(new UsuarioAuthenticator(), "SENESCYT"));
+        environment.jersey().register(new OAuthProvider<>(new UsuarioAuthenticator(), "SENESCYT"));
     }
 
     private void registrarFiltros(Environment environment) {

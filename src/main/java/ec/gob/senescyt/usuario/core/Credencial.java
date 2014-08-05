@@ -12,18 +12,18 @@ public class Credencial {
     private String nombreUsuario;
 
     @NotEmpty
-    private String contrasenia;
+    private String hash;
 
     private Credencial() {
     }
 
-    public Credencial(String nombreUsuario, String contrasenia) {
+    public Credencial(String nombreUsuario, String hash) {
         this.nombreUsuario = nombreUsuario;
-        this.contrasenia = contrasenia;
+        this.hash = hash;
     }
 
-    public String getContrasenia() {
-        return contrasenia;
+    public String getHash() {
+        return hash;
     }
 
     public String getNombreUsuario() {

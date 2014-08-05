@@ -27,7 +27,7 @@ public class CredencialTest {
         Credencial credencialDeserializada = MAPPER.readValue(fixture("fixtures/credencial.json"), Credencial.class);
 
         assertThat(credencialDeserializada.getNombreUsuario(), is(credencial.getNombreUsuario()));
-        assertThat(credencialDeserializada.getContrasenia(), is(credencial.getContrasenia()));
+        assertThat(credencialDeserializada.getHash(), is(credencial.getHash()));
     }
 
     @Test

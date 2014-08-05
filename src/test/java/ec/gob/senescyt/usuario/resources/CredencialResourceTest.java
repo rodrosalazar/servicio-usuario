@@ -14,20 +14,17 @@ import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.CredencialDAO;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
+import ec.gob.senescyt.usuario.services.ServicioCredencial;
 import io.dropwizard.testing.junit.ResourceTestRule;
-import org.apache.commons.lang.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
-import org.mindrot.jbcrypt.BCrypt;
 
 import javax.ws.rs.core.MediaType;
-
 import java.util.Optional;
 
 import static ec.gob.senescyt.commons.helpers.ResourceTestHelper.assertErrorMessage;
-import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.*;
@@ -40,7 +37,8 @@ public class CredencialResourceTest {
 
     private static CredencialDAO credencialDAO = mock(CredencialDAO.class);
     private static TokenDAO tokenDAO = mock(TokenDAO.class);
-    private static CredencialResource credencialResource = new CredencialResource(credencialDAO, tokenDAO, MENSAJE_ERROR_BUILDER);
+    private static ServicioCredencial servicioCredencial = mock(ServicioCredencial.class);
+    private static CredencialResource credencialResource = new CredencialResource(credencialDAO, tokenDAO, MENSAJE_ERROR_BUILDER, servicioCredencial);
 
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()
@@ -56,7 +54,7 @@ public class CredencialResourceTest {
 
     @After
     public void tearDown() {
-        reset(credencialDAO, tokenDAO);
+        reset(credencialDAO, tokenDAO, servicioCredencial);
     }
 
     @Test
@@ -180,15 +178,17 @@ public class CredencialResourceTest {
     }
 
     @Test
-    public void debeGuardarElHashSiLaContraseniaEsValida() {
+    public void debeGuardarLaCredencialSiLaContraseniaEsValida() {
         String contrasenia = "Perez9";
-        String hash = BCrypt.hashpw(contrasenia, BCrypt.gensalt());
+        String hash = "hash de Perez9";
         String nombreUsuario = "loremPerez";
         ContraseniaToken contraseniaToken = ContraseniaTokenBuilder.nuevaContraseniaToken().con(c -> c.contrasenia = contrasenia).generar();
         Usuario usuario = UsuarioBuilder.nuevoUsuario().con(u -> u.nombreUsuario = nombreUsuario).generar();
         Token token = new Token(TOKEN_VALIDO, usuario);
+        Credencial credencial = new Credencial(nombreUsuario, hash);
         when(tokenDAO.buscar(anyString())).thenReturn(Optional.of(token));
-        when(credencialDAO.guardar(any(Credencial.class))).thenReturn(new Credencial(nombreUsuario, hash));
+        when(servicioCredencial.convertirACredencial(contraseniaToken, token)).thenReturn(credencial);
+        when(credencialDAO.guardar(any(Credencial.class))).thenReturn(credencial);
 
         ClientResponse response = client.resource("/credenciales")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
@@ -196,11 +196,8 @@ public class CredencialResourceTest {
 
         verify(credencialDAO).guardar(any(Credencial.class));
         assertThat(response.getStatus(), is(201));
-        Credencial credencial = response.getEntity(Credencial.class);
-        assertThat(credencial.getNombreUsuario(), is(nombreUsuario));
-        assertThat(credencial.getContrasenia(), is(not(contrasenia)));
-        System.err.println(hash.length());
-        assertThat(credencial.getContrasenia(), is(hash));
-        assertThat(BCrypt.checkpw(contrasenia, hash), is(true));
+        Credencial credencialRespuesta = response.getEntity(Credencial.class);
+        assertThat(credencialRespuesta.getNombreUsuario(), is(nombreUsuario));
+        assertThat(credencialRespuesta.getHash(), is(hash));
     }
 }
