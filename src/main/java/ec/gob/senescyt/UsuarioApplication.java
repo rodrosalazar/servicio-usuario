@@ -6,6 +6,7 @@ import ec.gob.senescyt.biblioteca.Arbol;
 import ec.gob.senescyt.biblioteca.NivelArbol;
 import ec.gob.senescyt.biblioteca.dao.ArbolDAO;
 import ec.gob.senescyt.biblioteca.resource.ArbolResource;
+import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.commons.exceptions.DBConstraintViolationMapper;
 import ec.gob.senescyt.commons.filters.HeaderResponseFilter;
@@ -30,6 +31,7 @@ import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.resources.*;
 import ec.gob.senescyt.usuario.resources.management.LimpiezaResource;
 import ec.gob.senescyt.usuario.services.ServicioCedula;
+import ec.gob.senescyt.usuario.services.ServicioCredencial;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.Application;
 import io.dropwizard.auth.oauth.OAuthProvider;
@@ -56,7 +58,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
             Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class, Detalle.class, Pais.class,
             Provincia.class, Canton.class, Parroquia.class, TipoVisa.class, CategoriaVisa.class, Etnia.class,
             PortadorTitulo.class, Direccion.class, Arbol.class, NivelArbol.class, UniversidadExtranjera.class,
-            Token.class, Identificacion.class, Cedula.class, Pasaporte.class) {
+            Token.class, Identificacion.class, Cedula.class, Pasaporte.class, Credencial.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
@@ -108,10 +110,12 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         PortadorTituloDAO portadorTituloDAO = new PortadorTituloDAO(getSessionFactory());
         ArbolDAO arbolDAO = new ArbolDAO(getSessionFactory());
         DespachadorEmail despachadorEmail = new DespachadorEmail(configuration.getConfiguracionEmail());
-        ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG(), provinciaDAO);
         UniversidadExtranjeraDAO universidadExtranjeraDAO = new UniversidadExtranjeraDAO(getSessionFactory());
         TokenDAO tokenDAO = new TokenDAO(getSessionFactory());
-        CredencialDAO credencialesDAO = new CredencialDAO();
+        CredencialDAO credencialesDAO = new CredencialDAO(getSessionFactory());
+
+        ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG(), provinciaDAO);
+        ServicioCredencial servicioCredencial = new ServicioCredencial();
 
         final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
         environment.jersey().register(perfilResource);
@@ -119,6 +123,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         CedulaValidator cedulaValidator = new CedulaValidator();
         LectorArchivoDePropiedades lectorPropiedadesValidacion = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
         LectorArchivoDePropiedades lectorPropiedadesEmail = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_PROPIEDADES_EMAIL.getBaseName());
+        MensajeErrorBuilder mensajeErrorBuilder = new MensajeErrorBuilder(lectorPropiedadesValidacion);
 
         final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion, despachadorEmail, tokenDAO, lectorPropiedadesEmail);
         environment.jersey().register(usuarioResource);
@@ -161,6 +166,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         final BlitzResource blitzResource = new BlitzResource();
         environment.jersey().register(blitzResource);
+
+        final CredencialResource credencialResource = new CredencialResource(credencialesDAO, tokenDAO, mensajeErrorBuilder, servicioCredencial);
+        environment.jersey().register(credencialResource);
 
         registrarFiltros(environment);
 

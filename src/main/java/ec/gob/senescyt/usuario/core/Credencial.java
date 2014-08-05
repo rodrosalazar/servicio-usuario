@@ -4,8 +4,10 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "credenciales")
 public class Credencial {
     @Id
     @NotEmpty

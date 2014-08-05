@@ -15,9 +15,6 @@ import org.hibernate.context.internal.ManagedSessionContext;
 import org.junit.After;
 import org.junit.Before;
 
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLSession;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;

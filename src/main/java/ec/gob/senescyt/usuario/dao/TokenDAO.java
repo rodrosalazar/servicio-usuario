@@ -19,6 +19,15 @@ public class TokenDAO extends AbstractDAO<Token> {
         return Optional.ofNullable(token);
     }
 
+    public Optional<Token> buscarPorIdUsuario(long idUsuario) {
+        Token token = (Token) currentSession()
+                .createCriteria(Token.class)
+                .add(Restrictions.eq("usuario.id", idUsuario))
+                .uniqueResult();
+
+        return Optional.ofNullable(token);
+    }
+
     public void guardar(final Token token) {
         persist(token);
     }
