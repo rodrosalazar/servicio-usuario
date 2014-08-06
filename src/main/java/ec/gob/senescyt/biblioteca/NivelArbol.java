@@ -48,7 +48,7 @@ public class NivelArbol implements Comparable<NivelArbol>{
     @JsonManagedReference("nivelesHijos")
     private List<NivelArbol> nivelesHijos = new ArrayList<>();
 
-    public NivelArbol() {
+    private NivelArbol() {
     }
 
     public NivelArbol(Integer id, String nombre, NivelArbol nivelPadre, Arbol arbol) {
@@ -70,14 +70,16 @@ public class NivelArbol implements Comparable<NivelArbol>{
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         NivelArbol that = (NivelArbol) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-
-        return true;
+        return !(id != null ? !id.equals(that.id) : that.id != null);
     }
 
     public NivelArbol getNivelPadre() {

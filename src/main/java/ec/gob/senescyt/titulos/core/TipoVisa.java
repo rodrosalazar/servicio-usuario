@@ -25,7 +25,7 @@ public class TipoVisa {
     @JsonManagedReference
     private List<CategoriaVisa> categoriasVisa = new ArrayList<>();
 
-    public TipoVisa() {
+    private TipoVisa() {
     }
 
     public TipoVisa(String idTipoVisa, String nombreTipoVisa) {

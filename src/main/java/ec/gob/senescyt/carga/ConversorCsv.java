@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
+@SuppressWarnings("PMD.SystemPrintln")
 public abstract class ConversorCsv {
 
     private final Class tipo;

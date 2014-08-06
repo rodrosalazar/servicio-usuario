@@ -41,17 +41,24 @@ import java.util.Set;
  *
  * @author landrade
  */
+@SuppressWarnings({
+        "PMD.AvoidCatchingGenericException",
+        "PMD.AvoidPrintStackTrace",
+})
 public class HeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
-    DatosHeader DHLista= new DatosHeader();
+    public static final String WSS = "wss";
+    public static final String WSU = "wsu";
+
+    DatosHeader dhLista = new DatosHeader();
 
     public HeaderHandler(DatosHeader DHeader){
 
-        DHLista.setDigest(DHeader.getDigest());
-        DHLista.setNonce(DHeader.getNonce());
-        DHLista.setFecha(DHeader.getFecha());
-        DHLista.setFechaf(DHeader.getFechaf());
-        DHLista.setUsuario(DHeader.getUsuario());
+        dhLista.setDigest(DHeader.getDigest());
+        dhLista.setNonce(DHeader.getNonce());
+        dhLista.setFecha(DHeader.getFecha());
+        dhLista.setFechaf(DHeader.getFechaf());
+        dhLista.setUsuario(DHeader.getUsuario());
 
     }
 
@@ -77,47 +84,47 @@ public class HeaderHandler implements SOAPHandler<SOAPMessageContext> {
                 // get SOAP envelope from SOAP message
 
                 SOAPElement security =
-                        header.addChildElement("Security", "wss", "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd");
+                        header.addChildElement("Security", WSS, "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd");
 
 
                 SOAPElement timeStamp = security
                         .addChildElement(
                                 "Timestamp",
-                                "wsu",
+                                WSU,
                                 "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd");
 
 
                 SOAPElement createdTime =
-                        timeStamp.addChildElement("Created", "wsu");
-                createdTime.addTextNode(DHLista.getFecha());
+                        timeStamp.addChildElement("Created", WSU);
+                createdTime.addTextNode(dhLista.getFecha());
 
                 SOAPElement expires =
-                        timeStamp.addChildElement("Expires", "wsu");
-                expires.addTextNode(DHLista.getFechaf());
+                        timeStamp.addChildElement("Expires", WSU);
+                expires.addTextNode(dhLista.getFechaf());
 
 
                 SOAPElement usernameToken =
-                        security.addChildElement("UsernameToken","wss");
+                        security.addChildElement("UsernameToken", WSS);
                 //usernameToken.addAttribute(new QName("xmlns:wsu"), "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd");
 
                 SOAPElement username =
-                        usernameToken.addChildElement("Username", "wss");
-                username.addTextNode(DHLista.getUsuario());
+                        usernameToken.addChildElement("Username", WSS);
+                username.addTextNode(dhLista.getUsuario());
 
                 SOAPElement password =
-                        usernameToken.addChildElement("Password", "wss");
+                        usernameToken.addChildElement("Password", WSS);
                 password.setAttribute("Type", "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordDigest");
-                password.addTextNode(DHLista.getDigest());
+                password.addTextNode(dhLista.getDigest());
                 //password.addTextNode("Qro+U/5Swf50Pt04i4WS/PsbljY=");
 
                 SOAPElement nonce =
-                        usernameToken.addChildElement("Nonce", "wss");
+                        usernameToken.addChildElement("Nonce", WSS);
                 nonce.setAttribute("EncodingType", "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary");
-                nonce.addTextNode(DHLista.getNonce());
+                nonce.addTextNode(dhLista.getNonce());
                 //nonce.addTextNode("He+y+afyHy7lWugWrn6LBQ==");               
 
-                SOAPElement created = usernameToken.addChildElement("Created", "wsu", "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd");
-                created.addTextNode(DHLista.getFecha());
+                SOAPElement created = usernameToken.addChildElement("Created", WSU, "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd");
+                created.addTextNode(dhLista.getFecha());
                 //created.addTextNode("2012-12-07T13:40:21Z");
 
                 //Print out the outbound SOAP message to System.out

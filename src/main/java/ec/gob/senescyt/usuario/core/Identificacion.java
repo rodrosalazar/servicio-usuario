@@ -25,16 +25,19 @@ public class Identificacion implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Identificacion that = (Identificacion) o;
 
-        if (numeroIdentificacion != null ? !numeroIdentificacion.equals(that.numeroIdentificacion) : that.numeroIdentificacion != null)
+        if (numeroIdentificacion != null ? !numeroIdentificacion.equals(that.numeroIdentificacion) : that.numeroIdentificacion != null) {
             return false;
-        if (tipoDocumento != that.tipoDocumento) return false;
-
-        return true;
+        }
+        return tipoDocumento == that.tipoDocumento;
     }
 
     @Override

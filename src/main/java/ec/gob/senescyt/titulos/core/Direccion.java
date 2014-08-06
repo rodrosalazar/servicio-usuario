@@ -62,19 +62,25 @@ public class Direccion {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Direccion direccion = (Direccion) o;
 
-        if (direccionCompleta != null ? !direccionCompleta.equals(direccion.direccionCompleta) : direccion.direccionCompleta != null)
+        if (direccionCompleta != null ? !direccionCompleta.equals(direccion.direccionCompleta) : direccion.direccionCompleta != null) {
             return false;
-        if (idCanton != null ? !idCanton.equals(direccion.idCanton) : direccion.idCanton != null) return false;
-        if (idParroquia != null ? !idParroquia.equals(direccion.idParroquia) : direccion.idParroquia != null)
+        }
+        if (idCanton != null ? !idCanton.equals(direccion.idCanton) : direccion.idCanton != null) {
             return false;
-        if (idProvincia != null ? !idProvincia.equals(direccion.idProvincia) : direccion.idProvincia != null)
+        }
+        if (idParroquia != null ? !idParroquia.equals(direccion.idParroquia) : direccion.idParroquia != null) {
             return false;
+        }
+        return !(idProvincia != null ? !idProvincia.equals(direccion.idProvincia) : direccion.idProvincia != null);
 
-        return true;
     }
 }

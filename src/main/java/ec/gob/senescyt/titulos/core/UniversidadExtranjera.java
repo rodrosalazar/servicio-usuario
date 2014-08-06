@@ -18,7 +18,7 @@ public class UniversidadExtranjera {
     private String codigoPais;
 
 
-    public UniversidadExtranjera() {
+    private UniversidadExtranjera() {
     }
 
     public UniversidadExtranjera(String id, String nombre, String codigoTipo, String codigoPais) {

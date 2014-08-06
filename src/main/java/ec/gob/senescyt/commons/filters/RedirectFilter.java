@@ -12,17 +12,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.HttpHeaders;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 public class RedirectFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
+        // do nothing
     }
+
 
     @Override
     public void destroy() {
+        // do nothing
     }
 
     @Override
@@ -49,17 +50,6 @@ public class RedirectFilter implements Filter {
         }
 
         return null;
-    }
-
-    private boolean isPrivateIp(String address) {
-        InetAddress ip;
-        try {
-            ip = InetAddress.getByName(address);
-        } catch (UnknownHostException e) {
-            return false;
-        }
-
-        return ip.isLoopbackAddress() || ip.isLinkLocalAddress() || ip.isSiteLocalAddress();
     }
 
     private String getRedirectUrl(HttpServletRequest request, String newScheme) {

@@ -25,7 +25,7 @@ import javax.validation.constraints.Pattern;
 @Table(name = "identificaciones")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="tipoDocumento", discriminatorType= DiscriminatorType.STRING)
-
+@SuppressWarnings("PMD.UncommentedEmptyConstructor")
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.WRAPPER_OBJECT, property="type")
 @JsonSubTypes({
 
@@ -51,7 +51,7 @@ public abstract class Identificacion {
     @Pattern(regexp = "^[^_\\W]+$", message = "{ec.gob.senescyt.error.numeroIdentificacion}")
     private String numeroIdentificacion;
 
-    protected Identificacion(){};
+    protected Identificacion() {}
 
     protected Identificacion(String numeroIdentificacion, TipoDocumento tipoDocumento) {
         this.numeroIdentificacion = numeroIdentificacion;

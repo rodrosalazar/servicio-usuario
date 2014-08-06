@@ -26,7 +26,7 @@ public class CedulaValidator {
             return false;
         }
 
-        Integer verificadorPrivado = Integer.parseInt(cedula.charAt(2) + "");
+        Integer verificadorPrivado = Integer.parseInt(String.valueOf(cedula.charAt(2)));
 
         if(verificadorPrivado > 5 && verificadorPrivado < 9 ){
             return false;
@@ -51,10 +51,10 @@ public class CedulaValidator {
 
         // la ultima posicion no cuenta solo es verificador
         int totalValidNumbers = cedula.length() - 1;
-        int verifier = Integer.parseInt(cedula.charAt(9) + "");
+        int verifier = Integer.parseInt(String.valueOf(cedula.charAt(9)));
 
         for (int i = 0; i < totalValidNumbers; i++) {
-            int digit = Integer.parseInt(cedula.charAt(i) + "");
+            int digit = Integer.parseInt(String.valueOf(cedula.charAt(i)));
             if (esPar(i)) {// si son pares
                 int product = digit * MULTIPLICADOR;
                 if (product >= LIMITE_DECENA) {
@@ -72,7 +72,7 @@ public class CedulaValidator {
 
         // se verifica la decena superior
         if (esMultiDigito(totalString)) {
-            int first = Integer.parseInt(totalString.charAt(0) + "");
+            int first = Integer.parseInt(String.valueOf(totalString.charAt(0)));
             total = Integer.parseInt(first + "0") - total;
             if (total == LIMITE_DECENA) {
                 total = 0;
@@ -105,7 +105,7 @@ public class CedulaValidator {
 
         // Asignamos el string a un array
         for (int i = 0; i < cedula.length(); i++) {
-            digitos.add(Integer.parseInt(cedula.charAt(i) + ""));
+            digitos.add(Integer.parseInt(String.valueOf(cedula.charAt(i))));
         }
 
         for (int i = 0; i < digitos.size() - 1; i++) {

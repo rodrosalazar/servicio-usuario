@@ -9,9 +9,6 @@ public class UsuarioAuthenticator implements Authenticator<String, Credencial> {
 
     @Override
     public Optional<Credencial> authenticate(String credentials) throws AuthenticationException {
-
-        System.err.println(credentials);
-
         return Optional.of(new Credencial("contrasenia....", ""));
     }
 }

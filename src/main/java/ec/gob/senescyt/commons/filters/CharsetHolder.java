@@ -11,6 +11,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 
+@SuppressWarnings({
+        "PMD.CyclomaticComplexity",
+        "PMD.AvoidInstantiatingObjectsInLoops",
+        "PMD.AvoidCatchingGenericException",
+        "PMD.AvoidPrintStackTrace",
+})
 public class CharsetHolder implements Comparable<CharsetHolder> {
 
     private final String charset;
@@ -19,8 +25,8 @@ public class CharsetHolder implements Comparable<CharsetHolder> {
 
     private static final int CACHE_MAX_SIZE = 1000;
 
-    private static final Map<String, CharsetHolder> charsetCache = Collections.synchronizedMap(
-            new LinkedHashMap(CACHE_MAX_SIZE) {
+    private static final Map<String, CharsetHolder> CHARSET_CACHE = Collections.synchronizedMap(
+            new LinkedHashMap<String, CharsetHolder>(CACHE_MAX_SIZE) {
 
                 private static final long serialVersionUID = 2546245625L;
 
@@ -72,8 +78,8 @@ public class CharsetHolder implements Comparable<CharsetHolder> {
     public static CharsetHolder getFirstSupportedCharset(final String acceptCharsetHeaderValue) {
         CharsetHolder firstSupportedCharset = null;
 
-        if (charsetCache.containsKey(acceptCharsetHeaderValue)) {
-            firstSupportedCharset = charsetCache.get(acceptCharsetHeaderValue);
+        if (CHARSET_CACHE.containsKey(acceptCharsetHeaderValue)) {
+            firstSupportedCharset = CHARSET_CACHE.get(acceptCharsetHeaderValue);
         } else {
             final List<CharsetHolder> charsetRanks = getAcceptableCharsets(acceptCharsetHeaderValue);
 
@@ -84,7 +90,7 @@ public class CharsetHolder implements Comparable<CharsetHolder> {
                 }
             }
 
-            charsetCache.put(acceptCharsetHeaderValue, firstSupportedCharset);
+            CHARSET_CACHE.put(acceptCharsetHeaderValue, firstSupportedCharset);
         }
 
         return firstSupportedCharset;
@@ -112,7 +118,7 @@ public class CharsetHolder implements Comparable<CharsetHolder> {
                     }
                 }
 
-                if (charsetValue.equals("*")) {
+                if ("*".equals(charsetValue)) {
                     asteriskCharset = new CharsetHolder("*", qualityValue, order);
                 } else {
                     charsetHolders.add(new CharsetHolder(charsetValue, qualityValue, order));
@@ -165,14 +171,17 @@ public class CharsetHolder implements Comparable<CharsetHolder> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         final CharsetHolder that = (CharsetHolder) o;
 
-        if (!charset.equals(that.charset)) return false;
+        return charset.equals(that.charset);
 
-        return true;
     }
 
     @Override

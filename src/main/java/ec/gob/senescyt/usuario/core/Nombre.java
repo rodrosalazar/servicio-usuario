@@ -20,20 +20,25 @@ public class Nombre implements Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Nombre nombre = (Nombre) o;
 
-        if (primerApellido != null ? !primerApellido.equals(nombre.primerApellido) : nombre.primerApellido != null)
+        if (primerApellido != null ? !primerApellido.equals(nombre.primerApellido) : nombre.primerApellido != null) {
             return false;
-        if (primerNombre != null ? !primerNombre.equals(nombre.primerNombre) : nombre.primerNombre != null)
+        }
+        if (primerNombre != null ? !primerNombre.equals(nombre.primerNombre) : nombre.primerNombre != null) {
             return false;
-        if (segundoApellido != null ? !segundoApellido.equals(nombre.segundoApellido) : nombre.segundoApellido != null)
+        }
+        if (segundoApellido != null ? !segundoApellido.equals(nombre.segundoApellido) : nombre.segundoApellido != null) {
             return false;
-        if (segundoNombre != null ? !segundoNombre.equals(nombre.segundoNombre) : nombre.segundoNombre != null)
-            return false;
-        return true;
+        }
+        return !(segundoNombre != null ? !segundoNombre.equals(nombre.segundoNombre) : nombre.segundoNombre != null);
     }
 
     @Override

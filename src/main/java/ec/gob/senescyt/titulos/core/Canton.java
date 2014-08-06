@@ -39,8 +39,7 @@ public class Canton {
 
     private String nombre;
 
-    public Canton(){
-
+    private Canton(){
     }
 
     public Canton(Provincia provincia, String idCanton, String nombreCanton) {

@@ -4,15 +4,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
     <description>Conjuntos de reglas personalizados a nuestro proyecto</description>
-    <rule ref="rulesets/controversial.xml">
-        <exclude name="AtLeastOneConstructor"/>
-        <exclude name="OnlyOneReturn"/>
-    </rule>
     <rule ref="rulesets/design.xml">
         <exclude name="ImmutableField"/>
+        <exclude name="ConfusingTernary"/>
     </rule>
     <rule ref="rulesets/naming.xml">
         <exclude name="LongVariable"/>
+        <exclude name="ShortVariable"/>
     </rule>
     <rule ref="rulesets/optimizations.xml">
         <exclude name="MethodArgumentCouldBeFinal"/>
