@@ -1,7 +1,6 @@
 package ec.gob.senescyt.titulos.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ec.gob.senescyt.titulos.core.CategoriaVisa;
 import io.dropwizard.jackson.Jackson;
 import org.junit.Before;
 import org.junit.Test;

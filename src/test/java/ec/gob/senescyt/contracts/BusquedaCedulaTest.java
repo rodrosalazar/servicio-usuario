@@ -10,7 +10,10 @@ import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hamcrest.CoreMatchers;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
-import org.junit.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.ClassRule;
+import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
 import java.io.File;

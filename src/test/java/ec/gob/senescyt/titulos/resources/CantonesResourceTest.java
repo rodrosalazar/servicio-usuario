@@ -1,11 +1,11 @@
 package ec.gob.senescyt.titulos.resources;
 
+import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
+import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import ec.gob.senescyt.titulos.core.Canton;
 import ec.gob.senescyt.titulos.core.Parroquia;
 import ec.gob.senescyt.titulos.dao.CantonDAO;
 import ec.gob.senescyt.titulos.dao.ParroquiaDAO;
-import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
-import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import ec.gob.senescyt.usuario.resources.CantonResource;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,7 +16,9 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class CantonesResourceTest {
 

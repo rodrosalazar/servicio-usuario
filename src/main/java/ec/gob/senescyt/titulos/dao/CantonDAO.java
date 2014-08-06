@@ -2,8 +2,6 @@ package ec.gob.senescyt.titulos.dao;
 
 import ec.gob.senescyt.titulos.core.Canton;
 import io.dropwizard.hibernate.AbstractDAO;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 

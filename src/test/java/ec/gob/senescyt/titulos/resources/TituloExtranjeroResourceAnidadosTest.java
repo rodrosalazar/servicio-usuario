@@ -2,7 +2,9 @@ package ec.gob.senescyt.titulos.resources;
 
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.commons.builders.PortadorTituloBuilder;
-import ec.gob.senescyt.titulos.core.*;
+import ec.gob.senescyt.titulos.core.Cedula;
+import ec.gob.senescyt.titulos.core.Pasaporte;
+import ec.gob.senescyt.titulos.core.PortadorTitulo;
 import ec.gob.senescyt.titulos.dao.PortadorTituloDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -21,7 +23,10 @@ import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 
 public class TituloExtranjeroResourceAnidadosTest {
 

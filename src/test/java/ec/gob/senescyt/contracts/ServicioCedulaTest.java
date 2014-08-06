@@ -1,7 +1,5 @@
 package ec.gob.senescyt.contracts;
 
-import ec.gob.senescyt.titulos.dao.CantonDAO;
-import ec.gob.senescyt.titulos.dao.ParroquiaDAO;
 import ec.gob.senescyt.titulos.dao.ProvinciaDAO;
 import ec.gob.senescyt.usuario.configuracion.ConfiguracionBSG;
 import ec.gob.senescyt.usuario.exceptions.CedulaInvalidaException;
@@ -13,7 +11,9 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.when;
 
 public class ServicioCedulaTest {
 

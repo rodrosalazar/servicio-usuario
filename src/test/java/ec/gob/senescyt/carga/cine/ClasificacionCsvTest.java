@@ -1,10 +1,13 @@
 package ec.gob.senescyt.carga.cine;
 
-import ec.gob.senescyt.carga.cine.ClasificacionCsv;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

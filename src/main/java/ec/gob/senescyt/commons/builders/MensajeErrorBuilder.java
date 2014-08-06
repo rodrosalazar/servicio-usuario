@@ -1,7 +1,7 @@
 package ec.gob.senescyt.commons.builders;
 
-import ec.gob.senescyt.usuario.enums.MensajesErrorEnum;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
+import ec.gob.senescyt.usuario.enums.MensajesErrorEnum;
 
 import java.util.HashMap;
 import java.util.List;

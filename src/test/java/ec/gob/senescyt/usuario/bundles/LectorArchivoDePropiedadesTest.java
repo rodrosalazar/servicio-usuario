@@ -1,8 +1,8 @@
 package ec.gob.senescyt.usuario.bundles;
 
-import ec.gob.senescyt.usuario.enums.MensajesErrorEnum;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
+import ec.gob.senescyt.usuario.enums.MensajesErrorEnum;
 import org.junit.Test;
 
 import java.util.MissingResourceException;

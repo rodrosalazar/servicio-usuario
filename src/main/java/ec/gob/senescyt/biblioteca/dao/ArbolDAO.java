@@ -7,9 +7,6 @@ import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.transform.DistinctRootEntityResultTransformer;
 
 import java.util.List;
 import java.util.stream.Collectors;

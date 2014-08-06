@@ -5,7 +5,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.List;
 
 @JsonPropertyOrder({"id", "nombre"})

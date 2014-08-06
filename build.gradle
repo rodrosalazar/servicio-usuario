@@ -80,7 +80,7 @@ mainClassName = 'ec.gob.senescyt.UsuarioApplication'
 // Configure the run task to start the Dropwizard service
 run {
     if (project.hasProperty('ambiente')) {
-        if(ambiente.split().size() == 0){
+        if (ambiente.split().size() == 0) {
             error = 'Debe especificar uno de los siguientes ambientes:\ndev: Desarrollo\nqa:Control de Calidad\nci:Integracion Continua\nEjemplo:./gradlew run -P ambiente=dev'
 
             throw new StopExecutionException(error)
@@ -88,11 +88,11 @@ run {
 
         def ambienteParaLevantar = ambiente.split()[0]
 
-        if(ambienteParaLevantar == 'dev') {
+        if (ambienteParaLevantar == 'dev') {
             ext.archivoConfiguracion = 'servicio-usuario-dev.yml'
-        } else if(ambienteParaLevantar == 'qa') {
+        } else if (ambienteParaLevantar == 'qa') {
             ext.archivoConfiguracion = 'servicio-usuario-qa.yml'
-        } else if(ambienteParaLevantar == 'ci') {
+        } else if (ambienteParaLevantar == 'ci') {
             ext.archivoConfiguracion = 'servicio-usuario-ci.yml'
         }
     }
@@ -139,13 +139,13 @@ task(runCsv, type: JavaExec) {
         if (paramsList.length == 1) {
             args()
         } else {
-            args(paramsList[1..- 1])
+            args(paramsList[1..-1])
         }
     } else if (gradle.startParameter.taskNames[0] == 'runCsv') {
         final CONVERSORES = ['institucion.InstitucionCsv', 'cine.ClasificacionCsv', 'cine.AreaCsv', 'cine.SubareaCsv',
                              'pais.PaisCsv', 'dpa.ProvinciaCsv', 'dpa.CantonCsv', 'dpa.ParroquiaCsv', 'visa.TipoVisaCsv',
                              'visa.CategoriaVisaCsv', 'arboles.NivelArbolCsv'
-                            ]
+        ]
         def error = ''
         error += 'Uso correcto: ./gradlew runCsv -P params="paquete.Clase ruta-entrada.csv [ruta-salida.sql]"\n'
         error += 'Conversores disponibles:\n'
@@ -166,7 +166,7 @@ task oneJar(type: OneJar, dependsOn: clean) {
 
 task generateJavaFromWsdl() {
     def wsdlDir = file('src/main/resources/wsdl')
-    def wsdlsToGenerate = [[ 'https://www.bsg.gob.ec/sw/STI/BSGSW08_Acceder_BSG?wsdl'],
+    def wsdlsToGenerate = [['https://www.bsg.gob.ec/sw/STI/BSGSW08_Acceder_BSG?wsdl'],
                            ['https://www.bsg.gob.ec/sw/RC/BSGSW01_Consultar_Cedula?wsdl']]
     def generatedWsdlDir = file("${buildDir}/generated-sources")
 
@@ -183,7 +183,7 @@ task generateJavaFromWsdl() {
                     classpath configurations.java2wsdl
                     main = 'org.apache.cxf.tools.wsdlto.WSDLToJava'
                     args = argsin
-                    systemProperties = ['exitOnFinish':'TRUE']
+                    systemProperties = ['exitOnFinish': 'TRUE']
                 }
             }
         }
@@ -192,19 +192,22 @@ task generateJavaFromWsdl() {
 
 pmd {
     ruleSets = [
-        'basic',
-        'braces',
-        'codesize',
-        'imports',
-        'junit',
-        'logging-java',
-        'migrating',
-        'strictexception',
-        'strings',
-        'typeresolution',
-        'unusedcode'
+            'basic',
+            'braces',
+            'clone',
+            'codesize',
+            'coupling',
+            'imports',
+            'junit',
+            'logging-java',
+            'migrating',
+            'strictexception',
+            'strings',
+            'typeresolution',
+            'unusedcode',
     ]
     ruleSetFiles = files('pmd-ruleset.xml')
+//    targetJdk = '1.7'
 }
 
 compileJava {

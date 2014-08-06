@@ -1,11 +1,9 @@
 package ec.gob.senescyt.usuario.resources;
 
-import ec.gob.senescyt.titulos.core.Pais;
-import ec.gob.senescyt.titulos.dao.PaisDAO;
 import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
-import ec.gob.senescyt.usuario.core.Credencial;
-import io.dropwizard.auth.Auth;
+import ec.gob.senescyt.titulos.core.Pais;
+import ec.gob.senescyt.titulos.dao.PaisDAO;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;

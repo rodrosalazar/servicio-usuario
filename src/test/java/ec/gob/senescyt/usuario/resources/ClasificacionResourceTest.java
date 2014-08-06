@@ -4,10 +4,13 @@ import ec.gob.senescyt.usuario.core.cine.Clasificacion;
 import ec.gob.senescyt.usuario.dao.ClasificacionDAO;
 import org.junit.Before;
 import org.junit.Test;
+
 import javax.ws.rs.core.Response;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class ClasificacionResourceTest {
     public static final String ID_CLASIFICACION = "001";

@@ -1,11 +1,11 @@
 package ec.gob.senescyt.usuario.resources;
 
+import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
+import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import ec.gob.senescyt.titulos.core.CategoriaVisa;
 import ec.gob.senescyt.titulos.core.TipoVisa;
 import ec.gob.senescyt.titulos.dao.CategoriaVisaDAO;
 import ec.gob.senescyt.titulos.dao.TipoVisaDAO;
-import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
-import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
