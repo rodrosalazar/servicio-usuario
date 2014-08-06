@@ -1,8 +1,8 @@
 package ec.gob.senescyt.commons.email;
 
-public class ConstructorDeContenidoDeEmail {
+public class ConstructorContenidoEmail {
 
-    public static String construirEmailNotificacionUsuarioCreado(String nombreDestinatario, String nombreUsuario, String urlConToken) {
+    public String construirEmailNotificacionUsuarioCreado(String nombreDestinatario, String nombreUsuario, String urlConToken) {
         StringBuilder contenidoNotificacionUsuarioCreado = new StringBuilder();
         contenidoNotificacionUsuarioCreado.append("<div align='justify'>");
         contenidoNotificacionUsuarioCreado.append("Estimado/a ").append(nombreDestinatario).append("<br/>");

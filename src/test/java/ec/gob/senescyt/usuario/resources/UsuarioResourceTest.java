@@ -6,6 +6,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.commons.configuracion.ConfiguracionEmail;
+import ec.gob.senescyt.commons.email.ConstructorContenidoEmail;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.commons.helpers.ResourceTestHelper;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
@@ -45,7 +46,8 @@ public class UsuarioResourceTest {
     private static LectorArchivoDePropiedades lectorPropiedadesEmail = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_PROPIEDADES_EMAIL.getBaseName());
     private static ConfiguracionEmail configuracionEmail = spy(new ConfiguracionEmail());
     private static DespachadorEmail despachadorEmail = new DespachadorEmail(configuracionEmail);
-    private static UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion, despachadorEmail, tokenDAO, lectorPropiedadesEmail);
+    private static ConstructorContenidoEmail constructorContenidoEmail = new ConstructorContenidoEmail();
+    private static UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion, despachadorEmail, tokenDAO, lectorPropiedadesEmail, constructorContenidoEmail);
 
     @ClassRule
     public static final ResourceTestRule resources = ResourceTestRule.builder()

@@ -1,6 +1,5 @@
 package ec.gob.senescyt.usuario.resources;
 
-import com.sun.jersey.api.NotFoundException;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.usuario.core.CedulaInfo;
@@ -51,7 +50,7 @@ public class BusquedaResourceTest {
     @Test
     public void debeDevolverServicioNoDisponibleCuandoRegistroCivilNoEstaDisponible() throws CedulaInvalidaException, ServicioNoDisponibleException, CredencialesIncorrectasException {
         String cedulaIndiferente = "1111";
-        when(servicioCedula.buscar(cedulaIndiferente)).thenThrow(new ServicioNoDisponibleException("Servicio no disponible"));
+        when(servicioCedula.buscar(cedulaIndiferente)).thenThrow(new ServicioNoDisponibleException("Servicio no disponible", null));
         ClientResponse response = resources.client().resource("/busqueda")
                 .queryParam("cedula", cedulaIndiferente)
                 .header("Content-Type", MediaType.APPLICATION_JSON)

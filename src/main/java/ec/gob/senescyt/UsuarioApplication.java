@@ -7,6 +7,7 @@ import ec.gob.senescyt.biblioteca.NivelArbol;
 import ec.gob.senescyt.biblioteca.dao.ArbolDAO;
 import ec.gob.senescyt.biblioteca.resource.ArbolResource;
 import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
+import ec.gob.senescyt.commons.email.ConstructorContenidoEmail;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.commons.exceptions.DBConstraintViolationMapper;
 import ec.gob.senescyt.commons.filters.HeaderResponseFilter;
@@ -113,8 +114,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         LectorArchivoDePropiedades lectorPropiedadesValidacion = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
         LectorArchivoDePropiedades lectorPropiedadesEmail = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_PROPIEDADES_EMAIL.getBaseName());
         MensajeErrorBuilder mensajeErrorBuilder = new MensajeErrorBuilder(lectorPropiedadesValidacion);
+        ConstructorContenidoEmail constructorContenidoEmail = new ConstructorContenidoEmail();
 
-        final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion, despachadorEmail, tokenDAO, lectorPropiedadesEmail);
+        final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion, despachadorEmail, tokenDAO, lectorPropiedadesEmail, constructorContenidoEmail);
         environment.jersey().register(usuarioResource);
 
         final InstitucionResource institucionResource = new InstitucionResource(institucionDAO,constructorRespuestas,universidadExtranjeraDAO);

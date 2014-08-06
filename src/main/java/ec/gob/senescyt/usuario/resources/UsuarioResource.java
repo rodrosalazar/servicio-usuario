@@ -2,7 +2,7 @@ package ec.gob.senescyt.usuario.resources;
 
 import com.google.common.base.Optional;
 import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
-import ec.gob.senescyt.commons.email.ConstructorDeContenidoDeEmail;
+import ec.gob.senescyt.commons.email.ConstructorContenidoEmail;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.usuario.core.Token;
@@ -30,17 +30,20 @@ public class UsuarioResource {
     private LectorArchivoDePropiedades lectorArchivoDePropiedades;
     private LectorArchivoDePropiedades lectorPropiedadesEmail;
     private DespachadorEmail despachadorEmail;
+    private ConstructorContenidoEmail constructorContenidoEmail;
     private MensajeErrorBuilder mensajeErrorBuilder;
 
     public UsuarioResource(UsuarioDAO usuarioDAO, CedulaValidator cedulaValidator,
                            LectorArchivoDePropiedades lectorPropiedadesValidacion, DespachadorEmail despachadorEmail,
-                           TokenDAO tokenDAO, LectorArchivoDePropiedades lectorPropiedadesEmail) {
+                           TokenDAO tokenDAO, LectorArchivoDePropiedades lectorPropiedadesEmail,
+                           ConstructorContenidoEmail constructorContenidoEmail) {
         this.usuarioDAO = usuarioDAO;
         this.tokenDAO = tokenDAO;
         this.cedulaValidator = cedulaValidator;
         this.lectorArchivoDePropiedades = lectorPropiedadesValidacion;
         this.lectorPropiedadesEmail = lectorPropiedadesEmail;
         this.despachadorEmail = despachadorEmail;
+        this.constructorContenidoEmail = constructorContenidoEmail;
         this.mensajeErrorBuilder = new MensajeErrorBuilder(this.lectorArchivoDePropiedades);
     }
 
@@ -104,7 +107,7 @@ public class UsuarioResource {
         String asunto = lectorPropiedadesEmail.leerPropiedad(PropiedadesEmailEnum.ASUNTO.getKey());
         String urlToken = lectorPropiedadesEmail.leerPropiedad(PropiedadesEmailEnum.URL.getKey()).concat(idToken) ;
 
-        String mensaje = ConstructorDeContenidoDeEmail.construirEmailNotificacionUsuarioCreado(nombreDestinatario,
+        String mensaje = constructorContenidoEmail.construirEmailNotificacionUsuarioCreado(nombreDestinatario,
                 nombreUsuario, urlToken);
 
         despachadorEmail.enviarEmail(emailDestinatario, nombreDestinatario, asunto, mensaje);

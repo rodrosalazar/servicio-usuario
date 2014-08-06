@@ -22,12 +22,12 @@ public class DespachadorEmailTest {
     private String nombreDestinario = "NOMBRES COMPLETOS USUARIO TEST";
     private String asunto = "Creación de usuario para el sistema SNIESE";
     private String mensaje = "Mensaje";
-    private ConstructorDeContenidoDeEmail constructorDeContenidoDeEmail;
+    private ConstructorContenidoEmail constructorContenidoEmail;
     private ConfiguracionEmail configuracionEmail;
 
     @Before
     public void setUp() throws Exception {
-        constructorDeContenidoDeEmail = new ConstructorDeContenidoDeEmail();
+        constructorContenidoEmail = new ConstructorContenidoEmail();
         configuracionEmail = spy(new ConfiguracionEmail());
         despachadorEmail = new DespachadorEmail(configuracionEmail);
     }

@@ -56,7 +56,7 @@ public class ServicioCedula {
             throw new CedulaInvalidaException(respuesta.getError());
 
         } catch (WebServiceException cte) {
-            throw new ServicioNoDisponibleException("Servicio no disponible");
+            throw new ServicioNoDisponibleException("Servicio no disponible", cte);
         }
     }
 

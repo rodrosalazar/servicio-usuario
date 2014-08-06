@@ -41,20 +41,6 @@ public class DatosHeader {
     private String digest;
     private String usuario;
 
-    public DatosHeader()
-    {
-
-    }
-
-    public DatosHeader(String fecha, String nonce, String digest)
-    {
-        this.fecha = fecha;
-        this.fechaf = fechaf;
-        this.nonce = nonce;
-        this.digest = digest;
-    }
-
-
     public String getFecha() {
         return fecha;
     }

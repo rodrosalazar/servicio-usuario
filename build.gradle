@@ -6,6 +6,7 @@ apply plugin: 'idea'
 apply plugin: 'flyway'
 apply plugin: 'application'
 apply plugin: 'gradle-one-jar'
+apply plugin: 'pmd'
 
 buildscript {
     repositories {
@@ -100,6 +101,7 @@ run {
 }
 
 test {
+    dependsOn pmdMain
     exclude 'ec/gob/senescyt/contracts/**'
 }
 
@@ -186,6 +188,23 @@ task generateJavaFromWsdl() {
             }
         }
     }
+}
+
+pmd {
+    ruleSets = [
+        'basic',
+        'braces',
+        'codesize',
+        'imports',
+        'junit',
+        'logging-java',
+        'migrating',
+        'strictexception',
+        'strings',
+        'typeresolution',
+        'unusedcode'
+    ]
+    ruleSetFiles = files('pmd-ruleset.xml')
 }
 
 compileJava {
