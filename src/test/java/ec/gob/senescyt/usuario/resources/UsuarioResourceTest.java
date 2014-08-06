@@ -14,7 +14,7 @@ import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
-import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
+import ec.gob.senescyt.usuario.enums.TipoDocumento;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.testing.junit.ResourceTestRule;
@@ -130,7 +130,7 @@ public class UsuarioResourceTest {
     @Test
     public void debeGuardarUsuarioConPasaporte() throws Exception {
         Usuario usuarioConPasaporte = UsuarioBuilder.nuevoUsuario()
-                .con(u -> u.tipoDocumento = TipoDocumentoEnum.PASAPORTE)
+                .con(u -> u.tipoDocumento = TipoDocumento.PASAPORTE)
                 .generar();
 
         when(usuarioDAO.guardar(any(Usuario.class))).thenReturn(usuarioConPasaporte);

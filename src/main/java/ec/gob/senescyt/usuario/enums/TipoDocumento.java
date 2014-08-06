@@ -1,5 +1,5 @@
 package ec.gob.senescyt.usuario.enums;
 
-public enum TipoDocumentoEnum {
+public enum TipoDocumento {
     CEDULA, PASAPORTE;
 }

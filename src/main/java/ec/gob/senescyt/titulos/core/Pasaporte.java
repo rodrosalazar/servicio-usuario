@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ec.gob.senescyt.commons.serializers.JSONFechaDeserializer;
 import ec.gob.senescyt.commons.serializers.JSONFechaSerializer;
 import ec.gob.senescyt.titulos.validators.anotaciones.VigenciaVisaValida;
-import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
+import ec.gob.senescyt.usuario.enums.TipoDocumento;
 import ec.gob.senescyt.usuario.validators.annotations.FechaVigenciaValida;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
@@ -49,7 +49,7 @@ public class Pasaporte extends Identificacion {
     }
 
     public Pasaporte(String numeroIdentificacion, DateTime finVigenciaPasaporte, DateTime finVigenciaVisa, String idTipoVisa, boolean visaIndefinida) {
-        super(numeroIdentificacion.trim(), TipoDocumentoEnum.PASAPORTE);
+        super(numeroIdentificacion.trim(), TipoDocumento.PASAPORTE);
         this.finVigenciaPasaporte = finVigenciaPasaporte;
         this.finVigenciaVisa = finVigenciaVisa;
         this.idTipoVisa = idTipoVisa;

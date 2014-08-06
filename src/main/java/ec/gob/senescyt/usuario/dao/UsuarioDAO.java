@@ -1,6 +1,5 @@
 package ec.gob.senescyt.usuario.dao;
 
-import ec.gob.senescyt.usuario.core.Credencial;
 import ec.gob.senescyt.usuario.core.Usuario;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;

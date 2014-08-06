@@ -1,7 +1,7 @@
 package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
+import ec.gob.senescyt.usuario.enums.TipoDocumento;
 import io.dropwizard.jackson.Jackson;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -21,7 +21,7 @@ public class TokenTest {
     @Before
     public void setup() {
         long idInstitucion = 1l;
-        Usuario usuario = new Usuario(new Identificacion(TipoDocumentoEnum.CEDULA, "1718642174"),
+        Usuario usuario = new Usuario(new Identificacion(TipoDocumento.CEDULA, "1718642174"),
                 new Nombre("Nelson", "Alberto", "Jumbo", "Hidalgo"),
                 "testEmail@senescyt.gob.ec", "SENESCYT-DFAPO-2014-65946-MI",
                 new DateTime(2016, 7, 29, 0, 0, DateTimeZone.UTC),

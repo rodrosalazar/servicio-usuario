@@ -1,6 +1,6 @@
 package ec.gob.senescyt.titulos.core;
 
-import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
+import ec.gob.senescyt.usuario.enums.TipoDocumento;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -13,6 +13,6 @@ public class Cedula extends Identificacion {
     }
 
     public Cedula(String numeroIdentificacion) {
-        super(numeroIdentificacion, TipoDocumentoEnum.CEDULA);
+        super(numeroIdentificacion, TipoDocumento.CEDULA);
     }
 }

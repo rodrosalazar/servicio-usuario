@@ -12,7 +12,8 @@ public enum ElementosRaicesJSONEnum {
     ELEMENTO_RAIZ_TIPO_VISA("tiposDeVisa"),
     ELEMENTO_RAIZ_ARBOLES("arboles"),
     ELEMENTO_RAIZ_UNIVERSIDADES_CONVENIO("universidadesConvenio"),
-    ELEMENTO_RAIZ_UNIVERSIDADES_LISTADO("universidadesListado");
+    ELEMENTO_RAIZ_UNIVERSIDADES_LISTADO("universidadesListado"),
+    ELEMENTO_RAIZ_TIPOS_INSTITUCION("tiposDeInstitucion");
 
     private String nombre;
 

@@ -11,7 +11,7 @@ import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Usuario;
-import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
+import ec.gob.senescyt.usuario.enums.TipoDocumento;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.apache.commons.lang.RandomStringUtils;
 import org.joda.time.DateTime;
@@ -208,7 +208,7 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
     public void debeDevolverUnMensajeDeErrorCuandoElNumeroDeIdentificacionEsMayorDe20() {
         Usuario usuarioCon21Digitos = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.numeroIdentificacion = RandomStringUtils.random(21))
-                .con(u -> u.tipoDocumento = TipoDocumentoEnum.PASAPORTE)
+                .con(u -> u.tipoDocumento = TipoDocumento.PASAPORTE)
                 .generar();
 
         ClientResponse response = hacerPost("usuario", usuarioCon21Digitos);
@@ -219,7 +219,7 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
     @Test
     public void debeDevolverUnMensajeDeErrorCuandoElNumeroDePasaporteEstaVacio() {
         Usuario usuarioConPasaporteVacio = UsuarioBuilder.nuevoUsuario()
-                .con(u -> u.tipoDocumento = TipoDocumentoEnum.PASAPORTE)
+                .con(u -> u.tipoDocumento = TipoDocumento.PASAPORTE)
                 .con(u -> u.numeroIdentificacion = "")
                 .generar();
 

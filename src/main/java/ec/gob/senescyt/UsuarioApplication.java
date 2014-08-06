@@ -79,17 +79,6 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     public void initialize(Bootstrap<UsuarioConfiguration> bootstrap) {
         bootstrap.addBundle(hibernate);
         bootstrap.addBundle(flywayBundle);
-//        bootstrap.addBundle(new Bundle() {
-//            @Override
-//            public void initialize(Bootstrap<?> bootstrap) {
-//
-//            }
-//
-//            @Override
-//            public void run(Environment environment) {
-//                environment.servlets().addFilter("redirect", RedirectFilter.class).addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), false, "*");
-//            }
-//        });
     }
 
 

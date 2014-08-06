@@ -2,7 +2,7 @@ package ec.gob.senescyt.titulos.core;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
+import ec.gob.senescyt.usuario.enums.TipoDocumento;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -32,7 +32,7 @@ public abstract class Identificacion {
     @Enumerated(EnumType.STRING)
     @NotNull
     @Column(name = "tipoDocumento", insertable = false, updatable = false)
-    private TipoDocumentoEnum tipoDocumento;
+    private TipoDocumento tipoDocumento;
 
     @NotNull
     @NotEmpty
@@ -42,7 +42,7 @@ public abstract class Identificacion {
 
     protected Identificacion(){};
 
-    protected Identificacion(String numeroIdentificacion, TipoDocumentoEnum tipoDocumento) {
+    protected Identificacion(String numeroIdentificacion, TipoDocumento tipoDocumento) {
         this.numeroIdentificacion = numeroIdentificacion;
         this.tipoDocumento = tipoDocumento;
     }
@@ -51,7 +51,7 @@ public abstract class Identificacion {
         return numeroIdentificacion;
     }
 
-    public TipoDocumentoEnum getTipoDocumento() {
+    public TipoDocumento getTipoDocumento() {
         return tipoDocumento;
     }
 

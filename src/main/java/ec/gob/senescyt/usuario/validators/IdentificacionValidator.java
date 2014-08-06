@@ -1,7 +1,7 @@
 package ec.gob.senescyt.usuario.validators;
 
 import ec.gob.senescyt.usuario.core.Identificacion;
-import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
+import ec.gob.senescyt.usuario.enums.TipoDocumento;
 import ec.gob.senescyt.usuario.validators.annotations.IdentificacionValida;
 
 import javax.validation.ConstraintValidator;
@@ -20,12 +20,12 @@ public class IdentificacionValidator implements ConstraintValidator<Identificaci
     public boolean isValid(Identificacion identificacion, ConstraintValidatorContext context) {
 
         if (identificacion.getTipoDocumento() == null ||
-                (!TipoDocumentoEnum.CEDULA.equals(identificacion.getTipoDocumento())
-                   && !TipoDocumentoEnum.PASAPORTE.equals(identificacion.getTipoDocumento()))) {
+                (!TipoDocumento.CEDULA.equals(identificacion.getTipoDocumento())
+                   && !TipoDocumento.PASAPORTE.equals(identificacion.getTipoDocumento()))) {
             return false;
         }
 
-        if (TipoDocumentoEnum.CEDULA.equals(identificacion.getTipoDocumento())) {
+        if (TipoDocumento.CEDULA.equals(identificacion.getTipoDocumento())) {
             return cedulaValidator.isValidaCedula(identificacion.getNumeroIdentificacion());
         }
 

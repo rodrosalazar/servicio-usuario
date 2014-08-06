@@ -3,7 +3,7 @@ package ec.gob.senescyt.commons.builders;
 import ec.gob.senescyt.usuario.core.Identificacion;
 import ec.gob.senescyt.usuario.core.Nombre;
 import ec.gob.senescyt.usuario.core.Usuario;
-import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
+import ec.gob.senescyt.usuario.enums.TipoDocumento;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
@@ -14,7 +14,7 @@ import static com.google.common.collect.Lists.newArrayList;
 
 public class UsuarioBuilder {
 
-    public TipoDocumentoEnum tipoDocumento = TipoDocumentoEnum.CEDULA;
+    public TipoDocumento tipoDocumento = TipoDocumento.CEDULA;
     public String numeroIdentificacion = "1111111116";
     public String primerNombre = "Lorem";
     public String segundoNombre = "Ipsum";

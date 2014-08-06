@@ -1,6 +1,6 @@
 package ec.gob.senescyt.usuario.core;
 
-import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
+import ec.gob.senescyt.usuario.enums.TipoDocumento;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -15,7 +15,7 @@ public class Identificacion implements Serializable {
 
     @Enumerated(EnumType.STRING)
     @NotNull
-    private TipoDocumentoEnum tipoDocumento;
+    private TipoDocumento tipoDocumento;
 
     @NotEmpty
     @Length(max = 20)
@@ -42,12 +42,12 @@ public class Identificacion implements Serializable {
         return 0;
     }
 
-    public Identificacion(TipoDocumentoEnum tipoDocumento, String numeroIdentificacion) {
+    public Identificacion(TipoDocumento tipoDocumento, String numeroIdentificacion) {
         this.tipoDocumento = tipoDocumento;
         this.numeroIdentificacion = numeroIdentificacion;
     }
 
-    public TipoDocumentoEnum getTipoDocumento() {
+    public TipoDocumento getTipoDocumento() {
         return tipoDocumento;
     }
 

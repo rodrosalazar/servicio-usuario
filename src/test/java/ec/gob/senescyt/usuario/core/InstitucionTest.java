@@ -1,10 +1,7 @@
 package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ec.gob.senescyt.usuario.enums.TipoDocumentoEnum;
 import io.dropwizard.jackson.Jackson;
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 
