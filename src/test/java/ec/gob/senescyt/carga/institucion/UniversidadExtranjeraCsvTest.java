@@ -12,7 +12,7 @@ public class UniversidadExtranjeraCsvTest {
     UniversidadExtranjeraCsv universidadExtranjeraCsv;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         universidadExtranjeraCsv = new UniversidadExtranjeraCsv();
     }
 

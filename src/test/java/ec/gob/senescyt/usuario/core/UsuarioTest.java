@@ -8,6 +8,8 @@ import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -30,7 +32,7 @@ public class UsuarioTest {
     }
 
     @Test
-    public void debeDeserializarUnUsuarioDesdeJSON() throws Exception {
+    public void debeDeserializarUnUsuarioDesdeJSON() throws IOException {
         Usuario actual = MAPPER.readValue(fixture("fixtures/usuario.json"), Usuario.class);
 
         assertThat(actual.getIdentificacion(), is(usuario.getIdentificacion()));
@@ -42,7 +44,7 @@ public class UsuarioTest {
     }
 
     @Test
-    public void debeSerializarUnJSONDesdeUnUsuario() throws Exception {
+    public void debeSerializarUnJSONDesdeUnUsuario() throws IOException {
         String actual = MAPPER.writeValueAsString(usuario);
         assertThat(actual, is(fixture("fixtures/usuario_con_id.json")));
     }

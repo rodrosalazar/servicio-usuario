@@ -5,8 +5,9 @@ import org.junit.Test;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.Writer;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -17,7 +18,7 @@ public class ClasificacionCsvTest {
     ClasificacionCsv clasificacionCsv;
     
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         clasificacionCsv = new ClasificacionCsv();
     }
 
@@ -31,7 +32,7 @@ public class ClasificacionCsvTest {
     public void debeConvertirArchivosCompletos() throws IOException {
         File archivo = File.createTempFile("prueba", "csv");
         archivo.deleteOnExit();
-        Writer escritor = new BufferedWriter(new FileWriter(archivo, true));
+        Writer escritor = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivo), "UTF-8"));
         escritor.write("Cod_Clasificacion,Nombre_Clasificacion\n" +
                 "001  ,CINE-UNESCO 1997\n" +
                 "002  ,CINE-UNESCO 2013\n");

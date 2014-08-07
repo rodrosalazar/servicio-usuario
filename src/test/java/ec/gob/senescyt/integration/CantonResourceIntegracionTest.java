@@ -18,6 +18,8 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
@@ -74,7 +76,7 @@ public class CantonResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerParroquiasParaCantonTest() throws Exception {
+    public void debeObtenerParroquiasParaCantonTest() throws IOException {
         ClientResponse response = hacerGet("cantones/" + ID_CANTON_TEST + "/parroquias");
 
         assertThat(response.getStatus(), is(200));
@@ -84,7 +86,7 @@ public class CantonResourceIntegracionTest extends BaseIntegracionTest {
         assertThat(idCantonDeParroquiaEncontrada, is(ID_CANTON_TEST));
     }
 
-    private String obtenerIdCantonDesdeParroquia(final ClientResponse response) throws java.io.IOException {
+    private String obtenerIdCantonDesdeParroquia(final ClientResponse response) throws IOException {
         ObjectMapper MAPPER = Jackson.newObjectMapper();
         String parroquias = response.getEntity(String.class);
 

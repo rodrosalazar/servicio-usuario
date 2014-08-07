@@ -25,7 +25,7 @@ public class ClasificacionResourceTest {
     }
 
     @Test
-    public void debeObtenerElListadoDeAreasYSubareasParaCine() throws Exception {
+    public void debeObtenerElListadoDeAreasYSubareasParaCine() {
         Clasificacion clasificacion = new Clasificacion(ID_CLASIFICACION, NOMBRE_CLASIFICACION, null);
         when(clasificacionDAO.obtenerClasificacion("001")).thenReturn(clasificacion);
 

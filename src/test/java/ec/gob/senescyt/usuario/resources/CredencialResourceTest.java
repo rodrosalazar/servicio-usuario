@@ -47,7 +47,7 @@ public class CredencialResourceTest {
     private static CredencialResource credencialResource = new CredencialResource(credencialDAO, tokenDAO, MENSAJE_ERROR_BUILDER, servicioCredencial);
 
     @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
+    public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
             .addResource(credencialResource)
             .addProvider(ValidacionExceptionMapper.class)
             .build();
@@ -55,7 +55,7 @@ public class CredencialResourceTest {
 
     @Before
     public void setUp() {
-        client = resources.client();
+        client = RESOURCES.client();
     }
 
     @After

@@ -35,7 +35,7 @@ public class PerfilResourceTest {
     private static ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
 
     @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
+    public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
             .addResource(new PerfilResource(perfilDAO, constructorRespuestas))
             .addProvider(ValidacionExceptionMapper.class)
             .build();
@@ -43,12 +43,12 @@ public class PerfilResourceTest {
     private Client client;
 
     @Before
-    public void setUp() throws Exception {
-        client = resources.client();
+    public void setUp() {
+        client = RESOURCES.client();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         reset(perfilDAO);
     }
 
@@ -158,7 +158,7 @@ public class PerfilResourceTest {
     }
 
     @Test
-    public void debeObtenerTodosLosPerfiles() throws Exception {
+    public void debeObtenerTodosLosPerfiles() {
         Perfil perfil = PerfilBuilder.nuevoPerfil().generar();
         when(perfilDAO.obtenerTodos()).thenReturn(newArrayList(perfil));
 

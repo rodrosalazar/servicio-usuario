@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
 import java.io.File;
+import java.net.URISyntaxException;
 
 import static ec.gob.senescyt.commons.helpers.ResourceTestHelper.assertErrorMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -35,8 +36,8 @@ public class BusquedaCedulaTest {
     private static String resourceFilePath(String resourceClassPathLocation) {
         try {
             return new File(Resources.getResource(resourceClassPathLocation).toURI()).getAbsolutePath();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (URISyntaxException e) {
+            return null;
         }
     }
 

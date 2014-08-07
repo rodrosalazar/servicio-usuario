@@ -46,7 +46,7 @@ public class PerfilTest {
     }
 
     @Test
-    public void debeSerializarUnPerfilAJSON() throws Exception {
+    public void debeSerializarUnPerfilAJSON() throws IOException {
         String actual = MAPPER.writeValueAsString(perfil);
 
         assertThat(actual, is(fixture("fixtures/perfil_con_id.json")));

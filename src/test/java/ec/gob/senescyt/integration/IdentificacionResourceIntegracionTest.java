@@ -24,7 +24,7 @@ public class IdentificacionResourceIntegracionTest extends BaseIntegracionTest {
 
     @Test
     @Ignore
-    public void debeGuardarCredenciales() throws Exception {
+    public void debeGuardarCredenciales() {
         Credencial credencial = new Credencial("username", "password");
         ClientResponse clientResponse = hacerPost("identificacion",credencial);
 

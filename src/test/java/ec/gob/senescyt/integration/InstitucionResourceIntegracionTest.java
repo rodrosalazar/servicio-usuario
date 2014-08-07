@@ -27,7 +27,7 @@ public class InstitucionResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerTodasLasInstituciones() throws Exception {
+    public void debeObtenerTodasLasInstituciones() {
         ClientResponse response = hacerGet("instituciones");
 
         assertThat(response.getStatus(), is(200));
@@ -35,7 +35,7 @@ public class InstitucionResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerUniversidadesDeConvenio() throws Exception {
+    public void debeObtenerUniversidadesDeConvenio() {
         ClientResponse response = hacerGet("instituciones/convenio");
 
         assertThat(response.getStatus(), is(200));
@@ -47,7 +47,7 @@ public class InstitucionResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerUniversidadesDeListado() throws Exception {
+    public void debeObtenerUniversidadesDeListado() {
         ClientResponse response = hacerGet("instituciones/listado");
 
         assertThat(response.getStatus(), is(200));

@@ -8,16 +8,14 @@ import java.util.List;
 
 public class ArbolBuilder {
 
+    private static final NivelArbol NIVEL_PADRE_DE_GENERALES = null;
     private static ArbolBuilder arbolBuilder;
-
-    private List<NivelArbol> nivelesArbol;
 
     private Integer idArbol = 1000;
     private String nombreArbol = "normativas";
 
     private Integer idNivelGenerales = 1001;
     private String nombreNivelGenerales = "Generales";
-    private NivelArbol nivelPadreDeGenerales = null;
 
     private Integer idSubnivelLeyes = 1002;
     private String nombreSubnivelLeyes = "Leyes";
@@ -31,7 +29,7 @@ public class ArbolBuilder {
     public Arbol generar() {
         Arbol arbol = new Arbol(idArbol, nombreArbol);
 
-        NivelArbol nivelGenerales = new NivelArbol(idNivelGenerales, nombreNivelGenerales, nivelPadreDeGenerales, arbol);
+        NivelArbol nivelGenerales = new NivelArbol(idNivelGenerales, nombreNivelGenerales, NIVEL_PADRE_DE_GENERALES, arbol);
         NivelArbol nivelLeyes = new NivelArbol(idSubnivelLeyes, nombreSubnivelLeyes, nivelGenerales, arbol);
         NivelArbol nivelReglamentos = new NivelArbol(idSubnivelReglamentos, nombreSubnivelReglamentos, nivelGenerales, arbol);
 

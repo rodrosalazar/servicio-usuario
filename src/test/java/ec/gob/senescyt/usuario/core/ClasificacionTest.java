@@ -56,7 +56,7 @@ public class ClasificacionTest {
     }
 
     @Test
-    public void debeDeserializarUnaClasificacionDesdeJSON() throws Exception {
+    public void debeDeserializarUnaClasificacionDesdeJSON() throws IOException {
         Clasificacion clasificacionDeserializada = MAPPER.readValue(fixture("fixtures/clasificacion.json"), Clasificacion.class);
 
         assertThat(clasificacionDeserializada.getId(), is(clasificacion.getId()));
@@ -88,13 +88,13 @@ public class ClasificacionTest {
     }
 
     @Test
-    public void debeSerializarUnaClasificacionAJSON() throws Exception {
+    public void debeSerializarUnaClasificacionAJSON() throws IOException {
         String clasificacionSerializada = MAPPER.writeValueAsString(clasificacion);
         assertThat(clasificacionSerializada, is(fixture("fixtures/clasificacion.json")));
     }
 
     @Test
-    public void debeSerializarUnaClasificacion2013AJSON() throws Exception {
+    public void debeSerializarUnaClasificacion2013AJSON() throws IOException {
         String clasificacionSerializada = MAPPER.writeValueAsString(clasificacion2013);
         assertThat(clasificacionSerializada, is(fixture("fixtures/clasificacion_cine_2013.json")));
     }

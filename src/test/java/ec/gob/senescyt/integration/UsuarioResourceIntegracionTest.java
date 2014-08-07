@@ -86,7 +86,7 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeLanzarErrorCuandoEmailDeUsuarioEsInvalido() throws Exception {
+    public void debeLanzarErrorCuandoEmailDeUsuarioEsInvalido() {
         Usuario usuarioConEmailInvalido = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.emailInstitucional = "invalido")
                 .generar();
@@ -108,7 +108,7 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeIndicarQueUnNombreDeUsuarioYaHaSidoRegistrado() throws Exception {
+    public void debeIndicarQueUnNombreDeUsuarioYaHaSidoRegistrado() {
         Usuario usuarioValido = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
                 .generar();
@@ -127,7 +127,7 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeIndicarQueUnNombreDeUsuarioNoSeEncuentraRegistrado() throws Exception {
+    public void debeIndicarQueUnNombreDeUsuarioNoSeEncuentraRegistrado() {
         Usuario usuarioValido = UsuarioBuilder.nuevoUsuario().generar();
         MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
         parametros.add("nombreUsuario", usuarioValido.getNombreUsuario());
@@ -138,7 +138,7 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeIndicarQueUnNumeroDeIdentificacionYaHaSidoRegistrado() throws Exception {
+    public void debeIndicarQueUnNumeroDeIdentificacionYaHaSidoRegistrado() {
         Usuario usuario = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
                 .generar();
@@ -156,7 +156,7 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeIndicarQueUnNumeroDeIdentificacionNoSeEncuentraRegistrado() throws Exception {
+    public void debeIndicarQueUnNumeroDeIdentificacionNoSeEncuentraRegistrado() {
         Usuario usuario = UsuarioBuilder.nuevoUsuario().generar();
         MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
         parametros.add("numeroIdentificacion", usuario.getIdentificacion().getNumeroIdentificacion());
@@ -167,7 +167,7 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeValidarQueNombreDeUsuarioNoSeRepitaCuandoSeGuardaUsuario() throws Exception {
+    public void debeValidarQueNombreDeUsuarioNoSeRepitaCuandoSeGuardaUsuario() {
         Usuario usuarioConNombreA = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
                 .con(u -> u.nombreUsuario = "A")
@@ -184,7 +184,7 @@ public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeValidarQueNumeroDeIdentificacionNoSeRepitaCuandoSeGuardaUsuario() throws Exception {
+    public void debeValidarQueNumeroDeIdentificacionNoSeRepitaCuandoSeGuardaUsuario() {
         Usuario usuarioConNombreA = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
                 .con(u -> u.numeroIdentificacion = "1111111116")

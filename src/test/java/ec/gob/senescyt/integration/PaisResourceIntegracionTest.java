@@ -26,7 +26,7 @@ public class PaisResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerTodosLosPaises() throws Exception {
+    public void debeObtenerTodosLosPaises() {
         ClientResponse response = hacerGet("paises");
 
         assertThat(response.getStatus(), is(200));

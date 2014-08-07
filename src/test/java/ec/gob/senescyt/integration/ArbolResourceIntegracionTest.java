@@ -21,7 +21,7 @@ public class ArbolResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerTodos() throws Exception {
+    public void debeObtenerTodos() {
         ClientResponse response = hacerGet("arboles");
 
         assertThat(response.getStatus(), is(200));

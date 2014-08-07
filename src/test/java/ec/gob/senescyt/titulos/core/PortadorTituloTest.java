@@ -8,6 +8,8 @@ import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -23,7 +25,7 @@ public class PortadorTituloTest {
     private DateTime fechaFinVigenciaVisaValida = new DateTime(2015, 3, 16, 0, 0, DateTimeZone.UTC);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
 
 
         portadorTituloConCedula = PortadorTituloBuilder.nuevoPortadorTitulo().con(
@@ -37,7 +39,7 @@ public class PortadorTituloTest {
     }
 
     @Test
-    public void debeDeserializarUnPortadorTituloConCedulaDesdeJSON() throws Exception {
+    public void debeDeserializarUnPortadorTituloConCedulaDesdeJSON() throws IOException {
         PortadorTitulo portadorTituloDeserializado = MAPPER.readValue(fixture("fixtures/portador_titulo_con_cedula.json"),
                 PortadorTitulo.class);
 
@@ -56,13 +58,13 @@ public class PortadorTituloTest {
     }
 
     @Test
-    public void debeSerializarUnPortadorTituloConCedulaAJSON() throws Exception {
+    public void debeSerializarUnPortadorTituloConCedulaAJSON() throws IOException {
         String actual = MAPPER.writeValueAsString(portadorTituloConCedula);
         assertThat(actual, is(fixture("fixtures/portador_titulo_con_cedula_con_id.json")));
     }
 
     @Test
-    public void debeDeserializarUnPortadorTituloConPasaporteDesdeJSON() throws Exception {
+    public void debeDeserializarUnPortadorTituloConPasaporteDesdeJSON() throws IOException {
         PortadorTitulo portadorTituloDeserializado = MAPPER.readValue(fixture("fixtures/portador_titulo_con_pasaporte.json"),
                 PortadorTitulo.class);
 
@@ -93,7 +95,7 @@ public class PortadorTituloTest {
     }
 
     @Test
-    public void debeSerializarUnPortadorTituloConPasaporteAJSON() throws Exception {
+    public void debeSerializarUnPortadorTituloConPasaporteAJSON() throws IOException {
         String actual = MAPPER.writeValueAsString(portadorTituloConPasaporte);
         assertThat(actual, is(fixture("fixtures/portador_titulo_con_pasaporte_con_id.json")));
     }

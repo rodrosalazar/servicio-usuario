@@ -14,7 +14,7 @@ import static org.hamcrest.core.Is.is;
 public class ConstructorRespuestasTest{
 
     @Test
-    public void debeRetornarListaDeDatosComoUnHashMap() throws Exception {
+    public void debeRetornarListaDeDatosComoUnHashMap() {
         List<String> datosRespuesta = new ArrayList<String>();
 
         ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();

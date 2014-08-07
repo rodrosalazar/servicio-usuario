@@ -12,7 +12,7 @@ public class AreaCsvTest {
     AreaCsv areaCsv;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         areaCsv = new AreaCsv();
     }
 

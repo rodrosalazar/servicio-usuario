@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class TiposDeVisaResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerTodosLosTipoDeVisa() throws Exception {
+    public void debeObtenerTodosLosTipoDeVisa() {
         ClientResponse response = hacerGet("tiposDeVisa");
 
         assertThat(response.getStatus(), is(200));
@@ -79,7 +80,7 @@ public class TiposDeVisaResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerCategoriasDeVisaParaTipoDeVisa() throws Exception {
+    public void debeObtenerCategoriasDeVisaParaTipoDeVisa() throws IOException {
         ClientResponse response = hacerGet("tiposDeVisa/" + ID_TIPO_VISA_TEST + "/categorias");
 
         assertThat(response.getStatus(), is(200));

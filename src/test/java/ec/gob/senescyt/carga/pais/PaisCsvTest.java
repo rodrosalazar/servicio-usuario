@@ -12,7 +12,7 @@ public class PaisCsvTest {
     PaisCsv paisCsv;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         paisCsv = new PaisCsv();
     }
 

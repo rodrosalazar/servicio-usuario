@@ -12,7 +12,7 @@ public class ProvinciaCsvTest {
     ProvinciaCsv provinciaCsv;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         provinciaCsv = new ProvinciaCsv();
     }
 

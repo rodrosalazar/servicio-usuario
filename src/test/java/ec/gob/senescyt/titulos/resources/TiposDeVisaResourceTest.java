@@ -34,7 +34,6 @@ public class TiposDeVisaResourceTest {
     public static final String NOMBRE_TIPO_VISA = "Visa 12 - NO INMIGRANTE";
     public static final String NOMBRE_CATEGORIA_VISA = "I-II     FUNCIONARIO DE MISIONES DIPLOMATICAS";
 
-    private TipoDeVisaResource tiposDeVisaResource;
     private static TipoVisaDAO tipoVisaDAO = mock(TipoVisaDAO.class);
     private static CategoriaVisaDAO categoriaVisaDAO = mock(CategoriaVisaDAO.class);
     private static ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
@@ -42,7 +41,7 @@ public class TiposDeVisaResourceTest {
 
 
     @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
+    public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
             .addResource(new TipoDeVisaResource(tipoVisaDAO, categoriaVisaDAO, constructorRespuestas))
             .addProvider(ValidacionExceptionMapper.class)
             .build();
@@ -51,15 +50,14 @@ public class TiposDeVisaResourceTest {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         tiposDeVisa.add(new TipoVisa(ID_TIPO_VISA, NOMBRE_TIPO_VISA));
-        tiposDeVisaResource = new TipoDeVisaResource(tipoVisaDAO, categoriaVisaDAO, constructorRespuestas);
-        client = resources.client();
+        client = RESOURCES.client();
     }
 
 
     @Test
-    public void debeObtenerTiposDeVisa() throws Exception {
+    public void debeObtenerTiposDeVisa() {
 
         when(tipoVisaDAO.obtenerTodos()).thenReturn(tiposDeVisa);
 
@@ -74,7 +72,7 @@ public class TiposDeVisaResourceTest {
     }
 
     @Test
-    public void debeObtenerCategoriasVisaParaUnaVisa() throws Exception {
+    public void debeObtenerCategoriasVisaParaUnaVisa() {
 
         when(tipoVisaDAO.obtenerPorId(ID_TIPO_VISA)).thenReturn(new TipoVisa(ID_TIPO_VISA, NOMBRE_TIPO_VISA));
 

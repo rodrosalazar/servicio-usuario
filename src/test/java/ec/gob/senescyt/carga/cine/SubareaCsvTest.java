@@ -13,7 +13,7 @@ public class SubareaCsvTest {
     SubareaCsv subareaCsv;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         subareaCsv = new SubareaCsv();
     }
 

@@ -27,12 +27,11 @@ import static org.mockito.Mockito.when;
 
 public class ArbolResourceTest {
 
-    private ArbolResource arbolResource;
     private static ArbolDAO arbolDAO = mock(ArbolDAO.class);
     private static ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
 
     @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
+    public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
             .addResource(new ArbolResource(arbolDAO, constructorRespuestas))
             .addProvider(ValidacionExceptionMapper.class)
             .build();
@@ -40,10 +39,9 @@ public class ArbolResourceTest {
     private Arbol arbol;
 
     @Before
-    public void setUp() throws Exception {
-
+    public void setUp() {
         reset(arbolDAO);
-        client = resources.client();
+        client = RESOURCES.client();
         arbol = ArbolBuilder.nuevoArbol().generar();
         when(arbolDAO.obtenerPorId(any())).thenReturn(arbol);
     }

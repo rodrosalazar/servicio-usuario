@@ -35,7 +35,7 @@ public class PaisResourceTest {
     }
 
     @Test
-    public void debeObtenerTodosLosPaises() throws Exception {
+    public void debeObtenerTodosLosPaises() {
         Pais pais = new Pais(ID_PAIS, NOMBRE_PAIS);
         when(paisDAO.obtenerTodos()).thenReturn(newArrayList(pais));
 

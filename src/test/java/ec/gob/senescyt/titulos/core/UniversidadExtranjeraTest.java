@@ -5,6 +5,8 @@ import io.dropwizard.jackson.Jackson;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -25,7 +27,7 @@ public class UniversidadExtranjeraTest {
     }
 
     @Test
-    public void debeDeserializarUnPaisDesdeJSON() throws Exception {
+    public void debeDeserializarUnPaisDesdeJSON() throws IOException {
         UniversidadExtranjera universidadExtranjeraDeserializada =
                 MAPPER.readValue(fixture("fixtures/universidad_extranjera_con_id.json"), UniversidadExtranjera.class);
 
@@ -36,7 +38,7 @@ public class UniversidadExtranjeraTest {
     }
 
     @Test
-    public void debeSerializarUnPaisAJSON() throws Exception {
+    public void debeSerializarUnPaisAJSON() throws IOException {
         String actual = MAPPER.writeValueAsString(universidadExtranjera);
         assertThat(actual, is(fixture("fixtures/universidad_extranjera_con_id.json")));
     }

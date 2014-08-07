@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import static org.hamcrest.CoreMatchers.not;
@@ -70,7 +71,7 @@ public class ProvinciaResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerTodosLosPaises() throws Exception {
+    public void debeObtenerTodosLosPaises() {
         ClientResponse response = hacerGet("provincias");
 
         assertThat(response.getStatus(), is(200));
@@ -78,7 +79,7 @@ public class ProvinciaResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerCantonesParaProvinciaTest() throws Exception {
+    public void debeObtenerCantonesParaProvinciaTest() throws IOException {
         ClientResponse response = hacerGet("provincias/" + ID_PROVINCIA_TEST + "/cantones");
 
         assertThat(response.getStatus(), is(200));

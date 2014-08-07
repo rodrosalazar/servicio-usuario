@@ -15,13 +15,13 @@ public class LectorArchivoDePropiedadesTest {
     LectorArchivoDePropiedades lectorValidationMessages;
 
     @Test(expected = MissingResourceException.class)
-    public void debeLanzarExcepcionCuandoElArchivoNoExiste() throws Exception {
+    public void debeLanzarExcepcionCuandoElArchivoNoExiste() {
         String nombreArchivoValidaciones = "ArchivoNoExistente";
         lectorValidationMessages = new LectorArchivoDePropiedades(nombreArchivoValidaciones);
     }
 
     @Test
-    public void debeLeerDesdeArchivoDePropiedades() throws Exception {
+    public void debeLeerDesdeArchivoDePropiedades() {
         lectorValidationMessages = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
         String numeroIdentificacion  = lectorValidationMessages.leerPropiedad(MensajesErrorEnum.CAMPO_NUMERO_IDENTIFICACION.getKey());
 

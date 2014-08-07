@@ -8,6 +8,8 @@ import org.joda.time.DateTimeZone;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static java.util.Arrays.asList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,7 +33,7 @@ public class TokenTest {
     }
 
     @Test
-    public void debeDeserializarUnTokenDesdeJSON() throws Exception {
+    public void debeDeserializarUnTokenDesdeJSON() throws IOException {
         Token actual = MAPPER.readValue(fixture("fixtures/token.json"), Token.class);
 
         assertThat(actual.getId(), is(token.getId()));
@@ -40,7 +42,7 @@ public class TokenTest {
     }
 
     @Test
-    public void debeSerializarUnJSONDesdeUnUsuario() throws Exception {
+    public void debeSerializarUnJSONDesdeUnUsuario() throws IOException {
         String actual = MAPPER.writeValueAsString(token);
         assertThat(actual, is(fixture("fixtures/token.json")));
     }

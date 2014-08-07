@@ -32,7 +32,7 @@ public class PermisoTest {
     }
 
     @Test
-    public void debeSerializarUnJSONDesdeUnPermiso() throws Exception {
+    public void debeSerializarUnJSONDesdeUnPermiso() throws IOException {
         String permisoDestino = MAPPER.writeValueAsString(perfil);
 
         assertThat(permisoDestino, is(fixture("fixtures/permiso_con_id.json")));

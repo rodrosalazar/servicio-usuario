@@ -7,8 +7,9 @@ import org.junit.Test;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.Writer;
 
@@ -24,7 +25,7 @@ public class InstitucionCsvTest {
     private InstitucionCsv institucionCsv;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         institucionCsv = new InstitucionCsv();
     }
 
@@ -56,7 +57,7 @@ public class InstitucionCsvTest {
     public void debeConvertirArchivosCompletos() throws IOException {
         File archivo = File.createTempFile("prueba", "csv");
         archivo.deleteOnExit();
-        Writer escritor = new BufferedWriter(new FileWriter(archivo, true));
+        Writer escritor = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivo), "UTF-8"));
         escritor.write("CODIGO,NOMBRE,CODIGO_REGIMEN,REGIMEN,CODIGO_ESTADO,ESTADO,CODIGO_CATEGORIA,CATEGORIA\n" +
                 "1001,ESCUELA POLITECNICA NACIONAL,01,PUBLICA,01,VIGENTE,01,A\n" +
                 "1002,ESCUELA SUPERIOR POLITECNICA DE CHIMBORAZO,01,PUBLICA,01,VIGENTE,02,B\n");
@@ -97,19 +98,23 @@ public class InstitucionCsvTest {
     public void debeImprimirMensajeDeAyudaCuandoMainEsLLamadoSinArgumentos() throws IOException {
         PrintStream old = System.out;
         ByteArrayOutputStream flujoSalida = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(flujoSalida));
+        System.setOut(new PrintStream(flujoSalida, false, "UTF-8"));
 
         InstitucionCsv.main();
 
         System.out.flush();
         System.setOut(old);
 
-        assertThat(flujoSalida.toString(), containsString("Uso correcto"));
+        assertThat(flujoSalida.toString("UTF-8"), containsString("Uso correcto"));
     }
 
     @After
-    public void tearDown() throws Exception {
-        new File(ARCHIVO_SALIDA_SQL).delete();
-        new File(ARCHIVO_SALIDA_TXT).delete();
+    public void tearDown() {
+        boolean sqlBorrado = new File(ARCHIVO_SALIDA_SQL).delete();
+        boolean txtBorrado = new File(ARCHIVO_SALIDA_TXT).delete();
+
+        if (!sqlBorrado || !txtBorrado) {
+            return;
+        }
     }
 }

@@ -17,7 +17,7 @@ public class ServicioCredencialTest {
     private ServicioCredencial servicioCredencial;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         servicioCredencial = new ServicioCredencial();
     }
 

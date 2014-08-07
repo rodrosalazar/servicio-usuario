@@ -19,6 +19,7 @@ import org.junit.Before;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
+import java.net.URISyntaxException;
 
 public abstract class BaseIntegracionTest {
 
@@ -33,8 +34,8 @@ public abstract class BaseIntegracionTest {
     protected static String resourceFilePath(String resourceClassPathLocation) {
         try {
             return new File(Resources.getResource(resourceClassPathLocation).toURI()).getAbsolutePath();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (URISyntaxException e) {
+            return null;
         }
     }
 

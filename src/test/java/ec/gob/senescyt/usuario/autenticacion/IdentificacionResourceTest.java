@@ -31,21 +31,21 @@ public class IdentificacionResourceTest {
     private static IdentificacionResource identificacionResource = new IdentificacionResource(credencialDAO);
 
     @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
+    public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
             .addResource(identificacionResource)
             .addProvider(ValidacionExceptionMapper.class)
             .addProvider(LoginIncorrectoMapper.class)
             .build();
 
-    private Client client = resources.client();
+    private Client client = RESOURCES.client();
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         reset(credencialDAO);
     }
 
     @Test
-    public void debeDevolverTokenConLasCredencialesCorrectas() throws Exception {
+    public void debeDevolverTokenConLasCredencialesCorrectas() {
         String password = "Clave456";
         String token = "ASD123123asdasd";
         String username = "username";

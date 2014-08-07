@@ -5,6 +5,8 @@ import io.dropwizard.jackson.Jackson;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -23,7 +25,7 @@ public class CantonTest {
     }
 
     @Test
-    public void debeDeserializarUnCantonDesdeJSON() throws Exception {
+    public void debeDeserializarUnCantonDesdeJSON() throws IOException {
         Canton cantonDeserializado = MAPPER.readValue(fixture("fixtures/canton_con_id.json"), Canton.class);
 
         assertThat(cantonDeserializado.getId(),is(canton.getId()));
@@ -31,7 +33,7 @@ public class CantonTest {
     }
 
     @Test
-    public void debeSerializarUnCantonAJSON() throws Exception {
+    public void debeSerializarUnCantonAJSON() throws IOException {
         String actual = MAPPER.writeValueAsString(canton);
         assertThat(actual, is(fixture("fixtures/canton_con_id.json")));
     }

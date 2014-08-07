@@ -63,7 +63,7 @@ public class BusquedaResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerUnTokenPorSuId() throws Exception {
+    public void debeObtenerUnTokenPorSuId() {
         MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
 
         parametros.add("token",ID_TOKEN);

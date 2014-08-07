@@ -34,12 +34,12 @@ public class ProvinciaResourceTest {
     private ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         provinciaResource = new ProvinciaResource(provinciaDAO, cantonDAO, constructorRespuestas);
     }
 
     @Test
-    public void debeObtenerTodasLasProvincias() throws Exception {
+    public void debeObtenerTodasLasProvincias() {
         Provincia provincia = new Provincia(ID_PROVINCIA, NOMBRE_PROVINCIA);
         when(provinciaDAO.obtenerTodos()).thenReturn(newArrayList(provincia));
 
@@ -51,7 +51,7 @@ public class ProvinciaResourceTest {
     }
 
     @Test
-    public void debeObtenerCantonesParaUnaProvincia() throws Exception {
+    public void debeObtenerCantonesParaUnaProvincia() {
         when(provinciaDAO.obtenerPorId(ID_PROVINCIA)).thenReturn(new Provincia(ID_PROVINCIA,NOMBRE_PROVINCIA));
 
         Canton canton = new Canton(provinciaDAO.obtenerPorId(ID_PROVINCIA),ID_CANTON, NOMBRE_CANTON);

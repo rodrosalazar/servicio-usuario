@@ -32,7 +32,7 @@ public class EtniasResourceTest {
     }
 
     @Test
-    public void debeObtenerTodosLosPaises() throws Exception {
+    public void debeObtenerTodosLosPaises() {
         Etnia etnia = new Etnia(ID_ETNIA, NOMBRE_ETNIA);
         when(etniaDAO.obtenerTodos()).thenReturn(newArrayList(etnia));
 

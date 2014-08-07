@@ -37,15 +37,13 @@ public abstract class AbstractConversorCsv {
         CsvMapper mapeador = new CsvMapper();
         mapeador.enable(CsvParser.Feature.TRIM_SPACES);
         CsvSchema esquema = mapeador.schemaFor(tipo).withHeader();
-
-        String resultado = "";
-
+        StringBuilder constructorResultado = new StringBuilder();
         MappingIterator<Object> iterador = mapeador.reader(tipo).with(esquema).readValues(archivo);
-        while (iterador.hasNext()) {
-            resultado += entidadASql(iterador.next()) + "\n";
-        }
 
-        return resultado;
+        while (iterador.hasNext()) {
+            constructorResultado.append(entidadASql(iterador.next())).append("\n");
+        }
+        return constructorResultado.toString();
     }
 
     protected abstract String entidadASql(Object entidad);

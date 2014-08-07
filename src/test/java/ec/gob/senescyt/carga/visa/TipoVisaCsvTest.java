@@ -12,7 +12,7 @@ public class TipoVisaCsvTest {
     TipoVisaCsv tipoVisaCsv;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         tipoVisaCsv = new TipoVisaCsv();
     }
 

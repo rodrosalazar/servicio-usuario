@@ -46,13 +46,13 @@ public class TituloExtranjeroResourceAnidadosTest {
 
 
     @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
+    public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
             .addResource(new TituloExtranjeroResource(portadorTituloDAO))
             .addProvider(ValidacionExceptionMapper.class)
             .build();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         reset(portadorTituloDAO);
     }
 
@@ -167,7 +167,7 @@ public class TituloExtranjeroResourceAnidadosTest {
     public void noDebeCrearTituloConDireccionNula() throws IOException {
         String portadorTitulo = fixture("fixtures/portador_titulo_sin_direccion.json");
 
-        ClientResponse response = resources.client().resource("/titulo/extranjero")
+        ClientResponse response = RESOURCES.client().resource("/titulo/extranjero")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, portadorTitulo);
 
@@ -356,7 +356,7 @@ public class TituloExtranjeroResourceAnidadosTest {
     }
 
     private ClientResponse hacerPost(PortadorTitulo portadorTitulo) {
-        return resources.client().resource("/titulo/extranjero")
+        return RESOURCES.client().resource("/titulo/extranjero")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, portadorTitulo);
     }

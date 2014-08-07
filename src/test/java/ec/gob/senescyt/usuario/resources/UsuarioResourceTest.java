@@ -28,6 +28,7 @@ import org.junit.Test;
 import org.jvnet.mock_javamail.Mailbox;
 
 import javax.mail.Message;
+import javax.mail.internet.AddressException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -56,7 +57,7 @@ public class UsuarioResourceTest {
     private static UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion, despachadorEmail, tokenDAO, lectorPropiedadesEmail, constructorContenidoEmail);
 
     @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
+    public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
             .addResource(usuarioResource)
             .addProvider(ValidacionExceptionMapper.class)
             .build();
@@ -64,13 +65,13 @@ public class UsuarioResourceTest {
 
     @Before
     public void setUp() {
-        client = resources.client();
+        client = RESOURCES.client();
         ResourceTestHelper.mockConfiguracionMail(configuracionEmail);
         Mailbox.clearAll();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         reset(usuarioDAO);
         reset(tokenDAO);
     }
@@ -94,7 +95,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueCedulaDeUsuarioNoEsteEnBlanco() throws Exception {
+    public void debeVerificarQueCedulaDeUsuarioNoEsteEnBlanco() {
         Usuario usuarioConCedulaEnBlanco = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.numeroIdentificacion = "")
                 .generar();
@@ -108,7 +109,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeAlertarCuandoUnaCedulaDeUnUsuarioSeaInvalida() throws Exception {
+    public void debeAlertarCuandoUnaCedulaDeUnUsuarioSeaInvalida() {
         Usuario usuarioConCedulaInvalida = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.numeroIdentificacion = "11")
                 .generar();
@@ -122,7 +123,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeAlertarCuandoUnUsuarioTengaUnDocumentoDistintoACedulaOPasaporte() throws Exception {
+    public void debeAlertarCuandoUnUsuarioTengaUnDocumentoDistintoACedulaOPasaporte() {
         Usuario usuarioConTipoDeDocumentoInvalido = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.tipoDocumento = null)
                 .generar();
@@ -136,7 +137,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeGuardarUsuarioConPasaporte() throws Exception {
+    public void debeGuardarUsuarioConPasaporte() {
         Usuario usuarioConPasaporte = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.tipoDocumento = TipoDocumento.PASAPORTE)
                 .generar();
@@ -166,7 +167,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueEmailNoEsteEnBlanco() throws Exception {
+    public void debeVerificarQueEmailNoEsteEnBlanco() {
         Usuario usuarioConEmailInstitucionalInvalido = UsuarioBuilder.nuevoUsuario().con(u -> u.emailInstitucional = "").generar();
 
         ClientResponse response = client.resource("/usuario")
@@ -178,7 +179,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeIndicarCuandoUnEmailInstitucionalEsValido() throws Exception {
+    public void debeIndicarCuandoUnEmailInstitucionalEsValido() {
         Usuario usuarioConEmailValido = UsuarioBuilder.nuevoUsuario().generar();
         when(usuarioDAO.guardar(any(Usuario.class))).thenReturn(usuarioConEmailValido);
 
@@ -206,7 +207,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueNumeroQuipuxNoEsteEnBlanco() throws Exception {
+    public void debeVerificarQueNumeroQuipuxNoEsteEnBlanco() {
         Usuario usuarioConQuipuxEnBlanco = UsuarioBuilder.nuevoUsuario().con(u -> u.numeroAutorizacionQuipux = "").generar();
 
         ClientResponse response = client.resource("/usuario")
@@ -230,7 +231,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQuePrimerNombreNoEsteEnBlanco() throws Exception {
+    public void debeVerificarQuePrimerNombreNoEsteEnBlanco() {
         Usuario usuarioConPrimerNombreEnBlanco = UsuarioBuilder.nuevoUsuario().con(u -> u.primerNombre = "").generar();
 
         ClientResponse response = client.resource("/usuario")
@@ -242,7 +243,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQuePrimerApellidoNoEsteEnBlanco() throws Exception {
+    public void debeVerificarQuePrimerApellidoNoEsteEnBlanco() {
         Usuario usuarioConApellidoEnBlanco = UsuarioBuilder.nuevoUsuario().con(u -> u.primerApellido = "").generar();
 
         ClientResponse response = client.resource("/usuario")
@@ -254,7 +255,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueFechaFinDeVigenciaNoEsteEnBlanco() throws Exception{
+    public void debeVerificarQueFechaFinDeVigenciaNoEsteEnBlanco(){
         Usuario usuarioConFechaDeVigenciaNula = UsuarioBuilder.nuevoUsuario().con(u -> u.fechaDeVigencia = null).generar();
 
         ClientResponse response = client.resource("/usuario")
@@ -266,7 +267,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueCodigoInstitucionNoSeaNulo() throws Exception {
+    public void debeVerificarQueCodigoInstitucionNoSeaNulo() {
         Usuario usuarioConInstitucionNula = UsuarioBuilder.nuevoUsuario().con(u -> u.idInstitucion = null).generar();
 
         ClientResponse response = client.resource("/usuario")
@@ -278,7 +279,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueCodigoInstitucionNoEsteEnBlanco() throws Exception {
+    public void debeVerificarQueCodigoInstitucionNoEsteEnBlanco() {
         String usuarioConInstucionEnBlanco = UsuarioBuilder.usuarioConIdInstitucionEnBlanco();
 
         ClientResponse response = client.resource("/usuario")
@@ -290,7 +291,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueNombreDeUsuarioNoEsteEnBlanco() throws Exception {
+    public void debeVerificarQueNombreDeUsuarioNoEsteEnBlanco() {
         ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, UsuarioBuilder.nuevoUsuario().con(u -> u.nombreUsuario = "").generar());
@@ -312,7 +313,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeGuardarUsuario() throws Exception {
+    public void debeGuardarUsuario() {
         Usuario usuarioValido = UsuarioBuilder.nuevoUsuario().generar();
         when(usuarioDAO.guardar(any(Usuario.class))).thenReturn(usuarioValido);
 
@@ -326,7 +327,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeEnviarMailAlUsuarioQueAcabaDeSerCreado() throws Exception {
+    public void debeEnviarMailAlUsuarioQueAcabaDeSerCreado() throws AddressException {
         Usuario usuarioValido = UsuarioBuilder.nuevoUsuario().generar();
         when(usuarioDAO.guardar(any(Usuario.class))).thenReturn(usuarioValido);
 

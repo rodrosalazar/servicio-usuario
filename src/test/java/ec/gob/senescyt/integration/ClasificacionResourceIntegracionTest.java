@@ -28,7 +28,7 @@ public class ClasificacionResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerElListadoDeCine1997() throws Exception {
+    public void debeObtenerElListadoDeCine1997() {
         ClientResponse response = hacerGet("cine/1997");
 
         assertThat(response.getStatus(), is(200));
@@ -38,7 +38,7 @@ public class ClasificacionResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerElListadoDeCine2013() throws Exception {
+    public void debeObtenerElListadoDeCine2013() {
         ClientResponse response = hacerGet("cine/2013");
 
         assertThat(response.getStatus(), is(200));

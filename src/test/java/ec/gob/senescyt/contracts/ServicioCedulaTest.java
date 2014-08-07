@@ -25,7 +25,7 @@ public class ServicioCedulaTest {
     private ProvinciaDAO provinciaDAO = mock(ProvinciaDAO.class);
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         reset(configuracionBSG);
         servicioCedula = new ServicioCedula(configuracionBSG, provinciaDAO);
     }

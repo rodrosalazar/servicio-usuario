@@ -12,7 +12,7 @@ public class CantonCsvTest {
     CantonCsv cantonCsv;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         cantonCsv = new CantonCsv();
     }
 

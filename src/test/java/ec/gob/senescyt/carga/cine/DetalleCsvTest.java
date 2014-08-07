@@ -12,7 +12,7 @@ public class DetalleCsvTest {
     DetalleCsv detalleCsv;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         detalleCsv = new DetalleCsv();
     }
 

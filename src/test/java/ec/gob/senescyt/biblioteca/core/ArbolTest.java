@@ -1,11 +1,14 @@
 package ec.gob.senescyt.biblioteca.core;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ec.gob.senescyt.biblioteca.Arbol;
 import ec.gob.senescyt.commons.builders.ArbolBuilder;
 import io.dropwizard.jackson.Jackson;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -22,7 +25,7 @@ public class ArbolTest {
     }
 
     @Test
-    public void debeDeserializarUnArbolDesdeJSON() throws Exception {
+    public void debeDeserializarUnArbolDesdeJSON() throws IOException {
         Arbol arbolDeserializado = MAPPER.readValue(fixture("fixtures/arbol_con_id.json"), Arbol.class);
 
         assertThat(arbolDeserializado.getId(), is(arbolBiblioteca.getId()));
@@ -34,7 +37,7 @@ public class ArbolTest {
     }
 
     @Test
-    public void debeSerializarUnCantonAJSON() throws Exception {
+    public void debeSerializarUnCantonAJSON() throws IOException {
         String actual = MAPPER.writeValueAsString(arbolBiblioteca);
         assertThat(actual, is(fixture("fixtures/arbol_con_id.json")));
     }

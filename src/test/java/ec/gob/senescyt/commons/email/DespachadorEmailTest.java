@@ -2,12 +2,14 @@ package ec.gob.senescyt.commons.email;
 
 import ec.gob.senescyt.commons.configuracion.ConfiguracionEmail;
 import ec.gob.senescyt.commons.helpers.ResourceTestHelper;
+import org.apache.commons.mail.EmailException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.jvnet.mock_javamail.Mailbox;
 
 import javax.mail.Message;
+import javax.mail.internet.AddressException;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.not;
@@ -22,23 +24,21 @@ public class DespachadorEmailTest {
     private String nombreDestinario = "NOMBRES COMPLETOS USUARIO TEST";
     private String asunto = "Creación de usuario para el sistema SNIESE";
     private String mensaje = "Mensaje";
-    private ConstructorContenidoEmail constructorContenidoEmail;
     private ConfiguracionEmail configuracionEmail;
 
     @Before
-    public void setUp() throws Exception {
-        constructorContenidoEmail = new ConstructorContenidoEmail();
+    public void setUp() {
         configuracionEmail = spy(new ConfiguracionEmail());
         despachadorEmail = new DespachadorEmail(configuracionEmail);
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         Mailbox.clearAll();
     }
 
     @Test
-    public void debeEnviarMailDeNotificacionAUsuario() throws Exception {
+    public void debeEnviarMailDeNotificacionAUsuario() throws EmailException, AddressException {
         ResourceTestHelper.mockConfiguracionMail(configuracionEmail);
 
         String respuesta = despachadorEmail.enviarEmail(emailDestinatario, nombreDestinario, asunto, mensaje);

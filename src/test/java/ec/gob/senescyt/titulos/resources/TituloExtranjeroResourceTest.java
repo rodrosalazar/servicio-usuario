@@ -28,13 +28,13 @@ public class TituloExtranjeroResourceTest {
     private static final String CAMPO_EN_BLANCO = "";
 
     @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
+    public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
             .addResource(new TituloExtranjeroResource(portadorTituloDAO))
             .addProvider(ValidacionExceptionMapper.class)
             .build();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         reset(portadorTituloDAO);
     }
 
@@ -236,7 +236,7 @@ public class TituloExtranjeroResourceTest {
     }
 
     private ClientResponse hacerPost(PortadorTitulo portadorTitulo) {
-        return resources.client().resource("/titulo/extranjero")
+        return RESOURCES.client().resource("/titulo/extranjero")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, portadorTitulo);
     }

@@ -26,7 +26,7 @@ public class EtniaResourceIntegracionTest extends BaseIntegracionTest {
     }
 
     @Test
-    public void debeObtenerTodasLasEtnias() throws Exception {
+    public void debeObtenerTodasLasEtnias() {
         ClientResponse response = hacerGet("etnias");
 
         assertThat(response.getStatus(), is(200));

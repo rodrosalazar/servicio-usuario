@@ -34,13 +34,13 @@ public class CantonesResourceTest {
     private ConstructorRespuestas constructorRespuestasParroquias = new ConstructorRespuestas();
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         cantonResource = new CantonResource(parroquiaDAO, constructorRespuestasParroquias);
     }
 
 
     @Test
-    public void debeObtenerParroquiasParaUnCanton() throws Exception {
+    public void debeObtenerParroquiasParaUnCanton() {
 
         when(cantonDAO.obtenerPorId(ID_CANTON)).thenReturn(new Canton(null, ID_CANTON,NOMBRE_CANTON));
 

@@ -41,7 +41,7 @@ public class InstitucionResourceTest {
     private static UniversidadExtranjeraDAO universidadExtranjeraDAO = mock(UniversidadExtranjeraDAO.class);
 
     @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
+    public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
             .addResource(new InstitucionResource(institucionDAO, constructorRespuestas, universidadExtranjeraDAO))
             .addProvider(ValidacionExceptionMapper.class)
             .build();
@@ -49,11 +49,11 @@ public class InstitucionResourceTest {
 
     @Before
     public void setUp() {
-        client = resources.client();
+        client = RESOURCES.client();
     }
 
     @Test
-    public void debeObtenerTodasLasInstituciones() throws Exception {
+    public void debeObtenerTodasLasInstituciones() {
         Institucion institucion = new Institucion(ID_INSTITUCION, NOMBRE_INSTITUCION, REGIMEN_ID, NOMBRE_REGIMEN, ESTADO_ID, NOMBRE_ESTADO, CATEGORIA_ID, NOMBRE_CATEGORIA);
         when(institucionDAO.obtenerTodas()).thenReturn(newArrayList(institucion));
 
@@ -69,7 +69,7 @@ public class InstitucionResourceTest {
     }
 
     @Test
-    public void debeObtenerUniversidadesDeConvenio() throws Exception {
+    public void debeObtenerUniversidadesDeConvenio() {
         String id = "4001";
         String nombre = "UNIVERSIDAD CONVENIO";
         String codigoTipo = "00008";
@@ -89,7 +89,7 @@ public class InstitucionResourceTest {
     }
 
     @Test
-    public void debeObtenerUniversidadesDeListado() throws Exception {
+    public void debeObtenerUniversidadesDeListado() {
         String id = "4001";
         String nombre = "UNIVERSIDAD LISTADO";
         String codigoTipo = "00006";

@@ -12,7 +12,7 @@ public class NivelArbolCsvTest {
     NivelArbolCsv nivelArbolCsv;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         nivelArbolCsv = new NivelArbolCsv();
     }
 

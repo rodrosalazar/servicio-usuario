@@ -12,7 +12,7 @@ public class ParroquiaCsvTest {
     ParroquiaCsv parroquiaCsv;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         parroquiaCsv = new ParroquiaCsv();
     }
 

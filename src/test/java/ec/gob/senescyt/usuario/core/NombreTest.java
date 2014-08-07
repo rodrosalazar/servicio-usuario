@@ -15,7 +15,7 @@ public class NombreTest {
     private String sinSegundoNombreNiSegundoApellido = "PRIMER_NOMBRE PRIMER_APELLIDO";
 
     @Test
-    public void debeUnirCorrectamenteLasPartesDeUnNombre() throws Exception {
+    public void debeUnirCorrectamenteLasPartesDeUnNombre() {
        Nombre nombre = new Nombre(primerNombre, segundoNombre, primerApellido, segundoApellido);
        assertThat(nombresCompletos, is(nombre.toString()));
     }

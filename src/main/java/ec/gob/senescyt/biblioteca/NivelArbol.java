@@ -67,7 +67,6 @@ public class NivelArbol implements Comparable<NivelArbol>{
         return nombre;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -80,6 +79,11 @@ public class NivelArbol implements Comparable<NivelArbol>{
         NivelArbol that = (NivelArbol) o;
 
         return !(id != null ? !id.equals(that.id) : that.id != null);
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
     }
 
     public NivelArbol getNivelPadre() {

@@ -35,7 +35,7 @@ public class BusquedaResourceTest {
     private static TokenDAO tokenDAO = mock(TokenDAO.class);
 
     @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
+    public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
             .addResource(new BusquedaResource(servicioCedula, tokenDAO))
             .build();
 
@@ -54,7 +54,7 @@ public class BusquedaResourceTest {
     public void debeDevolverServicioNoDisponibleCuandoRegistroCivilNoEstaDisponible() throws CedulaInvalidaException, ServicioNoDisponibleException, CredencialesIncorrectasException {
         String cedulaIndiferente = "1111";
         when(servicioCedula.buscar(cedulaIndiferente)).thenThrow(new ServicioNoDisponibleException("Servicio no disponible", null));
-        ClientResponse response = resources.client().resource("/busqueda")
+        ClientResponse response = RESOURCES.client().resource("/busqueda")
                 .queryParam("cedula", cedulaIndiferente)
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
@@ -69,7 +69,7 @@ public class BusquedaResourceTest {
         String cedulaInvalida = "1111";
         when(servicioCedula.buscar(cedulaInvalida)).thenThrow(new CedulaInvalidaException("Cedula enviada no corresponde a un usuario no existe o no esta registrado"));
 
-        ClientResponse response = resources.client().resource("/busqueda")
+        ClientResponse response = RESOURCES.client().resource("/busqueda")
                 .queryParam("cedula", cedulaInvalida)
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
@@ -94,7 +94,7 @@ public class BusquedaResourceTest {
         when(servicioCedula.buscar(cedulaValida)).thenReturn(new CedulaInfo(nombre, direccion, provincia, idProvincia, canton,
                 parroquia, fechaNacimiento, genero, nacionalidad));
 
-        ClientResponse response = resources.client().resource("/busqueda")
+        ClientResponse response = RESOURCES.client().resource("/busqueda")
                 .queryParam("cedula", cedulaValida)
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
@@ -118,7 +118,7 @@ public class BusquedaResourceTest {
     public void debeDevolverRecursoNoEncontradoCuandoTokenNoEsValido() {
         when(tokenDAO.buscar(tokenInvalido)).thenReturn(Optional.empty());
 
-        ClientResponse response = resources.client().resource("/busqueda")
+        ClientResponse response = RESOURCES.client().resource("/busqueda")
                 .queryParam("token", tokenInvalido)
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
@@ -130,7 +130,7 @@ public class BusquedaResourceTest {
     public void debeDevolverElIdDelUsuarioCuandoElTokenEsValido() {
         Token tokenTest = new Token(tokenValido, UsuarioBuilder.nuevoUsuario().generar());
         when(tokenDAO.buscar(tokenValido)).thenReturn(Optional.of(tokenTest));
-        ClientResponse response = resources.client().resource("/busqueda")
+        ClientResponse response = RESOURCES.client().resource("/busqueda")
                 .queryParam("token", tokenValido)
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
@@ -145,7 +145,7 @@ public class BusquedaResourceTest {
     public void debeDevolverElNombreDeUsuarioCuandoElTokenEsValido() {
         Token tokenTest = new Token(tokenValido, UsuarioBuilder.nuevoUsuario().generar());
         when(tokenDAO.buscar(tokenValido)).thenReturn(Optional.of(tokenTest));
-        ClientResponse response = resources.client().resource("/busqueda")
+        ClientResponse response = RESOURCES.client().resource("/busqueda")
                 .queryParam("token", tokenValido)
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);

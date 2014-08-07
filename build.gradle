@@ -7,6 +7,7 @@ apply plugin: 'flyway'
 apply plugin: 'application'
 apply plugin: 'gradle-one-jar'
 apply plugin: 'pmd'
+apply plugin: 'findbugs'
 
 buildscript {
     repositories {
@@ -101,7 +102,7 @@ run {
 }
 
 test {
-    dependsOn pmdMain
+    dependsOn pmdMain, findbugsMain, findbugsTest
     exclude 'ec/gob/senescyt/contracts/**'
 }
 
@@ -208,6 +209,17 @@ pmd {
     ]
     ruleSetFiles = files('pmd-ruleset.xml')
     targetJdk = '1.7'
+}
+
+findbugs {
+    toolVersion = '3.0.0'
+}
+
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
 }
 
 compileJava {
