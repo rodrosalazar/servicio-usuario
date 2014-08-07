@@ -11,8 +11,7 @@ public class GeneradorClavesSecretas {
     private String archivoClaveSecreta = "aesKey.key";
 
     public SecretKeySpec generarClaveSecretaSpec() throws IOException {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(obtenerBytesDeArchivo(), METODO_CIFRADO);
-        return secretKeySpec;
+        return new SecretKeySpec(obtenerBytesDeArchivo(), METODO_CIFRADO);
     }
 
     private byte[] obtenerBytesDeArchivo() throws IOException {

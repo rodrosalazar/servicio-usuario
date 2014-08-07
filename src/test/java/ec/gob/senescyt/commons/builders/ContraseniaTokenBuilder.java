@@ -1,6 +1,6 @@
 package ec.gob.senescyt.commons.builders;
 
-import ec.gob.senescyt.biblioteca.dto.ContraseniaToken;
+import ec.gob.senescyt.usuario.dto.ContraseniaToken;
 
 import java.util.function.Consumer;
 

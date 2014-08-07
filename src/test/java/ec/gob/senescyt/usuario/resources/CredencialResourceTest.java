@@ -2,7 +2,7 @@ package ec.gob.senescyt.usuario.resources;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-import ec.gob.senescyt.biblioteca.dto.ContraseniaToken;
+import ec.gob.senescyt.usuario.dto.ContraseniaToken;
 import ec.gob.senescyt.commons.builders.ContraseniaTokenBuilder;
 import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;

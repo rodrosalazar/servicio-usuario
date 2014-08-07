@@ -1,4 +1,4 @@
-package ec.gob.senescyt.biblioteca.dto;
+package ec.gob.senescyt.usuario.dto;
 
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;

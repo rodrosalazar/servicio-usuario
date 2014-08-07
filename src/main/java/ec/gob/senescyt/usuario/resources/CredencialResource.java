@@ -1,6 +1,6 @@
 package ec.gob.senescyt.usuario.resources;
 
-import ec.gob.senescyt.biblioteca.dto.ContraseniaToken;
+import ec.gob.senescyt.usuario.dto.ContraseniaToken;
 import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.usuario.core.Credencial;
 import ec.gob.senescyt.usuario.core.Token;

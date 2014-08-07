@@ -1,4 +1,4 @@
-package ec.gob.senescyt.biblioteca.dto;
+package ec.gob.senescyt.usuario.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.jackson.Jackson;

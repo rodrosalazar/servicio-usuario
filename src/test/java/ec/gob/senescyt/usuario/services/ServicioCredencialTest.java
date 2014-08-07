@@ -1,6 +1,6 @@
 package ec.gob.senescyt.usuario.services;
 
-import ec.gob.senescyt.biblioteca.dto.ContraseniaToken;
+import ec.gob.senescyt.usuario.dto.ContraseniaToken;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.usuario.core.Credencial;
 import ec.gob.senescyt.usuario.core.Token;
@@ -70,6 +70,22 @@ public class ServicioCredencialTest {
         Token token = new Token(idToken, UsuarioBuilder.nuevoUsuario().con(u -> u.nombreUsuario = nombreUsuario).generar());
 
         Credencial credencial = servicioCredencial.convertirACredencial(contraseniaToken, token);
+
+        assertThat(credencial.getNombreUsuario(), is(nombreUsuario));
+        assertThat(servicioCredencial.verificarContrasenia(contrasenia, credencial.getHash()), is(true));
+        assertThat(credencial.getHash(), is(not(contrasenia)));
+    }
+
+    @Test
+    public void debeConvertirUnContraseniaTokenYUnTokenAUnaCredencialConLaContraseniaHasheadaYUsuario() {
+        String nombreUsuario = "juan";
+        String contrasenia = "una-contrasenia";
+        String idToken = "un-token";
+        ContraseniaToken contraseniaToken = new ContraseniaToken(contrasenia, idToken);
+        Token token = new Token(idToken, UsuarioBuilder.nuevoUsuario().con(u -> u.nombreUsuario = nombreUsuario).generar());
+
+        Credencial credencial = servicioCredencial.convertirACredencial(contraseniaToken, token
+        );
 
         assertThat(credencial.getNombreUsuario(), is(nombreUsuario));
         assertThat(servicioCredencial.verificarContrasenia(contrasenia, credencial.getHash()), is(true));

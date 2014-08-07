@@ -4,7 +4,7 @@ import com.google.common.io.Resources;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.UsuarioApplication;
 import ec.gob.senescyt.UsuarioConfiguration;
-import ec.gob.senescyt.biblioteca.dto.ContraseniaToken;
+import ec.gob.senescyt.usuario.dto.ContraseniaToken;
 import ec.gob.senescyt.commons.builders.ContraseniaTokenBuilder;
 import ec.gob.senescyt.commons.builders.PerfilBuilder;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;

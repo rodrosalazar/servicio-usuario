@@ -2,6 +2,8 @@ package ec.gob.senescyt.usuario.services;
 
 import ec.gob.senescyt.commons.cifrado.GeneradorClavesSecretas;
 import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -10,10 +12,17 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.AlgorithmParameters;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidParameterSpecException;
+import java.util.Arrays;
 
 public class ServicioCifrado {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ServicioCifrado.class);
 
     public static final String METODO_CIFRADO_AES = "AES/CBC/PKCS5Padding";
     private byte[] ivBytes;
@@ -26,17 +35,17 @@ public class ServicioCifrado {
             secretKeySpec = generadorClavesSecretas.generarClaveSecretaSpec();
             cipher = Cipher.getInstance(METODO_CIFRADO_AES);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(Arrays.toString(e.getStackTrace()));
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            LOGGER.error(Arrays.toString(e.getStackTrace()));
         } catch (NoSuchPaddingException e) {
-            e.printStackTrace();
+            LOGGER.error(Arrays.toString(e.getStackTrace()));
         }
 
     }
 
 
-    public String cifrar(String cadenaPlana) throws Exception {
+    public String cifrar(String cadenaPlana) throws InvalidKeyException, InvalidParameterSpecException, UnsupportedEncodingException, BadPaddingException, IllegalBlockSizeException {
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
         AlgorithmParameters params = cipher.getParameters();
         ivBytes = params.getParameterSpec(IvParameterSpec.class).getIV();
@@ -45,19 +54,19 @@ public class ServicioCifrado {
         return new Base64().encodeAsString(encryptedTextBytes);
     }
 
-    public String descifrar(String cadenaCifrada) throws Exception {
+    public String descifrar(String cadenaCifrada) throws InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, UnsupportedEncodingException {
         byte[] cadenaCifradaBytes = new Base64().decodeBase64(cadenaCifrada);
+
+        cipher = Cipher.getInstance(METODO_CIFRADO_AES);
         cipher.init(Cipher.DECRYPT_MODE,secretKeySpec,new IvParameterSpec(ivBytes));
 
-        byte[] cadenaDescrifradaBytes = null;
         try {
-            cadenaDescrifradaBytes = cipher.doFinal(cadenaCifradaBytes);
+            return new String(cipher.doFinal(cadenaCifradaBytes), "UTF-8");
         } catch (IllegalBlockSizeException e) {
-            e.printStackTrace();
+            LOGGER.error(Arrays.toString(e.getStackTrace()));
         } catch (BadPaddingException e) {
-            e.printStackTrace();
+            LOGGER.error(Arrays.toString(e.getStackTrace()));
         }
-
-        return new String(cadenaDescrifradaBytes);
+        return null;
     }
 }
