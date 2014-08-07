@@ -8,7 +8,6 @@ import ec.gob.senescyt.titulos.core.TipoVisa;
 import ec.gob.senescyt.titulos.dao.CategoriaVisaDAO;
 import ec.gob.senescyt.titulos.dao.TipoVisaDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
-import ec.gob.senescyt.usuario.resources.TipoDeVisaResource;
 import io.dropwizard.testing.junit.ResourceTestRule;
 import org.hamcrest.MatcherAssert;
 import org.junit.Before;

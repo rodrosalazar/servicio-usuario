@@ -1,4 +1,4 @@
-package ec.gob.senescyt.usuario.resources;
+package ec.gob.senescyt.titulos.resources;
 
 import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;

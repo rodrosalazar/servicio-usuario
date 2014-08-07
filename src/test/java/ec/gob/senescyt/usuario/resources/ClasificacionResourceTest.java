@@ -1,5 +1,6 @@
 package ec.gob.senescyt.usuario.resources;
 
+import ec.gob.senescyt.titulos.resources.ClasificacionResource;
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
 import ec.gob.senescyt.usuario.dao.ClasificacionDAO;
 import org.junit.Before;

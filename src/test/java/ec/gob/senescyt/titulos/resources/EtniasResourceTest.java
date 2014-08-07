@@ -4,7 +4,6 @@ import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import ec.gob.senescyt.titulos.core.Etnia;
 import ec.gob.senescyt.titulos.dao.EtniaDAO;
-import ec.gob.senescyt.usuario.resources.EtniaResource;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,9 +15,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class EtniasResourceTest {
 

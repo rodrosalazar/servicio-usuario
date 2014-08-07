@@ -16,60 +16,20 @@ import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.commons.resources.BlitzResource;
 import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
+import ec.gob.senescyt.titulos.core.*;
 import ec.gob.senescyt.titulos.core.Identificacion;
-import ec.gob.senescyt.titulos.core.Canton;
-import ec.gob.senescyt.titulos.core.CategoriaVisa;
-import ec.gob.senescyt.titulos.core.Cedula;
-import ec.gob.senescyt.titulos.core.Direccion;
-import ec.gob.senescyt.titulos.core.Etnia;
-import ec.gob.senescyt.titulos.core.Pais;
-import ec.gob.senescyt.titulos.core.Parroquia;
-import ec.gob.senescyt.titulos.core.Pasaporte;
-import ec.gob.senescyt.titulos.core.PortadorTitulo;
-import ec.gob.senescyt.titulos.core.Provincia;
-import ec.gob.senescyt.titulos.core.TipoVisa;
-import ec.gob.senescyt.titulos.core.UniversidadExtranjera;
-import ec.gob.senescyt.titulos.core.UniversidadExtranjeraDAO;
-import ec.gob.senescyt.titulos.dao.CantonDAO;
-import ec.gob.senescyt.titulos.dao.CategoriaVisaDAO;
-import ec.gob.senescyt.titulos.dao.EtniaDAO;
-import ec.gob.senescyt.titulos.dao.PaisDAO;
-import ec.gob.senescyt.titulos.dao.ParroquiaDAO;
-import ec.gob.senescyt.titulos.dao.PortadorTituloDAO;
-import ec.gob.senescyt.titulos.dao.ProvinciaDAO;
-import ec.gob.senescyt.titulos.dao.TipoVisaDAO;
-import ec.gob.senescyt.titulos.resources.TituloExtranjeroResource;
+import ec.gob.senescyt.titulos.dao.*;
+import ec.gob.senescyt.titulos.resources.*;
 import ec.gob.senescyt.usuario.autenticacion.UsuarioAuthenticator;
 import ec.gob.senescyt.usuario.bundles.DBMigrationsBundle;
-import ec.gob.senescyt.usuario.core.Credencial;
-import ec.gob.senescyt.usuario.core.Institucion;
-import ec.gob.senescyt.usuario.core.Perfil;
-import ec.gob.senescyt.usuario.core.Permiso;
-import ec.gob.senescyt.usuario.core.Token;
-import ec.gob.senescyt.usuario.core.Usuario;
+import ec.gob.senescyt.usuario.core.*;
 import ec.gob.senescyt.usuario.core.cine.Area;
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
 import ec.gob.senescyt.usuario.core.cine.Detalle;
 import ec.gob.senescyt.usuario.core.cine.Subarea;
-import ec.gob.senescyt.usuario.dao.ClasificacionDAO;
-import ec.gob.senescyt.usuario.dao.CredencialDAO;
-import ec.gob.senescyt.usuario.dao.InstitucionDAO;
-import ec.gob.senescyt.usuario.dao.PerfilDAO;
-import ec.gob.senescyt.usuario.dao.TokenDAO;
-import ec.gob.senescyt.usuario.dao.UsuarioDAO;
+import ec.gob.senescyt.usuario.dao.*;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
-import ec.gob.senescyt.usuario.resources.BusquedaResource;
-import ec.gob.senescyt.usuario.resources.CantonResource;
-import ec.gob.senescyt.usuario.resources.ClasificacionResource;
-import ec.gob.senescyt.usuario.resources.CredencialResource;
-import ec.gob.senescyt.usuario.resources.EtniaResource;
-import ec.gob.senescyt.usuario.resources.IdentificacionResource;
-import ec.gob.senescyt.usuario.resources.InstitucionResource;
-import ec.gob.senescyt.usuario.resources.PaisResource;
-import ec.gob.senescyt.usuario.resources.PerfilResource;
-import ec.gob.senescyt.usuario.resources.ProvinciaResource;
-import ec.gob.senescyt.usuario.resources.TipoDeVisaResource;
-import ec.gob.senescyt.usuario.resources.UsuarioResource;
+import ec.gob.senescyt.usuario.resources.*;
 import ec.gob.senescyt.usuario.resources.management.LimpiezaResource;
 import ec.gob.senescyt.usuario.services.ServicioCedula;
 import ec.gob.senescyt.usuario.services.ServicioCredencial;
@@ -147,7 +107,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG(), provinciaDAO);
         ServicioCredencial servicioCredencial = new ServicioCredencial();
 
-        final PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
+        PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
         environment.jersey().register(perfilResource);
 
         CedulaValidator cedulaValidator = new CedulaValidator();
@@ -156,49 +116,49 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         MensajeErrorBuilder mensajeErrorBuilder = new MensajeErrorBuilder(lectorPropiedadesValidacion);
         ConstructorContenidoEmail constructorContenidoEmail = new ConstructorContenidoEmail();
 
-        final UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion, despachadorEmail, tokenDAO, lectorPropiedadesEmail, constructorContenidoEmail);
+        UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion, despachadorEmail, tokenDAO, lectorPropiedadesEmail, constructorContenidoEmail);
         environment.jersey().register(usuarioResource);
 
-        final InstitucionResource institucionResource = new InstitucionResource(institucionDAO,constructorRespuestas,universidadExtranjeraDAO);
+        InstitucionResource institucionResource = new InstitucionResource(institucionDAO,constructorRespuestas,universidadExtranjeraDAO);
         environment.jersey().register(institucionResource);
 
-        final LimpiezaResource limpiezaResource = new LimpiezaResource(usuarioDAO, perfilDAO);
+        LimpiezaResource limpiezaResource = new LimpiezaResource(usuarioDAO, perfilDAO);
         environment.jersey().register(limpiezaResource);
 
-        final ClasificacionResource clasificacionResource = new ClasificacionResource(clasificacionDAO);
+        ClasificacionResource clasificacionResource = new ClasificacionResource(clasificacionDAO);
         environment.jersey().register(clasificacionResource);
 
-        final PaisResource paisResource = new PaisResource(paisDAO, constructorRespuestas);
+        PaisResource paisResource = new PaisResource(paisDAO, constructorRespuestas);
         environment.jersey().register(paisResource);
 
-        final ProvinciaResource provinciaResource = new ProvinciaResource(provinciaDAO, cantonDAO, constructorRespuestas);
+        ProvinciaResource provinciaResource = new ProvinciaResource(provinciaDAO, cantonDAO, constructorRespuestas);
         environment.jersey().register(provinciaResource);
 
-        final CantonResource cantonResource = new CantonResource(parroquiaDAO, constructorRespuestas);
+        CantonResource cantonResource = new CantonResource(parroquiaDAO, constructorRespuestas);
         environment.jersey().register(cantonResource);
 
-        final TipoDeVisaResource tipoDeVisaResource = new TipoDeVisaResource(tipoVisaDAO, categoriaVisaDAO, constructorRespuestas);
+        TipoDeVisaResource tipoDeVisaResource = new TipoDeVisaResource(tipoVisaDAO, categoriaVisaDAO, constructorRespuestas);
         environment.jersey().register(tipoDeVisaResource);
 
-        final EtniaResource etniaResource = new EtniaResource(etniaDAO, constructorRespuestas);
+        EtniaResource etniaResource = new EtniaResource(etniaDAO, constructorRespuestas);
         environment.jersey().register(etniaResource);
 
-        final TituloExtranjeroResource tituloExtranjeroResource = new TituloExtranjeroResource(portadorTituloDAO);
+        TituloExtranjeroResource tituloExtranjeroResource = new TituloExtranjeroResource(portadorTituloDAO);
         environment.jersey().register(tituloExtranjeroResource);
 
-        final ArbolResource arbolResource = new ArbolResource(arbolDAO, constructorRespuestas);
+        ArbolResource arbolResource = new ArbolResource(arbolDAO, constructorRespuestas);
         environment.jersey().register(arbolResource);
 
-        final BusquedaResource busquedaResource = new BusquedaResource(servicioCedula, tokenDAO);
+        BusquedaResource busquedaResource = new BusquedaResource(servicioCedula, tokenDAO);
         environment.jersey().register(busquedaResource);
 
-        final IdentificacionResource identificacionResource = new IdentificacionResource(credencialesDAO);
+        IdentificacionResource identificacionResource = new IdentificacionResource(credencialesDAO);
         environment.jersey().register(identificacionResource);
 
-        final BlitzResource blitzResource = new BlitzResource();
+        BlitzResource blitzResource = new BlitzResource();
         environment.jersey().register(blitzResource);
 
-        final CredencialResource credencialResource = new CredencialResource(credencialesDAO, tokenDAO, mensajeErrorBuilder, servicioCredencial);
+        CredencialResource credencialResource = new CredencialResource(credencialesDAO, tokenDAO, mensajeErrorBuilder, servicioCredencial);
         environment.jersey().register(credencialResource);
 
         registrarFiltros(environment);

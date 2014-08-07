@@ -11,17 +11,18 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("/tiposDeInstitucion")
+@Path("/catalogos")
 @Produces(MediaType.APPLICATION_JSON)
-public class TipoDeInstitucionResource {
+public class CatalogosResource {
 
     private ConstructorRespuestas constructorRespuestas;
 
-    public TipoDeInstitucionResource(ConstructorRespuestas constructorRespuestas) {
+    public CatalogosResource(ConstructorRespuestas constructorRespuestas) {
         this.constructorRespuestas = constructorRespuestas;
     }
 
     @GET
+    @Path("/tiposDeInstitucion")
     public Response obtenerTodos(){
         List values = TipoDeInstitucion.getAll();
         return constructorRespuestas.construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_TIPOS_INSTITUCION, values);

@@ -1,4 +1,4 @@
-package ec.gob.senescyt.usuario.resources;
+package ec.gob.senescyt.titulos.resources;
 
 import ec.gob.senescyt.usuario.core.cine.AnioClasificacion;
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
