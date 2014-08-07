@@ -31,13 +31,14 @@ import static org.mockito.Mockito.verifyZeroInteractions;
 public class TituloExtranjeroResourceAnidadosTest {
 
     private static PortadorTituloDAO portadorTituloDAO = mock(PortadorTituloDAO.class);
+    private static final String ID_CATEGORIA_VISA = "9";
     private static final String STRING_CON_255_CARACTERES = RandomStringUtils.random(256);
     private static final String CAMPO_EN_BLANCO = "";
     private static final String NUMERO_CEDULA_VALIDO = "1111111116";
     private static final String NUMERO_PASAPORTE = "ASE23";
     private static final DateTime FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA = new DateTime(2015, 3, 16, 0, 0, DateTimeZone.UTC);
     private static final DateTime FECHA_FIN_VIGENCIA_VISA_VALIDA = new DateTime(2015, 3, 16, 0, 0, DateTimeZone.UTC);
-    private static final String CAMPO_CONFORMADO_SOLO_DE_ESPACIOS_EN_BLANCO = "   ";
+    private static final String CAMPO_SOLO_ESPACIOS = "   ";
     private static final DateTime FECHA_FIN_VIGENCIA_VISA_EN_BLANCO = null;
     private static final DateTime FECHA_FIN_VIGENCIA_PASAPORTE_EN_BLANCO = null;
     private static final DateTime FECHA_FIN_VIGENCIA_VISA_MENOR_FECHA_ACTUAL = new DateTime(1990, 3, 16, 0, 0, DateTimeZone.UTC);
@@ -183,7 +184,7 @@ public class TituloExtranjeroResourceAnidadosTest {
         DateTime fechaFinVigenciaVisaValida = new DateTime(2015, 3, 16, 0, 0, DateTimeZone.UTC);
 
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.identificacion = new Pasaporte(pasaporteEnBlanco, fechaFinVigenciaPasaporteValida, fechaFinVigenciaVisaValida, "9", false))
+                .con(p -> p.identificacion = new Pasaporte(pasaporteEnBlanco, fechaFinVigenciaPasaporteValida, fechaFinVigenciaVisaValida, ID_CATEGORIA_VISA, false))
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);
@@ -196,7 +197,7 @@ public class TituloExtranjeroResourceAnidadosTest {
     @Test
     public void noDebeCrearTituloCuandoElNumeroDePasaporteEstaConformadoSoloDeEspaciosEnBlanco() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.identificacion = new Pasaporte(CAMPO_CONFORMADO_SOLO_DE_ESPACIOS_EN_BLANCO, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, FECHA_FIN_VIGENCIA_VISA_VALIDA, "9", false))
+                .con(p -> p.identificacion = new Pasaporte(CAMPO_SOLO_ESPACIOS, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, FECHA_FIN_VIGENCIA_VISA_VALIDA, ID_CATEGORIA_VISA, false))
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);
@@ -210,7 +211,7 @@ public class TituloExtranjeroResourceAnidadosTest {
          public void noDebeCrearTituloCuandoFechaDeFinDeVigenciaVisaEstaEnBlancoYNoSeaVisaIndefinida() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> {
-                    p.identificacion = new Pasaporte(NUMERO_PASAPORTE, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, FECHA_FIN_VIGENCIA_VISA_EN_BLANCO, "9", false);
+                    p.identificacion = new Pasaporte(NUMERO_PASAPORTE, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, FECHA_FIN_VIGENCIA_VISA_EN_BLANCO, ID_CATEGORIA_VISA, false);
                 })
                 .generar();
 
@@ -225,7 +226,7 @@ public class TituloExtranjeroResourceAnidadosTest {
     public void noDebeCrearTituloCuandoFechaDeFinDeVigenciaVisaTieneUnValorYSeaVisaIndefinida() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> {
-                    p.identificacion = new Pasaporte(NUMERO_PASAPORTE, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, FECHA_FIN_VIGENCIA_VISA_VALIDA, "9", true);
+                    p.identificacion = new Pasaporte(NUMERO_PASAPORTE, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, FECHA_FIN_VIGENCIA_VISA_VALIDA, ID_CATEGORIA_VISA, true);
                 })
                 .generar();
 
@@ -240,7 +241,7 @@ public class TituloExtranjeroResourceAnidadosTest {
     public void noDebeCrearTituloCuandoFechaDeFinDeVigenciaPasaporteEstaEnBlanco() {
 
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.identificacion = new Pasaporte("AS23", FECHA_FIN_VIGENCIA_PASAPORTE_EN_BLANCO, FECHA_FIN_VIGENCIA_VISA_VALIDA, "9", false))
+                .con(p -> p.identificacion = new Pasaporte("AS23", FECHA_FIN_VIGENCIA_PASAPORTE_EN_BLANCO, FECHA_FIN_VIGENCIA_VISA_VALIDA, ID_CATEGORIA_VISA, false))
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);
@@ -254,7 +255,7 @@ public class TituloExtranjeroResourceAnidadosTest {
     public void noDebeCrearTituloCuandoFechaDeFinDeVigenciaVisaEsMenorALaActual() {
 
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.identificacion = new Pasaporte(NUMERO_PASAPORTE, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, FECHA_FIN_VIGENCIA_VISA_MENOR_FECHA_ACTUAL, "9", false))
+                .con(p -> p.identificacion = new Pasaporte(NUMERO_PASAPORTE, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, FECHA_FIN_VIGENCIA_VISA_MENOR_FECHA_ACTUAL, ID_CATEGORIA_VISA, false))
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);
@@ -270,7 +271,7 @@ public class TituloExtranjeroResourceAnidadosTest {
         DateTime fechaFinVigenciaVisaValida = new DateTime(2015, 3, 16, 0, 0, DateTimeZone.UTC);
         DateTime fechaFinVigenciaPasaporteMenorFechaActual = new DateTime(1990, 3, 16, 0, 0, DateTimeZone.UTC);
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.identificacion = new Pasaporte(NUMERO_PASAPORTE, fechaFinVigenciaPasaporteMenorFechaActual, fechaFinVigenciaVisaValida, "9", false))
+                .con(p -> p.identificacion = new Pasaporte(NUMERO_PASAPORTE, fechaFinVigenciaPasaporteMenorFechaActual, fechaFinVigenciaVisaValida, ID_CATEGORIA_VISA, false))
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);
@@ -283,7 +284,7 @@ public class TituloExtranjeroResourceAnidadosTest {
     @Test
     public void noDebeCrearTituloCuandoNumeroDePasaporteContieneEspacios() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.identificacion = new Pasaporte(NUMERO_PASAPORTE_CON_ESPACIOS, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, FECHA_FIN_VIGENCIA_VISA_VALIDA, "9", false))
+                .con(p -> p.identificacion = new Pasaporte(NUMERO_PASAPORTE_CON_ESPACIOS, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, FECHA_FIN_VIGENCIA_VISA_VALIDA, ID_CATEGORIA_VISA, false))
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);
@@ -296,7 +297,7 @@ public class TituloExtranjeroResourceAnidadosTest {
     @Test
     public void noDebeCrearTituloCuandoNumeroDePasaporteContieneCaracteresEspeciales() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.identificacion = new Pasaporte(NUMERO_PASAPORTE_CON_CARACTERES_ESPECIALES, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, FECHA_FIN_VIGENCIA_VISA_VALIDA, "9", false))
+                .con(p -> p.identificacion = new Pasaporte(NUMERO_PASAPORTE_CON_CARACTERES_ESPECIALES, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, FECHA_FIN_VIGENCIA_VISA_VALIDA, ID_CATEGORIA_VISA, false))
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);
@@ -346,7 +347,7 @@ public class TituloExtranjeroResourceAnidadosTest {
     @Test
     public void debeCrearTituloCuandoLaVisaEsIndefinidaYLaFechaDeFinDeVigenciaDeLaVisaEsNula() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
-                .con(p -> p.identificacion = new Pasaporte(NUMERO_PASAPORTE, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, null, "9", true))
+                .con(p -> p.identificacion = new Pasaporte(NUMERO_PASAPORTE, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, null, ID_CATEGORIA_VISA, true))
                 .generar();
 
         ClientResponse response = hacerPost(portadorTitulo);

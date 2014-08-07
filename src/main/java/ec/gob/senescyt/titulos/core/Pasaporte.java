@@ -40,12 +40,12 @@ public class Pasaporte extends Identificacion {
     private DateTime finVigenciaVisa;
 
     @ManyToOne
-    @JoinColumn(name = "id_tipo_visa", insertable = false, updatable = false)
+    @JoinColumn(name = "id_categoria_visa", insertable = false, updatable = false)
     @JsonIgnore
-    private TipoVisa tipoVisa;
+    private CategoriaVisa categoriaVisa;
 
-    @Column(name = "id_tipo_visa", insertable = true, updatable = true)
-    private String idTipoVisa;
+    @Column(name = "id_categoria_visa", insertable = true, updatable = true)
+    private String idCategoriaVisa;
 
     @Column(name = "visaIndefinida")
     private boolean visaIndefinida;
@@ -54,11 +54,11 @@ public class Pasaporte extends Identificacion {
         super();
     }
 
-    public Pasaporte(String numeroIdentificacion, DateTime finVigenciaPasaporte, DateTime finVigenciaVisa, String idTipoVisa, boolean visaIndefinida) {
+    public Pasaporte(String numeroIdentificacion, DateTime finVigenciaPasaporte, DateTime finVigenciaVisa, String idCategoriaVisa, boolean visaIndefinida) {
         super(numeroIdentificacion.trim(), TipoDocumento.PASAPORTE);
         this.finVigenciaPasaporte = finVigenciaPasaporte;
         this.finVigenciaVisa = finVigenciaVisa;
-        this.idTipoVisa = idTipoVisa;
+        this.idCategoriaVisa = idCategoriaVisa;
         this.visaIndefinida = visaIndefinida;
     }
 
@@ -70,12 +70,12 @@ public class Pasaporte extends Identificacion {
         return finVigenciaVisa;
     }
 
-    public TipoVisa getTipoVisa() {
-        return tipoVisa;
+    public CategoriaVisa getCategoriaVisa() {
+        return categoriaVisa;
     }
 
-    public String getIdTipoVisa() {
-        return idTipoVisa;
+    public String getIdCategoriaVisa() {
+        return idCategoriaVisa;
     }
 
     public boolean isVisaIndefinida() {

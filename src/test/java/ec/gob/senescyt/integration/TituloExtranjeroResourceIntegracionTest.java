@@ -6,8 +6,11 @@ import ec.gob.senescyt.UsuarioApplication;
 import ec.gob.senescyt.UsuarioConfiguration;
 import ec.gob.senescyt.commons.builders.PortadorTituloBuilder;
 import ec.gob.senescyt.titulos.core.Cedula;
+import ec.gob.senescyt.titulos.core.Pasaporte;
 import ec.gob.senescyt.titulos.core.PortadorTitulo;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.ClassRule;
 import org.junit.Test;
 
@@ -23,6 +26,10 @@ public class TituloExtranjeroResourceIntegracionTest extends AbstractIntegracion
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
 
     private String numeroIdentificacionCedulaValida = "1111111116";
+    private static final String RUTA_TITULO_EXTRANJERO = "titulo/extranjero";
+    private static final String ID_CATEGORIA_VISA = "9";
+    private static final String NUMERO_PASAPORTE = "ASE23";
+    private static final DateTime FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA = new DateTime(2015, 3, 16, 0, 0, DateTimeZone.UTC);
 
     public static String resourceFilePath(String resourceClassPathLocation) {
         try {
@@ -43,7 +50,20 @@ public class TituloExtranjeroResourceIntegracionTest extends AbstractIntegracion
                 .con(p -> p.identificacion = new Cedula(numeroIdentificacionCedulaValida))
                 .generar();
 
-        ClientResponse respuesta =  hacerPost("titulo/extranjero", portadorTitulo);
+        ClientResponse respuesta =  hacerPost(RUTA_TITULO_EXTRANJERO, portadorTitulo);
+
+        assertThat(respuesta.getStatus(), is(201));
+        assertThat(respuesta.getEntity(PortadorTitulo.class).getEmail(), is(portadorTitulo.getEmail()));
+    }
+
+    @Test
+    public void debeAlmacenarUnNuevoExpedienteDeTituloExtranjeroConPasaporte() {
+        Pasaporte pasaporte = new Pasaporte(NUMERO_PASAPORTE, FECHA_FIN_VIGENCIA_PASAPORTE_VALIDA, null, ID_CATEGORIA_VISA, true);
+        PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
+                .con(p -> p.identificacion = pasaporte)
+                .generar();
+
+        ClientResponse respuesta = hacerPost(RUTA_TITULO_EXTRANJERO, portadorTitulo);
 
         assertThat(respuesta.getStatus(), is(201));
         assertThat(respuesta.getEntity(PortadorTitulo.class).getEmail(), is(portadorTitulo.getEmail()));
@@ -56,7 +76,7 @@ public class TituloExtranjeroResourceIntegracionTest extends AbstractIntegracion
                 .con(p -> p.idPaisNacionalidad = "invali")
                 .generar();
 
-        ClientResponse respuesta = hacerPost("titulo/extranjero",portadorTitulo);
+        ClientResponse respuesta = hacerPost(RUTA_TITULO_EXTRANJERO,portadorTitulo);
 
         assertThat(respuesta.getStatus(), is(400));
         assertErrorMessage(respuesta, "idpaisnacionalidad no es un valor válido");
@@ -69,7 +89,7 @@ public class TituloExtranjeroResourceIntegracionTest extends AbstractIntegracion
                 .con(p -> p.idEtnia = "xx")
                 .generar();
 
-        ClientResponse respuesta = hacerPost("titulo/extranjero", portadorTitulo);
+        ClientResponse respuesta = hacerPost(RUTA_TITULO_EXTRANJERO, portadorTitulo);
 
         assertThat(respuesta.getStatus(), is(400));
         assertErrorMessage(respuesta, "etnia_id no es un valor válido");

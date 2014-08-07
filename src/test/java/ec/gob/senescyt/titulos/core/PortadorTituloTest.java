@@ -90,7 +90,7 @@ public class PortadorTituloTest {
 
         assertThat(pasaporteEsperado.getFinVigenciaPasaporte(),is(pasaporteActual.getFinVigenciaPasaporte()));
         assertThat(pasaporteEsperado.getFinVigenciaVisa(),is(pasaporteActual.getFinVigenciaVisa()));
-        assertThat(pasaporteEsperado.getIdTipoVisa(),is(pasaporteActual.getIdTipoVisa()));
+        assertThat(pasaporteEsperado.getIdCategoriaVisa(),is(pasaporteActual.getIdCategoriaVisa()));
         assertThat(pasaporteEsperado.isVisaIndefinida(),is(pasaporteActual.isVisaIndefinida()));
     }
 
