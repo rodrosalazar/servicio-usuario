@@ -25,16 +25,13 @@ import javax.validation.constraints.Pattern;
 @Table(name = "identificaciones")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="tipoDocumento", discriminatorType= DiscriminatorType.STRING)
-@SuppressWarnings("PMD.UncommentedEmptyConstructor")
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.WRAPPER_OBJECT, property="type")
 @JsonSubTypes({
-
         @JsonSubTypes.Type(value=Cedula.class, name="cedula"),
-
-        @JsonSubTypes.Type(value=Pasaporte.class, name="pasaporte")
+        @JsonSubTypes.Type(value=Pasaporte.class, name="pasaporte"),
 
 })
-public abstract class Identificacion {
+public class Identificacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +48,9 @@ public abstract class Identificacion {
     @Pattern(regexp = "^[^_\\W]+$", message = "{ec.gob.senescyt.error.numeroIdentificacion}")
     private String numeroIdentificacion;
 
-    protected Identificacion() {}
+    protected Identificacion() {
+        // Do nothing.
+    }
 
     protected Identificacion(String numeroIdentificacion, TipoDocumento tipoDocumento) {
         this.numeroIdentificacion = numeroIdentificacion;

@@ -1,11 +1,11 @@
 package ec.gob.senescyt.carga.cine;
 
-import ec.gob.senescyt.carga.ConversorCsv;
+import ec.gob.senescyt.carga.AbstractConversorCsv;
 import ec.gob.senescyt.usuario.core.cine.Detalle;
 
 import java.io.IOException;
 
-public class DetalleCsv extends ConversorCsv {
+public class DetalleCsv extends AbstractConversorCsv {
 
     public DetalleCsv() {
         super(Detalle.class);

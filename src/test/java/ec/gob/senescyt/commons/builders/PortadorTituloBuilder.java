@@ -1,7 +1,7 @@
 package ec.gob.senescyt.commons.builders;
 
-import ec.gob.senescyt.titulos.core.Direccion;
 import ec.gob.senescyt.titulos.core.Identificacion;
+import ec.gob.senescyt.titulos.core.Direccion;
 import ec.gob.senescyt.titulos.core.PortadorTitulo;
 import ec.gob.senescyt.titulos.enums.GeneroEnum;
 import org.joda.time.DateTime;

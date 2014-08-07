@@ -1,11 +1,11 @@
 package ec.gob.senescyt.carga.dpa;
 
-import ec.gob.senescyt.carga.ConversorCsv;
+import ec.gob.senescyt.carga.AbstractConversorCsv;
 import ec.gob.senescyt.titulos.core.Parroquia;
 
 import java.io.IOException;
 
-public class ParroquiaCsv extends ConversorCsv{
+public class ParroquiaCsv extends AbstractConversorCsv {
     protected ParroquiaCsv() {
         super(Parroquia.class);
     }

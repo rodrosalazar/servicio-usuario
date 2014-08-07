@@ -13,12 +13,12 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 
 @SuppressWarnings("PMD.SystemPrintln")
-public abstract class ConversorCsv {
+public abstract class AbstractConversorCsv {
 
     private final Class tipo;
     protected final String nombreTabla;
 
-    protected ConversorCsv(Class tipo) {
+    protected AbstractConversorCsv(Class tipo) {
         this.tipo = tipo;
         Table table = (Table) tipo.getAnnotation(Table.class);
         nombreTabla = table.name();
@@ -86,7 +86,7 @@ public abstract class ConversorCsv {
         return argDestino;
     }
 
-    protected static void convertir(ConversorCsv conversorCsv, String... args) throws IOException {
+    protected static void convertir(AbstractConversorCsv abstractConversorCsv, String... args) throws IOException {
         final String usoCorrecto = "\nUso correcto:\n" +
                 "./gradlew runCsv -P params=\"paquete.Clase ruta-entrada.csv [ruta-salida.sql]\"\n\n" +
                 "El archivo CSV de entrada esperado consiste en:\n" +
@@ -109,7 +109,7 @@ public abstract class ConversorCsv {
         File archivoDestino = new File(rutaDestino);
         OutputStreamWriter escritor = new OutputStreamWriter(new FileOutputStream((archivoDestino)), StandardCharsets.UTF_8);
 
-        escritor.write(conversorCsv.archivoASql(archivoOrigen));
+        escritor.write(abstractConversorCsv.archivoASql(archivoOrigen));
         escritor.close();
     }
 }

@@ -1,11 +1,11 @@
 package ec.gob.senescyt.carga.cine;
 
-import ec.gob.senescyt.carga.ConversorCsv;
+import ec.gob.senescyt.carga.AbstractConversorCsv;
 import ec.gob.senescyt.usuario.core.cine.Area;
 
 import java.io.IOException;
 
-public class AreaCsv extends ConversorCsv {
+public class AreaCsv extends AbstractConversorCsv {
 
     public AreaCsv() {
         super(Area.class);

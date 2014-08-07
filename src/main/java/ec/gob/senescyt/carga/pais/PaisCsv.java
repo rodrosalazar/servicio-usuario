@@ -1,11 +1,11 @@
 package ec.gob.senescyt.carga.pais;
 
-import ec.gob.senescyt.carga.ConversorCsv;
+import ec.gob.senescyt.carga.AbstractConversorCsv;
 import ec.gob.senescyt.titulos.core.Pais;
 
 import java.io.IOException;
 
-public class PaisCsv extends ConversorCsv {
+public class PaisCsv extends AbstractConversorCsv {
 
     protected PaisCsv() {
         super(Pais.class);

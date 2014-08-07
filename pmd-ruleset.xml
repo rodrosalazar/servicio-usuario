@@ -15,5 +15,6 @@
     <rule ref="rulesets/optimizations.xml">
         <exclude name="MethodArgumentCouldBeFinal"/>
         <exclude name="LocalVariableCouldBeFinal"/>
+        <exclude name="UseStringBufferForStringAppends"/>
     </rule>
 </ruleset>

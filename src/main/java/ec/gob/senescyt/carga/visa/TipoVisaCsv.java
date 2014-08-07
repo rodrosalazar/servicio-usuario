@@ -1,11 +1,11 @@
 package ec.gob.senescyt.carga.visa;
 
-import ec.gob.senescyt.carga.ConversorCsv;
+import ec.gob.senescyt.carga.AbstractConversorCsv;
 import ec.gob.senescyt.titulos.core.TipoVisa;
 
 import java.io.IOException;
 
-public class TipoVisaCsv extends ConversorCsv {
+public class TipoVisaCsv extends AbstractConversorCsv {
     protected TipoVisaCsv() {
         super(TipoVisa.class);
     }

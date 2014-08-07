@@ -16,12 +16,12 @@ import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.commons.resources.BlitzResource;
 import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
+import ec.gob.senescyt.titulos.core.Identificacion;
 import ec.gob.senescyt.titulos.core.Canton;
 import ec.gob.senescyt.titulos.core.CategoriaVisa;
 import ec.gob.senescyt.titulos.core.Cedula;
 import ec.gob.senescyt.titulos.core.Direccion;
 import ec.gob.senescyt.titulos.core.Etnia;
-import ec.gob.senescyt.titulos.core.Identificacion;
 import ec.gob.senescyt.titulos.core.Pais;
 import ec.gob.senescyt.titulos.core.Parroquia;
 import ec.gob.senescyt.titulos.core.Pasaporte;
@@ -174,7 +174,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         final ProvinciaResource provinciaResource = new ProvinciaResource(provinciaDAO, cantonDAO, constructorRespuestas);
         environment.jersey().register(provinciaResource);
 
-        final CantonResource cantonResource = new CantonResource(cantonDAO, parroquiaDAO, constructorRespuestas);
+        final CantonResource cantonResource = new CantonResource(parroquiaDAO, constructorRespuestas);
         environment.jersey().register(cantonResource);
 
         final TipoDeVisaResource tipoDeVisaResource = new TipoDeVisaResource(tipoVisaDAO, categoriaVisaDAO, constructorRespuestas);

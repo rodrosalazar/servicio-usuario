@@ -1,11 +1,11 @@
 package ec.gob.senescyt.carga.dpa;
 
-import ec.gob.senescyt.carga.ConversorCsv;
+import ec.gob.senescyt.carga.AbstractConversorCsv;
 import ec.gob.senescyt.titulos.core.Canton;
 
 import java.io.IOException;
 
-public class CantonCsv extends ConversorCsv{
+public class CantonCsv extends AbstractConversorCsv {
     public CantonCsv() {
         super(Canton.class);
     }

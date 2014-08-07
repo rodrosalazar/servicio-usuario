@@ -11,7 +11,7 @@ import javax.validation.ConstraintValidatorContext;
 public class VigenciaVisaValidator implements ConstraintValidator<VigenciaVisaValida, Pasaporte> {
     @Override
     public void initialize(VigenciaVisaValida constraintAnnotation) {
-
+        // Do nothing.
     }
 
     @Override

@@ -10,7 +10,7 @@ import javax.validation.ConstraintValidatorContext;
 public class FechaVigenciaValidator implements ConstraintValidator<FechaVigenciaValida, DateTime> {
     @Override
     public void initialize(FechaVigenciaValida constraintAnnotation) {
-
+        // Do nothing.
     }
 
     @Override

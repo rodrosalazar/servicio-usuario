@@ -1,11 +1,11 @@
 package ec.gob.senescyt.carga.arboles;
 
 import ec.gob.senescyt.biblioteca.NivelArbol;
-import ec.gob.senescyt.carga.ConversorCsv;
+import ec.gob.senescyt.carga.AbstractConversorCsv;
 
 import java.io.IOException;
 
-public class NivelArbolCsv extends ConversorCsv {
+public class NivelArbolCsv extends AbstractConversorCsv {
     public NivelArbolCsv() {
         super(NivelArbol.class);
     }

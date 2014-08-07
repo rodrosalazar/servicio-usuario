@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotNull;
 
+@SuppressWarnings("PMD.AvoidFieldNameMatchingMethodName")
 public class ConfiguracionEmail {
 
     @NotNull

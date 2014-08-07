@@ -1,11 +1,11 @@
 package ec.gob.senescyt.carga.institucion;
 
-import ec.gob.senescyt.carga.ConversorCsv;
+import ec.gob.senescyt.carga.AbstractConversorCsv;
 import ec.gob.senescyt.titulos.core.UniversidadExtranjera;
 
 import java.io.IOException;
 
-public class UniversidadExtranjeraCsv extends ConversorCsv{
+public class UniversidadExtranjeraCsv extends AbstractConversorCsv {
     protected UniversidadExtranjeraCsv() {
         super(UniversidadExtranjera.class);
     }

@@ -3,7 +3,6 @@ package ec.gob.senescyt.usuario.resources;
 import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import ec.gob.senescyt.titulos.core.Parroquia;
-import ec.gob.senescyt.titulos.dao.CantonDAO;
 import ec.gob.senescyt.titulos.dao.ParroquiaDAO;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -19,13 +18,11 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 public class CantonResource {
 
-    private final CantonDAO cantonDAO;
     private final ParroquiaDAO parroquiaDAO;
     private final ConstructorRespuestas constructorRespuestas;
 
-    public CantonResource(CantonDAO cantonDAO, ParroquiaDAO parroquiaDAO, ConstructorRespuestas constructorRespuestas) {
+    public CantonResource(ParroquiaDAO parroquiaDAO, ConstructorRespuestas constructorRespuestas) {
         this.parroquiaDAO = parroquiaDAO;
-        this.cantonDAO = cantonDAO;
         this.constructorRespuestas = constructorRespuestas;
     }
 

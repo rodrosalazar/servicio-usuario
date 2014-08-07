@@ -90,6 +90,7 @@ public class PortadorTitulo {
     private PortadorTitulo() {
     }
 
+    @SuppressWarnings("PMD.ExcessiveParameterList")
     public PortadorTitulo(String nombresCompletos, Identificacion identificacion,
                           String idPaisNacionalidad, String email, GeneroEnum genero,
                           String idEtnia, DateTime fechaNacimiento, String telefonoConvencional,

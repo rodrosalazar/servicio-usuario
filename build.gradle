@@ -207,7 +207,7 @@ pmd {
             'unusedcode',
     ]
     ruleSetFiles = files('pmd-ruleset.xml')
-//    targetJdk = '1.7'
+    targetJdk = '1.7'
 }
 
 compileJava {

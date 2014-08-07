@@ -6,6 +6,7 @@ import javax.persistence.Embeddable;
 import java.io.Serializable;
 
 @Embeddable
+@SuppressWarnings("PMD.CyclomaticComplexity")
 public class Nombre implements Serializable {
 
     @NotEmpty

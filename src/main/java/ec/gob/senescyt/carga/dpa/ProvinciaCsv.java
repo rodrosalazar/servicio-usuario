@@ -1,11 +1,11 @@
 package ec.gob.senescyt.carga.dpa;
 
-import ec.gob.senescyt.carga.ConversorCsv;
+import ec.gob.senescyt.carga.AbstractConversorCsv;
 import ec.gob.senescyt.titulos.core.Provincia;
 
 import java.io.IOException;
 
-public class ProvinciaCsv extends ConversorCsv {
+public class ProvinciaCsv extends AbstractConversorCsv {
 
     protected ProvinciaCsv() {
         super(Provincia.class);

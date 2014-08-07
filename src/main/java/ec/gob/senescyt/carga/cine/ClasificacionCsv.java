@@ -1,11 +1,11 @@
 package ec.gob.senescyt.carga.cine;
 
-import ec.gob.senescyt.carga.ConversorCsv;
+import ec.gob.senescyt.carga.AbstractConversorCsv;
 import ec.gob.senescyt.usuario.core.cine.Clasificacion;
 
 import java.io.IOException;
 
-public class ClasificacionCsv extends ConversorCsv {
+public class ClasificacionCsv extends AbstractConversorCsv {
 
     public ClasificacionCsv() {
         super(Clasificacion.class);

@@ -31,7 +31,6 @@ public class UsuarioResource {
     private UsuarioDAO usuarioDAO;
     private TokenDAO tokenDAO;
     private CedulaValidator cedulaValidator;
-    private LectorArchivoDePropiedades lectorArchivoDePropiedades;
     private LectorArchivoDePropiedades lectorPropiedadesEmail;
     private DespachadorEmail despachadorEmail;
     private ConstructorContenidoEmail constructorContenidoEmail;
@@ -44,11 +43,11 @@ public class UsuarioResource {
         this.usuarioDAO = usuarioDAO;
         this.tokenDAO = tokenDAO;
         this.cedulaValidator = cedulaValidator;
-        this.lectorArchivoDePropiedades = lectorPropiedadesValidacion;
+        LectorArchivoDePropiedades lectorArchivoDePropiedades = lectorPropiedadesValidacion;
         this.lectorPropiedadesEmail = lectorPropiedadesEmail;
         this.despachadorEmail = despachadorEmail;
         this.constructorContenidoEmail = constructorContenidoEmail;
-        this.mensajeErrorBuilder = new MensajeErrorBuilder(this.lectorArchivoDePropiedades);
+        this.mensajeErrorBuilder = new MensajeErrorBuilder(lectorArchivoDePropiedades);
     }
 
     @GET

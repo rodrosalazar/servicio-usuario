@@ -16,20 +16,21 @@ import javax.persistence.Transient;
 @Entity
 public class Detalle {
 
+    @Id
+    private String id;
+
+    private String nombre;
+
     @ManyToOne
     @JoinColumn(name = "subarea_id")
     @JsonBackReference
     private Subarea subarea;
 
-    private Detalle() {}
-
-    @Id
-    private String id;
-    private String nombre;
-
     @Transient
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String subareaIdParaCsv;
+
+    private Detalle() {}
 
     public Detalle(String id, String nombre) {
         this.id = id;
@@ -42,6 +43,10 @@ public class Detalle {
 
     public String getNombre() {
         return nombre;
+    }
+
+    public Subarea getSubarea() {
+        return subarea;
     }
 
     public String getSubareaIdParaCsv() {

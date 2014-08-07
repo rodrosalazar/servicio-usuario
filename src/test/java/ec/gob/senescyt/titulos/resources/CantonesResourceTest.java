@@ -34,7 +34,7 @@ public class CantonesResourceTest {
 
     @Before
     public void setUp() throws Exception {
-        cantonResource = new CantonResource(cantonDAO, parroquiaDAO, constructorRespuestasParroquias);
+        cantonResource = new CantonResource(parroquiaDAO, constructorRespuestasParroquias);
     }
 
 

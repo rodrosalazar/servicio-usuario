@@ -11,7 +11,7 @@ public class QuipuxValidator  implements ConstraintValidator<QuipuxValido, Strin
 
     @Override
     public void initialize(QuipuxValido constraintAnnotation) {
-
+        // Do nothing.
     }
 
     @Override

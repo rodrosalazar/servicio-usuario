@@ -8,7 +8,7 @@ import org.flywaydb.core.Flyway;
 
 public class DBMigrationsBundle implements ConfiguredBundle<UsuarioConfiguration> {
     @Override
-    public void run(UsuarioConfiguration configuration, Environment environment) throws Exception {
+    public void run(UsuarioConfiguration configuration, Environment environment) {
         Flyway flyway = new Flyway();
         flyway.setDataSource(configuration.getDataSourceFactory().getUrl(), configuration.getDataSourceFactory().getUser(), configuration.getDataSourceFactory().getPassword());
         flyway.migrate();
@@ -16,6 +16,6 @@ public class DBMigrationsBundle implements ConfiguredBundle<UsuarioConfiguration
 
     @Override
     public void initialize(Bootstrap<?> bootstrap) {
-
+        // Do nothing.
     }
 }
