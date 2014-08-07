@@ -13,8 +13,7 @@ import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
@@ -36,13 +35,12 @@ public class ArbolResourceTest {
             .addProvider(ValidacionExceptionMapper.class)
             .build();
     private Client client;
-    private Arbol arbol;
 
     @Before
     public void setUp() {
         reset(arbolDAO);
         client = RESOURCES.client();
-        arbol = ArbolBuilder.nuevoArbol().generar();
+        Arbol arbol = ArbolBuilder.nuevoArbol().generar();
         when(arbolDAO.obtenerPorId(any())).thenReturn(arbol);
     }
 
@@ -53,8 +51,7 @@ public class ArbolResourceTest {
 
         verify(arbolDAO).obtenerTodos();
         assertThat(response.getStatus(), is(200));
-
-        HashMap arboles =  response.getEntity(LinkedHashMap.class);
+        Map arboles = response.getEntity(Map.class);
         MatcherAssert.assertThat(arboles.isEmpty(), is(not(true)));
     }
 }

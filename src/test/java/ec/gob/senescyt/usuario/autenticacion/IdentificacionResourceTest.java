@@ -13,21 +13,21 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.After;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
 
 public class IdentificacionResourceTest {
 
-    private static CredencialDAO credencialDAO = mock(CredencialDAO.class);
+    private static final String RUTA_IDENTIFICACION = "/identificacion";
+    private static final String INDIFERENTE = "indiferente";
+    private static final String CAMPO_OBLIGATORIO = "El campo es obligatorio";
+    private static CredencialDAO credencialDAO = Mockito.mock(CredencialDAO.class);
     private static IdentificacionResource identificacionResource = new IdentificacionResource(credencialDAO);
 
     @ClassRule
@@ -41,7 +41,7 @@ public class IdentificacionResourceTest {
 
     @After
     public void tearDown() {
-        reset(credencialDAO);
+        Mockito.reset(credencialDAO);
     }
 
     @Test
@@ -52,74 +52,74 @@ public class IdentificacionResourceTest {
 
         Credencial credencialesUsuario = new Credencial(username, password);
 
-        when(credencialDAO.validar(any(Credencial.class))).thenReturn(Optional.of(token));
+        Mockito.when(credencialDAO.validar(any(Credencial.class))).thenReturn(Optional.of(token));
 
-        ClientResponse response = client.resource("/identificacion")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+        ClientResponse response = client.resource(RUTA_IDENTIFICACION)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, credencialesUsuario);
 
-        verify(credencialDAO).validar(any(Credencial.class));
+        Mockito.verify(credencialDAO).validar(any(Credencial.class));
         assertThat(response.getStatus(), is(200));
     }
 
     @Test
     public void debeDevolverErrorCuandoContraseniaEsNula() {
-        Credencial credencialesConContraseniaNula = new Credencial("indiferente", null);
-        ClientResponse response = client.resource("/identificacion")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+        Credencial credencialesConContraseniaNula = new Credencial(INDIFERENTE, null);
+        ClientResponse response = client.resource(RUTA_IDENTIFICACION)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, credencialesConContraseniaNula);
 
-        verifyZeroInteractions(credencialDAO);
+        Mockito.verifyZeroInteractions(credencialDAO);
         assertThat(response.getStatus(), is(400));
-        ResourceTestHelper.assertErrorMessage(response, "El campo es obligatorio");
+        ResourceTestHelper.assertErrorMessage(response, CAMPO_OBLIGATORIO);
     }
 
     @Test
     public void debeDevolverErrorCuandoContraseniaEstaVacia() {
-        Credencial credencialesConContraseniaVacia = new Credencial("indiferente", "");
-        ClientResponse response = client.resource("/identificacion")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+        Credencial credencialesConContraseniaVacia = new Credencial(INDIFERENTE, "");
+        ClientResponse response = client.resource(RUTA_IDENTIFICACION)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, credencialesConContraseniaVacia);
 
-        verifyZeroInteractions(credencialDAO);
+        Mockito.verifyZeroInteractions(credencialDAO);
         assertThat(response.getStatus(), is(400));
-        ResourceTestHelper.assertErrorMessage(response, "El campo es obligatorio");
+        ResourceTestHelper.assertErrorMessage(response, CAMPO_OBLIGATORIO);
     }
 
     @Test
     public void debeDevolverErrorCuandoNombreDeUsuarioEsNulo() {
-        Credencial credencialesConContraseniaVacia = new Credencial(null, "indiferente");
-        ClientResponse response = client.resource("/identificacion")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+        Credencial credencialesConContraseniaVacia = new Credencial(null, INDIFERENTE);
+        ClientResponse response = client.resource(RUTA_IDENTIFICACION)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, credencialesConContraseniaVacia);
 
-        verifyZeroInteractions(credencialDAO);
+        Mockito.verifyZeroInteractions(credencialDAO);
         assertThat(response.getStatus(), is(400));
-        ResourceTestHelper.assertErrorMessage(response, "El campo es obligatorio");
+        ResourceTestHelper.assertErrorMessage(response, CAMPO_OBLIGATORIO);
     }
 
     @Test
     public void debeDevolverErrorCuandoNombreDeUsuarioEstaVacio() {
-        Credencial credencialesConContraseniaVacia = new Credencial("", "indiferente");
-        ClientResponse response = client.resource("/identificacion")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+        Credencial credencialesConContraseniaVacia = new Credencial("", INDIFERENTE);
+        ClientResponse response = client.resource(RUTA_IDENTIFICACION)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, credencialesConContraseniaVacia);
 
-        verifyZeroInteractions(credencialDAO);
+        Mockito.verifyZeroInteractions(credencialDAO);
         assertThat(response.getStatus(), is(400));
-        ResourceTestHelper.assertErrorMessage(response, "El campo es obligatorio");
+        ResourceTestHelper.assertErrorMessage(response, CAMPO_OBLIGATORIO);
     }
 
     @Test
     public void debeDevolverNoAutorizadoCuandoCredencialesSonIncorrectas() {
         Credencial credencialesIncorectas = new Credencial("incorrecta", "Incorr3cta");
-        when(credencialDAO.validar(any(Credencial.class))).thenReturn(Optional.absent());
+        Mockito.when(credencialDAO.validar(any(Credencial.class))).thenReturn(Optional.absent());
 
-        ClientResponse response = client.resource("/identificacion")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+        ClientResponse response = client.resource(RUTA_IDENTIFICACION)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, credencialesIncorectas);
 
-        verify(credencialDAO).validar(any(Credencial.class));
+        Mockito.verify(credencialDAO).validar(any(Credencial.class));
         assertThat(response.getStatus(), is(401));
         ResourceTestHelper.assertErrorMessage(response, "Credenciales Incorrectas");
     }

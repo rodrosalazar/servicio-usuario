@@ -13,19 +13,16 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class TiposDeVisaResourceTest {
 
@@ -34,8 +31,8 @@ public class TiposDeVisaResourceTest {
     public static final String NOMBRE_TIPO_VISA = "Visa 12 - NO INMIGRANTE";
     public static final String NOMBRE_CATEGORIA_VISA = "I-II     FUNCIONARIO DE MISIONES DIPLOMATICAS";
 
-    private static TipoVisaDAO tipoVisaDAO = mock(TipoVisaDAO.class);
-    private static CategoriaVisaDAO categoriaVisaDAO = mock(CategoriaVisaDAO.class);
+    private static TipoVisaDAO tipoVisaDAO = Mockito.mock(TipoVisaDAO.class);
+    private static CategoriaVisaDAO categoriaVisaDAO = Mockito.mock(CategoriaVisaDAO.class);
     private static ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
     private List<TipoVisa> tiposDeVisa = new ArrayList<>();
 
@@ -58,34 +55,32 @@ public class TiposDeVisaResourceTest {
 
     @Test
     public void debeObtenerTiposDeVisa() {
-
-        when(tipoVisaDAO.obtenerTodos()).thenReturn(tiposDeVisa);
+        Mockito.when(tipoVisaDAO.obtenerTodos()).thenReturn(tiposDeVisa);
 
         ClientResponse response = client.resource("/tiposDeVisa")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
 
-        verify(tipoVisaDAO).obtenerTodos();
+        Mockito.verify(tipoVisaDAO).obtenerTodos();
         MatcherAssert.assertThat(response.getStatus(), is(200));
-        HashMap tiposVisa =  response.getEntity(LinkedHashMap.class);
+        Map tiposVisa = response.getEntity(Map.class);
         MatcherAssert.assertThat(tiposVisa.isEmpty(), is(not(true)));
     }
 
     @Test
     public void debeObtenerCategoriasVisaParaUnaVisa() {
-
-        when(tipoVisaDAO.obtenerPorId(ID_TIPO_VISA)).thenReturn(new TipoVisa(ID_TIPO_VISA, NOMBRE_TIPO_VISA));
+        Mockito.when(tipoVisaDAO.obtenerPorId(ID_TIPO_VISA)).thenReturn(new TipoVisa(ID_TIPO_VISA, NOMBRE_TIPO_VISA));
 
         CategoriaVisa categoriaVisa = new CategoriaVisa(tipoVisaDAO.obtenerPorId(ID_TIPO_VISA), ID_CATEGORIA_VISA, NOMBRE_CATEGORIA_VISA);
-        when(categoriaVisaDAO.obtenerPorTipoVisa(ID_TIPO_VISA)).thenReturn(newArrayList(categoriaVisa));
+        Mockito.when(categoriaVisaDAO.obtenerPorTipoVisa(ID_TIPO_VISA)).thenReturn(newArrayList(categoriaVisa));
 
         ClientResponse response = client.resource("/tiposDeVisa/" + ID_TIPO_VISA + "/categorias")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
 
-        verify(categoriaVisaDAO).obtenerPorTipoVisa(ID_TIPO_VISA);
+        Mockito.verify(categoriaVisaDAO).obtenerPorTipoVisa(ID_TIPO_VISA);
         MatcherAssert.assertThat(response.getStatus(), is(200));
-        HashMap categorias =  response.getEntity(LinkedHashMap.class);
+        Map categorias = response.getEntity(Map.class);
         MatcherAssert.assertThat(categorias.isEmpty(), is(not(true)));
     }
 }
