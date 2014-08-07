@@ -8,7 +8,7 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
-public class CredencialDAO extends AbstractDAO<Credencial>{
+public class CredencialDAO extends AbstractDAO<Credencial> {
 
     public CredencialDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
@@ -27,8 +27,8 @@ public class CredencialDAO extends AbstractDAO<Credencial>{
         query.executeUpdate();
     }
 
-    public Credencial obtenerPorNombreUsuario(String nombreUsuario){
+    public Credencial obtenerPorNombreUsuario(String nombreUsuario) {
         Criteria criteria = currentSession().createCriteria(Credencial.class);
-        return (Credencial) criteria.add(Restrictions.eq("nombreUsuario",nombreUsuario)).uniqueResult();
+        return (Credencial) criteria.add(Restrictions.eq("nombreUsuario", nombreUsuario)).uniqueResult();
     }
 }

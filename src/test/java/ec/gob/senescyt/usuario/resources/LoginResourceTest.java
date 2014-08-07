@@ -17,7 +17,6 @@ import javax.ws.rs.core.MediaType;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.verify;
 
 public class LoginResourceTest {
@@ -47,15 +46,15 @@ public class LoginResourceTest {
 
         Credencial credencial = new Credencial(nombreUsuario, hash);
 
-        Mockito.when(servicioCredencial.convertirACredencialDesdeLogin(any(CredencialLogin.class))).thenReturn(credencial);
         Mockito.when(credencialDAO.obtenerPorNombreUsuario(nombreUsuario)).thenReturn(credencial);
+        Mockito.when(servicioCredencial.verificarContrasenia(contrasenia, credencial.getHash())).thenReturn(true);
 
         ClientResponse response = client.resource("/login")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, credencialLogin);
 
         assertThat(response.getStatus(), is(201));
-        verify(servicioCredencial).convertirACredencialDesdeLogin(any(CredencialLogin.class));
+        verify(servicioCredencial).verificarContrasenia(contrasenia, credencial.getHash());
         verify(credencialDAO).obtenerPorNombreUsuario(nombreUsuario);
     }
 }

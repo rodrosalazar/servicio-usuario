@@ -6,6 +6,7 @@ import ec.gob.senescyt.usuario.dto.CredencialLogin;
 import ec.gob.senescyt.usuario.services.ServicioCredencial;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import javax.validation.Valid;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -30,11 +31,11 @@ public class LoginResource {
 
     @POST
     @UnitOfWork
-    public Response buscar(CredencialLogin credencialLogin) {
-        Credencial credencial = servicioCredencial.convertirACredencialDesdeLogin(credencialLogin);
+    public Response buscar(@Valid CredencialLogin credencialLogin) {
         Credencial credencialAlmacenada = credencialDAO.obtenerPorNombreUsuario(credencialLogin.getNombreUsuario());
+        boolean esCredencialValido = servicioCredencial.verificarContrasenia(credencialLogin.getContrasenia(), credencialAlmacenada.getHash());
 
-        if(credencialAlmacenada.equals(credencial)) {
+        if(esCredencialValido) {
             return Response.status(CREATED).build();
         }
         return Response.status(BAD_REQUEST).build();
