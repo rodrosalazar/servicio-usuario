@@ -2,6 +2,8 @@ package ec.gob.senescyt.titulos.resources;
 
 import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
+import ec.gob.senescyt.titulos.core.ModalidadEducacion;
+import ec.gob.senescyt.titulos.core.NivelDeFormacion;
 import ec.gob.senescyt.titulos.core.TipoDeInstitucion;
 
 import javax.ws.rs.GET;
@@ -23,9 +25,26 @@ public class CatalogosResource {
 
     @GET
     @Path("/tiposDeInstitucion")
-    public Response obtenerTodos(){
+    public Response obtenerTiposDeInstitucion(){
         List values = TipoDeInstitucion.getAll();
-        return constructorRespuestas.construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_TIPOS_INSTITUCION, values);
+        return constructorRespuestas
+                .construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_TIPOS_INSTITUCION, values);
+    }
+
+    @GET
+    @Path("/nivelesDeFormacion")
+    public Response obtenerNivelesDeFormacion(){
+        List values = NivelDeFormacion.getAll();
+        return constructorRespuestas
+                .construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_NIVELES_FORMACION, values);
+    }
+
+    @GET
+    @Path("/modalidadesDeEducacion")
+    public Response obtenerModalidadesDeEducacion(){
+        List values = ModalidadEducacion.getAll();
+        return constructorRespuestas
+                .construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_MODALIDADES_EDUCACION, values);
     }
 
 }

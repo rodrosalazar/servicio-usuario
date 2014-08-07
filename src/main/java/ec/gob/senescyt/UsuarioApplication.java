@@ -161,6 +161,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         CredencialResource credencialResource = new CredencialResource(credencialesDAO, tokenDAO, mensajeErrorBuilder, servicioCredencial);
         environment.jersey().register(credencialResource);
 
+        CatalogosResource catalagosResource = new CatalogosResource(constructorRespuestas);
+        environment.jersey().register(catalagosResource);
+
         registrarFiltros(environment);
 
         registrarValidacionExceptionMapper(environment);
