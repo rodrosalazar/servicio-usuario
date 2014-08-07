@@ -21,8 +21,7 @@ public class PerfilBuilder {
     }
 
     public Perfil generar() {
-        Perfil perfil = new Perfil(nombre, permisos);
-        return perfil;
+        return new Perfil(nombre, permisos);
     }
 
     public PerfilBuilder con(Consumer<PerfilBuilder> consumer){

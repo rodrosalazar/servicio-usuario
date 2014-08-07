@@ -26,7 +26,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class UsuarioResourceIntegracionTest extends BaseIntegracionTest {
+public class UsuarioResourceIntegracionTest extends AbstractIntegracionTest {
 
     private LectorArchivoDePropiedades lectorArchivoDePropiedades;
     private MensajeErrorBuilder mensajeErrorBuilder;

@@ -8,13 +8,13 @@ import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class CatalagosResourceIntegracionTest extends BaseIntegracionTest {
+public class CatalagosResourceIntegracionTest extends AbstractIntegracionTest {
 
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
@@ -28,7 +28,7 @@ public class CatalagosResourceIntegracionTest extends BaseIntegracionTest {
     public void debeObtenerElListadoDeTiposDeInstituciones() {
         ClientResponse response = hacerGet("catalogos/tiposDeInstitucion");
         assertThat(response.getStatus(), is(200));
-        HashMap entidad = response.getEntity(HashMap.class);
+        Map entidad = response.getEntity(Map.class);
         List tiposInstituciones = (List) entidad.get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_TIPOS_INSTITUCION.getNombre());
         assertThat(tiposInstituciones.size(), is(2));
     }

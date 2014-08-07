@@ -7,6 +7,7 @@ import org.hamcrest.MatcherAssert;
 
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("PMD.UseSingleton")
 public class ResourceTestHelper {
 
     public static void assertErrorMessage(ClientResponse response, String expectedErrorMessage) {

@@ -17,14 +17,14 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class TiposDeVisaResourceIntegracionTest extends BaseIntegracionTest {
+public class TiposDeVisaResourceIntegracionTest extends AbstractIntegracionTest {
 
     private static final String ID_TIPO_VISA_TEST = "3";
     private static final String NOMBRE_TIPO_VISA_TEST = "TIPO_VISA_TEST";
@@ -75,7 +75,7 @@ public class TiposDeVisaResourceIntegracionTest extends BaseIntegracionTest {
         ClientResponse response = hacerGet("tiposDeVisa");
 
         assertThat(response.getStatus(), is(200));
-        List tiposDeVisa = (List) response.getEntity(HashMap.class).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_TIPO_VISA.getNombre());
+        List tiposDeVisa = (List) response.getEntity(Map.class).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_TIPO_VISA.getNombre());
         assertThat(tiposDeVisa.isEmpty(), is(not(true)));
     }
 

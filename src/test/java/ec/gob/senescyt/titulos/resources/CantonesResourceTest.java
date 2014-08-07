@@ -8,6 +8,7 @@ import ec.gob.senescyt.titulos.dao.CantonDAO;
 import ec.gob.senescyt.titulos.dao.ParroquiaDAO;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import javax.ws.rs.core.Response;
 import java.util.HashMap;
@@ -15,7 +16,6 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -27,8 +27,8 @@ public class CantonesResourceTest {
     public static final String NOMBRE_PARROQUIA = "Provincia";
 
     private CantonResource cantonResource;
-    private CantonDAO cantonDAO = mock(CantonDAO.class);
-    private ParroquiaDAO parroquiaDAO = mock(ParroquiaDAO.class);
+    private CantonDAO cantonDAO = Mockito.mock(CantonDAO.class);
+    private ParroquiaDAO parroquiaDAO = Mockito.mock(ParroquiaDAO.class);
     private ConstructorRespuestas constructorRespuestasParroquias = new ConstructorRespuestas();
 
     @Before

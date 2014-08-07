@@ -21,7 +21,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class BusquedaResourceIntegracionTest extends BaseIntegracionTest {
+public class BusquedaResourceIntegracionTest extends AbstractIntegracionTest {
 
     private static final String ID_TOKEN = "32d88be3-2233-4b58-bf3c-99c35b162805";
 

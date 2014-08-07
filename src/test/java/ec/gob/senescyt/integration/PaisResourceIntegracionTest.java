@@ -8,14 +8,14 @@ import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class PaisResourceIntegracionTest extends BaseIntegracionTest {
+public class PaisResourceIntegracionTest extends AbstractIntegracionTest {
 
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
@@ -30,6 +30,6 @@ public class PaisResourceIntegracionTest extends BaseIntegracionTest {
         ClientResponse response = hacerGet("paises");
 
         assertThat(response.getStatus(), is(200));
-        assertThat(((List)(response.getEntity(HashMap.class).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_PAISES.getNombre()))).size(), is(not(0)));
+        assertThat(((List)(response.getEntity(Map.class).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_PAISES.getNombre()))).size(), is(not(0)));
     }
 }

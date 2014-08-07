@@ -13,7 +13,9 @@ import io.dropwizard.testing.junit.ResourceTestRule;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Optional;
@@ -23,16 +25,13 @@ import static ec.gob.senescyt.commons.helpers.ResourceTestHelper.assertErrorMess
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class BusquedaResourceTest {
 
     private static final int OK_STATUS_CODE = Response.Status.OK.getStatusCode();
-    private static ServicioCedula servicioCedula = mock(ServicioCedula.class);
-    private static TokenDAO tokenDAO = mock(TokenDAO.class);
+    public static final String RUTA_BUSQUEDA = "/busqueda";
+    private static ServicioCedula servicioCedula = Mockito.mock(ServicioCedula.class);
+    private static TokenDAO tokenDAO = Mockito.mock(TokenDAO.class);
 
     @ClassRule
     public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
@@ -44,8 +43,7 @@ public class BusquedaResourceTest {
 
     @Before
     public void setUp() {
-        reset(servicioCedula);
-        reset(tokenDAO);
+        Mockito.reset(servicioCedula, tokenDAO);
         tokenInvalido = UUID.randomUUID().toString();
         tokenValido = UUID.randomUUID().toString();
     }
@@ -53,13 +51,13 @@ public class BusquedaResourceTest {
     @Test
     public void debeDevolverServicioNoDisponibleCuandoRegistroCivilNoEstaDisponible() throws CedulaInvalidaException, ServicioNoDisponibleException, CredencialesIncorrectasException {
         String cedulaIndiferente = "1111";
-        when(servicioCedula.buscar(cedulaIndiferente)).thenThrow(new ServicioNoDisponibleException("Servicio no disponible", null));
-        ClientResponse response = RESOURCES.client().resource("/busqueda")
+        Mockito.when(servicioCedula.buscar(cedulaIndiferente)).thenThrow(new ServicioNoDisponibleException("Servicio no disponible", null));
+        ClientResponse response = RESOURCES.client().resource(RUTA_BUSQUEDA)
                 .queryParam("cedula", cedulaIndiferente)
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
 
-        verify(servicioCedula).buscar(eq(cedulaIndiferente));
+        Mockito.verify(servicioCedula).buscar(eq(cedulaIndiferente));
         assertThat(response.getStatus(), is(503));
         assertErrorMessage(response, "Servicio no disponible");
     }
@@ -67,14 +65,14 @@ public class BusquedaResourceTest {
     @Test
     public void debeDevolverBadRequestCuandoLaCedulaEsInvalida() throws CedulaInvalidaException, ServicioNoDisponibleException, CredencialesIncorrectasException {
         String cedulaInvalida = "1111";
-        when(servicioCedula.buscar(cedulaInvalida)).thenThrow(new CedulaInvalidaException("Cedula enviada no corresponde a un usuario no existe o no esta registrado"));
+        Mockito.when(servicioCedula.buscar(cedulaInvalida)).thenThrow(new CedulaInvalidaException("Cedula enviada no corresponde a un usuario no existe o no esta registrado"));
 
-        ClientResponse response = RESOURCES.client().resource("/busqueda")
+        ClientResponse response = RESOURCES.client().resource(RUTA_BUSQUEDA)
                 .queryParam("cedula", cedulaInvalida)
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
 
-        verify(servicioCedula).buscar(eq(cedulaInvalida));
+        Mockito.verify(servicioCedula).buscar(eq(cedulaInvalida));
         assertThat(response.getStatus(), is(400));
         assertErrorMessage(response, "Cedula enviada no corresponde a un usuario no existe o no esta registrado");
     }
@@ -91,15 +89,15 @@ public class BusquedaResourceTest {
         String fechaNacimiento = "01/01/1980";
         String genero = "MASCULINO";
         String nacionalidad = "SUAZI";
-        when(servicioCedula.buscar(cedulaValida)).thenReturn(new CedulaInfo(nombre, direccion, provincia, idProvincia, canton,
+        Mockito.when(servicioCedula.buscar(cedulaValida)).thenReturn(new CedulaInfo(nombre, direccion, provincia, idProvincia, canton,
                 parroquia, fechaNacimiento, genero, nacionalidad));
 
-        ClientResponse response = RESOURCES.client().resource("/busqueda")
+        ClientResponse response = RESOURCES.client().resource(RUTA_BUSQUEDA)
                 .queryParam("cedula", cedulaValida)
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
 
-        verify(servicioCedula).buscar(eq(cedulaValida));
+        Mockito.verify(servicioCedula).buscar(eq(cedulaValida));
         assertThat(response.getStatus(), is(200));
         CedulaInfo cedulaInfo = response.getEntity(CedulaInfo.class);
         assertThat(cedulaInfo.getNombre(), is(nombre));
@@ -116,11 +114,11 @@ public class BusquedaResourceTest {
 
     @Test
     public void debeDevolverRecursoNoEncontradoCuandoTokenNoEsValido() {
-        when(tokenDAO.buscar(tokenInvalido)).thenReturn(Optional.empty());
+        Mockito.when(tokenDAO.buscar(tokenInvalido)).thenReturn(Optional.empty());
 
-        ClientResponse response = RESOURCES.client().resource("/busqueda")
+        ClientResponse response = RESOURCES.client().resource(RUTA_BUSQUEDA)
                 .queryParam("token", tokenInvalido)
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
 
         assertThat(response.getStatus(), is(Response.Status.NOT_FOUND.getStatusCode()));
@@ -129,10 +127,10 @@ public class BusquedaResourceTest {
     @Test
     public void debeDevolverElIdDelUsuarioCuandoElTokenEsValido() {
         Token tokenTest = new Token(tokenValido, UsuarioBuilder.nuevoUsuario().generar());
-        when(tokenDAO.buscar(tokenValido)).thenReturn(Optional.of(tokenTest));
-        ClientResponse response = RESOURCES.client().resource("/busqueda")
+        Mockito.when(tokenDAO.buscar(tokenValido)).thenReturn(Optional.of(tokenTest));
+        ClientResponse response = RESOURCES.client().resource(RUTA_BUSQUEDA)
                 .queryParam("token", tokenValido)
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
 
         long idUsuarioEsperado = 0;
@@ -144,10 +142,10 @@ public class BusquedaResourceTest {
     @Test
     public void debeDevolverElNombreDeUsuarioCuandoElTokenEsValido() {
         Token tokenTest = new Token(tokenValido, UsuarioBuilder.nuevoUsuario().generar());
-        when(tokenDAO.buscar(tokenValido)).thenReturn(Optional.of(tokenTest));
-        ClientResponse response = RESOURCES.client().resource("/busqueda")
+        Mockito.when(tokenDAO.buscar(tokenValido)).thenReturn(Optional.of(tokenTest));
+        ClientResponse response = RESOURCES.client().resource(RUTA_BUSQUEDA)
                 .queryParam("token", tokenValido)
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
                 .get(ClientResponse.class);
 
         String nombreUsuarioEsperado = "usuarioSenescyt";

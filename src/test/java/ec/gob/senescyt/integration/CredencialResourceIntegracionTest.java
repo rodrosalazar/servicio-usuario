@@ -24,7 +24,7 @@ import static ec.gob.senescyt.commons.helpers.ResourceTestHelper.assertErrorMess
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-public class CredencialResourceIntegracionTest extends BaseIntegracionTest {
+public class CredencialResourceIntegracionTest extends AbstractIntegracionTest {
 
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));

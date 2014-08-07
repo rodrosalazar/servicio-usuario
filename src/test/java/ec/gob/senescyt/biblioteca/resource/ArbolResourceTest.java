@@ -12,6 +12,7 @@ import org.hamcrest.MatcherAssert;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.util.Map;
 
@@ -19,14 +20,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class ArbolResourceTest {
 
-    private static ArbolDAO arbolDAO = mock(ArbolDAO.class);
+    private static ArbolDAO arbolDAO = Mockito.mock(ArbolDAO.class);
     private static ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
 
     @ClassRule
@@ -38,10 +35,10 @@ public class ArbolResourceTest {
 
     @Before
     public void setUp() {
-        reset(arbolDAO);
+        Mockito.reset(arbolDAO);
         client = RESOURCES.client();
         Arbol arbol = ArbolBuilder.nuevoArbol().generar();
-        when(arbolDAO.obtenerPorId(any())).thenReturn(arbol);
+        Mockito.when(arbolDAO.obtenerPorId(any())).thenReturn(arbol);
     }
 
     @Test
@@ -49,7 +46,7 @@ public class ArbolResourceTest {
         ClientResponse response = client.resource("/arboles")
                 .get(ClientResponse.class);
 
-        verify(arbolDAO).obtenerTodos();
+        Mockito.verify(arbolDAO).obtenerTodos();
         assertThat(response.getStatus(), is(200));
         Map arboles = response.getEntity(Map.class);
         MatcherAssert.assertThat(arboles.isEmpty(), is(not(true)));

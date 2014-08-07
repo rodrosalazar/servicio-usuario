@@ -23,7 +23,7 @@ import java.io.IOException;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class CantonResourceIntegracionTest extends BaseIntegracionTest {
+public class CantonResourceIntegracionTest extends AbstractIntegracionTest {
 
     private static final String ID_PROVINCIA_TEST = "80";
     private static final String NOMBRE_PROVINCIA_TEST = "PROVINCIA_TEST";

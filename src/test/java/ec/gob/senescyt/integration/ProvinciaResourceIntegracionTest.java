@@ -17,13 +17,13 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class ProvinciaResourceIntegracionTest extends BaseIntegracionTest {
+public class ProvinciaResourceIntegracionTest extends AbstractIntegracionTest {
 
     private static final String ID_PROVINCIA_TEST = "80";
     private static final String NOMBRE_PROVINCIA_TEST = "PROVINCIA_TEST";
@@ -75,7 +75,7 @@ public class ProvinciaResourceIntegracionTest extends BaseIntegracionTest {
         ClientResponse response = hacerGet("provincias");
 
         assertThat(response.getStatus(), is(200));
-        assertThat(response.getEntity(HashMap.class).size(), is(not(0)));
+        assertThat(response.getEntity(Map.class).size(), is(not(0)));
     }
 
     @Test

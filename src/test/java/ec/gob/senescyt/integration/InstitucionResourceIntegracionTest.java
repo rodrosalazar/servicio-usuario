@@ -9,14 +9,14 @@ import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.ClassRule;
 import org.junit.Test;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class InstitucionResourceIntegracionTest extends BaseIntegracionTest {
+public class InstitucionResourceIntegracionTest extends AbstractIntegracionTest {
 
     @ClassRule
     public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
@@ -40,8 +40,8 @@ public class InstitucionResourceIntegracionTest extends BaseIntegracionTest {
 
         assertThat(response.getStatus(), is(200));
 
-        List<UniversidadExtranjera> universidadesConvenioEncontradas =
-                (List) response.getEntity(HashMap.class).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_UNIVERSIDADES_CONVENIO.getNombre());
+        List<UniversidadExtranjera> universidadesConvenioEncontradas = (List<UniversidadExtranjera>)
+                response.getEntity(Map.class).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_UNIVERSIDADES_CONVENIO.getNombre());
 
         assertThat(universidadesConvenioEncontradas.size(), is(not(0)));
     }
@@ -52,8 +52,8 @@ public class InstitucionResourceIntegracionTest extends BaseIntegracionTest {
 
         assertThat(response.getStatus(), is(200));
 
-        List<UniversidadExtranjera> universidadesListadoEncontradas =
-                (List) response.getEntity(HashMap.class).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_UNIVERSIDADES_LISTADO.getNombre());
+        List<UniversidadExtranjera> universidadesListadoEncontradas = (List<UniversidadExtranjera>)
+                response.getEntity(Map.class).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_UNIVERSIDADES_LISTADO.getNombre());
 
         assertThat(universidadesListadoEncontradas.size(), is(not(0)));
     }

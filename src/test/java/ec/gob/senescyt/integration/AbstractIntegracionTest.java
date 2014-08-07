@@ -21,7 +21,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import java.io.File;
 import java.net.URISyntaxException;
 
-public abstract class BaseIntegracionTest {
+public abstract class AbstractIntegracionTest {
 
     protected static final String CONFIGURACION = "test-integracion.yml";
     protected SessionFactory sessionFactory;

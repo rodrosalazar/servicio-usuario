@@ -103,7 +103,7 @@ run {
 }
 
 test {
-    dependsOn pmdMain, findbugsMain, findbugsTest
+    dependsOn pmdMain, pmdTest, findbugsMain, findbugsTest
     exclude 'ec/gob/senescyt/contracts/**'
 }
 
@@ -207,8 +207,6 @@ pmd {
             'typeresolution',
             'unusedcode',
     ]
-    // Don't include pmdTest checks for now
-    sourceSets = [sourceSets.main]
     ruleSetFiles = files('config/pmd/pmd.xml')
     targetJdk = '1.7'
 }

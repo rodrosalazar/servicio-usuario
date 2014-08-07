@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
+@SuppressWarnings("PMD.TooManyMethods")
 public class QuipuxValidatorTest {
 
     private static final String QUIPUX_VALIDO = "SENESCYT-DFAPO-2014-65946-MI";
@@ -99,7 +100,6 @@ public class QuipuxValidatorTest {
         Boolean esValido = quipuxValidator.isValid(QUIPUX_CON_LETRAS, null);
         assertThat(esValido, is(false));
     }
-
 
     @Test
     public void debeVerificarQueNumeroDeQuipuxNoContengaCaracteresEspeciales(){
