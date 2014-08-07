@@ -14,7 +14,6 @@ import ec.gob.senescyt.commons.filters.HeaderResponseFilter;
 import ec.gob.senescyt.commons.filters.RedirectFilter;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
-import ec.gob.senescyt.commons.resources.BlitzResource;
 import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import ec.gob.senescyt.titulos.core.*;
 import ec.gob.senescyt.titulos.core.Identificacion;
@@ -154,9 +153,6 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
         IdentificacionResource identificacionResource = new IdentificacionResource(credencialesDAO);
         environment.jersey().register(identificacionResource);
-
-        BlitzResource blitzResource = new BlitzResource();
-        environment.jersey().register(blitzResource);
 
         CredencialResource credencialResource = new CredencialResource(credencialesDAO, tokenDAO, mensajeErrorBuilder, servicioCredencial);
         environment.jersey().register(credencialResource);
