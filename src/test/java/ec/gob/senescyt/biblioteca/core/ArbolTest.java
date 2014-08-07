@@ -1,6 +1,5 @@
 package ec.gob.senescyt.biblioteca.core;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ec.gob.senescyt.biblioteca.Arbol;
 import ec.gob.senescyt.commons.builders.ArbolBuilder;

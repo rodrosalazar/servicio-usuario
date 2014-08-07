@@ -6,8 +6,6 @@ import ec.gob.senescyt.titulos.core.Canton;
 import ec.gob.senescyt.titulos.core.Provincia;
 import ec.gob.senescyt.titulos.dao.CantonDAO;
 import ec.gob.senescyt.titulos.dao.ProvinciaDAO;
-import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
-import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import org.junit.Before;
 import org.junit.Test;
 
