@@ -17,7 +17,7 @@ public class UniversidadExtranjeraTest {
     private UniversidadExtranjera universidadExtranjera;
 
     @Before
-    public void setup() {
+    public void setUp() {
         String id = "4001";
         String nombre = "AALTO UNIVERSIDAD";
         String codigoTipo = "00008";

@@ -17,7 +17,7 @@ public class CategoriaVisaTest {
     private CategoriaVisa categoriaVisa;
 
     @Before
-    public void setup() {
+    public void setUp() {
         String idCategoriaVisa = "99";
         String nombreCategoriaVisa = "CATEGORIA_VISA_DE_PRUEBA";
 

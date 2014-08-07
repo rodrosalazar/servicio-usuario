@@ -38,7 +38,6 @@ import javax.xml.ws.handler.soap.SOAPMessageContext;
 import java.util.Set;
 
 /**
- *
  * @author landrade
  */
 @SuppressWarnings({
@@ -52,13 +51,13 @@ public class HeaderHandler implements SOAPHandler<SOAPMessageContext> {
 
     DatosHeader dhLista = new DatosHeader();
 
-    public HeaderHandler(DatosHeader DHeader){
+    public HeaderHandler(DatosHeader datosHeader) {
 
-        dhLista.setDigest(DHeader.getDigest());
-        dhLista.setNonce(DHeader.getNonce());
-        dhLista.setFecha(DHeader.getFecha());
-        dhLista.setFechaf(DHeader.getFechaf());
-        dhLista.setUsuario(DHeader.getUsuario());
+        dhLista.setDigest(datosHeader.getDigest());
+        dhLista.setNonce(datosHeader.getNonce());
+        dhLista.setFecha(datosHeader.getFecha());
+        dhLista.setFechaf(datosHeader.getFechaf());
+        dhLista.setUsuario(datosHeader.getUsuario());
 
     }
 
@@ -66,7 +65,6 @@ public class HeaderHandler implements SOAPHandler<SOAPMessageContext> {
     public boolean handleMessage(SOAPMessageContext smc) {
 
         Boolean outboundProperty = (Boolean) smc.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
-
 
 
         if (outboundProperty.booleanValue()) {

@@ -17,7 +17,7 @@ public class CantonTest {
     private Canton canton;
 
     @Before
-    public void setup() {
+    public void setUp() {
         String idCanton = "9999";
         String nombreCanton = "CANTON_DE_PRUEBA";
 

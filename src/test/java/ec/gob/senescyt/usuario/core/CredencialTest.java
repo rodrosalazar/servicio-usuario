@@ -17,7 +17,7 @@ public class CredencialTest {
     private Credencial credencial;
 
     @Before
-    public void setup() {
+    public void setUp() {
         String contrasenia = "contrasenia hasheada";
         String username = "username";
 

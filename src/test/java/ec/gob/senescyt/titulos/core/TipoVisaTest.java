@@ -17,7 +17,7 @@ public class TipoVisaTest {
     private TipoVisa tipoVisa;
 
     @Before
-    public void setup() {
+    public void setUp() {
         String idTipoVisa = "9";
         String nombreTipoVisa = "TIPO_VISA_DE_PRUEBA";
 

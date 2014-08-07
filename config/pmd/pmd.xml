@@ -16,4 +16,8 @@
         <exclude name="MethodArgumentCouldBeFinal"/>
         <exclude name="LocalVariableCouldBeFinal"/>
     </rule>
+    <rule ref="rulesets/junit.xml">
+        <exclude name="TestClassWithoutTestCases"/>
+        <exclude name="JUnitTestsShouldIncludeAssert"/>
+    </rule>
 </ruleset>

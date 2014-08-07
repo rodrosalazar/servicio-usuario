@@ -8,6 +8,7 @@ apply plugin: 'application'
 apply plugin: 'gradle-one-jar'
 apply plugin: 'pmd'
 apply plugin: 'findbugs'
+//apply plugin: 'checkstyle'
 
 buildscript {
     repositories {
@@ -199,7 +200,6 @@ pmd {
             'codesize',
             'coupling',
             'imports',
-            'junit',
             'logging-java',
             'migrating',
             'strictexception',
@@ -209,7 +209,7 @@ pmd {
     ]
     // Don't include pmdTest checks for now
     sourceSets = [sourceSets.main]
-    ruleSetFiles = files('pmd-ruleset.xml')
+    ruleSetFiles = files('config/pmd/pmd.xml')
     targetJdk = '1.7'
 }
 
@@ -223,6 +223,35 @@ tasks.withType(FindBugs) {
         html.enabled = true
     }
 }
+
+/*
+checkstyle {
+    toolVersion = '5.7'
+}
+
+task checkstyleReport << {
+    if (file("$buildDir/reports/checkstyle/${checkType}.xml").exists()) {
+        ant.xslt(in: "$buildDir/reports/checkstyle/${checkType}.xml",
+                style:"config/checkstyle/checkstyle.xsl",
+                out:"$buildDir/reports/checkstyle/checkstyle_${checkType}.html"
+        )
+    }
+}
+
+gradle.taskGraph.afterTask {Task task, TaskState state ->
+    if(state.failure) {
+        if (task.name in ['checkstyleMain', 'checkstyleTest']) {
+            checkstyleReport {
+                def matcher = task.name =~ /^checkstyle(.*)$/
+                if (matcher.matches()) {
+                    checkType = matcher.group(1).toLowerCase()
+                }
+            }
+            checkstyleReport.execute()
+        }
+    }
+}
+*/
 
 compileJava {
     sourceCompatibility = '1.8'

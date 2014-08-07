@@ -17,7 +17,7 @@ public class PaisTest {
     private Pais pais;
 
     @Before
-    public void setup() {
+    public void setUp() {
         String idPais = "888101";
         String nombrePais = "Argentina";
 

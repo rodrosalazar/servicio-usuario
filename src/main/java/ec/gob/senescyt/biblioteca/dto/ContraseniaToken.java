@@ -22,7 +22,8 @@ public class ContraseniaToken {
     @NotEmpty
     private String contrasenia;
 
-    private ContraseniaToken() {};
+    private ContraseniaToken() {
+    }
 
     public ContraseniaToken(String contrasenia, String idToken) {
         this.contrasenia = contrasenia;

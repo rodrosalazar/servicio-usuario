@@ -17,7 +17,7 @@ public class InstitucionTest {
     private Institucion institucion;
 
     @Before
-    public void setup() {
+    public void setUp() {
         long idInstitucion = 1l;
         String nombreInstitucion = "ESPE";
         long regimenId = 1L;

@@ -17,7 +17,7 @@ public class ParroquiaTest {
     private Parroquia parroquia;
 
     @Before
-    public void setup() {
+    public void setUp() {
         String idParroquia = "999999";
         String nombreParroquia = "PARROQUIA_DE_PRUEBA";
 

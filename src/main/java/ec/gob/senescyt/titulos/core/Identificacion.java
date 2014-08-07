@@ -23,12 +23,12 @@ import javax.validation.constraints.Pattern;
 
 @Entity
 @Table(name = "identificaciones")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="tipoDocumento", discriminatorType= DiscriminatorType.STRING)
-@JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include= JsonTypeInfo.As.WRAPPER_OBJECT, property="type")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipoDocumento", discriminatorType = DiscriminatorType.STRING)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.WRAPPER_OBJECT, property = "type")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value=Cedula.class, name="cedula"),
-        @JsonSubTypes.Type(value=Pasaporte.class, name="pasaporte"),
+        @JsonSubTypes.Type(value = Cedula.class, name = "cedula"),
+        @JsonSubTypes.Type(value = Pasaporte.class, name = "pasaporte"),
 
 })
 public class Identificacion {

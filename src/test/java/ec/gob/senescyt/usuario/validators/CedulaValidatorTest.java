@@ -12,7 +12,7 @@ public class CedulaValidatorTest {
     private CedulaValidator cedulaValidator;
 
     @Before
-    public void setup(){
+    public void setUp(){
        cedulaValidator = new CedulaValidator();
     }
 

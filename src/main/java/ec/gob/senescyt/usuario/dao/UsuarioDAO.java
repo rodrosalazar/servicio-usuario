@@ -12,12 +12,13 @@ public class UsuarioDAO extends AbstractDAO<Usuario> {
         super(sessionFactory);
     }
 
-    public Usuario guardar(final Usuario usuario){
+    public Usuario guardar(final Usuario usuario) {
         return persist(usuario);
     }
 
-    public boolean isRegistradoNombreUsuario(String nombreUsuario){
-        Query query = currentSession().createQuery("SELECT COUNT(*) FROM Usuario u WHERE u.nombreUsuario = :nombreUsuario");
+    public boolean isRegistradoNombreUsuario(String nombreUsuario) {
+        Query query = currentSession().createQuery(
+                "SELECT COUNT(*) FROM Usuario u WHERE u.nombreUsuario = :nombreUsuario");
         query.setParameter("nombreUsuario", nombreUsuario);
 
         Long usuariosRegistrados = (Long) query.uniqueResult();
@@ -26,8 +27,9 @@ public class UsuarioDAO extends AbstractDAO<Usuario> {
 
     }
 
-    public boolean isRegistradoNumeroIdentificacion(String numeroIdentificacion){
-        Query query = currentSession().createQuery("SELECT COUNT(*) FROM Usuario u WHERE u.identificacion.numeroIdentificacion = :numeroIdentificacion");
+    public boolean isRegistradoNumeroIdentificacion(String numeroIdentificacion) {
+        Query query = currentSession().createQuery(
+                "SELECT COUNT(*) FROM Usuario u WHERE u.identificacion.numeroIdentificacion = :numeroIdentificacion");
         query.setParameter("numeroIdentificacion", numeroIdentificacion);
 
         Long usuariosRegistrados = (Long) query.uniqueResult();

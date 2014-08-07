@@ -40,11 +40,11 @@ public class ServicioCedula {
             }
             DatosHeader datosHeader = construirDatosHeader(validarPermisoRespuesta);
 
-            WSRegistroCivilConsultaCedula_Service wsRegistroCivilConsultaCedula_service = new WSRegistroCivilConsultaCedula_Service();
+            WSRegistroCivilConsultaCedula_Service wsRegistroCivilConsultaCedulaService = new WSRegistroCivilConsultaCedula_Service();
             HeaderHandlerResolver headerHandlerResolver = new HeaderHandlerResolver(datosHeader);
-            wsRegistroCivilConsultaCedula_service.setHandlerResolver(headerHandlerResolver);
+            wsRegistroCivilConsultaCedulaService.setHandlerResolver(headerHandlerResolver);
 
-            WSRegistroCivilConsultaCedula consultarCedulaRegistroCivil = wsRegistroCivilConsultaCedula_service.getWSRegistroCivilConsultaCedulaPort();
+            WSRegistroCivilConsultaCedula consultarCedulaRegistroCivil = wsRegistroCivilConsultaCedulaService.getWSRegistroCivilConsultaCedulaPort();
             Cedula respuesta = consultarCedulaRegistroCivil.busquedaPorCedula(cedula, configuracionBSG.getUsuario(), configuracionBSG.getContrasenia());
 
             if (respuesta.getCodigoError().equals("000")) {

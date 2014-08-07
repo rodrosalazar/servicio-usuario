@@ -21,7 +21,7 @@ public class TokenTest {
     private Token token;
 
     @Before
-    public void setup() {
+    public void setUp() {
         long idInstitucion = 1l;
         Usuario usuario = new Usuario(new Identificacion(TipoDocumento.CEDULA, "1718642174"),
                 new Nombre("Nelson", "Alberto", "Jumbo", "Hidalgo"),

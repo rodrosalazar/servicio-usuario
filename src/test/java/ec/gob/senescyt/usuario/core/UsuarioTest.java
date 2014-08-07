@@ -21,7 +21,7 @@ public class UsuarioTest {
     private Usuario usuario;
 
     @Before
-    public void setup() {
+    public void setUp() {
         long idInstitucion = 1l;
 
         usuario = new Usuario(new Identificacion(TipoDocumento.CEDULA, "1718642174"),

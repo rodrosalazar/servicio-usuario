@@ -18,17 +18,17 @@ public class CedulaValidator {
             return false;
         }
 
-        if(!NumberUtils.isNumber(cedula)){
+        if (!NumberUtils.isNumber(cedula)) {
             return false;
         }
 
-        if(!isValidaProvincia(cedula)) {
+        if (!isValidaProvincia(cedula)) {
             return false;
         }
 
         Integer verificadorPrivado = Integer.parseInt(String.valueOf(cedula.charAt(2)));
 
-        if(verificadorPrivado > 5 && verificadorPrivado < 9 ){
+        if (verificadorPrivado > 5 && verificadorPrivado < 9) {
             return false;
         }
 
@@ -46,8 +46,10 @@ public class CedulaValidator {
     }
 
     private static boolean verificarPersonaNatural(String cedula) {
-        int totalEven = 0; // pares
-        int totalOdd = 0; // impares
+        // pares
+        int totalEven = 0;
+        // impares
+        int totalOdd = 0;
 
         // la ultima posicion no cuenta solo es verificador
         int totalValidNumbers = cedula.length() - 1;
@@ -55,13 +57,15 @@ public class CedulaValidator {
 
         for (int i = 0; i < totalValidNumbers; i++) {
             int digit = Integer.parseInt(String.valueOf(cedula.charAt(i)));
-            if (esPar(i)) {// si son pares
+            // si son pares
+            if (esPar(i)) {
                 int product = digit * MULTIPLICADOR;
                 if (product >= LIMITE_DECENA) {
                     product = product - 9;
                 }
                 totalEven += product;
-            } else { // si son impares
+                // si son impares
+            } else {
                 totalOdd += digit;
             }
         }
@@ -96,7 +100,7 @@ public class CedulaValidator {
     }
 
     private static boolean verificarPersonaJuridica(String cedula) {
-        int[] coeficientes = { 4, 3, 2, 7, 6, 5, 4, 3, 2 };
+        int[] coeficientes = {4, 3, 2, 7, 6, 5, 4, 3, 2};
         int constante = 11;
 
         // verifica que el último dígito de la cédula sea válido
@@ -113,7 +117,8 @@ public class CedulaValidator {
             suma += digitos.get(i);
         }
 
-        int aux, resp;
+        int aux;
+        int resp;
 
         aux = suma % constante;
         resp = constante - aux;

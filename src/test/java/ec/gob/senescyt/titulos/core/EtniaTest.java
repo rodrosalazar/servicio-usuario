@@ -17,7 +17,7 @@ public class EtniaTest {
     private Etnia etnia;
 
     @Before
-    public void setup() {
+    public void setUp() {
         String idEtnia = "99";
         String nombreEtnia = "ETNIA_DE_PRUEBA";
 

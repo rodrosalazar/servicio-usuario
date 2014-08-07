@@ -17,7 +17,7 @@ public class ProvinciaTest {
     private Provincia provincia;
 
     @Before
-    public void setup() {
+    public void setUp() {
         String idProvincia = "1";
         String nombreProvincia = "Azuay";
 

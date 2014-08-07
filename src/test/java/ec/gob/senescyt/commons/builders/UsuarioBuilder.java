@@ -23,8 +23,8 @@ public class UsuarioBuilder {
     public String emailInstitucional = "test@example.com";
     public String numeroAutorizacionQuipux = "SENESCYT-DFAPO-2014-65946-MI";
     public DateTime fechaDeVigencia = new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay();
-    public Long idInstitucion = 1l;
-    public List<Long> perfiles = newArrayList(1l);
+    public Long idInstitucion = 1L;
+    public List<Long> perfiles = newArrayList(1L);
     public String nombreUsuario = "usuarioSenescyt";
 
     private static UsuarioBuilder usuarioBuilder;

@@ -19,7 +19,7 @@ import static org.fest.assertions.api.Assertions.assertThat;
 public class CatalogosResourceTest {
 
     @ClassRule
-    public static final ResourceTestRule resources = ResourceTestRule.builder()
+    public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
             .addResource(new CatalogosResource(new ConstructorRespuestas()))
             .build();
 
@@ -27,7 +27,7 @@ public class CatalogosResourceTest {
 
     @Before
     public void setUp() {
-        client = resources.client();
+        client = RESOURCES.client();
     }
 
     @Test
