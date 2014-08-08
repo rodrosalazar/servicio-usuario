@@ -1,5 +1,6 @@
 package ec.gob.senescyt.usuario.resources;
 
+import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.usuario.core.Credencial;
 import ec.gob.senescyt.usuario.dao.CredencialDAO;
 import ec.gob.senescyt.usuario.dto.CredencialLogin;
@@ -22,10 +23,12 @@ public class LoginResource {
 
     private CredencialDAO credencialDAO;
     private ServicioCredencial servicioCredencial;
+    private MensajeErrorBuilder mensajeErrorBuilder;
 
-    public LoginResource(CredencialDAO credencialDAO, ServicioCredencial servicioCredencial) {
+    public LoginResource(CredencialDAO credencialDAO, ServicioCredencial servicioCredencial, MensajeErrorBuilder mensajeErrorBuilder) {
         this.credencialDAO = credencialDAO;
         this.servicioCredencial = servicioCredencial;
+        this.mensajeErrorBuilder = mensajeErrorBuilder;
     }
 
 
@@ -35,9 +38,11 @@ public class LoginResource {
         Credencial credencialAlmacenada = credencialDAO.obtenerPorNombreUsuario(credencialLogin.getNombreUsuario());
         boolean esCredencialValido = servicioCredencial.verificarContrasenia(credencialLogin.getContrasenia(), credencialAlmacenada.getHash());
 
-        if(esCredencialValido) {
-            return Response.status(CREATED).build();
+        if (!esCredencialValido) {
+           String entidadError = mensajeErrorBuilder.mensajeLoginIncorrecto();
+            return Response.status(BAD_REQUEST).entity(entidadError).build();
+//            return Response.status(BAD_REQUEST).build();
         }
-        return Response.status(BAD_REQUEST).build();
+        return Response.status(CREATED).build();
     }
 }

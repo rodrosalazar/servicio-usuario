@@ -36,6 +36,10 @@ public class MensajeErrorBuilder {
                 lectorArchivoDePropiedades.leerPropiedad(MensajesErrorEnum.MENSAJE_ERROR_NUMERO_IDENTIFICACION_YA_HA_SIDO_REGISTRADO.getKey());
     }
 
+    public String mensajeLoginIncorrecto(){
+        return lectorArchivoDePropiedades.leerPropiedad(MensajesErrorEnum.MENSAJE_ERROR_LOGIN.getKey());
+    }
+
     public Map<String, List<String>> construirErrorCampo(String campo, MensajesErrorEnum mensajeError) {
         Map<String, List<String>> entidadRespuesta = new HashMap<>();
         entidadRespuesta.put("errors", newArrayList(campo + " " +

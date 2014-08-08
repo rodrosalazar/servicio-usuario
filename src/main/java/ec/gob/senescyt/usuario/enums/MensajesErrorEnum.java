@@ -6,7 +6,8 @@ public enum MensajesErrorEnum {
     MENSAJE_ERROR_CEDULA_INVALIDA("ec.gob.senescyt.error.numeroIdentificacion"),
     MENSAJE_ERROR_NUMERO_IDENTIFICACION_YA_HA_SIDO_REGISTRADO("ec.gob.senescyt.error.nombreUsuarioExistente"),
     MENSAJE_ERROR_NOMBRE_USUARIO_YA_HA_SIDO_REGISTRADO("ec.gob.senescyt.error.nombreUsuarioExistente"),
-    MENSAJE_ERROR_TOKEN("ec.gob.senescyt.error.token");
+    MENSAJE_ERROR_TOKEN("ec.gob.senescyt.error.token"),
+    MENSAJE_ERROR_LOGIN("ec.gob.senescyt.error.login");
     private String key;
 
     private MensajesErrorEnum(final String baseName){
