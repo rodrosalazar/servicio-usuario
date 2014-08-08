@@ -2,7 +2,7 @@ package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ec.gob.senescyt.commons.serializers.JSONFechaDeserializer;
+import ec.gob.senescyt.commons.deserializers.JSONFechaDeserializer;
 import ec.gob.senescyt.commons.serializers.JSONFechaSerializer;
 import ec.gob.senescyt.usuario.validators.annotations.FechaVigenciaValida;
 import ec.gob.senescyt.usuario.validators.annotations.IdentificacionValida;

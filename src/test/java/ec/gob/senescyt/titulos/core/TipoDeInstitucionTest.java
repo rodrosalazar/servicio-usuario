@@ -16,6 +16,14 @@ public class TipoDeInstitucionTest {
     @Test
     public void debeSerializarTiposdeInstitucionAJSON() throws IOException {
         String actual = MAPPER.writeValueAsString(TipoDeInstitucion.PUBLICA);
-        assertThat(actual, is(fixture("fixtures/tipos_institucion_publica.json")));
+        assertThat(actual, is(fixture("fixtures/tipos_institucion_publica_serializada.json")));
+    }
+
+    @Test
+    public void debeDeserializarTiposdeInstitucionDesdeJSON() throws IOException {
+        TipoDeInstitucion tipoDeInstitucionDeserializada =
+                MAPPER.readValue(fixture("fixtures/tipos_institucion_publica_para_deserializar.json"), TipoDeInstitucion.class);
+
+        assertThat(tipoDeInstitucionDeserializada, is(TipoDeInstitucion.PUBLICA));
     }
 }

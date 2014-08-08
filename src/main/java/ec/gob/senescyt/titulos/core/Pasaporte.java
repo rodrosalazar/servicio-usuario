@@ -3,7 +3,7 @@ package ec.gob.senescyt.titulos.core;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import ec.gob.senescyt.commons.serializers.JSONFechaDeserializer;
+import ec.gob.senescyt.commons.deserializers.JSONFechaDeserializer;
 import ec.gob.senescyt.commons.serializers.JSONFechaSerializer;
 import ec.gob.senescyt.titulos.validators.anotaciones.VigenciaVisaValida;
 import ec.gob.senescyt.usuario.enums.TipoDocumento;

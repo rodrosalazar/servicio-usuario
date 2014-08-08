@@ -1,4 +1,4 @@
-package ec.gob.senescyt.commons.serializers;
+package ec.gob.senescyt.commons.deserializers;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
