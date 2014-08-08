@@ -210,11 +210,12 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
     private void registrarFiltros(Environment environment) {
         environment.jersey().getResourceConfig().getContainerResponseFilters().add(new HeaderResponseFilter(StandardCharsets.UTF_8.name()));
-        environment.jersey().getResourceConfig().getContainerRequestFilters().add(RedirectFilter.class);
 
         environment.servlets().addFilter("cors-filter", CrossOriginFilter.class)
                 .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
 
+        environment.servlets().addFilter("redirect-filter", RedirectFilter.class)
+                .addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
     }
 
     @VisibleForTesting
