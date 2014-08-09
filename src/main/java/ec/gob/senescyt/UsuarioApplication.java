@@ -78,6 +78,7 @@ import io.dropwizard.Application;
 import io.dropwizard.auth.oauth.OAuthProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
+import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
@@ -122,90 +123,115 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         bootstrap.addBundle(flywayBundle);
     }
 
-
     @Override
     public void run(UsuarioConfiguration configuration, Environment environment) throws Exception {
-        PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory());
-        UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory());
-        InstitucionDAO institucionDAO = new InstitucionDAO(getSessionFactory());
-        ClasificacionDAO clasificacionDAO = new ClasificacionDAO(getSessionFactory());
-        PaisDAO paisDAO = new PaisDAO(getSessionFactory());
-        ProvinciaDAO provinciaDAO = new ProvinciaDAO(getSessionFactory());
-        CantonDAO cantonDAO = new CantonDAO(getSessionFactory());
-        ParroquiaDAO parroquiaDAO = new ParroquiaDAO(getSessionFactory());
-        TipoVisaDAO tipoVisaDAO = new TipoVisaDAO(getSessionFactory());
-        CategoriaVisaDAO categoriaVisaDAO = new CategoriaVisaDAO(getSessionFactory());
-        EtniaDAO etniaDAO = new EtniaDAO(getSessionFactory());
+        JerseyEnvironment jerseyEnvironment = environment.jersey();
         ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
-        PortadorTituloDAO portadorTituloDAO = new PortadorTituloDAO(getSessionFactory());
-        ArbolDAO arbolDAO = new ArbolDAO(getSessionFactory());
-        DespachadorEmail despachadorEmail = new DespachadorEmail(configuration.getConfiguracionEmail());
-        UniversidadExtranjeraDAO universidadExtranjeraDAO = new UniversidadExtranjeraDAO(getSessionFactory());
-        TokenDAO tokenDAO = new TokenDAO(getSessionFactory());
-        CredencialDAO credencialesDAO = new CredencialDAO(getSessionFactory());
 
-        ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG(), provinciaDAO);
-        ServicioCredencial servicioCredencial = new ServicioCredencial();
-
-        PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
-        environment.jersey().register(perfilResource);
-
-        CedulaValidator cedulaValidator = new CedulaValidator();
-        LectorArchivoDePropiedades lectorPropiedadesValidacion = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
-        LectorArchivoDePropiedades lectorPropiedadesEmail = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_PROPIEDADES_EMAIL.getBaseName());
-        MensajeErrorBuilder mensajeErrorBuilder = new MensajeErrorBuilder(lectorPropiedadesValidacion);
-        ConstructorContenidoEmail constructorContenidoEmail = new ConstructorContenidoEmail();
-
-        UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion, despachadorEmail, tokenDAO, lectorPropiedadesEmail, constructorContenidoEmail);
-        environment.jersey().register(usuarioResource);
-
-        InstitucionResource institucionResource = new InstitucionResource(institucionDAO,constructorRespuestas,universidadExtranjeraDAO);
-        environment.jersey().register(institucionResource);
-
-        LimpiezaResource limpiezaResource = new LimpiezaResource(usuarioDAO, perfilDAO);
-        environment.jersey().register(limpiezaResource);
-
-        ClasificacionResource clasificacionResource = new ClasificacionResource(clasificacionDAO);
-        environment.jersey().register(clasificacionResource);
-
-        PaisResource paisResource = new PaisResource(paisDAO, constructorRespuestas);
-        environment.jersey().register(paisResource);
-
-        ProvinciaResource provinciaResource = new ProvinciaResource(provinciaDAO, cantonDAO, constructorRespuestas);
-        environment.jersey().register(provinciaResource);
-
-        CantonResource cantonResource = new CantonResource(parroquiaDAO, constructorRespuestas);
-        environment.jersey().register(cantonResource);
-
-        TipoDeVisaResource tipoDeVisaResource = new TipoDeVisaResource(tipoVisaDAO, categoriaVisaDAO, constructorRespuestas);
-        environment.jersey().register(tipoDeVisaResource);
-
-        EtniaResource etniaResource = new EtniaResource(etniaDAO, constructorRespuestas);
-        environment.jersey().register(etniaResource);
-
-        TituloExtranjeroResource tituloExtranjeroResource = new TituloExtranjeroResource(portadorTituloDAO);
-        environment.jersey().register(tituloExtranjeroResource);
-
-        ArbolResource arbolResource = new ArbolResource(arbolDAO, constructorRespuestas);
-        environment.jersey().register(arbolResource);
-
-        BusquedaResource busquedaResource = new BusquedaResource(servicioCedula, tokenDAO);
-        environment.jersey().register(busquedaResource);
-
-        IdentificacionResource identificacionResource = new IdentificacionResource(credencialesDAO);
-        environment.jersey().register(identificacionResource);
-
-        CredencialResource credencialResource = new CredencialResource(credencialesDAO, tokenDAO, mensajeErrorBuilder, servicioCredencial);
-        environment.jersey().register(credencialResource);
-
-        CatalogosResource catalagosResource = new CatalogosResource(constructorRespuestas);
-        environment.jersey().register(catalagosResource);
+        configurarBiblioteca(jerseyEnvironment, constructorRespuestas);
+        configurarCatalogos(jerseyEnvironment, constructorRespuestas);
+        configurarCuenta(jerseyEnvironment, constructorRespuestas, configuration);
+        configurarTitulos(jerseyEnvironment);
+        configurarLimpieza(jerseyEnvironment);
 
         registrarFiltros(environment);
 
         registrarValidacionExceptionMapper(environment);
 
-        environment.jersey().register(new OAuthProvider<>(new UsuarioAuthenticator(), "SENESCYT"));
+        jerseyEnvironment.register(new OAuthProvider<>(new UsuarioAuthenticator(), "SENESCYT"));
+    }
+
+    private void configurarLimpieza(JerseyEnvironment jerseyEnvironment) {
+        PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory());
+        UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory());
+
+        LimpiezaResource limpiezaResource = new LimpiezaResource(usuarioDAO, perfilDAO);
+        jerseyEnvironment.register(limpiezaResource);
+    }
+
+    private void configurarTitulos(JerseyEnvironment jerseyEnvironment) {
+        PortadorTituloDAO portadorTituloDAO = new PortadorTituloDAO(getSessionFactory());
+
+        TituloExtranjeroResource tituloExtranjeroResource = new TituloExtranjeroResource(portadorTituloDAO);
+        jerseyEnvironment.register(tituloExtranjeroResource);
+    }
+
+    private void configurarCuenta(JerseyEnvironment jerseyEnvironment, ConstructorRespuestas constructorRespuestas,
+                                  UsuarioConfiguration configuration) {
+
+        CredencialDAO credencialesDAO = new CredencialDAO(getSessionFactory());
+        UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory());
+        CedulaValidator cedulaValidator = new CedulaValidator();
+        LectorArchivoDePropiedades lectorPropiedadesValidacion = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
+        TokenDAO tokenDAO = new TokenDAO(getSessionFactory());
+        LectorArchivoDePropiedades lectorPropiedadesEmail = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_PROPIEDADES_EMAIL.getBaseName());
+        ConstructorContenidoEmail constructorContenidoEmail = new ConstructorContenidoEmail();
+        PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory());
+        MensajeErrorBuilder mensajeErrorBuilder = new MensajeErrorBuilder(lectorPropiedadesValidacion);
+        ServicioCredencial servicioCredencial = new ServicioCredencial();
+        ProvinciaDAO provinciaDAO = new ProvinciaDAO(getSessionFactory());
+        ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG(), provinciaDAO);
+        DespachadorEmail despachadorEmail = new DespachadorEmail(configuration.getConfiguracionEmail());
+
+        UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion,
+                despachadorEmail, tokenDAO, lectorPropiedadesEmail, constructorContenidoEmail);
+        jerseyEnvironment.register(usuarioResource);
+
+        PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
+        jerseyEnvironment.register(perfilResource);
+
+        IdentificacionResource identificacionResource = new IdentificacionResource(credencialesDAO);
+        jerseyEnvironment.register(identificacionResource);
+
+        CredencialResource credencialResource = new CredencialResource(credencialesDAO, tokenDAO, mensajeErrorBuilder, servicioCredencial);
+        jerseyEnvironment.register(credencialResource);
+
+        BusquedaResource busquedaResource = new BusquedaResource(servicioCedula, tokenDAO);
+        jerseyEnvironment.register(busquedaResource);
+    }
+
+    private void configurarCatalogos(JerseyEnvironment jerseyEnvironment, ConstructorRespuestas constructorRespuestas) {
+        InstitucionDAO institucionDAO = new InstitucionDAO(getSessionFactory());
+        ClasificacionDAO clasificacionDAO = new ClasificacionDAO(getSessionFactory());
+        PaisDAO paisDAO = new PaisDAO(getSessionFactory());
+        CantonDAO cantonDAO = new CantonDAO(getSessionFactory());
+        ParroquiaDAO parroquiaDAO = new ParroquiaDAO(getSessionFactory());
+        TipoVisaDAO tipoVisaDAO = new TipoVisaDAO(getSessionFactory());
+        CategoriaVisaDAO categoriaVisaDAO = new CategoriaVisaDAO(getSessionFactory());
+        EtniaDAO etniaDAO = new EtniaDAO(getSessionFactory());
+        UniversidadExtranjeraDAO universidadExtranjeraDAO = new UniversidadExtranjeraDAO(getSessionFactory());
+        ProvinciaDAO provinciaDAO = new ProvinciaDAO(getSessionFactory());
+
+        PaisResource paisResource = new PaisResource(paisDAO, constructorRespuestas);
+        jerseyEnvironment.register(paisResource);
+
+        InstitucionResource institucionResource = new InstitucionResource(institucionDAO, constructorRespuestas, universidadExtranjeraDAO);
+        jerseyEnvironment.register(institucionResource);
+
+        ClasificacionResource clasificacionResource = new ClasificacionResource(clasificacionDAO);
+        jerseyEnvironment.register(clasificacionResource);
+
+        ProvinciaResource provinciaResource = new ProvinciaResource(provinciaDAO, cantonDAO, constructorRespuestas);
+        jerseyEnvironment.register(provinciaResource);
+
+        CantonResource cantonResource = new CantonResource(parroquiaDAO, constructorRespuestas);
+        jerseyEnvironment.register(cantonResource);
+
+        TipoDeVisaResource tipoDeVisaResource = new TipoDeVisaResource(tipoVisaDAO, categoriaVisaDAO, constructorRespuestas);
+        jerseyEnvironment.register(tipoDeVisaResource);
+
+        EtniaResource etniaResource = new EtniaResource(etniaDAO, constructorRespuestas);
+        jerseyEnvironment.register(etniaResource);
+
+        CatalogosResource catalagosResource = new CatalogosResource(constructorRespuestas);
+        jerseyEnvironment.register(catalagosResource);
+    }
+
+    private void configurarBiblioteca(JerseyEnvironment jerseyEnvironment, ConstructorRespuestas constructorRespuestas) {
+        ArbolDAO arbolDAO = new ArbolDAO(getSessionFactory());
+
+        ArbolResource arbolResource = new ArbolResource(arbolDAO, constructorRespuestas);
+        jerseyEnvironment.register(arbolResource);
     }
 
     private void registrarFiltros(Environment environment) {
