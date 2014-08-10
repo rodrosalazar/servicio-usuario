@@ -11,6 +11,7 @@ import java.io.IOException;
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
 
 public class InformacionAcademicaTest {
     private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
@@ -39,4 +40,24 @@ public class InformacionAcademicaTest {
         assertThat(actual, is(fixture("fixtures/informacion_academica_con_id_serializada.json")));
     }
 
+    @Test
+    public void debenSerIgualesDosObjectosConLosMismoValores() {
+        InformacionAcademica otraInformacionAcademica = InformacionAcademicaBuilder
+                                                            .nuevaInformacionAcademica()
+                                                            .generar();
+
+        assertThat(informacionAcademica, is(otraInformacionAcademica));
+    }
+
+    @Test
+    public void debeSerIgualesObjectoConsigoMismo() {
+        assertThat(informacionAcademica, is(informacionAcademica));
+    }
+
+    @Test
+    public void debeNoSerIgualesCuandoUnObjectoEsNulo() {
+        InformacionAcademica informacionAcademicaNula = null;
+
+        assertThat(informacionAcademica, is(not(informacionAcademicaNula)));
+    }
 }

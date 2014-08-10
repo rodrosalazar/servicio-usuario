@@ -8,6 +8,7 @@ apply plugin: 'application'
 apply plugin: 'gradle-one-jar'
 apply plugin: 'pmd'
 apply plugin: 'findbugs'
+apply plugin: 'jacoco'
 //apply plugin: 'checkstyle'
 
 buildscript {
@@ -257,4 +258,9 @@ compileJava {
     targetCompatibility = '1.8'
     dependsOn += generateJavaFromWsdl
     source generateJavaFromWsdl.outputs.files, sourceSets.main.java
+}
+
+jacoco {
+    toolVersion = '0.7.1.201405082137'
+    exclude = ['ec/gob/bsg/accesobsgservice/**', 'ec/gob/registrocivil/consultacedula/**']
 }

@@ -23,7 +23,6 @@ public class ExpedienteTest {
         expediente = new Expediente(PortadorTituloBuilder.nuevoPortadorTitulo().con(
                 p -> p.identificacion = new Cedula("1111111116")).generar(),
                 InformacionAcademicaBuilder.nuevaInformacionAcademica().generar());
-
     }
 
     @Test

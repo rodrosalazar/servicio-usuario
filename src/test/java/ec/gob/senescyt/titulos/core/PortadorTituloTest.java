@@ -26,8 +26,6 @@ public class PortadorTituloTest {
 
     @Before
     public void setUp() {
-
-
         portadorTituloConCedula = PortadorTituloBuilder.nuevoPortadorTitulo().con(
                 p -> p.identificacion = new Cedula("1111111116")
         ).generar();
@@ -35,7 +33,6 @@ public class PortadorTituloTest {
         portadorTituloConPasaporte = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p->p.identificacion =  new Pasaporte(numeroIdentificacion,fechaFinVigenciaPasaporteValida,fechaFinVigenciaVisaValida, "9",false))
                 .generar();
-
     }
 
     @Test

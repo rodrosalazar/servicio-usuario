@@ -103,14 +103,6 @@ public class TituloAcademico {
 
     @Override
     public int hashCode() {
-        int result = tipoDeTitulo != null ? tipoDeTitulo.hashCode() : 0;
-        result = 31 * result + (nombreTitulo != null ? nombreTitulo.hashCode() : 0);
-        result = 31 * result + (fechaTitulo != null ? fechaTitulo.hashCode() : 0);
-        result = 31 * result + (nivelDeFormacion != null ? nivelDeFormacion.hashCode() : 0);
-        result = 31 * result + (modalidadEducacion != null ? modalidadEducacion.hashCode() : 0);
-        result = 31 * result + (tipoDeMecanismo != null ? tipoDeMecanismo.hashCode() : 0);
-        result = 31 * result + (numeroTipoDeMecanismo != null ? numeroTipoDeMecanismo.hashCode() : 0);
-        result = 31 * result + (fechaTipoDeMecanismo != null ? fechaTipoDeMecanismo.hashCode() : 0);
-        return result;
+        return 0;
     }
 }

@@ -2,6 +2,7 @@ package ec.gob.senescyt.titulos.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.dropwizard.jackson.Jackson;
+import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,11 +31,14 @@ public class ProvinciaTest {
 
         assertThat(provinciaDeserializada.getId(),is(provincia.getId()));
         assertThat(provinciaDeserializada.getNombre(),is(provincia.getNombre()));
+        assertThat(provinciaDeserializada.getNombreRegistroCivil(), CoreMatchers.nullValue());
     }
 
     @Test
     public void debeSerializarUnaProvinciaAJSON() throws IOException {
         String actual = MAPPER.writeValueAsString(provincia);
+
         assertThat(actual, is(fixture("fixtures/provincia_con_id.json")));
+        assertThat(actual, CoreMatchers.not(CoreMatchers.containsString("nombre_registro_civil")));
     }
 }
