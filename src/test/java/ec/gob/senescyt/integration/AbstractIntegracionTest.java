@@ -11,6 +11,7 @@ import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
 import org.junit.After;
@@ -30,6 +31,7 @@ public abstract class AbstractIntegracionTest {
     protected PerfilDAO perfilDAO;
     protected TokenDAO tokenDAO;
     private CredencialDAO credencialDAO;
+    private Session session;
 
     protected static String resourceFilePath(String resourceClassPathLocation) {
         try {
@@ -47,7 +49,8 @@ public abstract class AbstractIntegracionTest {
         perfilDAO = new PerfilDAO(sessionFactory);
         tokenDAO = new TokenDAO(sessionFactory);
 
-        ManagedSessionContext.bind(sessionFactory.openSession());
+        session = sessionFactory.openSession();
+        ManagedSessionContext.bind(session);
         limpiarTablas();
 
         client = new Client();
@@ -60,12 +63,12 @@ public abstract class AbstractIntegracionTest {
     }
 
     private void limpiarTablas() {
-        sessionFactory.getCurrentSession().flush();
+        session.flush();
         credencialDAO.limpiar();
         tokenDAO.limpiar();
         usuarioDAO.limpiar();
         perfilDAO.limpiar();
-        sessionFactory.getCurrentSession().flush();
+        session.disconnect();
     }
 
     protected abstract DropwizardAppRule<UsuarioConfiguration> getRule();
