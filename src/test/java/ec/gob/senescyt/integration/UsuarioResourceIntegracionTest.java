@@ -14,6 +14,7 @@ import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.enums.TipoDocumento;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.apache.commons.lang.RandomStringUtils;
+import org.hamcrest.CoreMatchers;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Before;
@@ -21,6 +22,7 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 import javax.ws.rs.core.MultivaluedMap;
+import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
@@ -226,5 +228,32 @@ public class UsuarioResourceIntegracionTest extends AbstractIntegracionTest {
         ClientResponse response = hacerPost("usuario", usuarioConPasaporteVacio);
 
         assertThat(response.getStatus(), is(400));
+    }
+
+    @Test
+    public void debeDevolverTodosLosUsuarios() {
+        Usuario usuarioA = UsuarioBuilder.nuevoUsuario()
+                .con(b -> b.nombreUsuario = "usuarioA")
+                .con(b -> b.perfiles = newArrayList(perfilGuardado.getId()))
+                .generar();
+        Usuario usuarioB = UsuarioBuilder.nuevoUsuario()
+                .con(b -> b.perfiles = newArrayList(perfilGuardado.getId()))
+                .con(b -> b.tipoDocumento = TipoDocumento.PASAPORTE)
+                .con(b -> b.numeroIdentificacion = "2222223")
+                .con(b -> b.nombreUsuario = "usuarioB")
+                .generar();
+
+        ClientResponse responseUsuarioA = hacerPost("usuario", usuarioA);
+        assertThat(responseUsuarioA.getStatus(), is(201));
+        ClientResponse responseUsuarioB = hacerPost("usuario", usuarioB);
+        System.out.println("ERROR " + responseUsuarioB.getEntity(String.class));
+        assertThat(responseUsuarioB.getStatus(), is(201));
+
+        ClientResponse response = hacerGet("usuario/todos");
+
+        assertThat(response.getStatus(), is(200));
+        List entity = response.getEntity(List.class);
+        assertThat(entity, CoreMatchers.notNullValue());
+        assertThat(entity.size(), is(2));
     }
 }

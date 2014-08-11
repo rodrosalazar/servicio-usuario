@@ -22,6 +22,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.List;
 import java.util.UUID;
 
 @Path("/usuario")
@@ -102,6 +103,14 @@ public class UsuarioResource {
         mandarConfirmacion(usuarioCreado);
 
         return Response.status(Response.Status.CREATED).entity(usuarioCreado).build();
+    }
+
+    @GET
+    @UnitOfWork
+    @Path("/todos")
+    public Response todos() {
+        List<Usuario> usuarios = usuarioDAO.obtenerTodos();
+        return Response.ok().entity(usuarios).build();
     }
 
     private void mandarConfirmacion(Usuario usuarioCreado) throws EmailException {

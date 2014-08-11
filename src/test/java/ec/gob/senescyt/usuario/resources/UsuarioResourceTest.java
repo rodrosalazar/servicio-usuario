@@ -19,6 +19,7 @@ import ec.gob.senescyt.usuario.enums.TipoDocumento;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import org.fest.assertions.api.Assertions;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.After;
@@ -33,6 +34,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -342,5 +344,23 @@ public class UsuarioResourceTest {
         assertThat(bandejaEntradaTest.size(), is(1));
 
         assertThat(response.getStatus(), is(201));
+    }
+
+    @Test
+    public void debeObtenerTodos() {
+        Usuario usuario = UsuarioBuilder.nuevoUsuario().generar();
+        when(usuarioDAO.obtenerTodos()).thenReturn(newArrayList(usuario));
+
+        ClientResponse response = client.resource("/usuario/todos")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .get(ClientResponse.class);
+
+        verify(usuarioDAO).obtenerTodos();
+
+        Assertions.assertThat(response.getStatus()).isEqualTo(200);
+
+        List<Usuario> resultado = response.getEntity(List.class);
+        Assertions.assertThat(resultado).isNotEmpty();
+        Assertions.assertThat(resultado.size()).isEqualTo(1);
     }
 }
