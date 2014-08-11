@@ -30,6 +30,7 @@ task deployQA(type: SshTask) {
         put 'build/libs/servicio-usuario-standalone.jar', targetDir
         put 'servicio-usuario-qa.yml', targetDir + 'servicio-usuario.yml'
         put 'sniese.keystore', targetDir
+        put 'aesKey.key', targetDir
         executeSudo 'service sniese restart', pty: true
     }
 }
