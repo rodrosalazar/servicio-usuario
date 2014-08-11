@@ -6,10 +6,11 @@ import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.UsuarioApplication;
 import ec.gob.senescyt.UsuarioConfiguration;
 import ec.gob.senescyt.commons.Constantes;
-import ec.gob.senescyt.usuario.dao.CredencialDAO;
+import ec.gob.senescyt.usuario.dao.NivelDeAccesoDAO;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
+import ec.gob.senescyt.usuario.dao.CredencialDAO;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -30,6 +31,7 @@ public abstract class AbstractIntegracionTest {
     protected UsuarioDAO usuarioDAO;
     protected PerfilDAO perfilDAO;
     protected TokenDAO tokenDAO;
+    protected NivelDeAccesoDAO nivelDeAccesoDAO;
     private CredencialDAO credencialDAO;
     private Session session;
 
@@ -48,6 +50,7 @@ public abstract class AbstractIntegracionTest {
         credencialDAO = new CredencialDAO(sessionFactory);
         perfilDAO = new PerfilDAO(sessionFactory);
         tokenDAO = new TokenDAO(sessionFactory);
+        nivelDeAccesoDAO = new NivelDeAccesoDAO(sessionFactory);
 
         session = sessionFactory.openSession();
         ManagedSessionContext.bind(session);
@@ -68,6 +71,7 @@ public abstract class AbstractIntegracionTest {
         tokenDAO.limpiar();
         usuarioDAO.limpiar();
         perfilDAO.limpiar();
+        nivelDeAccesoDAO.limpiar();
         session.disconnect();
     }
 
