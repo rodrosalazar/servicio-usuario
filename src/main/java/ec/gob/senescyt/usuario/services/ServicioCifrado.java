@@ -1,9 +1,8 @@
 package ec.gob.senescyt.usuario.services;
 
 import ec.gob.senescyt.commons.cifrado.GeneradorClavesSecretas;
+import ec.gob.senescyt.usuario.exceptions.CifradoErroneoException;
 import org.apache.commons.codec.binary.Base64;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
@@ -18,11 +17,8 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidParameterSpecException;
-import java.util.Arrays;
 
 public class ServicioCifrado {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ServicioCifrado.class);
 
     public static final String METODO_CIFRADO_AES = "AES/CBC/PKCS5Padding";
     private byte[] ivBytes;
@@ -30,43 +26,47 @@ public class ServicioCifrado {
     private SecretKeySpec secretKeySpec;
     private Cipher cipher;
 
-    public ServicioCifrado() {
+    public  ServicioCifrado() throws CifradoErroneoException {
         try {
             secretKeySpec = generadorClavesSecretas.generarClaveSecretaSpec();
-            cipher = Cipher.getInstance(METODO_CIFRADO_AES);
         } catch (IOException e) {
-            LOGGER.error(Arrays.toString(e.getStackTrace()));
-        } catch (NoSuchAlgorithmException e) {
-            LOGGER.error(Arrays.toString(e.getStackTrace()));
-        } catch (NoSuchPaddingException e) {
-            LOGGER.error(Arrays.toString(e.getStackTrace()));
+            throw new CifradoErroneoException(e.getMessage(), e);
         }
+    }
 
+    private Cipher getCipher() throws NoSuchPaddingException, NoSuchAlgorithmException {
+        if (cipher == null) {
+            cipher = Cipher.getInstance(METODO_CIFRADO_AES);
+        }
+        return cipher;
     }
 
 
-    public String cifrar(String cadenaPlana) throws InvalidKeyException, InvalidParameterSpecException, UnsupportedEncodingException, BadPaddingException, IllegalBlockSizeException {
-        cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
-        AlgorithmParameters params = cipher.getParameters();
-        ivBytes = params.getParameterSpec(IvParameterSpec.class).getIV();
-        byte[] encryptedTextBytes = cipher.doFinal(cadenaPlana.getBytes("UTF-8"));
+    public String cifrar(String cadenaPlana) throws CifradoErroneoException {
+        try {
 
-        return new Base64().encodeAsString(encryptedTextBytes);
+            getCipher().init(Cipher.ENCRYPT_MODE, secretKeySpec);
+            AlgorithmParameters params = cipher.getParameters();
+            ivBytes = params.getParameterSpec(IvParameterSpec.class).getIV();
+            byte[] encryptedTextBytes = cipher.doFinal(cadenaPlana.getBytes("UTF-8"));
+            return new Base64().encodeAsString(encryptedTextBytes);
+
+        } catch (IllegalBlockSizeException | BadPaddingException | UnsupportedEncodingException |
+                InvalidParameterSpecException | InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException e) {
+            throw new CifradoErroneoException(e.getMessage(), e);
+        }
     }
 
-    public String descifrar(String cadenaCifrada) throws InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException, UnsupportedEncodingException {
+    public String descifrar(String cadenaCifrada) throws CifradoErroneoException {
         byte[] cadenaCifradaBytes = new Base64().decodeBase64(cadenaCifrada);
 
-        cipher = Cipher.getInstance(METODO_CIFRADO_AES);
-        cipher.init(Cipher.DECRYPT_MODE,secretKeySpec,new IvParameterSpec(ivBytes));
-
         try {
+            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, new IvParameterSpec(ivBytes));
+
             return new String(cipher.doFinal(cadenaCifradaBytes), "UTF-8");
-        } catch (IllegalBlockSizeException e) {
-            LOGGER.error(Arrays.toString(e.getStackTrace()));
-        } catch (BadPaddingException e) {
-            LOGGER.error(Arrays.toString(e.getStackTrace()));
+        } catch (InvalidKeyException | InvalidAlgorithmParameterException|
+                BadPaddingException | IllegalBlockSizeException | UnsupportedEncodingException e) {
+            throw new CifradoErroneoException(e.getMessage(), e);
         }
-        return null;
     }
 }

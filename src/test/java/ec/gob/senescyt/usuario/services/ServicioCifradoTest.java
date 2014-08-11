@@ -1,16 +1,8 @@
 package ec.gob.senescyt.usuario.services;
 
+import ec.gob.senescyt.usuario.exceptions.CifradoErroneoException;
 import org.junit.Before;
 import org.junit.Test;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import java.io.UnsupportedEncodingException;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidParameterSpecException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -23,27 +15,27 @@ public class ServicioCifradoTest {
     private String cadenaCifrada;
 
     @Before
-    public void setUp(){
+    public void setUp() throws CifradoErroneoException {
         servicioCifrado = new ServicioCifrado();
         cadenaCifrada = null;
     }
 
     @Test
-    public void debeCifrarCadenaDeCaracteresYNoEsNulo() throws IllegalBlockSizeException, BadPaddingException, InvalidParameterSpecException, InvalidKeyException, UnsupportedEncodingException {
+    public void debeCifrarCadenaDeCaracteresYNoEsNulo() throws CifradoErroneoException {
         cadenaCifrada = servicioCifrado.cifrar(cadenaPlana);
 
         assertThat(cadenaCifrada, is(notNullValue()));
     }
 
     @Test
-    public void debeCifrarCadenaYNoEsVacio() throws IllegalBlockSizeException, BadPaddingException, InvalidParameterSpecException, InvalidKeyException, UnsupportedEncodingException {
+    public void debeCifrarCadenaYNoEsVacio() throws CifradoErroneoException {
         cadenaCifrada = servicioCifrado.cifrar(cadenaPlana);
 
         assertThat(cadenaCifrada.isEmpty(), is(false));
     }
 
     @Test
-    public void debeDescifrarCadenaYNoEsNulo() throws IllegalBlockSizeException, BadPaddingException, InvalidParameterSpecException, InvalidKeyException, UnsupportedEncodingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public void debeDescifrarCadenaYNoEsNulo() throws CifradoErroneoException {
         cadenaCifrada = servicioCifrado.cifrar(cadenaPlana);
         String cadenaDescifrada = servicioCifrado.descifrar(cadenaCifrada);
 
@@ -51,7 +43,7 @@ public class ServicioCifradoTest {
     }
 
     @Test
-    public void debeDescifrarCadenaYNoEsVacio() throws IllegalBlockSizeException, BadPaddingException, InvalidParameterSpecException, InvalidKeyException, UnsupportedEncodingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public void debeDescifrarCadenaYNoEsVacio() throws CifradoErroneoException {
         cadenaCifrada = servicioCifrado.cifrar(cadenaPlana);
         String cadenaDescifrada = servicioCifrado.descifrar(cadenaCifrada);
 
@@ -59,10 +51,26 @@ public class ServicioCifradoTest {
     }
 
     @Test
-    public void debeCadenaDescifradaSerIgualACadenaPlana() throws IllegalBlockSizeException, BadPaddingException, InvalidParameterSpecException, InvalidKeyException, UnsupportedEncodingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public void debeCadenaDescifradaSerIgualACadenaPlana() throws CifradoErroneoException {
         cadenaCifrada = servicioCifrado.cifrar(cadenaPlana);
         String cadenaDescifrada = servicioCifrado.descifrar(cadenaCifrada);
 
         assertThat(cadenaDescifrada, is(cadenaPlana));
+    }
+
+    @Test
+    public void alCifrarYDescifrar2CadenasConElMismoValorElResultadoDebeSerElMismo() throws CifradoErroneoException {
+        String cadena1 = "paraCifrar";
+        String cadena2 = "paraCifrar";
+
+        String cifradoCadena1 = servicioCifrado.cifrar(cadena1);
+
+        ServicioCifrado servicioCifrado1 = new ServicioCifrado();
+        String cifradoCadena2 = servicioCifrado1.cifrar(cadena2);
+
+        String cadenaDescifrada1 = servicioCifrado.descifrar(cifradoCadena1);
+        String cadenaDescifrada2 = servicioCifrado1.descifrar(cifradoCadena2);
+
+        assertThat(cadenaDescifrada1.equals(cadenaDescifrada2), is(true));
     }
 }

@@ -1,9 +1,10 @@
 package ec.gob.senescyt.usuario.resources;
 
 import com.google.common.base.Optional;
-import ec.gob.senescyt.usuario.core.Credencial;
-import ec.gob.senescyt.usuario.dao.CredencialDAO;
+import ec.gob.senescyt.usuario.dto.CredencialLogin;
 import ec.gob.senescyt.usuario.exceptions.LoginIncorrectoException;
+import ec.gob.senescyt.usuario.services.ServicioCredencial;
+import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.validation.Valid;
 import javax.ws.rs.POST;
@@ -16,18 +17,20 @@ import javax.ws.rs.core.Response;
 @Produces(MediaType.APPLICATION_JSON)
 public class IdentificacionResource {
 
-    private CredencialDAO credencialDAO;
+    private ServicioCredencial servicioCredencial;
 
-    public IdentificacionResource(CredencialDAO credencialDAO) {
-        this.credencialDAO = credencialDAO;
+    public IdentificacionResource(ServicioCredencial servicioCredencial) {
+        this.servicioCredencial = servicioCredencial;
     }
 
     @POST
-    public Response login(@Valid Credencial credencial) throws LoginIncorrectoException {
-        Optional token = credencialDAO.validar(credencial);
+    @UnitOfWork
+    public Response identificar(@Valid CredencialLogin credencialLogin) {
+
+        Optional token = servicioCredencial.obtenerTokenDeInicioDeSesion(credencialLogin);
 
         if (token.isPresent()) {
-            return Response.ok().build();
+            return Response.status(Response.Status.CREATED).entity(token.get()).build();
         }
 
         throw new LoginIncorrectoException();

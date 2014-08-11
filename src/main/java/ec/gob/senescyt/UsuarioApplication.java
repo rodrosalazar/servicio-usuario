@@ -62,6 +62,8 @@ import ec.gob.senescyt.usuario.dao.InstitucionDAO;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
+import ec.gob.senescyt.usuario.exceptions.CifradoErroneoException;
+import ec.gob.senescyt.usuario.exceptions.LoginIncorrectoMapper;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.resources.BusquedaResource;
 import ec.gob.senescyt.usuario.resources.CredencialResource;
@@ -72,6 +74,7 @@ import ec.gob.senescyt.usuario.resources.PerfilResource;
 import ec.gob.senescyt.usuario.resources.UsuarioResource;
 import ec.gob.senescyt.usuario.resources.management.LimpiezaResource;
 import ec.gob.senescyt.usuario.services.ServicioCedula;
+import ec.gob.senescyt.usuario.services.ServicioCifrado;
 import ec.gob.senescyt.usuario.services.ServicioCredencial;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.Application;
@@ -157,18 +160,19 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     }
 
     private void configurarCuenta(JerseyEnvironment jerseyEnvironment, ConstructorRespuestas constructorRespuestas,
-                                  UsuarioConfiguration configuration) {
+                                  UsuarioConfiguration configuration) throws CifradoErroneoException {
 
         CredencialDAO credencialesDAO = new CredencialDAO(getSessionFactory());
         UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory());
         CedulaValidator cedulaValidator = new CedulaValidator();
+        ServicioCifrado servicioCifrado = new ServicioCifrado();
         LectorArchivoDePropiedades lectorPropiedadesValidacion = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
         TokenDAO tokenDAO = new TokenDAO(getSessionFactory());
         LectorArchivoDePropiedades lectorPropiedadesEmail = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_PROPIEDADES_EMAIL.getBaseName());
         ConstructorContenidoEmail constructorContenidoEmail = new ConstructorContenidoEmail();
         PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory());
         MensajeErrorBuilder mensajeErrorBuilder = new MensajeErrorBuilder(lectorPropiedadesValidacion);
-        ServicioCredencial servicioCredencial = new ServicioCredencial();
+        ServicioCredencial servicioCredencial = new ServicioCredencial(credencialesDAO, servicioCifrado);
         ProvinciaDAO provinciaDAO = new ProvinciaDAO(getSessionFactory());
         ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG(), provinciaDAO);
         DespachadorEmail despachadorEmail = new DespachadorEmail(configuration.getConfiguracionEmail());
@@ -180,7 +184,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
         jerseyEnvironment.register(perfilResource);
 
-        IdentificacionResource identificacionResource = new IdentificacionResource(credencialesDAO);
+        IdentificacionResource identificacionResource = new IdentificacionResource(servicioCredencial);
         jerseyEnvironment.register(identificacionResource);
 
         CredencialResource credencialResource = new CredencialResource(credencialesDAO, tokenDAO, mensajeErrorBuilder, servicioCredencial);
@@ -255,6 +259,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         ValidacionExceptionMapper validacionExceptionMapper = new ValidacionExceptionMapper();
         environment.jersey().register(validacionExceptionMapper);
         environment.jersey().register(new DBConstraintViolationMapper());
+
+        LoginIncorrectoMapper loginIncorrectoMapper = new LoginIncorrectoMapper();
+        environment.jersey().register(loginIncorrectoMapper);
 
     }
 

@@ -1,6 +1,5 @@
 package ec.gob.senescyt.usuario.dao;
 
-import com.google.common.base.Optional;
 import ec.gob.senescyt.usuario.core.Credencial;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
@@ -14,10 +13,6 @@ public class CredencialDAO extends AbstractDAO<Credencial> {
         super(sessionFactory);
     }
 
-    public Optional validar(Credencial credencialesUsuario) {
-        return Optional.absent();
-    }
-
     public Credencial guardar(Credencial credencial) {
         return persist(credencial);
     }
@@ -25,6 +20,13 @@ public class CredencialDAO extends AbstractDAO<Credencial> {
     public void limpiar() {
         Query query = currentSession().createSQLQuery("TRUNCATE credenciales CASCADE");
         query.executeUpdate();
+    }
+
+    public void eliminar(final String nombreUsuario) {
+        Credencial credencial = (Credencial) currentSession().createCriteria(Credencial.class, "c")
+                .add(Restrictions.eq("nombreUsuario", nombreUsuario)).uniqueResult();
+
+        currentSession().delete(credencial);
     }
 
     public Credencial obtenerPorNombreUsuario(String nombreUsuario) {

@@ -3,32 +3,31 @@ package ec.gob.senescyt.usuario.autenticacion;
 import com.google.common.base.Optional;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-import ec.gob.senescyt.commons.helpers.ResourceTestHelper;
-import ec.gob.senescyt.usuario.core.Credencial;
-import ec.gob.senescyt.usuario.dao.CredencialDAO;
+import ec.gob.senescyt.usuario.dto.CredencialLogin;
 import ec.gob.senescyt.usuario.exceptions.LoginIncorrectoMapper;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.resources.IdentificacionResource;
+import ec.gob.senescyt.usuario.services.ServicioCredencial;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import org.hamcrest.core.Is;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
+import org.mockito.Matchers;
 import org.mockito.Mockito;
 
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
+import static ec.gob.senescyt.commons.helpers.ResourceTestHelper.assertErrorMessage;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class IdentificacionResourceTest {
 
-    private static final String RUTA_IDENTIFICACION = "/identificacion";
-    private static final String INDIFERENTE = "indiferente";
-    private static final String CAMPO_OBLIGATORIO = "El campo es obligatorio";
-    private static CredencialDAO credencialDAO = Mockito.mock(CredencialDAO.class);
-    private static IdentificacionResource identificacionResource = new IdentificacionResource(credencialDAO);
+    private static ServicioCredencial servicioCredencial = Mockito.mock(ServicioCredencial.class);
+    private static IdentificacionResource identificacionResource = new IdentificacionResource(servicioCredencial);
 
     @ClassRule
     public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
@@ -37,90 +36,108 @@ public class IdentificacionResourceTest {
             .addProvider(LoginIncorrectoMapper.class)
             .build();
 
-    private Client client = RESOURCES.client();
+    private Client client;
+
+    @Before
+    public void setUp() {
+        client = RESOURCES.client();
+    }
 
     @After
     public void tearDown() {
-        Mockito.reset(credencialDAO);
+        Mockito.reset(servicioCredencial);
     }
 
     @Test
-    public void debeDevolverTokenConLasCredencialesCorrectas() {
-        String password = "Clave456";
-        String token = "ASD123123asdasd";
-        String username = "username";
+    public void debeVerificarQueElUsuarioYLaContraseniaSonCorrectos() {
 
-        Credencial credencialesUsuario = new Credencial(username, password);
+        String nombreUsuario = "nombreUsuario";
+        String contrasenia = "contrasenia";
+        String tokenDeInicioDeSesion = "token_de_inicio_de_sesion";
+        CredencialLogin credencialLogin = new CredencialLogin(nombreUsuario, contrasenia);
 
-        Mockito.when(credencialDAO.validar(any(Credencial.class))).thenReturn(Optional.of(token));
+        when(servicioCredencial.obtenerTokenDeInicioDeSesion(Mockito.refEq(credencialLogin))).thenReturn(Optional.fromNullable(tokenDeInicioDeSesion));
 
-        ClientResponse response = client.resource(RUTA_IDENTIFICACION)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, credencialesUsuario);
+        ClientResponse response = hacerPost(credencialLogin);
 
-        Mockito.verify(credencialDAO).validar(any(Credencial.class));
-        assertThat(response.getStatus(), is(200));
+        assertThat(response.getStatus(), Is.is(201));
+        verify(servicioCredencial).obtenerTokenDeInicioDeSesion(Matchers.refEq(credencialLogin));
     }
 
     @Test
-    public void debeDevolverErrorCuandoContraseniaEsNula() {
-        Credencial credencialesConContraseniaNula = new Credencial(INDIFERENTE, null);
-        ClientResponse response = client.resource(RUTA_IDENTIFICACION)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, credencialesConContraseniaNula);
+    public void debeVerificarQueUnaCredencialNoEsValida() {
+        String nombreUsuario = "nombreUsuario";
+        String contrasenia = "contrasenia";
+        CredencialLogin credencialLoginInvalida = new CredencialLogin(nombreUsuario, contrasenia);
 
-        Mockito.verifyZeroInteractions(credencialDAO);
-        assertThat(response.getStatus(), is(400));
-        ResourceTestHelper.assertErrorMessage(response, CAMPO_OBLIGATORIO);
+        when(servicioCredencial.obtenerTokenDeInicioDeSesion(Matchers.refEq(credencialLoginInvalida))).thenReturn(Optional.absent());
+
+        ClientResponse response = hacerPost(credencialLoginInvalida);
+
+        assertThat(response.getStatus(), Is.is(401));
+        String mensajeErrorEsperado = "Credenciales Incorrectas";
+        assertErrorMessage(response, mensajeErrorEsperado);
     }
 
     @Test
-    public void debeDevolverErrorCuandoContraseniaEstaVacia() {
-        Credencial credencialesConContraseniaVacia = new Credencial(INDIFERENTE, "");
-        ClientResponse response = client.resource(RUTA_IDENTIFICACION)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, credencialesConContraseniaVacia);
+    public void debeRetornarErrorCuandoElNombreDeUsuarioEsNulo() {
+        String nombreUsuario = null;
+        String contrasenia = "constrasenia indiferente";
 
-        Mockito.verifyZeroInteractions(credencialDAO);
-        assertThat(response.getStatus(), is(400));
-        ResourceTestHelper.assertErrorMessage(response, CAMPO_OBLIGATORIO);
+        CredencialLogin credencialLoginInvalida = new CredencialLogin(nombreUsuario, contrasenia);
+
+        ClientResponse response = hacerPost(credencialLoginInvalida);
+
+        assertThat(response.getStatus(), Is.is(400));
+        assertErrorMessage(response, "nombreUsuario El campo es obligatorio");
+        Mockito.verifyZeroInteractions(servicioCredencial);
     }
 
     @Test
-    public void debeDevolverErrorCuandoNombreDeUsuarioEsNulo() {
-        Credencial credencialesConContraseniaVacia = new Credencial(null, INDIFERENTE);
-        ClientResponse response = client.resource(RUTA_IDENTIFICACION)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, credencialesConContraseniaVacia);
+    public void debeRetornarErrorCuandoElNombreDeUsuarioEstaVacio() {
+        String nombreUsuario = "";
+        String contrasenia = "constrasenia indiferente";
 
-        Mockito.verifyZeroInteractions(credencialDAO);
-        assertThat(response.getStatus(), is(400));
-        ResourceTestHelper.assertErrorMessage(response, CAMPO_OBLIGATORIO);
+        CredencialLogin credencialLoginInvalida = new CredencialLogin(nombreUsuario, contrasenia);
+
+        ClientResponse response = hacerPost(credencialLoginInvalida);
+
+        assertThat(response.getStatus(), Is.is(400));
+        assertErrorMessage(response, "nombreUsuario El campo es obligatorio");
+        Mockito.verifyZeroInteractions(servicioCredencial);
     }
 
     @Test
-    public void debeDevolverErrorCuandoNombreDeUsuarioEstaVacio() {
-        Credencial credencialesConContraseniaVacia = new Credencial("", INDIFERENTE);
-        ClientResponse response = client.resource(RUTA_IDENTIFICACION)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, credencialesConContraseniaVacia);
+    public void debeRetornarErrorCuandoElContraseniaEsNula() {
+        String nombreUsuario = "usuario indiferente";
+        String contrasenia = null;
 
-        Mockito.verifyZeroInteractions(credencialDAO);
-        assertThat(response.getStatus(), is(400));
-        ResourceTestHelper.assertErrorMessage(response, CAMPO_OBLIGATORIO);
+        CredencialLogin credencialLoginInvalida = new CredencialLogin(nombreUsuario, contrasenia);
+
+        ClientResponse response = hacerPost(credencialLoginInvalida);
+
+        assertThat(response.getStatus(), Is.is(400));
+        assertErrorMessage(response, "contrasenia El campo es obligatorio");
+        Mockito.verifyZeroInteractions(servicioCredencial);
     }
 
     @Test
-    public void debeDevolverNoAutorizadoCuandoCredencialesSonIncorrectas() {
-        Credencial credencialesIncorectas = new Credencial("incorrecta", "Incorr3cta");
-        Mockito.when(credencialDAO.validar(any(Credencial.class))).thenReturn(Optional.absent());
+    public void debeRetornarErrorCuandoElContraseniaEstaVacia() {
+        String nombreUsuario = "usuario indiferente";
+        String contrasenia = "";
 
-        ClientResponse response = client.resource(RUTA_IDENTIFICACION)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, credencialesIncorectas);
+        CredencialLogin credencialLoginInvalida = new CredencialLogin(nombreUsuario, contrasenia);
 
-        Mockito.verify(credencialDAO).validar(any(Credencial.class));
-        assertThat(response.getStatus(), is(401));
-        ResourceTestHelper.assertErrorMessage(response, "Credenciales Incorrectas");
+        ClientResponse response = hacerPost(credencialLoginInvalida);
+
+        assertThat(response.getStatus(), Is.is(400));
+        assertErrorMessage(response, "contrasenia El campo es obligatorio");
+        Mockito.verifyZeroInteractions(servicioCredencial);
+    }
+
+    private ClientResponse hacerPost(CredencialLogin credencialLogin) {
+        return client.resource("/identificacion")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .post(ClientResponse.class, credencialLogin);
     }
 }

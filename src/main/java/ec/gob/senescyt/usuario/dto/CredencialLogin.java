@@ -1,8 +1,13 @@
 package ec.gob.senescyt.usuario.dto;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class CredencialLogin {
 
+    @NotEmpty
     private String nombreUsuario;
+
+    @NotEmpty
     private String contrasenia;
 
     private CredencialLogin () {}

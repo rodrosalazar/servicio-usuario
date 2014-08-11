@@ -4,6 +4,7 @@ import ec.gob.senescyt.usuario.core.Usuario;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 public class UsuarioDAO extends AbstractDAO<Usuario> {
 
@@ -39,6 +40,13 @@ public class UsuarioDAO extends AbstractDAO<Usuario> {
     public void limpiar() {
         Query query = currentSession().createSQLQuery("TRUNCATE usuarios CASCADE");
         query.executeUpdate();
+    }
+
+    public void eliminar(long id) {
+        Usuario usuario = (Usuario) currentSession().createCriteria(Usuario.class, "u")
+                .add(Restrictions.eq("id", id)).uniqueResult();
+
+        currentSession().delete(usuario);
     }
 
 }

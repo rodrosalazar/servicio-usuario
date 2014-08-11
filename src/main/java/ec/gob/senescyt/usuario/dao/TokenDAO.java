@@ -41,6 +41,15 @@ public class TokenDAO extends AbstractDAO<Token> {
         currentSession().delete(tokenAEliminar);
     }
 
+    public void eliminarPorIdUsuario(long id) {
+        Token tokenAEliminar = (Token) currentSession()
+                .createCriteria(Token.class)
+                .add(Restrictions.eq("usuario.id", id))
+                .uniqueResult();
+
+        currentSession().delete(tokenAEliminar);
+    }
+
     public void limpiar() {
         Query query = currentSession().createSQLQuery("TRUNCATE tokens CASCADE");
         query.executeUpdate();
