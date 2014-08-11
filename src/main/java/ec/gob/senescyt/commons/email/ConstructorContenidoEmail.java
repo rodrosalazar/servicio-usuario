@@ -7,7 +7,7 @@ public class ConstructorContenidoEmail {
         contenidoNotificacionUsuarioCreado.append("<div align='justify'>");
         contenidoNotificacionUsuarioCreado.append("Estimado/a ").append(nombreDestinatario).append("<br/>");
         contenidoNotificacionUsuarioCreado.append("El usuario ").append(nombreUsuario)
-                .append(" ha sido creado en el Sistema Nacional de Educación Superior (SNIESE).<br/>");
+                .append(" ha sido creado en el Sistema Nacional de Información de la Educación Superior del Ecuador (SNIESE).<br/>");
         contenidoNotificacionUsuarioCreado.append("Para acceder al sistema SNIESE, usted necesita crear una contraseña en la siguiente dirección web:");
         contenidoNotificacionUsuarioCreado.append("<br/>");
         contenidoNotificacionUsuarioCreado.append("<a href='").append(urlConToken).append("'>")
