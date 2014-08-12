@@ -11,7 +11,7 @@ public class Rol {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;
 
-    protected final String nombre;
+    protected String nombre;
 
     public Rol(String nombre) {
         this.nombre = nombre;

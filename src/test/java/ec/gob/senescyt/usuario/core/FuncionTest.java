@@ -14,8 +14,6 @@ import static org.hamcrest.core.Is.is;
 public class FuncionTest{
     private String nombre;
     private Funcion funcion;
-    private NivelDeAcceso nivelDeAcceso;
-    private FuncionNivelDeAcceso funcionNivelDeAcceso;
 
     @Before
     public void setUp() throws Exception {
@@ -30,14 +28,13 @@ public class FuncionTest{
     }
 
     @Test
-    public void debeTenerRelacionConNivelDeAccesos() {
+    public void debeTenerNivelDeAccesos() {
         funcion = new Funcion(nombre);
-        nivelDeAcceso = new NivelDeAcceso(nombre);
-        funcionNivelDeAcceso = new FuncionNivelDeAcceso(funcion, nivelDeAcceso);
-        Set<FuncionNivelDeAcceso> funcionNivelDeAccesoSet = new HashSet<>();
-        funcionNivelDeAccesoSet.add(funcionNivelDeAcceso);
-
-        funcion.setRelacionesConNivelDeAccesos(funcionNivelDeAccesoSet);
-        assertThat(funcion.getRelacionesConNivelDeAccesos(), is(funcionNivelDeAccesoSet));
+        NivelDeAcceso nivelDeAcceso = new NivelDeAcceso(nombre);
+        Set<NivelDeAcceso> nivelDeAccesoSet = new HashSet<>(1);
+        nivelDeAccesoSet.add(nivelDeAcceso);
+        funcion.setNivelesDeAcceso(nivelDeAccesoSet);
+        assertThat(funcion.getNivelesDeAcceso().size(), is(1));
+        assertThat(funcion.getNivelesDeAcceso().iterator().next(), is(nivelDeAcceso));
     }
 }

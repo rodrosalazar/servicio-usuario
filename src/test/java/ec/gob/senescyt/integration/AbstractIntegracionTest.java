@@ -36,7 +36,7 @@ public class AbstractIntegracionTest {
     protected NivelDeAccesoDAO nivelDeAccesoDAO;
     protected FuncionDAO funcionDAO;
     private CredencialDAO credencialDAO;
-    private Session session;
+    protected Session session;
     private boolean seInicializaDB = false;
     protected final Client CLIENT = new Client();
 
