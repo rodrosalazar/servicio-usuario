@@ -9,8 +9,4 @@ public class FuncionDAO extends AbstractRolDAO<Funcion> {
         super(sessionFactory);
     }
 
-    @Override
-    public void limpiar() {
-        truncar("funciones");
-    }
 }

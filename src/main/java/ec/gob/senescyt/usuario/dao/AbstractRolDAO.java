@@ -6,6 +6,8 @@ import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
+import javax.persistence.Table;
+
 public abstract class AbstractRolDAO<T extends Rol> extends AbstractDAO<T> {
 
     public AbstractRolDAO(SessionFactory sessionFactory) {
@@ -21,9 +23,8 @@ public abstract class AbstractRolDAO<T extends Rol> extends AbstractDAO<T> {
     }
 
     @VisibleForTesting
-    public abstract void limpiar();
-
-    protected void truncar(String nombreTabla) {
+    public void limpiar(){
+        String nombreTabla = getEntityClass().getAnnotation(Table.class).name();
         String sqlQuery = String.format("TRUNCATE %s CASCADE", nombreTabla);
         Query query = currentSession().createSQLQuery(sqlQuery);
         query.executeUpdate();

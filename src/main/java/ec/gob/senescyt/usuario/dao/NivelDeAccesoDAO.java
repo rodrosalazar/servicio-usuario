@@ -8,8 +8,4 @@ public class NivelDeAccesoDAO extends AbstractRolDAO<NivelDeAcceso> {
         super(sessionFactory);
     }
 
-    @Override
-    public void limpiar() {
-        truncar("niveles_de_acceso");
-    }
 }
