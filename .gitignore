@@ -13,3 +13,4 @@ src/test/resources/test-integracion.yml
 sniese.jks
 *.der
 *.keystore
+reports/

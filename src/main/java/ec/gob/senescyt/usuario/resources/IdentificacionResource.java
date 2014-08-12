@@ -26,13 +26,10 @@ public class IdentificacionResource {
     @POST
     @UnitOfWork
     public Response identificar(@Valid CredencialLogin credencialLogin) {
-
         Optional token = servicioCredencial.obtenerTokenDeInicioDeSesion(credencialLogin);
-
         if (token.isPresent()) {
             return Response.status(Response.Status.CREATED).entity(token.get()).build();
         }
-
         throw new LoginIncorrectoException();
     }
 }

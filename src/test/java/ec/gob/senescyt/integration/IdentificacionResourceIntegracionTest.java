@@ -11,8 +11,7 @@ import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.CredencialDAO;
 import ec.gob.senescyt.usuario.dto.CredencialLogin;
 import ec.gob.senescyt.usuario.exceptions.CifradoErroneoException;
-import ec.gob.senescyt.usuario.services.ServicioCifrado;
-import ec.gob.senescyt.usuario.services.ServicioCredencial;
+import ec.gob.senescyt.usuario.utils.Hasher;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -50,7 +49,7 @@ public class IdentificacionResourceIntegracionTest extends AbstractIntegracionTe
                 .generar()).getEntity(Usuario.class);
 
         Credencial credencial = new Credencial(usuarioDePrueba.getNombreUsuario(),
-                new ServicioCredencial(credencialDAO,new ServicioCifrado()).calcularHash(claveTest));
+                new Hasher().calcularHash(claveTest));
         
         credencialDAO.guardar(credencial);
         sessionFactory.getCurrentSession().flush();

@@ -44,7 +44,6 @@ public class ServicioCifrado {
 
     public String cifrar(String cadenaPlana) throws CifradoErroneoException {
         try {
-
             getCipher().init(Cipher.ENCRYPT_MODE, secretKeySpec);
             AlgorithmParameters params = cipher.getParameters();
             ivBytes = params.getParameterSpec(IvParameterSpec.class).getIV();
