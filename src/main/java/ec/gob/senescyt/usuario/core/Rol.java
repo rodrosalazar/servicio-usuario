@@ -3,13 +3,15 @@ package ec.gob.senescyt.usuario.core;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
-public abstract class Rol {
+@MappedSuperclass
+public class Rol {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    protected int id;
 
-    private final String nombre;
+    protected final String nombre;
 
     public Rol(String nombre) {
         this.nombre = nombre;
