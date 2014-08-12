@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import static com.google.common.collect.Lists.newArrayList;
 
 public class PerfilBuilder {
+
     private static PerfilBuilder perfilBuilder;
     private static final List<Acceso> ACCESOS = newArrayList(Acceso.CREAR, Acceso.ELIMINAR);
     public String nombre = "atencion ciudadana";
