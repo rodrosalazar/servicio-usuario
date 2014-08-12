@@ -5,6 +5,7 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.commons.builders.PerfilBuilder;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
+import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.core.Perfil;
@@ -19,6 +20,7 @@ import org.junit.Test;
 
 import javax.ws.rs.core.MultivaluedMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.core.Is.is;
@@ -234,14 +236,18 @@ public class UsuarioResourceIntegracionTest extends AbstractIntegracionTest {
         ClientResponse responseUsuarioA = hacerPost("usuario", usuarioA);
         assertThat(responseUsuarioA.getStatus(), is(201));
         ClientResponse responseUsuarioB = hacerPost("usuario", usuarioB);
-        System.out.println("ERROR " + responseUsuarioB.getEntity(String.class));
         assertThat(responseUsuarioB.getStatus(), is(201));
 
         ClientResponse response = hacerGet("usuario/todos");
 
         assertThat(response.getStatus(), is(200));
-        List entity = response.getEntity(List.class);
+
+        List entity = (List) response.getEntity(Map.class).get(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_USUARIOS.getNombre());
         assertThat(entity, CoreMatchers.notNullValue());
         assertThat(entity.size(), is(2));
+        Map<String, Object> usuario = (Map<String, Object>) entity.get(0);
+        List perfiles = (List) usuario.get("perfiles");
+        assertThat(perfiles.size(), is(1));
+        assertThat(perfiles.get(0).toString(), is(String.valueOf(perfilGuardado.getId())));
     }
 }

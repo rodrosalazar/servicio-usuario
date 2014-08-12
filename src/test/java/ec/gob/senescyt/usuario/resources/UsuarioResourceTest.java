@@ -11,6 +11,7 @@ import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.commons.helpers.ResourceTestHelper;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
+import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
@@ -33,6 +34,7 @@ import javax.mail.internet.AddressException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -56,7 +58,9 @@ public class UsuarioResourceTest {
     private static ConfiguracionEmail configuracionEmail = spy(new ConfiguracionEmail());
     private static DespachadorEmail despachadorEmail = new DespachadorEmail(configuracionEmail);
     private static ConstructorContenidoEmail constructorContenidoEmail = new ConstructorContenidoEmail();
-    private static UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion, despachadorEmail, tokenDAO, lectorPropiedadesEmail, constructorContenidoEmail);
+    private static ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
+    private static UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator,
+            lectorPropiedadesValidacion, despachadorEmail, tokenDAO, lectorPropiedadesEmail, constructorContenidoEmail, constructorRespuestas);
 
     @ClassRule
     public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
@@ -359,7 +363,7 @@ public class UsuarioResourceTest {
 
         Assertions.assertThat(response.getStatus()).isEqualTo(200);
 
-        List<Usuario> resultado = response.getEntity(List.class);
+        Map<String, List<Usuario>> resultado = response.getEntity(Map.class);
         Assertions.assertThat(resultado).isNotEmpty();
         Assertions.assertThat(resultado.size()).isEqualTo(1);
     }

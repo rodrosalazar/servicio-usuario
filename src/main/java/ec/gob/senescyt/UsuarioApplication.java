@@ -176,7 +176,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         DespachadorEmail despachadorEmail = new DespachadorEmail(configuration.getConfiguracionEmail());
 
         UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion,
-                despachadorEmail, tokenDAO, lectorPropiedadesEmail, constructorContenidoEmail);
+                despachadorEmail, tokenDAO, lectorPropiedadesEmail, constructorContenidoEmail, constructorRespuestas);
         jerseyEnvironment.register(usuarioResource);
 
         PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );

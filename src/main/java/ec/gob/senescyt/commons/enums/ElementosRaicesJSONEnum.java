@@ -15,7 +15,8 @@ public enum ElementosRaicesJSONEnum {
     ELEMENTO_RAIZ_UNIVERSIDADES_LISTADO("universidadesListado"),
     ELEMENTO_RAIZ_TIPOS_INSTITUCION("tiposDeInstitucion"),
     ELEMENTO_RAIZ_NIVELES_FORMACION("nivelesDeFormacion"),
-    ELEMENTO_RAIZ_MODALIDADES_EDUCACION("modalidadesDeEducacion");
+    ELEMENTO_RAIZ_MODALIDADES_EDUCACION("modalidadesDeEducacion"),
+    ELEMENTO_RAIZ_USUARIOS("usuarios");
 
     private String nombre;
 

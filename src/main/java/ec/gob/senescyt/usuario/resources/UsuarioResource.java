@@ -4,7 +4,9 @@ import com.google.common.base.Optional;
 import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.commons.email.ConstructorContenidoEmail;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
+import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
+import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
 import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
@@ -36,17 +38,19 @@ public class UsuarioResource {
     private DespachadorEmail despachadorEmail;
     private ConstructorContenidoEmail constructorContenidoEmail;
     private MensajeErrorBuilder mensajeErrorBuilder;
+    private ConstructorRespuestas constructorRespuestas;
 
     public UsuarioResource(UsuarioDAO usuarioDAO, CedulaValidator cedulaValidator,
                            LectorArchivoDePropiedades lectorPropiedadesValidacion, DespachadorEmail despachadorEmail,
                            TokenDAO tokenDAO, LectorArchivoDePropiedades lectorPropiedadesEmail,
-                           ConstructorContenidoEmail constructorContenidoEmail) {
+                           ConstructorContenidoEmail constructorContenidoEmail, ConstructorRespuestas constructorRespuestas) {
         this.usuarioDAO = usuarioDAO;
         this.tokenDAO = tokenDAO;
         this.cedulaValidator = cedulaValidator;
         this.lectorPropiedadesEmail = lectorPropiedadesEmail;
         this.despachadorEmail = despachadorEmail;
         this.constructorContenidoEmail = constructorContenidoEmail;
+        this.constructorRespuestas = constructorRespuestas;
         this.mensajeErrorBuilder = new MensajeErrorBuilder(lectorPropiedadesValidacion);
     }
 
@@ -110,7 +114,7 @@ public class UsuarioResource {
     @Path("/todos")
     public Response todos() {
         List<Usuario> usuarios = usuarioDAO.obtenerTodos();
-        return Response.ok().entity(usuarios).build();
+        return constructorRespuestas.construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_USUARIOS, usuarios);
     }
 
     private void mandarConfirmacion(Usuario usuarioCreado) throws EmailException {

@@ -3,8 +3,6 @@ package ec.gob.senescyt.usuario.core;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -32,7 +30,6 @@ public class Perfil {
 
     // Ir a https://hibernate.atlassian.net/browse/HHH-1718 para mas informacion sobre el FetchMode.SUBSELECT
     @OneToMany(mappedBy = "perfil", fetch = FetchType.EAGER)
-    @Fetch(value = FetchMode.SUBSELECT)
     @Cascade(CascadeType.ALL)
     @JsonManagedReference
     @NotEmpty
