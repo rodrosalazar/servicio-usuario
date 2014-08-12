@@ -4,7 +4,6 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -31,7 +30,7 @@ public class UsuarioPerfilTest {
     @Test
     public void debeTenerModulos() {
         usuarioPerfil = new UsuarioPerfil(nombre);
-        Set<Modulo> moduloSet = mock(HashSet.class);
+        Set<Modulo> moduloSet = mock(Set.class);
         usuarioPerfil.setModulos(moduloSet);
         assertThat(usuarioPerfil.getModulos(), is(moduloSet));
     }

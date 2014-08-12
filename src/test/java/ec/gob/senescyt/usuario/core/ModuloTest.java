@@ -4,7 +4,6 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -31,7 +30,7 @@ public class ModuloTest{
     @Test
     public void debeTenerFunciones() {
         modulo = new Modulo(nombre);
-        Set<Funcion> funcionSet = mock(HashSet.class);
+        Set<Funcion> funcionSet = mock(Set.class);
         modulo.setFunciones(funcionSet);
         assertThat(modulo.getFunciones(), is(funcionSet));
     }

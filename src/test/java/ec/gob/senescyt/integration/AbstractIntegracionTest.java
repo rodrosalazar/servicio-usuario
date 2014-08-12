@@ -13,6 +13,7 @@ import ec.gob.senescyt.usuario.dao.NivelDeAccesoDAO;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
+import ec.gob.senescyt.usuario.dao.UsuarioPerfilDAO;
 import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -37,6 +38,7 @@ public class AbstractIntegracionTest {
     protected NivelDeAccesoDAO nivelDeAccesoDAO;
     protected FuncionDAO funcionDAO;
     protected ModuloDAO moduloDAO;
+    protected UsuarioPerfilDAO usuarioPerfilDAO;
     private CredencialDAO credencialDAO;
     protected Session session;
     private boolean seInicializaDB = false;
@@ -69,6 +71,7 @@ public class AbstractIntegracionTest {
         nivelDeAccesoDAO = new NivelDeAccesoDAO(sessionFactory);
         funcionDAO = new FuncionDAO(sessionFactory);
         moduloDAO = new ModuloDAO(sessionFactory);
+        usuarioPerfilDAO = new UsuarioPerfilDAO(sessionFactory);
         session = sessionFactory.openSession();
         seInicializaDB = true;
     }
@@ -88,6 +91,7 @@ public class AbstractIntegracionTest {
         nivelDeAccesoDAO.limpiar();
         funcionDAO.limpiar();
         moduloDAO.limpiar();
+        usuarioPerfilDAO.limpiar();
         session.disconnect();
     }
 
