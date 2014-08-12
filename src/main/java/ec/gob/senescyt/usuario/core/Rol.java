@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
 @MappedSuperclass
-public class Rol {
+public class Rol implements Entidad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected int id;

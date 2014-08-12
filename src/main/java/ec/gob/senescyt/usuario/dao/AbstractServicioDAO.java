@@ -1,16 +1,16 @@
 package ec.gob.senescyt.usuario.dao;
 
 import com.google.common.annotations.VisibleForTesting;
-import ec.gob.senescyt.usuario.core.Rol;
+import ec.gob.senescyt.usuario.core.Entidad;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import javax.persistence.Table;
 
-public abstract class AbstractRolDAO<T extends Rol> extends AbstractDAO<T> {
+public abstract class AbstractServicioDAO<T extends Entidad> extends AbstractDAO<T> {
 
-    public AbstractRolDAO(SessionFactory sessionFactory) {
+    public AbstractServicioDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
     }
 
