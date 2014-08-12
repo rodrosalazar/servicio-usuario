@@ -17,12 +17,11 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,7 +30,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
-@javax.persistence.Entity
+@Entity
 @Table(name = "usuarios")
 public class Usuario {
 
@@ -67,10 +66,8 @@ public class Usuario {
     private DateTime finDeVigencia;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "idinstitucion")
-    @Cascade(CascadeType.ALL)
-    private Institucion institucion;
+    @Valid
+    private Long idInstitucion;
 
     @NotEmpty
     private String nombreUsuario;
@@ -85,13 +82,13 @@ public class Usuario {
     private Usuario() {}
 
     public Usuario(Identificacion identificacion, Nombre nombre, String emailInstitucional, String numeroAutorizacionQuipux,
-                   DateTime fechaDeVigencia, Institucion institucion, String nombreUsuario, List<Long> perfiles) {
+                   DateTime fechaDeVigencia, Long idInstitucion, String nombreUsuario, List<Long> perfiles) {
         this.identificacion = identificacion;
         this.nombre = nombre;
         this.emailInstitucional = emailInstitucional;
         this.numeroAutorizacionQuipux = numeroAutorizacionQuipux;
         this.finDeVigencia = fechaDeVigencia;
-        this.institucion = institucion;
+        this.idInstitucion = idInstitucion;
         this.nombreUsuario = nombreUsuario;
         this.perfiles = perfiles;
     }
@@ -120,15 +117,15 @@ public class Usuario {
         return finDeVigencia;
     }
 
+    public Long getIdInstitucion() {
+        return idInstitucion;
+    }
+
     public String getNombreUsuario() {
         return nombreUsuario;
     }
 
     public List<Long> getPerfiles() {
         return perfiles;
-    }
-
-    public Institucion getInstitucion(){
-        return institucion;
     }
 }

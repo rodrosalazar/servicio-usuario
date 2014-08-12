@@ -22,12 +22,12 @@ public class TokenTest {
 
     @Before
     public void setUp() {
-        Institucion institucion = new Institucion(1L, "PUCE", 1L, "R", 1L, "A", 1L, "ACADEMICO");
+        long idInstitucion = 1l;
         Usuario usuario = new Usuario(new Identificacion(TipoDocumento.CEDULA, "1718642174"),
                 new Nombre("Nelson", "Alberto", "Jumbo", "Hidalgo"),
                 "testEmail@senescyt.gob.ec", "SENESCYT-DFAPO-2014-65946-MI",
                 new DateTime(2016, 7, 29, 0, 0, DateTimeZone.UTC),
-                institucion, "nombreUsuario", asList(1234l, 5678l, 9630l));
+                idInstitucion, "nombreUsuario", asList(1234l, 5678l, 9630l));
 
         token = new Token("32d88be3-2233-4b58-bf3c-99c35b162805", usuario);
     }

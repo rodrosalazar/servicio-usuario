@@ -1,7 +1,6 @@
 package ec.gob.senescyt.commons.builders;
 
 import ec.gob.senescyt.usuario.core.Identificacion;
-import ec.gob.senescyt.usuario.core.Institucion;
 import ec.gob.senescyt.usuario.core.Nombre;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.enums.TipoDocumento;
@@ -24,7 +23,7 @@ public class UsuarioBuilder {
     public String emailInstitucional = "test@example.com";
     public String numeroAutorizacionQuipux = "SENESCYT-DFAPO-2014-65946-MI";
     public DateTime fechaDeVigencia = new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay();
-    public Institucion institucion = new Institucion(1L, "PUCE", 1L, "R", 1L, "A", 1L, "ACADEMICO");
+    public Long idInstitucion = 1L;
     public List<Long> perfiles = newArrayList(1L);
     public String nombreUsuario = "usuarioSenescyt";
 
@@ -44,7 +43,7 @@ public class UsuarioBuilder {
         return new Usuario(new Identificacion(tipoDocumento, numeroIdentificacion),
                 new Nombre(primerNombre, segundoNombre, primerApellido, segundoApellido),
                 emailInstitucional, numeroAutorizacionQuipux, fechaDeVigencia,
-                institucion, nombreUsuario, perfiles);
+                idInstitucion, nombreUsuario, perfiles);
     }
 
     public static String usuarioConIdInstitucionEnBlanco() {
@@ -62,17 +61,9 @@ public class UsuarioBuilder {
                 "    \"emailInstitucional\":\"testEmail@senescyt.gob.ec\",\n" +
                 "    \"numeroAutorizacionQuipux\":\"SENESCYT-DFAPO-2014-65946-MI\",\n" +
                 "    \"finDeVigencia\":\"2016-07-25\",\n" +
-                "    \"institucion\": {\n" +
-                "        \"id\": \"1\",\n" +
-                "        \"nombre\": \"ESPE\",\n" +
-                "        \"regimenId\": \"1\",\n" +
-                "        \"regimen\": \"REGIMENTEST\",\n" +
-                "        \"estadoId\": \"1\",\n" +
-                "        \"estado\": \"ESTADO\",\n" +
-                "        \"categoriaId\": \"1\",\n" +
-                "        \"categoria\": \"CATEGORIA\"\n" +
-                "    },\n" +
+                "    \"idInstitucion\":\"\",\n" +
                 "    \"nombreUsuario\":\"njumbo\"\n" +
                 "}";
     }
+
 }
