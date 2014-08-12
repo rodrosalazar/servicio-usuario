@@ -1,11 +1,20 @@
 package ec.gob.senescyt.usuario.core;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "funciones")
 public class Funcion {
-    private final int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
     private final String nombre;
 
-    public Funcion(int id, String nombre) {
-        this.id = id;
+    public Funcion(String nombre) {
         this.nombre = nombre;
     }
 

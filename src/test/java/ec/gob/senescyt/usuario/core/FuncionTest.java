@@ -4,25 +4,22 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Random;
-
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class FuncionTest{
     private String nombre;
-    private int id;
 
     @Before
     public void setUp() throws Exception {
-        nombre = RandomStringUtils.random(9).toString();
-        id = new Random().nextInt(999);
+        nombre = RandomStringUtils.random(10).toString();
     }
 
     @Test
-    public void debeInicializarConIdYNombre() {
-        Funcion funcion = new Funcion(id, nombre);
-        assertThat(funcion.getId(), is(id));
+    public void debeInicializarNombre() {
+        Funcion funcion = new Funcion(nombre);
         assertThat(funcion.getNombre(), is(nombre));
+        assertThat(funcion.getId(), is(notNullValue()));
     }
 }

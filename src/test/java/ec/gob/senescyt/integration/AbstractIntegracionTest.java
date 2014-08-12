@@ -7,6 +7,7 @@ import ec.gob.senescyt.UsuarioApplication;
 import ec.gob.senescyt.UsuarioConfiguration;
 import ec.gob.senescyt.commons.Constantes;
 import ec.gob.senescyt.usuario.dao.CredencialDAO;
+import ec.gob.senescyt.usuario.dao.FuncionDAO;
 import ec.gob.senescyt.usuario.dao.NivelDeAccesoDAO;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
@@ -33,6 +34,7 @@ public class AbstractIntegracionTest {
     protected PerfilDAO perfilDAO;
     protected TokenDAO tokenDAO;
     protected NivelDeAccesoDAO nivelDeAccesoDAO;
+    protected FuncionDAO funcionDAO;
     private CredencialDAO credencialDAO;
     private Session session;
     private boolean seInicializaDB = false;
@@ -63,6 +65,7 @@ public class AbstractIntegracionTest {
         perfilDAO = new PerfilDAO(sessionFactory);
         tokenDAO = new TokenDAO(sessionFactory);
         nivelDeAccesoDAO = new NivelDeAccesoDAO(sessionFactory);
+        funcionDAO = new FuncionDAO(sessionFactory);
         session = sessionFactory.openSession();
         seInicializaDB = true;
     }
@@ -80,6 +83,7 @@ public class AbstractIntegracionTest {
         usuarioDAO.limpiar();
         perfilDAO.limpiar();
         nivelDeAccesoDAO.limpiar();
+        funcionDAO.limpiar();
         session.disconnect();
     }
 
