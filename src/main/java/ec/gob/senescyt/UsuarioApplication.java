@@ -100,7 +100,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
             Provincia.class, Canton.class, Parroquia.class, TipoVisa.class, CategoriaVisa.class, Etnia.class,
             PortadorTitulo.class, Direccion.class, Arbol.class, NivelArbol.class, UniversidadExtranjera.class,
             Token.class, Identificacion.class, Cedula.class, Pasaporte.class, Credencial.class, NivelDeAcceso.class,
-            Funcion.class) {
+            Funcion.class, Modulo.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {

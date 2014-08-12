@@ -1,4 +1,6 @@
 package ec.gob.senescyt.usuario.core;
 
-public interface Entidad {
+import java.io.Serializable;
+
+public interface Entidad extends Serializable {
 }
