@@ -2,18 +2,14 @@ package ec.gob.senescyt.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.jersey.api.client.ClientResponse;
-import ec.gob.senescyt.UsuarioApplication;
-import ec.gob.senescyt.UsuarioConfiguration;
 import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import ec.gob.senescyt.titulos.core.CategoriaVisa;
 import ec.gob.senescyt.titulos.core.TipoVisa;
 import ec.gob.senescyt.titulos.dao.CategoriaVisaDAO;
 import ec.gob.senescyt.titulos.dao.TipoVisaDAO;
 import io.dropwizard.jackson.Jackson;
-import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -32,14 +28,6 @@ public class TiposDeVisaResourceIntegracionTest extends AbstractIntegracionTest 
     private static final String NOMBRE_CATEGORIA_VISA_TEST = "CATEGORIA_VISA_TEST";
     private TipoVisaDAO tipoVisaDAO;
     private CategoriaVisaDAO categoriaVisaDAO;
-
-    @ClassRule
-    public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
-
-    @Override
-    protected DropwizardAppRule<UsuarioConfiguration> getRule() {
-        return RULE;
-    }
 
     @Before
     public void setUp() {

@@ -2,16 +2,12 @@ package ec.gob.senescyt.integration;
 
 import com.google.common.io.Resources;
 import com.sun.jersey.api.client.ClientResponse;
-import ec.gob.senescyt.UsuarioApplication;
-import ec.gob.senescyt.UsuarioConfiguration;
 import ec.gob.senescyt.commons.builders.PortadorTituloBuilder;
 import ec.gob.senescyt.titulos.core.Cedula;
 import ec.gob.senescyt.titulos.core.Pasaporte;
 import ec.gob.senescyt.titulos.core.PortadorTitulo;
-import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
-import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.io.File;
@@ -21,9 +17,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 public class TituloExtranjeroResourceIntegracionTest extends AbstractIntegracionTest {
-
-    @ClassRule
-    public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
 
     private String numeroIdentificacionCedulaValida = "1111111116";
     private static final String RUTA_TITULO_EXTRANJERO = "titulo/extranjero";
@@ -37,11 +30,6 @@ public class TituloExtranjeroResourceIntegracionTest extends AbstractIntegracion
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    protected DropwizardAppRule<UsuarioConfiguration> getRule() {
-        return RULE;
     }
 
     @Test

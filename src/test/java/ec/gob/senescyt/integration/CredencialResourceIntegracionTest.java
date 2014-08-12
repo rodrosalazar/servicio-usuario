@@ -2,19 +2,15 @@ package ec.gob.senescyt.integration;
 
 import com.google.common.io.Resources;
 import com.sun.jersey.api.client.ClientResponse;
-import ec.gob.senescyt.UsuarioApplication;
-import ec.gob.senescyt.UsuarioConfiguration;
-import ec.gob.senescyt.usuario.dto.ContraseniaToken;
 import ec.gob.senescyt.commons.builders.ContraseniaTokenBuilder;
 import ec.gob.senescyt.commons.builders.PerfilBuilder;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.core.Usuario;
-import io.dropwizard.testing.junit.DropwizardAppRule;
+import ec.gob.senescyt.usuario.dto.ContraseniaToken;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 
 import java.io.File;
@@ -26,8 +22,6 @@ import static org.hamcrest.core.Is.is;
 
 public class CredencialResourceIntegracionTest extends AbstractIntegracionTest {
 
-    @ClassRule
-    public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
     public static final String NOMBRE_USUARIO = "pepito";
     public static final String CONTRASENIA = "Perez5";
 
@@ -41,11 +35,6 @@ public class CredencialResourceIntegracionTest extends AbstractIntegracionTest {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    protected DropwizardAppRule<UsuarioConfiguration> getRule() {
-        return RULE;
     }
 
     @Before

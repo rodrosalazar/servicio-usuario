@@ -2,8 +2,6 @@ package ec.gob.senescyt.integration;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
-import ec.gob.senescyt.UsuarioApplication;
-import ec.gob.senescyt.UsuarioConfiguration;
 import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.commons.builders.PerfilBuilder;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
@@ -12,13 +10,11 @@ import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.enums.TipoDocumento;
-import io.dropwizard.testing.junit.DropwizardAppRule;
 import org.apache.commons.lang.RandomStringUtils;
 import org.hamcrest.CoreMatchers;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 
 import javax.ws.rs.core.MultivaluedMap;
@@ -34,14 +30,6 @@ public class UsuarioResourceIntegracionTest extends AbstractIntegracionTest {
     private MensajeErrorBuilder mensajeErrorBuilder;
     private Perfil perfil;
     private Perfil perfilGuardado;
-
-    @ClassRule
-    public static final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
-
-    @Override
-    protected DropwizardAppRule<UsuarioConfiguration> getRule() {
-        return RULE;
-    }
 
     @Before
     public void setUp() {
