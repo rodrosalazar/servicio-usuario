@@ -51,4 +51,9 @@ public class PerfilDAOIntegracionTest extends AbstractIntegracionTest {
         Perfil registroEncontrado = perfilDAO.encontrarPorId(perfil.getId());
         assertThat(registroEncontrado, is(nullValue()));
     }
+
+    @Test
+    public void debeTenerNombreDeLaColeccion() {
+        assertThat(perfilDAO.nombreDeLaColeccion(), is("perfiles"));
+    }
 }

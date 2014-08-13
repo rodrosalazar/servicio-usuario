@@ -39,4 +39,8 @@ public abstract class AbstractServicioDAO<T extends Entidad> extends AbstractDAO
         T registro = (T) currentSession().load(getEntityClass(), id);
         currentSession().delete(registro);
     }
+
+    public String nombreDeLaColeccion() {
+        return nombreTabla;
+    }
 }
