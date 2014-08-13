@@ -78,7 +78,7 @@ public class PerfilTest {
         assertThat(constraintViolations.size(), is(1));
         ConstraintViolation<Perfil> violation = constraintViolations.iterator().next();
         assertThat(violation.getPropertyPath().iterator().next().getName(), is("nombre"));
-        assertThat(violation.getMessage(), is("length must be between 0 and 100"));
+        assertThat(violation.getMessage(), is("El campo debe estar entre 1 y 100"));
     }
 }
 
