@@ -2,46 +2,53 @@ package ec.gob.senescyt.usuario.resources;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
-import ec.gob.senescyt.commons.builders.PerfilBuilder;
-import ec.gob.senescyt.commons.resources.builders.ConstructorRespuestas;
-import ec.gob.senescyt.usuario.core.Acceso;
+import com.sun.jersey.api.client.WebResource;
+import ec.gob.senescyt.ayudantes.AyudantePerfil;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import io.dropwizard.testing.junit.ResourceTestRule;
-import org.apache.commons.lang.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.mockito.Mockito.any;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
+@SuppressWarnings("PMD.TooManyStaticImports")
 public class PerfilResourceTest {
 
+    public static final String PERFILES_URL = "/perfiles";
+    public static final String PERFILES_RESOURCE_URL = "/perfiles/1";
     private static PerfilDAO perfilDAO = mock(PerfilDAO.class);
-    private static ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
+
+    private final AyudantePerfil ayudantePerfil = new AyudantePerfil();
+    private Perfil perfil;
+    
+    
 
     @ClassRule
     public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
-            .addResource(new PerfilResource(perfilDAO, constructorRespuestas))
-            .addProvider(ValidacionExceptionMapper.class)
-            .build();
+                                                                            .addResource(new PerfilResource(perfilDAO))
+                                                                            .addProvider(ValidacionExceptionMapper.class)
+                                                                            .build();
 
     private Client client;
-
+    
     @Before
     public void setUp() {
         client = RESOURCES.client();
@@ -53,123 +60,91 @@ public class PerfilResourceTest {
     }
 
     @Test
-    public void noPuedoCrearPerfilSinNombre() {
-        Perfil perfil = PerfilBuilder.nuevoPerfil()
-                .con(p -> p.nombre = null)
-                .generar();
+    public void debeCrear() {
+        perfil = ayudantePerfil.construirConPermisos(new Permiso());
+        ClientResponse response = getClient(PERFILES_URL)
+                                        .post(ClientResponse.class, perfil);
+        assertThat(response.getStatus(), is(201));
+        Perfil encontrarEntidad = response.getEntity(Perfil.class);
+        assertThat(encontrarEntidad.getNombre(), is(perfil.getNombre()));
+        verify(perfilDAO, times(1)).guardar(any(Perfil.class));
+    }
 
-        ClientResponse response = client.resource("/perfiles")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+    private WebResource.Builder getClient(String url) {
+        return client.resource(url)
+                             .header("Content-Type", MediaType.APPLICATION_JSON);
+    }
+
+    @Test
+    public void debeNoCrearCuandoNoValido() {
+        perfil = ayudantePerfil.construir();
+        ClientResponse response = getClient(PERFILES_URL)
                 .post(ClientResponse.class, perfil);
-
-        assertThat(response.getStatus()).isEqualTo(400);
+        assertThat(response.getStatus(), is(400));
         verifyZeroInteractions(perfilDAO);
     }
 
     @Test
-    public void noPuedoCrearPerfilConNombreDeMasDe100Caracteres() {
-        Perfil perfil = PerfilBuilder.nuevoPerfil()
-                .con(p -> p.nombre = RandomStringUtils.random(101))
-                .generar();
+    public void debeModificar() {
+        perfil = ayudantePerfil.construirConPermisos(new Permiso());
+        when(perfilDAO.encontrarPorId(1L)).thenReturn(perfil);
+        ClientResponse response = getClient(PERFILES_URL)
+                .put(ClientResponse.class, perfil);
+        assertThat(response.getStatus(), is(200));
+        Perfil encontrarEntidad = response.getEntity(Perfil.class);
+        assertThat(encontrarEntidad.getNombre(), is(perfil.getNombre()));
+        verify(perfilDAO, times(1)).guardar(any(Perfil.class));
+    }
 
-        ClientResponse response = client.resource("/perfiles")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, perfil);
-
-        assertThat(response.getStatus()).isEqualTo(400);
+    @Test
+    public void debeNoModificarCuandoNoValido() {
+        perfil = ayudantePerfil.construir();
+        ClientResponse response = getClient(PERFILES_URL)
+                .put(ClientResponse.class, perfil);
+        assertThat(response.getStatus(), is(400));
         verifyZeroInteractions(perfilDAO);
     }
 
     @Test
-    public void noDebeCrearUnPerfilSinPermisos() {
-        Perfil perfilSinPermisos = PerfilBuilder.nuevoPerfil()
-                .con(p -> p.permisos = null)
-                .generar();
-
-        ClientResponse response = client.resource("/perfiles")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, perfilSinPermisos);
-
-        assertThat(response.getStatus()).isEqualTo(400);
-        verifyZeroInteractions(perfilDAO);
-    }
-
-    @Test
-    public void noDebeCrearUnPerfilConPermisosSinModulo() {
-        Permiso permiso = new Permiso(null, 1l, newArrayList(Acceso.LEER));
-        Perfil perfilSinPermisos = PerfilBuilder.nuevoPerfil()
-                .con(p -> p.permisos = newArrayList(permiso))
-                .generar();
-
-        ClientResponse response = client.resource("/perfiles")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, perfilSinPermisos);
-
-        assertThat(response.getStatus()).isEqualTo(400);
-        verifyZeroInteractions(perfilDAO);
-    }
-
-    @Test
-    public void noDebeCrearUnPerfilConPermisosSinFuncion() {
-        Permiso permiso = new Permiso(1l, null, newArrayList(Acceso.LEER));
-        Perfil perfilSinPermisos = PerfilBuilder.nuevoPerfil()
-                .con(p -> p.permisos = newArrayList(permiso))
-                .generar();
-
-        ClientResponse response = client.resource("/perfiles")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, perfilSinPermisos);
-
-        assertThat(response.getStatus()).isEqualTo(400);
-        verifyZeroInteractions(perfilDAO);
-    }
-
-    @Test
-    public void noDebeCrearUnPerfilSinAlMenosUnAcceso() {
-        long moduloId = 1l;
-        long funcionId = 2l;
-
-        Permiso permisoSinAcceso = new Permiso(moduloId, funcionId, null);
-        List<Permiso> permisos = newArrayList(permisoSinAcceso);
-
-        Perfil perfilSinAccesos = PerfilBuilder.nuevoPerfil()
-                .con(p -> p.permisos = permisos)
-                .generar();
-
-        ClientResponse response = client.resource("/perfiles")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, perfilSinAccesos);
-
-        assertThat(response.getStatus()).isEqualTo(400);
-        verifyZeroInteractions(perfilDAO);
-    }
-
-    @Test
-    public void debeCrearUnNuevoPerfilConNombreYPermisos() {
-        Perfil perfil = PerfilBuilder.nuevoPerfil()
-                .generar();
-
-        ClientResponse response = client.resource("/perfiles")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
-                .post(ClientResponse.class, perfil);
-
-        verify(perfilDAO).guardar(any(Perfil.class));
-        assertThat(response.getStatus()).isEqualTo(201);
-    }
-
-    @Test
-    public void debeObtenerTodosLosPerfiles() {
-        Perfil perfil = PerfilBuilder.nuevoPerfil().generar();
-        when(perfilDAO.obtenerTodos()).thenReturn(newArrayList(perfil));
-
-        ClientResponse response = client.resource("/perfiles")
-                .header("Content-Type", MediaType.APPLICATION_JSON)
+    public void debeObtener() {
+        perfil = ayudantePerfil.construir();
+        when(perfilDAO.encontrarPorId(1L)).thenReturn(perfil);
+        ClientResponse response = getClient(PERFILES_RESOURCE_URL)
                 .get(ClientResponse.class);
-
-        verify(perfilDAO).obtenerTodos();
-        assertThat(response.getStatus()).isEqualTo(200);
-        Map<String, List<Perfil>> resultado = response.getEntity(Map.class);
-        assertThat(resultado).isNotEmpty();
-        assertThat(resultado.get("perfiles").size()).isEqualTo(1);
+        assertThat(response.getStatus(), is(200));
+        Perfil encontrarEntidad = response.getEntity(Perfil.class);
+        assertThat(encontrarEntidad.getNombre(), is(perfil.getNombre()));
     }
+
+    @Test
+    public void debeNoObtenerCuandoNoHayObjecto() {
+        ClientResponse response = getClient(PERFILES_RESOURCE_URL)
+                .get(ClientResponse.class);
+        assertThat(response.getStatus(), is(404));
+    }
+
+    @Test
+    public void debeObtenerTodos() {
+        perfil = ayudantePerfil.construir();
+        List<Perfil> perfilList = newArrayList(perfil);
+        when(perfilDAO.obtenerTodos()).thenReturn(perfilList);
+        ClientResponse response = getClient(PERFILES_URL)
+                .get(ClientResponse.class);
+        assertThat(response.getStatus(), is(200));
+        List<LinkedHashMap> encontrarEntidad = response.getEntity(List.class);
+        assertThat(encontrarEntidad.size(), is(1));
+        assertThat(encontrarEntidad.get(0).get("nombre"), is(perfil.getNombre()));
+    }
+
+    @Test
+    public void debeEliminar() {
+        perfil = ayudantePerfil.construirConPermisos(new Permiso());
+        long id = 1L;
+        when(perfilDAO.encontrarPorId(id)).thenReturn(perfil);
+        ClientResponse response = getClient(PERFILES_RESOURCE_URL)
+                .delete(ClientResponse.class);
+        assertThat(response.getStatus(), is(200));
+        verify(perfilDAO, times(1)).eliminar(id);
+    }
+
 }

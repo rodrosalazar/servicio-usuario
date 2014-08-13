@@ -3,7 +3,6 @@ package ec.gob.senescyt.integration;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
-import ec.gob.senescyt.commons.builders.PerfilBuilder;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
@@ -30,19 +29,14 @@ public class UsuarioResourceIntegracionTest extends AbstractIntegracionTest {
 
     private LectorArchivoDePropiedades lectorArchivoDePropiedades;
     private MensajeErrorBuilder mensajeErrorBuilder;
-    private Perfil perfil;
     private Perfil perfilGuardado;
 
     @Before
     public void setUp() {
-        perfil = PerfilBuilder.nuevoPerfil().generar();
+        perfilGuardado = ayudantePerfil.construirConPermisos();
+        perfilDAO.guardar(perfilGuardado);
         lectorArchivoDePropiedades = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
         mensajeErrorBuilder = new MensajeErrorBuilder(lectorArchivoDePropiedades);
-
-        ClientResponse response = hacerPost("perfiles", perfil);
-
-        assertThat(response.getStatus(), is(201));
-        perfilGuardado = response.getEntity(Perfil.class);
     }
 
     @Test

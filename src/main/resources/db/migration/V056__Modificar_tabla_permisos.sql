@@ -1,0 +1,7 @@
+DROP TABLE permisos CASCADE ;
+
+CREATE TABLE permisos (
+  id SERIAL PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL,
+  acceso VARCHAR(100) NOT NULL
+);

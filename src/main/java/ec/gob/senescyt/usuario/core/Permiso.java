@@ -1,78 +1,40 @@
 package ec.gob.senescyt.usuario.core;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.List;
 
 @Entity
 @Table(name = "permisos")
-public class Permiso {
+public class Permiso extends Entidad {
+
+    private String nombre;
+    private Acceso acceso;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    @NotNull
-    private Long moduloId;
-
-    @NotNull
-    private Long funcionId;
-
-    @ElementCollection(targetClass = Acceso.class, fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    @CollectionTable(name = "accesos")
-    @Column(name = "accesos")
-    @NotEmpty
-    @Valid
-    private List<Acceso> accesos;
-
-    @ManyToOne
-    @JoinColumn(name = "perfil_id")
-    @JsonBackReference
-    private Perfil perfil;
-
-    private Permiso() {}
-
-    public Permiso (Long moduloId, Long funcionId, List<Acceso> accesos) {
-        this.moduloId = moduloId;
-        this.funcionId = funcionId;
-        this.accesos = accesos;
+    public Permiso() {
+        // Por Jackson
     }
 
-    public long getId() {
+    public Permiso(String nombre, Acceso acceso) {
+        this.nombre = nombre;
+        this.acceso = acceso;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public Acceso getAcceso() {
+        return acceso;
+    }
+
+    public Long getId() {
         return id;
     }
-
-    public Long getModuloId() {
-        return moduloId;
-    }
-
-    public Long getFuncionId() {
-        return funcionId;
-    }
-
-    public List<Acceso> getAccesos() {
-        return accesos;
-    }
-
-    public Perfil getPerfil() {
-        return perfil;
-    }
-
 }

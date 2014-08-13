@@ -3,7 +3,6 @@ package ec.gob.senescyt.integration;
 import com.google.common.io.Resources;
 import com.sun.jersey.api.client.ClientResponse;
 import ec.gob.senescyt.commons.builders.ContraseniaTokenBuilder;
-import ec.gob.senescyt.commons.builders.PerfilBuilder;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Token;
@@ -39,10 +38,8 @@ public class CredencialResourceIntegracionTest extends AbstractIntegracionTest {
 
     @Before
     public void setUp() {
-        Perfil perfil = PerfilBuilder.nuevoPerfil().generar();
-        ClientResponse respuestaPerfil = hacerPost("perfiles", perfil);
-        Assert.assertThat(respuestaPerfil.getStatus(), is(201));
-        perfilGuardado = respuestaPerfil.getEntity(Perfil.class);
+        perfilGuardado = ayudantePerfil.construirConPermisos();
+        perfilDAO.guardar(perfilGuardado);
 
         Usuario usuarioValido = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))

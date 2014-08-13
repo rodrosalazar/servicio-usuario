@@ -1,54 +1,84 @@
 package ec.gob.senescyt.usuario.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.dropwizard.jackson.Jackson;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.io.IOException;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.List;
+import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static io.dropwizard.testing.FixtureHelpers.fixture;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.core.IsNull.nullValue;
 
 public class PerfilTest {
-
-    private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
+    private String nombre;
+    private List<Permiso> permisos = newArrayList(new Permiso());
     private Perfil perfil;
 
+    private static Validator validator;
+
+    @BeforeClass
+    public static void setUpValidator() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
+
     @Before
-    public void setUp() {
-        long moduloId = 1l;
-        long funcionId = 2l;
-        List<Acceso> accesos = newArrayList(Acceso.CREAR, Acceso.LEER);
-        long moduloId2 = 2l;
-
-        perfil = new Perfil("Perfil1", newArrayList(new Permiso(moduloId, funcionId, accesos), new Permiso(moduloId2, funcionId, accesos)));
+    public void setUp() throws Exception {
+        nombre = RandomStringUtils.random(10).toString();
     }
 
     @Test
-    public void debeDeserializarUnPerfilDesdeJSON() throws IOException {
-        long id1 = 3l;
-        long id2 = 4l;
-
-        Perfil actual = MAPPER.readValue(fixture("fixtures/perfil.json"), Perfil.class);
-
-        assertThat(actual.getNombre(), is(perfil.getNombre()));
-        assertThat(actual.getPermisos().size(), is(2));
-        assertThat(actual.getPermisos().get(0).getModuloId(), is(perfil.getPermisos().get(0).getModuloId()));
-        assertThat(actual.getPermisos().get(0).getId(), is(id1));
-        assertThat(actual.getPermisos().get(0).getAccesos(), is(perfil.getPermisos().get(0).getAccesos()));
-        assertThat(actual.getPermisos().get(1).getId(), is(id2));
-        assertThat(actual.getPermisos().get(1).getModuloId(), is(perfil.getPermisos().get(1).getModuloId()));
-        assertThat(actual.getPermisos().get(1).getAccesos(), is(perfil.getPermisos().get(1).getAccesos()));
+    public void debeInicializarConNombreYPermisos() {
+        perfil = new Perfil(nombre, permisos);
+        assertThat(perfil.getNombre(), is(nombre));
+        assertThat(perfil.getPermisos(), is(permisos));
     }
 
     @Test
-    public void debeSerializarUnPerfilAJSON() throws IOException {
-        String actual = MAPPER.writeValueAsString(perfil);
+    public void debeTenerIdAutoAsignado() {
+        perfil = new Perfil(nombre, permisos);
+        assertThat(perfil.getId(), is(nullValue()));
+    }
 
-        assertThat(actual, is(fixture("fixtures/perfil_con_id.json")));
+    @Test
+    public void debeNoTieneNombreVacio() {
+        perfil = new Perfil();
+        perfil.setPermisos(permisos);
+        Set<ConstraintViolation<Perfil>> constraintViolations = validator.validate(perfil);
+        assertThat(constraintViolations.size(), is(1));
+        ConstraintViolation<Perfil> violation = constraintViolations.iterator().next();
+        assertThat(violation.getPropertyPath().iterator().next().getName(), is("nombre"));
+        assertThat(violation.getMessage(), is("El campo es obligatorio"));
+    }
+
+    @Test
+    public void debeNoTienePermisosVacio() {
+        perfil = new Perfil();
+        perfil.setNombre(nombre);
+        Set<ConstraintViolation<Perfil>> constraintViolations = validator.validate(perfil);
+        assertThat(constraintViolations.size(), is(1));
+        ConstraintViolation<Perfil> violation = constraintViolations.iterator().next();
+        assertThat(violation.getPropertyPath().iterator().next().getName(), is("permisos"));
+        assertThat(violation.getMessage(), is("El campo es obligatorio"));
+    }
+
+    @Test
+    public void debeNombreNoSeaSuperiorA100() {
+        nombre = RandomStringUtils.randomAlphabetic(101).toString();
+        perfil = new Perfil(nombre, permisos);
+        Set<ConstraintViolation<Perfil>> constraintViolations = validator.validate(perfil);
+        assertThat(constraintViolations.size(), is(1));
+        ConstraintViolation<Perfil> violation = constraintViolations.iterator().next();
+        assertThat(violation.getPropertyPath().iterator().next().getName(), is("nombre"));
+        assertThat(violation.getMessage(), is("length must be between 0 and 100"));
     }
 }
+
