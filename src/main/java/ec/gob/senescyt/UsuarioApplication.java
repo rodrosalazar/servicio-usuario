@@ -99,7 +99,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
             Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class, Detalle.class, Pais.class,
             Provincia.class, Canton.class, Parroquia.class, TipoVisa.class, CategoriaVisa.class, Etnia.class,
             PortadorTitulo.class, Direccion.class, Arbol.class, NivelArbol.class, UniversidadExtranjera.class,
-            Token.class, Identificacion.class, Cedula.class, Pasaporte.class, Credencial.class) {
+            Token.class, Identificacion.class, Cedula.class, Pasaporte.class, Credencial.class, Perfil.class, Permiso.class) {
 
         @Override
         public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
@@ -178,7 +178,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
                 despachadorEmail, tokenDAO, lectorPropiedadesEmail, constructorContenidoEmail, constructorRespuestas);
         jerseyEnvironment.register(usuarioResource);
 
-        PerfilResource perfilResource = new PerfilResource(perfilDAO, constructorRespuestas );
+        PerfilResource perfilResource = new PerfilResource(perfilDAO);
         jerseyEnvironment.register(perfilResource);
 
         IdentificacionResource identificacionResource = new IdentificacionResource(servicioCredencial);

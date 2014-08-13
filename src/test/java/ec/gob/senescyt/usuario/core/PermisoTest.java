@@ -1,40 +1,34 @@
 package ec.gob.senescyt.usuario.core;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.dropwizard.jackson.Jackson;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.IOException;
-
-import static io.dropwizard.testing.FixtureHelpers.fixture;
-import static org.fest.util.Lists.newArrayList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNull.nullValue;
 
 public class PermisoTest {
-
-    private static final ObjectMapper MAPPER = Jackson.newObjectMapper();
-    private Permiso perfil;
+    private String nombre;
+    private Acceso acceso;
+    private Permiso permiso;
 
     @Before
-    public void setUp() {
-        perfil = new Permiso(1l, 2l, newArrayList(Acceso.CREAR, Acceso.LEER));
+    public void setUp() throws Exception {
+        nombre = RandomStringUtils.random(10).toString();
+        acceso = Acceso.CREAR;
     }
 
     @Test
-    public void debeDeserializarUnPermisoDesdeJSON() throws IOException {
-        Permiso actual = MAPPER.readValue(fixture("fixtures/permiso.json"), Permiso.class);
-
-        assertThat(actual.getModuloId(), is(perfil.getModuloId()));
-        assertThat(actual.getFuncionId(), is(perfil.getFuncionId()));
-//        assertThat(actual.getAccesos(), is(perfil.getAccesos()));
+    public void debeInicializarConElNombreYElAcceso() {
+        permiso = new Permiso(nombre, acceso);
+        assertThat(permiso.getNombre(), is(nombre));
+        assertThat(permiso.getAcceso(), is(acceso));
     }
 
     @Test
-    public void debeSerializarUnJSONDesdeUnPermiso() throws IOException {
-        String permisoDestino = MAPPER.writeValueAsString(perfil);
-
-        assertThat(permisoDestino, is(fixture("fixtures/permiso_con_id.json")));
+    public void debeTenerIdAutoAsignado() {
+        permiso = new Permiso(nombre, acceso);
+        assertThat(permiso.getId(), is(nullValue()));
     }
 }

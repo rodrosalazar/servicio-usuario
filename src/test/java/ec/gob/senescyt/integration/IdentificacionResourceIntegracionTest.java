@@ -1,7 +1,6 @@
 package ec.gob.senescyt.integration;
 
 import com.sun.jersey.api.client.ClientResponse;
-import ec.gob.senescyt.commons.builders.PerfilBuilder;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.usuario.core.Credencial;
 import ec.gob.senescyt.usuario.core.Perfil;
@@ -21,7 +20,6 @@ import static org.hamcrest.core.Is.is;
 
 public class IdentificacionResourceIntegracionTest extends AbstractIntegracionTest {
 
-    private CredencialDAO credencialDAO;
     private String claveTest = "claveTest";
     private Usuario usuarioDePrueba;
     private Perfil perfilDePrueba;
@@ -30,7 +28,8 @@ public class IdentificacionResourceIntegracionTest extends AbstractIntegracionTe
     public void setUp() throws CifradoErroneoException {
         credencialDAO = new CredencialDAO(sessionFactory);
 
-        perfilDePrueba = hacerPost("perfiles",PerfilBuilder.nuevoPerfil().generar()).getEntity(Perfil.class);
+        perfilDePrueba = ayudantePerfil.construirConPermisos();
+        perfilDAO.guardar(perfilDePrueba);
 
         usuarioDePrueba = hacerPost("usuario", UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.perfiles = newArrayList(perfilDePrueba.getId()))

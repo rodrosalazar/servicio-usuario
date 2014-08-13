@@ -1,42 +1,40 @@
 package ec.gob.senescyt.usuario.core;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.validation.Valid;
 import java.util.List;
 
 @Entity
 @Table(name = "perfiles")
-public class Perfil {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Perfil extends Entidad {
 
     @NotEmpty
     @Length(max = 100)
     private String nombre;
 
-    // Ir a https://hibernate.atlassian.net/browse/HHH-1718 para mas informacion sobre el FetchMode.SUBSELECT
-    @OneToMany(mappedBy = "perfil", fetch = FetchType.EAGER)
-    @Cascade(CascadeType.ALL)
-    @JsonManagedReference
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "perfil_permiso_relaciones", joinColumns = { @JoinColumn(name = "perfil_id") }, inverseJoinColumns = { @JoinColumn(name = "permiso_id") })
     @NotEmpty
-    @Valid
     private List<Permiso> permisos;
 
-    private Perfil() {}
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    public Perfil() {
+        // Por Jackson
+    }
 
     public Perfil(String nombre, List<Permiso> permisos) {
         this.nombre = nombre;
@@ -47,11 +45,19 @@ public class Perfil {
         return nombre;
     }
 
-    public long getId() {
+    public List<Permiso> getPermisos() {
+        return permisos;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public List<Permiso> getPermisos() {
-        return permisos;
+    public void setPermisos(List<Permiso> permisos) {
+        this.permisos = permisos;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 }

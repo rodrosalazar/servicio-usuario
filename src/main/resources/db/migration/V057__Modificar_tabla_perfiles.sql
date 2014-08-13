@@ -1,0 +1,6 @@
+DROP TABLE perfiles CASCADE ;
+
+CREATE TABLE perfiles (
+  id SERIAL PRIMARY KEY,
+  nombre VARCHAR(100) NOT NULL
+);

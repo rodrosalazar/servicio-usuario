@@ -2,7 +2,6 @@ package ec.gob.senescyt.integration;
 
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
-import ec.gob.senescyt.commons.builders.PerfilBuilder;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Token;
@@ -30,12 +29,8 @@ public class BusquedaResourceIntegracionTest extends AbstractIntegracionTest {
     }
 
     private void cargarDataParaPruebas() {
-        Perfil perfil = PerfilBuilder.nuevoPerfil().generar();
-
-        ClientResponse responsePerfil = hacerPost("perfiles", perfil);
-
-        assertThat(responsePerfil.getStatus(), is(201));
-        Perfil perfilGuardado = responsePerfil.getEntity(Perfil.class);
+        Perfil perfilGuardado = ayudantePerfil.construirConPermisos();
+        perfilDAO.guardar(perfilGuardado);
 
         Usuario usuario = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
