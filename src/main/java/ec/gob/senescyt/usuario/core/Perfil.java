@@ -20,7 +20,7 @@ import java.util.List;
 public class Perfil extends Entidad {
 
     @NotEmpty
-    @Length(max = 100, message = "El campo debe estar entre 1 y 100")
+    @Length(max = 100, message = "{ec.gob.senescyt.error.nombreLongitud}")
     private String nombre;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
