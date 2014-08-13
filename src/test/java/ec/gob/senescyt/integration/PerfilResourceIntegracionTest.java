@@ -5,11 +5,14 @@ import ec.gob.senescyt.usuario.core.Acceso;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Permiso;
 import org.apache.commons.lang.RandomStringUtils;
+import org.hamcrest.MatcherAssert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
@@ -37,9 +40,10 @@ public class PerfilResourceIntegracionTest extends AbstractIntegracionTest {
         Perfil perfil = guardarPerfilConPermiso();
         ClientResponse response = hacerGet(PERFILES_URL);
 
-        List<LinkedHashMap> encontrarEntidad = response.getEntity(List.class);
-        assertThat(encontrarEntidad.size(), is(1));
-        assertThat(encontrarEntidad.get(0).get("nombre"), is(perfil.getNombre()));
+        Map<String, ArrayList> encontrarEntidad = response.getEntity(Map.class);
+        List<LinkedHashMap> recordos = encontrarEntidad.get(perfilDAO.nombreDeLaColeccion());
+        MatcherAssert.assertThat(recordos.size(), is(1));
+        MatcherAssert.assertThat(recordos.get(0).get("nombre"), is(perfil.getNombre()));
     }
 
     @Test

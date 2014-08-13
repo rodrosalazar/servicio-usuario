@@ -9,14 +9,17 @@ import ec.gob.senescyt.usuario.core.Permiso;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import io.dropwizard.testing.junit.ResourceTestRule;
+import org.apache.commons.lang.RandomStringUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -29,12 +32,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings("PMD.TooManyStaticImports")
+@SuppressWarnings({"PMD.TooManyStaticImports", "PMD.ExcessiveImports"})
 public class PerfilResourceTest {
 
     public static final String PERFILES_URL = "/perfiles";
     public static final String PERFILES_RESOURCE_URL = "/perfiles/1";
     private static PerfilDAO perfilDAO = mock(PerfilDAO.class);
+    private final String nombreDeLaColeccion = RandomStringUtils.random(10).toString();
 
     private final AyudantePerfil ayudantePerfil = new AyudantePerfil();
     private Perfil perfil;
@@ -52,6 +56,7 @@ public class PerfilResourceTest {
     @Before
     public void setUp() {
         client = RESOURCES.client();
+        when(perfilDAO.nombreDeLaColeccion()).thenReturn(nombreDeLaColeccion);
     }
 
     @After
@@ -131,9 +136,10 @@ public class PerfilResourceTest {
         ClientResponse response = getClient(PERFILES_URL)
                 .get(ClientResponse.class);
         assertThat(response.getStatus(), is(200));
-        List<LinkedHashMap> encontrarEntidad = response.getEntity(List.class);
-        assertThat(encontrarEntidad.size(), is(1));
-        assertThat(encontrarEntidad.get(0).get("nombre"), is(perfil.getNombre()));
+        Map<String, ArrayList> encontrarEntidad = response.getEntity(Map.class);
+        List<LinkedHashMap> recordos = encontrarEntidad.get(nombreDeLaColeccion);
+        assertThat(recordos.size(), is(1));
+        assertThat(recordos.get(0).get("nombre"), is(perfil.getNombre()));
     }
 
     @Test
