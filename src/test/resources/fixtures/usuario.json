@@ -12,7 +12,18 @@
     "emailInstitucional":"testEmail@senescyt.gob.ec",
     "numeroAutorizacionQuipux":"SENESCYT-DFAPO-2014-65946-MI",
     "finDeVigencia":"2016-07-29",
-    "idInstitucion":"1",
+    "institucion":{
+        "id":1,
+        "nombre":"ESPE",
+        "regimenId":1,
+        "regimen":"REGIMENTEST",
+        "estadoId":1,
+        "estado":"ESTADO",
+        "categoriaId":1,
+        "categoria":"CATEGORIA"},
     "nombreUsuario":"njumbo",
     "perfiles": [1234, 5678, 9630]
 }
+
+
+
