@@ -274,7 +274,7 @@ public class UsuarioResourceTest {
 
     @Test
     public void debeVerificarQueCodigoInstitucionNoSeaNulo() {
-        Usuario usuarioConInstitucionNula = UsuarioBuilder.nuevoUsuario().con(u -> u.idInstitucion = null).generar();
+        Usuario usuarioConInstitucionNula = UsuarioBuilder.nuevoUsuario().con(u -> u.institucion = null).generar();
 
         ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)

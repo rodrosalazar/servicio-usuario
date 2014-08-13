@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class PerfilBuilder {
+
     private static PerfilBuilder perfilBuilder;
     public String nombre = "atencion ciudadana";
     public List<Permiso> permisos = new ArrayList<>();
