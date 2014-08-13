@@ -69,6 +69,7 @@ public class Usuario {
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idinstitucion")
+    @Cascade(CascadeType.ALL)
     private Institucion institucion;
 
     @NotEmpty
