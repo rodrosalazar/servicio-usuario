@@ -8,6 +8,7 @@ import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.commons.enums.ElementosRaicesJSONEnum;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.commons.lectores.enums.ArchivosPropiedadesEnum;
+import ec.gob.senescyt.usuario.core.Institucion;
 import ec.gob.senescyt.usuario.core.Perfil;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.enums.TipoDocumento;
@@ -19,6 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import javax.ws.rs.core.MultivaluedMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -226,7 +228,23 @@ public class UsuarioResourceIntegracionTest extends AbstractIntegracionTest {
     }
 
     @Test
-    public void debeDevolverTodosLosUsuarios() {
+    public void noDebeGuardarUnUsuarioConInstitucionQueNoExiste() {
+        Institucion institucionNoExistente = new Institucion(100000l, "PUCE", 1l, null, 1l, null, 1l, null);
+
+        Usuario usuarioA = UsuarioBuilder.nuevoUsuario()
+                .con(b -> b.nombreUsuario = "usuarioA")
+                .con(b -> b.perfiles = newArrayList(perfilGuardado.getId()))
+                .con(b -> b.institucion = institucionNoExistente)
+                .generar();
+
+        ClientResponse respuesta = hacerPost("usuario", usuarioA);
+
+        assertThat(respuesta.getStatus(), is(400));
+    }
+
+    @Test
+    public void debeDevolverTodosLosUsuariosConLosDatosDeInstitucion() {
+
         Usuario usuarioA = UsuarioBuilder.nuevoUsuario()
                 .con(b -> b.nombreUsuario = "usuarioA")
                 .con(b -> b.perfiles = newArrayList(perfilGuardado.getId()))
@@ -253,8 +271,12 @@ public class UsuarioResourceIntegracionTest extends AbstractIntegracionTest {
         assertThat(entity, CoreMatchers.notNullValue());
         assertThat(entity.size(), is(2));
         Map<String, Object> usuario = (Map<String, Object>) entity.get(0);
+
         List perfiles = (List) usuario.get("perfiles");
         assertThat(perfiles.size(), is(1));
         assertThat(perfiles.get(0).toString(), is(String.valueOf(perfilGuardado.getId())));
+
+        HashMap<String, Object> recordo = (HashMap<String, Object>) usuario.get("institucion");
+        assertThat(recordo.get("nombre"), is(institucion.getNombre()));
     }
 }

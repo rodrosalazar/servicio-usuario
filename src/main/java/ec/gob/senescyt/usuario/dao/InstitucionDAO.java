@@ -9,8 +9,13 @@ import org.hibernate.SessionFactory;
 import java.util.List;
 
 public class InstitucionDAO extends AbstractDAO<Institucion>{
+
     public InstitucionDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
+    }
+
+    public Institucion obtenerPorId(long id){
+        return get(id);
     }
 
     public List<Institucion> obtenerTodas() {
