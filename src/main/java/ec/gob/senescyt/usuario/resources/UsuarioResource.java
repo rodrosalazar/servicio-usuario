@@ -11,6 +11,7 @@ import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
+import ec.gob.senescyt.usuario.dto.EdicionBasicaUsuario;
 import ec.gob.senescyt.usuario.enums.PropiedadesEmailEnum;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -19,7 +20,9 @@ import org.apache.commons.mail.EmailException;
 import javax.validation.Valid;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -90,17 +93,16 @@ public class UsuarioResource {
     @POST
     @UnitOfWork
     public Response crear(@Valid final Usuario usuario) throws EmailException {
-        if (usuario.getNombreUsuario() != null
-                && usuarioDAO.isRegistradoNombreUsuario(usuario.getNombreUsuario())) {
+        if (usuarioDAO.isRegistradoNombreUsuario(usuario.getNombreUsuario())) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(mensajeErrorBuilder.mensajeNombreDeUsuarioYaHaSidoRegistrado()).build();
         }
 
-        if (usuario.getIdentificacion().getNumeroIdentificacion() != null
-                && usuarioDAO.isRegistradoNumeroIdentificacion(usuario.getIdentificacion().getNumeroIdentificacion())) {
+        if (usuarioDAO.isRegistradoNumeroIdentificacion(usuario.getIdentificacion().getNumeroIdentificacion())) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity(mensajeErrorBuilder.mensajeNumeroIdentificacionYaHaSidoRegistrado()).build();
         }
+
 
         Usuario usuarioCreado = usuarioDAO.guardar(usuario);
 
@@ -115,6 +117,19 @@ public class UsuarioResource {
     public Response todos() {
         List<Usuario> usuarios = usuarioDAO.obtenerTodos();
         return constructorRespuestas.construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_USUARIOS, usuarios);
+    }
+
+    @PUT
+    @UnitOfWork
+    @Path("{id}")
+    public Response actualizarEstado(@PathParam("id") long id,  @Valid EdicionBasicaUsuario usuarioBasico) {
+        Usuario usuarioAEditar = usuarioDAO.obtenerPorId(id);
+
+        usuarioAEditar.completarCon(usuarioBasico);
+
+        usuarioDAO.guardar(usuarioAEditar);
+
+        return Response.status(Response.Status.OK).build();
     }
 
     private void mandarConfirmacion(Usuario usuarioCreado) throws EmailException {

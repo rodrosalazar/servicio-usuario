@@ -27,7 +27,7 @@ public class TokenTest {
                 new Nombre("Nelson", "Alberto", "Jumbo", "Hidalgo"),
                 "testEmail@senescyt.gob.ec", "SENESCYT-DFAPO-2014-65946-MI",
                 new DateTime(2016, 7, 29, 0, 0, DateTimeZone.UTC),
-                institucion, "nombreUsuario", asList(1234l, 5678l, 9630l));
+                institucion, "nombreUsuario", asList(1234l, 5678l, 9630l), EstadoUsuario.ACTIVO);
 
         token = new Token("32d88be3-2233-4b58-bf3c-99c35b162805", usuario);
     }

@@ -5,6 +5,7 @@ import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
 
@@ -49,4 +50,8 @@ public class UsuarioDAO extends AbstractDAO<Usuario> {
         query.executeUpdate();
     }
 
+    public Usuario obtenerPorId(long id) {
+        Criteria criteria = currentSession().createCriteria(Usuario.class);
+        return (Usuario) criteria.add(Restrictions.eq("id", id)).uniqueResult();
+    }
 }

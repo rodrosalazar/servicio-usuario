@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ec.gob.senescyt.commons.deserializers.JSONFechaDeserializer;
 import ec.gob.senescyt.commons.serializers.JSONFechaSerializer;
+import ec.gob.senescyt.usuario.dto.EdicionBasicaUsuario;
 import ec.gob.senescyt.usuario.validators.annotations.FechaVigenciaValida;
 import ec.gob.senescyt.usuario.validators.annotations.IdentificacionValida;
 import ec.gob.senescyt.usuario.validators.annotations.QuipuxValido;
@@ -17,6 +18,8 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -81,10 +84,14 @@ public class Usuario {
     @Column(name = "perfil_id")
     private List<Long> perfiles;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private EstadoUsuario estado;
+
     private Usuario() {}
 
     public Usuario(Identificacion identificacion, Nombre nombre, String emailInstitucional, String numeroAutorizacionQuipux,
-                   DateTime fechaDeVigencia, Institucion institucion, String nombreUsuario, List<Long> perfiles) {
+                   DateTime fechaDeVigencia, Institucion institucion, String nombreUsuario, List<Long> perfiles, EstadoUsuario estado) {
         this.identificacion = identificacion;
         this.nombre = nombre;
         this.emailInstitucional = emailInstitucional;
@@ -93,8 +100,13 @@ public class Usuario {
         this.institucion = institucion;
         this.nombreUsuario = nombreUsuario;
         this.perfiles = perfiles;
+        this.estado = estado;
     }
 
+    public void completarCon(EdicionBasicaUsuario usuarioBasico) {
+        this.estado = usuarioBasico.getEstado();
+        this.perfiles = usuarioBasico.getPerfiles();
+    }
     public long getId() {
         return id;
     }
@@ -130,4 +142,9 @@ public class Usuario {
     public Institucion getInstitucion(){
         return institucion;
     }
+
+    public EstadoUsuario getEstado() {
+        return estado;
+    }
+
 }
