@@ -3,6 +3,8 @@ package ec.gob.senescyt.usuario.core;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ec.gob.senescyt.usuario.enums.TipoDocumento;
 import io.dropwizard.jackson.Jackson;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.junit.Before;
@@ -12,7 +14,7 @@ import java.io.IOException;
 
 import static io.dropwizard.testing.FixtureHelpers.fixture;
 import static java.util.Arrays.asList;
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 
 public class UsuarioTest {
@@ -35,18 +37,20 @@ public class UsuarioTest {
     public void debeDeserializarUnUsuarioDesdeJSON() throws IOException {
         Usuario actual = MAPPER.readValue(fixture("fixtures/usuario.json"), Usuario.class);
 
-        assertThat(actual.getIdentificacion(), is(usuario.getIdentificacion()));
-        assertThat(actual.getNombre(), is(usuario.getNombre()));
-        assertThat(actual.getEmailInstitucional(), is(usuario.getEmailInstitucional()));
-        assertThat(actual.getNumeroAutorizacionQuipux(), is(usuario.getNumeroAutorizacionQuipux()));
-        assertThat(actual.getFinDeVigencia(), is(usuario.getFinDeVigencia()));
-        assertThat(actual.getPerfiles().get(0), is(usuario.getPerfiles().get(0)));
+        MatcherAssert.assertThat(actual.getIdentificacion(), is(usuario.getIdentificacion()));
+        MatcherAssert.assertThat(actual.getNombre(), is(usuario.getNombre()));
+        MatcherAssert.assertThat(actual.getEmailInstitucional(), is(usuario.getEmailInstitucional()));
+        MatcherAssert.assertThat(actual.getNumeroAutorizacionQuipux(), is(usuario.getNumeroAutorizacionQuipux()));
+        MatcherAssert.assertThat(actual.getFinDeVigencia(), is(usuario.getFinDeVigencia()));
+        MatcherAssert.assertThat(actual.getPerfiles().get(0), is(usuario.getPerfiles().get(0)));
+        MatcherAssert.assertThat(actual.getInstitucion(), CoreMatchers.is(notNullValue()));
+        MatcherAssert.assertThat(actual.getInstitucion().getId(), is(usuario.getInstitucion().getId()));
     }
 
     @Test
     public void debeSerializarUnJSONDesdeUnUsuario() throws IOException {
         String actual = MAPPER.writeValueAsString(usuario);
-        assertThat(actual, is(fixture("fixtures/usuario_con_id.json")));
+        MatcherAssert.assertThat(actual, is(fixture("fixtures/usuario_con_id.json")));
     }
 
 }

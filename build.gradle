@@ -195,6 +195,10 @@ task generateJavaFromWsdl() {
 }
 
 pmd {
+    targetJdk = '1.7'
+}
+
+pmdMain {
     ruleSets = [
             'basic',
             'braces',
@@ -210,7 +214,23 @@ pmd {
             'unusedcode',
     ]
     ruleSetFiles = files('config/pmd/pmd.xml')
-    targetJdk = '1.7'
+}
+
+pmdTest {
+    ruleSets = [
+            'basic',
+            'braces',
+            'clone',
+            'codesize',
+            'coupling',
+            'logging-java',
+            'migrating',
+            'strictexception',
+            'strings',
+            'typeresolution',
+            'unusedcode',
+    ]
+    ruleSetFiles = files('config/pmd/pmd.xml')
 }
 
 findbugs {

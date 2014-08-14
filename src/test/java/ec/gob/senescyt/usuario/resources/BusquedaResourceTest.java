@@ -153,4 +153,5 @@ public class BusquedaResourceTest {
         Token token = response.getEntity(Token.class);
         assertThat(token.getUsuario().getNombreUsuario(), is(nombreUsuarioEsperado));
     }
+
 }
