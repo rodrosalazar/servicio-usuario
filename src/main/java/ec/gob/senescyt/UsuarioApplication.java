@@ -184,7 +184,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         CredencialResource credencialResource = new CredencialResource(credencialesDAO, tokenDAO, mensajeErrorBuilder, servicioCredencial);
         jerseyEnvironment.register(credencialResource);
 
-        BusquedaResource busquedaResource = new BusquedaResource(servicioCedula, tokenDAO);
+        BusquedaResource busquedaResource = new BusquedaResource(servicioCedula, tokenDAO, usuarioDAO, lectorPropiedadesValidacion);
         jerseyEnvironment.register(busquedaResource);
     }
 
