@@ -119,6 +119,17 @@ public class UsuarioResource {
         return constructorRespuestas.construirRespuestaParaArray(ElementosRaicesJSONEnum.ELEMENTO_RAIZ_USUARIOS, usuarios);
     }
 
+    @GET
+    @UnitOfWork
+    @Path("{id}")
+    public Response obtenerPorId(@PathParam("id") long id) {
+        Usuario usuario = usuarioDAO.obtenerPorId(id);
+        if(usuario == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.status(Response.Status.OK).entity(usuario).build();
+    }
+
     @PUT
     @UnitOfWork
     @Path("{id}")

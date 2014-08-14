@@ -40,6 +40,7 @@ import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.mockito.Mockito.any;
@@ -413,6 +414,37 @@ public class UsuarioResourceTest {
         assertThat(response.getStatus(), is(200));
 
         verify(usuarioDAO).guardar(any(Usuario.class));
+    }
+
+    @Test
+    public void debeObtenerUsuarioCuandoSeBuscaUsuarioQueExiste() {
+        Usuario usuario = UsuarioBuilder.nuevoUsuario().generar();
+        when(usuarioDAO.obtenerPorId(123)).thenReturn(usuario);
+
+        ClientResponse response = client.resource("/usuario/123")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .get(ClientResponse.class);
+
+        verify(usuarioDAO).obtenerPorId(123);
+
+        Assertions.assertThat(response.getStatus()).isEqualTo(200);
+
+        Usuario resultado = response.getEntity(Usuario.class);
+        assertThat(resultado, is(notNullValue()));
+        assertThat(resultado.getNombreUsuario(), is(usuario.getNombreUsuario()));
+    }
+
+    @Test
+    public void debeObtenerErrorCuandoSeBuscaUsuarioQueNoExiste() {
+        when(usuarioDAO.obtenerPorId(123)).thenReturn(null);
+
+        ClientResponse response = client.resource("/usuario/123")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .get(ClientResponse.class);
+
+        verify(usuarioDAO).obtenerPorId(123);
+
+        Assertions.assertThat(response.getStatus()).isEqualTo(404);
     }
 
 }

@@ -273,4 +273,29 @@ public class UsuarioResourceIntegracionTest extends AbstractIntegracionTest {
         HashMap<String, Object> recordo = (HashMap<String, Object>) usuario.get("institucion");
         assertThat(recordo.get("nombre"), is(institucion.getNombre()));
     }
+
+    @Test
+    public void debeDevolverUsuarioCuandoBuscaIdDeUsuarioQueExiste() {
+
+        Usuario usuarioACrear = UsuarioBuilder.nuevoUsuario()
+                .con(b -> b.nombreUsuario = "usuarioA")
+                .con(b -> b.perfiles = newArrayList(perfilGuardado.getId()))
+                .con(u -> u.institucion = institucion)
+                .generar();
+
+        Usuario responseUsuarioCreado = hacerPost("usuario", usuarioACrear).getEntity(Usuario.class);
+
+        ClientResponse responseUsuarioObtenido = hacerGet("usuario/" + responseUsuarioCreado.getId());
+        assertThat(responseUsuarioObtenido.getStatus(), is(200));
+
+        Usuario usuarioObtenido =  responseUsuarioObtenido.getEntity(Usuario.class);
+        assertThat(usuarioObtenido.getNombreUsuario(), is(usuarioACrear.getNombreUsuario()));
+        assertThat(usuarioObtenido.getInstitucion().getId(), is(usuarioACrear.getInstitucion().getId()));
+    }
+
+    @Test
+    public void debeDevolverErrorCuandoBuscarIdDeUsuarioQueNoExiste() {
+        ClientResponse responseUsuarioObtenido = hacerGet("usuario/999");
+        assertThat(responseUsuarioObtenido.getStatus(), is(404));
+    }
 }
