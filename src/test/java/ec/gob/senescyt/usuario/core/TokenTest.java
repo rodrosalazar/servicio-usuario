@@ -1,7 +1,7 @@
 package ec.gob.senescyt.usuario.core;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ec.gob.senescyt.usuario.enums.TipoDocumento;
+import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import io.dropwizard.jackson.Jackson;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -23,11 +23,19 @@ public class TokenTest {
     @Before
     public void setUp() {
         Institucion institucion = new Institucion(1L, "PUCE", 1L, "R", 1L, "A", 1L, "ACADEMICO");
-        Usuario usuario = new Usuario(new Identificacion(TipoDocumento.CEDULA, "1718642174"),
-                new Nombre("Nelson", "Alberto", "Jumbo", "Hidalgo"),
-                "testEmail@senescyt.gob.ec", "SENESCYT-DFAPO-2014-65946-MI",
-                new DateTime(2016, 7, 29, 0, 0, DateTimeZone.UTC),
-                institucion, "nombreUsuario", asList(1234l, 5678l, 9630l));
+        Usuario usuario = UsuarioBuilder.nuevoUsuario()
+                .con(u -> u.numeroIdentificacion = "1718642174")
+                .con(u -> u.primerNombre = "Nelson")
+                .con(u -> u.segundoNombre = "Alberto")
+                .con(u -> u.primerApellido = "Jumbo")
+                .con(u -> u.segundoApellido = "Hidalgo")
+                .con(u -> u.emailInstitucional = "testEmail@senescyt.gob.ec")
+                .con(u -> u.numeroAutorizacionQuipux = "SENESCYT-DFAPO-2014-65946-MI")
+                .con(u -> u.fechaDeVigencia = new DateTime(2016, 7, 29, 0, 0, DateTimeZone.UTC))
+                .con(u -> u.institucion = institucion)
+                .con(u -> u.nombreUsuario = "nombreUsuario")
+                .con(u -> u.perfiles = asList(1234l, 5678l, 9630l))
+                .generar();
 
         token = new Token("32d88be3-2233-4b58-bf3c-99c35b162805", usuario);
     }

@@ -4,7 +4,7 @@ import ec.gob.senescyt.usuario.core.Permiso;
 import org.hibernate.SessionFactory;
 
 public class PermisoDAO extends AbstractServicioDAO<Permiso> {
-    public PermisoDAO(SessionFactory sessionFactory) {
-        super(sessionFactory);
+    public PermisoDAO(SessionFactory sessionFactory, String defaultSchema) {
+        super(sessionFactory, defaultSchema);
     }
 }

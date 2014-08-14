@@ -12,8 +12,11 @@ import java.util.List;
 public abstract class AbstractServicioDAO<T extends Entidad> extends AbstractDAO<T> {
     private String nombreTabla = getEntityClass().getAnnotation(Table.class).name();
 
-    public AbstractServicioDAO(SessionFactory sessionFactory) {
+    private String defaultSchema;
+
+    public AbstractServicioDAO(SessionFactory sessionFactory, String defaultSchema) {
         super(sessionFactory);
+        this.defaultSchema = defaultSchema;
     }
 
     public void guardar(T entidad) {
@@ -26,7 +29,7 @@ public abstract class AbstractServicioDAO<T extends Entidad> extends AbstractDAO
 
     @VisibleForTesting
     public void limpiar(){
-        String sqlQuery = String.format("TRUNCATE %s CASCADE", nombreTabla);
+        String sqlQuery = String.format("TRUNCATE %s.%s CASCADE", defaultSchema, nombreTabla);
         Query query = currentSession().createSQLQuery(sqlQuery);
         query.executeUpdate();
     }

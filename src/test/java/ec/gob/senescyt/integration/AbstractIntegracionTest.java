@@ -70,11 +70,11 @@ public class AbstractIntegracionTest {
 
     private void inicializaDB() {
         sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
-        usuarioDAO = new UsuarioDAO(sessionFactory);
-        credencialDAO = new CredencialDAO(sessionFactory);
-        perfilDAO = new PerfilDAO(sessionFactory);
-        tokenDAO = new TokenDAO(sessionFactory);
-        permisoDAO = new PermisoDAO(sessionFactory);
+        usuarioDAO = new UsuarioDAO(sessionFactory, RULE.getConfiguration().getDefaultSchema());
+        credencialDAO = new CredencialDAO(sessionFactory, RULE.getConfiguration().getDefaultSchema());
+        perfilDAO = new PerfilDAO(sessionFactory, RULE.getConfiguration().getDefaultSchema());
+        tokenDAO = new TokenDAO(sessionFactory, RULE.getConfiguration().getDefaultSchema());
+        permisoDAO = new PermisoDAO(sessionFactory, RULE.getConfiguration().getDefaultSchema());
         institucionDAO = new InstitucionDAO(sessionFactory);
         session = sessionFactory.openSession();
         seInicializaDB = true;
@@ -92,10 +92,11 @@ public class AbstractIntegracionTest {
         tokenDAO.limpiar();
         usuarioDAO.limpiar();
         perfilDAO.limpiar();
-        permisoDAO.limpiar();
         if (institucion != null){
             institucionDAO.eliminar(institucion);
         }
+
+        permisoDAO.limpiar();
         session.disconnect();
     }
 
@@ -103,10 +104,6 @@ public class AbstractIntegracionTest {
         return CLIENT.resource(getURL(recurso))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, objectoAEnviar);
-    }
-
-    private String getURL(String recurso) {
-        return String.format("https://localhost:%d/" + recurso, Constantes.HTTPS_PORT);
     }
 
     protected ClientResponse hacerPut(final String recurso, Entidad entidad) {
@@ -119,6 +116,10 @@ public class AbstractIntegracionTest {
         return CLIENT.resource(getURL(recurso))
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .delete(ClientResponse.class);
+    }
+
+    private String getURL(String recurso) {
+        return String.format("https://localhost:%d/" + recurso, Constantes.HTTPS_PORT);
     }
 
     protected ClientResponse hacerGet(String recurso, MultivaluedMap<String, String> parametros) {

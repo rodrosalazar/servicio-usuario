@@ -37,4 +37,8 @@ public class UsuarioConfiguration extends Configuration {
     public ConfiguracionBSG getConfiguracionBSG() {
         return configuracionBSG;
     }
+
+    public String getDefaultSchema() {
+        return database.getProperties().get("hibernate.default_schema");
+    }
 }

@@ -42,8 +42,8 @@ public class PerfilResourceTest {
 
     private final AyudantePerfil ayudantePerfil = new AyudantePerfil();
     private Perfil perfil;
-    
-    
+
+
 
     @ClassRule
     public static final ResourceTestRule RESOURCES = ResourceTestRule.builder()
@@ -52,7 +52,7 @@ public class PerfilResourceTest {
                                                                             .build();
 
     private Client client;
-    
+
     @Before
     public void setUp() {
         client = RESOURCES.client();

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.common.base.Optional;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
+import ec.gob.senescyt.commons.builders.EdicionBasicaUsuarioBuilder;
 import ec.gob.senescyt.commons.builders.UsuarioBuilder;
 import ec.gob.senescyt.commons.configuracion.ConfiguracionEmail;
 import ec.gob.senescyt.commons.email.ConstructorContenidoEmail;
@@ -16,6 +17,7 @@ import ec.gob.senescyt.usuario.core.Token;
 import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
+import ec.gob.senescyt.usuario.dto.EdicionBasicaUsuario;
 import ec.gob.senescyt.usuario.enums.TipoDocumento;
 import ec.gob.senescyt.usuario.exceptions.ValidacionExceptionMapper;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
@@ -101,7 +103,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueCedulaDeUsuarioNoEsteEnBlanco() {
+    public void debeVerificarQueCedulaDeUsuarioNoEsteEnBlancoCuandoCreaUsuario() {
         Usuario usuarioConCedulaEnBlanco = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.numeroIdentificacion = "")
                 .generar();
@@ -115,7 +117,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeAlertarCuandoUnaCedulaDeUnUsuarioSeaInvalida() {
+    public void debeAlertarCuandoUnaCedulaDeUnUsuarioSeaInvalidaCuandoCreaUsuario() {
         Usuario usuarioConCedulaInvalida = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.numeroIdentificacion = "11")
                 .generar();
@@ -129,7 +131,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeAlertarCuandoUnUsuarioTengaUnDocumentoDistintoACedulaOPasaporte() {
+    public void debeAlertarCuandoUnUsuarioTengaUnDocumentoDistintoACedulaOPasaporteCuandoCreaUsuario() {
         Usuario usuarioConTipoDeDocumentoInvalido = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.tipoDocumento = null)
                 .generar();
@@ -143,7 +145,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeGuardarUsuarioConPasaporte() {
+    public void debeGuardarUsuarioConPasaporteCuandoCreaUsuario() {
         Usuario usuarioConPasaporte = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.tipoDocumento = TipoDocumento.PASAPORTE)
                 .generar();
@@ -159,7 +161,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeIndicarCuandoUnEmailInstitucionalEsInvalido() {
+    public void debeIndicarCuandoUnEmailInstitucionalEsInvalidoCuandoCreaUsuario() {
         Usuario usuarioEmailInstitucionalInvalido = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.emailInstitucional = "invalido")
                 .generar();
@@ -173,7 +175,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueEmailNoEsteEnBlanco() {
+    public void debeVerificarQueEmailNoEsteEnBlancoCuandoCreaUsuario() {
         Usuario usuarioConEmailInstitucionalInvalido = UsuarioBuilder.nuevoUsuario().con(u -> u.emailInstitucional = "").generar();
 
         ClientResponse response = client.resource("/usuario")
@@ -185,7 +187,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeIndicarCuandoUnEmailInstitucionalEsValido() {
+    public void debeIndicarCuandoUnEmailInstitucionalEsValidoCuandoCreaUsuario() {
         Usuario usuarioConEmailValido = UsuarioBuilder.nuevoUsuario().generar();
         when(usuarioDAO.guardar(any(Usuario.class))).thenReturn(usuarioConEmailValido);
 
@@ -198,7 +200,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueLaFechaDeFinDeVigenciaNoPuedeSerMenorALaFechaActual() throws JsonProcessingException {
+    public void debeVerificarQueLaFechaDeFinDeVigenciaNoPuedeSerMenorALaFechaActualCuandoCreaUsuario() throws JsonProcessingException {
         Usuario usuarioConFinDeVigenciaInvalida = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.fechaDeVigencia = new DateTime().withZone(DateTimeZone.UTC).withTimeAtStartOfDay().minusMonths(1))
                 .generar();
@@ -213,7 +215,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueNumeroQuipuxNoEsteEnBlanco() {
+    public void debeVerificarQueNumeroQuipuxNoEsteEnBlancoCuandoCreaUsuario() {
         Usuario usuarioConQuipuxEnBlanco = UsuarioBuilder.nuevoUsuario().con(u -> u.numeroAutorizacionQuipux = "").generar();
 
         ClientResponse response = client.resource("/usuario")
@@ -225,7 +227,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeIndicarQueFormatoDeNumeroAutorizacionQuipuxEsInvalido() throws JsonProcessingException {
+    public void debeIndicarQueFormatoDeNumeroAutorizacionQuipuxEsInvalidoCuandoCreaUsuario() throws JsonProcessingException {
         Usuario usuarioConNumeroDeQuipuxInvalido = UsuarioBuilder.nuevoUsuario().con(u -> u.numeroAutorizacionQuipux = "123456").generar();
 
         ClientResponse response = client.resource("/usuario")
@@ -237,7 +239,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQuePrimerNombreNoEsteEnBlanco() {
+    public void debeVerificarQuePrimerNombreNoEsteEnBlancoCuandoCreaUsuario() {
         Usuario usuarioConPrimerNombreEnBlanco = UsuarioBuilder.nuevoUsuario().con(u -> u.primerNombre = "").generar();
 
         ClientResponse response = client.resource("/usuario")
@@ -249,7 +251,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQuePrimerApellidoNoEsteEnBlanco() {
+    public void debeVerificarQuePrimerApellidoNoEsteEnBlancoCuandoCreaUsuario() {
         Usuario usuarioConApellidoEnBlanco = UsuarioBuilder.nuevoUsuario().con(u -> u.primerApellido = "").generar();
 
         ClientResponse response = client.resource("/usuario")
@@ -261,7 +263,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueFechaFinDeVigenciaNoEsteEnBlanco(){
+    public void debeVerificarQueFechaFinDeVigenciaNoEsteEnBlancoCuandoCreaUsuario(){
         Usuario usuarioConFechaDeVigenciaNula = UsuarioBuilder.nuevoUsuario().con(u -> u.fechaDeVigencia = null).generar();
 
         ClientResponse response = client.resource("/usuario")
@@ -285,7 +287,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueCodigoInstitucionNoEsteEnBlanco() {
+    public void debeVerificarQueCodigoInstitucionNoEsteEnBlancoCuandoCreaUsuario() {
         String usuarioConInstucionEnBlanco = UsuarioBuilder.usuarioConIdInstitucionEnBlanco();
 
         ClientResponse response = client.resource("/usuario")
@@ -297,7 +299,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueNombreDeUsuarioNoEsteEnBlanco() {
+    public void debeVerificarQueNombreDeUsuarioNoEsteEnBlancoCuandoCreaUsuario() {
         ClientResponse response = client.resource("/usuario")
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .post(ClientResponse.class, UsuarioBuilder.nuevoUsuario().con(u -> u.nombreUsuario = "").generar());
@@ -307,7 +309,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeVerificarQueLosPerfilesNoEstenVacios() {
+    public void debeVerificarQueLosPerfilesNoEstenVaciosCuandoCreaUsuario() {
         Usuario usuarioSinPerfiles = UsuarioBuilder.nuevoUsuario().con(u -> u.perfiles = null).generar();
 
         ClientResponse response = client.resource("/usuario")
@@ -319,7 +321,7 @@ public class UsuarioResourceTest {
     }
 
     @Test
-    public void debeGuardarUsuario() {
+    public void debeCrearUsuario() {
         Usuario usuarioValido = UsuarioBuilder.nuevoUsuario().generar();
         when(usuarioDAO.guardar(any(Usuario.class))).thenReturn(usuarioValido);
 
@@ -367,4 +369,50 @@ public class UsuarioResourceTest {
         Assertions.assertThat(resultado).isNotEmpty();
         Assertions.assertThat(resultado.size()).isEqualTo(1);
     }
+
+    @Test
+    public void debeVerificarQueEstadoEsteDefinidoCuandoEditaUsuario() {
+        EdicionBasicaUsuario edicionBasicaUsuario = EdicionBasicaUsuarioBuilder
+                .nuevaEdicionBasicaUsuario()
+                .con(u -> u.estadoUsuario = null)
+                .generar();
+
+        ClientResponse response = client.resource("/usuario/123")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .put(ClientResponse.class, edicionBasicaUsuario);
+
+        assertThat(response.getStatus(), is(400));
+        verifyZeroInteractions(usuarioDAO);
+    }
+
+    @Test
+    public void debeVerificarQuePerfilesEstenDefinidosCuandoEditaUsuario() {
+        EdicionBasicaUsuario edicionBasicaUsuario = EdicionBasicaUsuarioBuilder
+                .nuevaEdicionBasicaUsuario()
+                .con(u -> u.perfiles = null)
+                .generar();
+
+        ClientResponse response = client.resource("/usuario/123")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .put(ClientResponse.class, edicionBasicaUsuario);
+
+        assertThat(response.getStatus(), is(400));
+        verifyZeroInteractions(usuarioDAO);
+    }
+
+    @Test
+    public void debeVerificarGuardeCambiosCuandoEditaUsuarioCorrectamente() {
+        when(usuarioDAO.obtenerPorId(123)).thenReturn(UsuarioBuilder.nuevoUsuario().generar());
+
+        EdicionBasicaUsuario edicionBasicaUsuario = EdicionBasicaUsuarioBuilder.nuevaEdicionBasicaUsuario().generar();
+
+        ClientResponse response = client.resource("/usuario/123")
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .put(ClientResponse.class, edicionBasicaUsuario);
+
+        assertThat(response.getStatus(), is(200));
+
+        verify(usuarioDAO).guardar(any(Usuario.class));
+    }
+
 }

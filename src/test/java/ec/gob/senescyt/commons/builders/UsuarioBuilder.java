@@ -1,5 +1,6 @@
 package ec.gob.senescyt.commons.builders;
 
+import ec.gob.senescyt.usuario.core.EstadoUsuario;
 import ec.gob.senescyt.usuario.core.Identificacion;
 import ec.gob.senescyt.usuario.core.Institucion;
 import ec.gob.senescyt.usuario.core.Nombre;
@@ -27,6 +28,7 @@ public class UsuarioBuilder {
     public Institucion institucion = new Institucion(1L, "PUCE", 1L, "R", 1L, "A", 1L, "ACADEMICO");
     public List<Long> perfiles = newArrayList(1L);
     public String nombreUsuario = "usuarioSenescyt";
+    public EstadoUsuario estado = EstadoUsuario.ACTIVO;
 
     private static UsuarioBuilder usuarioBuilder;
 
@@ -44,7 +46,7 @@ public class UsuarioBuilder {
         return new Usuario(new Identificacion(tipoDocumento, numeroIdentificacion),
                 new Nombre(primerNombre, segundoNombre, primerApellido, segundoApellido),
                 emailInstitucional, numeroAutorizacionQuipux, fechaDeVigencia,
-                institucion, nombreUsuario, perfiles);
+                institucion, nombreUsuario, perfiles, estado);
     }
 
     public static String usuarioConIdInstitucionEnBlanco() {

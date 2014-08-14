@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ec.gob.senescyt.commons.deserializers.JSONFechaDeserializer;
 import ec.gob.senescyt.commons.serializers.JSONFechaSerializer;
+import ec.gob.senescyt.usuario.dto.EdicionBasicaUsuario;
 import ec.gob.senescyt.usuario.validators.annotations.FechaVigenciaValida;
 import ec.gob.senescyt.usuario.validators.annotations.IdentificacionValida;
 import ec.gob.senescyt.usuario.validators.annotations.QuipuxValido;
@@ -16,14 +17,12 @@ import org.joda.time.DateTime;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.Valid;
@@ -32,21 +31,21 @@ import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @javax.persistence.Entity
-@Table(name = "usuarios")
+@javax.persistence.Table(name = "usuarios")
 public class Usuario {
 
     private static final String REGEX_EMAIL = "^[a-z](\\.?[_-]*[a-z0-9]+)*@\\w+(\\.\\w+)*(\\.[a-z]{2,})$";
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @javax.persistence.Id
+    @javax.persistence.GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Embedded
+    @javax.persistence.Embedded
     @Valid
     @IdentificacionValida
     private Identificacion identificacion;
 
-    @Embedded
+    @javax.persistence.Embedded
     @Valid
     private Nombre nombre;
 
@@ -81,10 +80,14 @@ public class Usuario {
     @Column(name = "perfil_id")
     private List<Long> perfiles;
 
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private EstadoUsuario estado;
+
     private Usuario() {}
 
     public Usuario(Identificacion identificacion, Nombre nombre, String emailInstitucional, String numeroAutorizacionQuipux,
-                   DateTime fechaDeVigencia, Institucion institucion, String nombreUsuario, List<Long> perfiles) {
+                   DateTime fechaDeVigencia, Institucion institucion, String nombreUsuario, List<Long> perfiles, EstadoUsuario estado) {
         this.identificacion = identificacion;
         this.nombre = nombre;
         this.emailInstitucional = emailInstitucional;
@@ -93,8 +96,13 @@ public class Usuario {
         this.institucion = institucion;
         this.nombreUsuario = nombreUsuario;
         this.perfiles = perfiles;
+        this.estado = estado;
     }
 
+    public void completarCon(EdicionBasicaUsuario usuarioBasico) {
+        this.estado = usuarioBasico.getEstado();
+        this.perfiles = usuarioBasico.getPerfiles();
+    }
     public long getId() {
         return id;
     }
@@ -130,4 +138,9 @@ public class Usuario {
     public Institucion getInstitucion(){
         return institucion;
     }
+
+    public EstadoUsuario getEstado() {
+        return estado;
+    }
+
 }

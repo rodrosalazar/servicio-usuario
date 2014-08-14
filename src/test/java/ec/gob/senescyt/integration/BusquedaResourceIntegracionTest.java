@@ -24,7 +24,7 @@ public class BusquedaResourceIntegracionTest extends AbstractIntegracionTest {
 
     @Before
     public void setUp() {
-        tokenDAO = new TokenDAO(sessionFactory);
+        tokenDAO = new TokenDAO(sessionFactory, RULE.getConfiguration().getDefaultSchema());
         cargarDataParaPruebas();
     }
 

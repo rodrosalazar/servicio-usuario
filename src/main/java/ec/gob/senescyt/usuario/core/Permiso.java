@@ -42,4 +42,5 @@ public class Permiso extends Entidad {
     public String getModulo() {
         return modulo;
     }
+
 }

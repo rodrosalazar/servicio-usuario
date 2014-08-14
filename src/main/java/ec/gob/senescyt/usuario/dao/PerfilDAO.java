@@ -5,7 +5,7 @@ import org.hibernate.SessionFactory;
 
 public class PerfilDAO extends AbstractServicioDAO<Perfil> {
 
-    public PerfilDAO(SessionFactory sessionFactory) {
-        super(sessionFactory);
+    public PerfilDAO(SessionFactory sessionFactory, String defaultSchema) {
+        super(sessionFactory, defaultSchema);
     }
 }
