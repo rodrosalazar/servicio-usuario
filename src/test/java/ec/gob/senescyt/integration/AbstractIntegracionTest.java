@@ -70,12 +70,12 @@ public class AbstractIntegracionTest {
 
     private void inicializaDB() {
         sessionFactory = ((UsuarioApplication) RULE.getApplication()).getSessionFactory();
-        usuarioDAO = new UsuarioDAO(sessionFactory);
-        credencialDAO = new CredencialDAO(sessionFactory);
-        perfilDAO = new PerfilDAO(sessionFactory);
-        tokenDAO = new TokenDAO(sessionFactory);
+        usuarioDAO = new UsuarioDAO(sessionFactory, RULE.getConfiguration().getDefaultSchema());
+        credencialDAO = new CredencialDAO(sessionFactory, RULE.getConfiguration().getDefaultSchema());
+        perfilDAO = new PerfilDAO(sessionFactory, RULE.getConfiguration().getDefaultSchema());
+        tokenDAO = new TokenDAO(sessionFactory, RULE.getConfiguration().getDefaultSchema());
+        permisoDAO = new PermisoDAO(sessionFactory, RULE.getConfiguration().getDefaultSchema());
         institucionDAO = new InstitucionDAO(sessionFactory);
-        permisoDAO = new PermisoDAO(sessionFactory);
         session = sessionFactory.openSession();
         seInicializaDB = true;
     }

@@ -7,10 +7,15 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
+import javax.persistence.Table;
+
 public class CredencialDAO extends AbstractDAO<Credencial> {
 
-    public CredencialDAO(SessionFactory sessionFactory) {
+    private String defaultSchema;
+
+    public CredencialDAO(SessionFactory sessionFactory, String defaultSchema) {
         super(sessionFactory);
+        this.defaultSchema = defaultSchema;
     }
 
     public Credencial guardar(Credencial credencial) {
@@ -18,7 +23,9 @@ public class CredencialDAO extends AbstractDAO<Credencial> {
     }
 
     public void limpiar() {
-        Query query = currentSession().createSQLQuery("TRUNCATE credenciales CASCADE");
+        String nombreTabla = getEntityClass().getAnnotation(Table.class).name();
+        String sqlQuery = String.format("TRUNCATE %s.%s CASCADE", defaultSchema, nombreTabla);
+        Query query = currentSession().createSQLQuery(sqlQuery);
         query.executeUpdate();
     }
 

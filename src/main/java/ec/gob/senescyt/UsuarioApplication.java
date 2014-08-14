@@ -45,6 +45,7 @@ import ec.gob.senescyt.titulos.resources.EtniaResource;
 import ec.gob.senescyt.titulos.resources.ProvinciaResource;
 import ec.gob.senescyt.titulos.resources.TipoDeVisaResource;
 import ec.gob.senescyt.titulos.resources.TituloExtranjeroResource;
+import ec.gob.senescyt.usuario.UsuarioHibernateBundle;
 import ec.gob.senescyt.usuario.autenticacion.UsuarioAuthenticator;
 import ec.gob.senescyt.usuario.bundles.DBMigrationsBundle;
 import ec.gob.senescyt.usuario.core.*;
@@ -76,8 +77,6 @@ import ec.gob.senescyt.usuario.services.ServicioCredencial;
 import ec.gob.senescyt.usuario.validators.CedulaValidator;
 import io.dropwizard.Application;
 import io.dropwizard.auth.oauth.OAuthProvider;
-import io.dropwizard.db.DataSourceFactory;
-import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.jersey.setup.JerseyEnvironment;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
@@ -96,17 +95,13 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
     private final DBMigrationsBundle flywayBundle = new DBMigrationsBundle();
 
-    private final HibernateBundle<UsuarioConfiguration> hibernate = new HibernateBundle<UsuarioConfiguration>(Perfil.class, Permiso.class,
+
+    private final UsuarioHibernateBundle hibernate = new UsuarioHibernateBundle(UsuarioConfiguration.class, Perfil.class, Permiso.class,
             Usuario.class, Institucion.class, Clasificacion.class, Area.class, Subarea.class, Detalle.class, Pais.class,
             Provincia.class, Canton.class, Parroquia.class, TipoVisa.class, CategoriaVisa.class, Etnia.class,
             PortadorTitulo.class, Direccion.class, Arbol.class, NivelArbol.class, UniversidadExtranjera.class,
-            Token.class, Identificacion.class, Cedula.class, Pasaporte.class, Credencial.class, Perfil.class, Permiso.class) {
-
-        @Override
-        public DataSourceFactory getDataSourceFactory(UsuarioConfiguration configuration) {
-            return configuration.getDataSourceFactory();
-        }
-    };
+            Token.class, Identificacion.class, Cedula.class, Pasaporte.class, Credencial.class, Permiso.class);
+    private String defaultSchema;
 
     public static void main(String[] args) throws Exception {
         new UsuarioApplication().run(args);
@@ -125,6 +120,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
 
     @Override
     public void run(UsuarioConfiguration configuration, Environment environment) throws Exception {
+        defaultSchema = hibernate.getConfiguration().getDefaultSchema();
         JerseyEnvironment jerseyEnvironment = environment.jersey();
         ConstructorRespuestas constructorRespuestas = new ConstructorRespuestas();
 
@@ -142,8 +138,8 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     }
 
     private void configurarLimpieza(JerseyEnvironment jerseyEnvironment) {
-        PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory());
-        UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory());
+        PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory(), defaultSchema);
+        UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory(), defaultSchema);
 
         LimpiezaResource limpiezaResource = new LimpiezaResource(usuarioDAO, perfilDAO);
         jerseyEnvironment.register(limpiezaResource);
@@ -159,16 +155,16 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     private void configurarCuenta(JerseyEnvironment jerseyEnvironment, ConstructorRespuestas constructorRespuestas,
                                   UsuarioConfiguration configuration) throws CifradoErroneoException {
 
-        CredencialDAO credencialesDAO = new CredencialDAO(getSessionFactory());
-        UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory());
+        CredencialDAO credencialesDAO = new CredencialDAO(getSessionFactory(), defaultSchema);
+        UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory(), defaultSchema);
         CedulaValidator cedulaValidator = new CedulaValidator();
         ServicioCifrado servicioCifrado = new ServicioCifrado();
         Hasher hasher = new Hasher();
         LectorArchivoDePropiedades lectorPropiedadesValidacion = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_VALIDACIONES.getBaseName());
-        TokenDAO tokenDAO = new TokenDAO(getSessionFactory());
+        TokenDAO tokenDAO = new TokenDAO(getSessionFactory(), defaultSchema);
         LectorArchivoDePropiedades lectorPropiedadesEmail = new LectorArchivoDePropiedades(ArchivosPropiedadesEnum.ARCHIVO_PROPIEDADES_EMAIL.getBaseName());
         ConstructorContenidoEmail constructorContenidoEmail = new ConstructorContenidoEmail();
-        PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory());
+        PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory(), defaultSchema);
         MensajeErrorBuilder mensajeErrorBuilder = new MensajeErrorBuilder(lectorPropiedadesValidacion);
         ServicioCredencial servicioCredencial = new ServicioCredencial(credencialesDAO, servicioCifrado, hasher);
         ProvinciaDAO provinciaDAO = new ProvinciaDAO(getSessionFactory());

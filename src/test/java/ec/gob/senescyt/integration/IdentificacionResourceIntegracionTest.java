@@ -26,7 +26,7 @@ public class IdentificacionResourceIntegracionTest extends AbstractIntegracionTe
 
     @Before
     public void setUp() throws CifradoErroneoException {
-        credencialDAO = new CredencialDAO(sessionFactory);
+        credencialDAO = new CredencialDAO(sessionFactory, RULE.getConfiguration().getDefaultSchema());
 
         perfilDePrueba = ayudantePerfil.construirConPermisos();
         perfilDAO.guardar(perfilDePrueba);
