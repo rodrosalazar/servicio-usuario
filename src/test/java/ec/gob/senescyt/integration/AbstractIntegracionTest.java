@@ -86,7 +86,9 @@ public class AbstractIntegracionTest {
         tokenDAO.limpiar();
         usuarioDAO.limpiar();
         perfilDAO.limpiar();
-        institucionDAO.limpiar();
+        if (institucion != null){
+            institucionDAO.eliminar(institucion);
+        }
         session.disconnect();
     }
 

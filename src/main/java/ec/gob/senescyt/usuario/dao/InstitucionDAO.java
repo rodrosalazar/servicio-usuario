@@ -25,7 +25,8 @@ public class InstitucionDAO extends AbstractDAO<Institucion>{
     }
 
     @VisibleForTesting
-    public void limpiar() {
-        currentSession().createSQLQuery("TRUNCATE instituciones CASCADE ").executeUpdate();
+    public void eliminar(Institucion institucion){
+        currentSession().delete(institucion);
     }
+
 }
