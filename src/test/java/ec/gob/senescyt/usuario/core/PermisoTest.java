@@ -9,26 +9,29 @@ import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNull.nullValue;
 
 public class PermisoTest {
-    private String nombre;
+    private String modulo;
+    private String funcion;
     private Acceso acceso;
     private Permiso permiso;
 
     @Before
     public void setUp() throws Exception {
-        nombre = RandomStringUtils.random(10).toString();
+        modulo = RandomStringUtils.random(10).toString();
+        funcion = RandomStringUtils.random(10).toString();
         acceso = Acceso.CREAR;
     }
 
     @Test
     public void debeInicializarConElNombreYElAcceso() {
-        permiso = new Permiso(nombre, acceso);
-        assertThat(permiso.getNombre(), is(nombre));
+        permiso = new Permiso(modulo, funcion, acceso);
+        assertThat(permiso.getModulo(), is(modulo));
+        assertThat(permiso.getFuncion(), is(funcion));
         assertThat(permiso.getAcceso(), is(acceso));
     }
 
     @Test
     public void debeTenerIdAutoAsignado() {
-        permiso = new Permiso(nombre, acceso);
+        permiso = new Permiso(modulo, funcion, acceso);
         assertThat(permiso.getId(), is(nullValue()));
     }
 }

@@ -10,24 +10,25 @@ import javax.persistence.Table;
 @Table(name = "permisos")
 public class Permiso extends Entidad {
 
-    private String nombre;
-    private Acceso acceso;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String funcion;
+    private Acceso acceso;
+    private String modulo;
 
     public Permiso() {
         // Por Jackson
     }
 
-    public Permiso(String nombre, Acceso acceso) {
-        this.nombre = nombre;
+    public Permiso(String modulo, String funcion, Acceso acceso) {
+        this.modulo = modulo;
+        this.funcion = funcion;
         this.acceso = acceso;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getFuncion() {
+        return funcion;
     }
 
     public Acceso getAcceso() {
@@ -36,5 +37,9 @@ public class Permiso extends Entidad {
 
     public Long getId() {
         return id;
+    }
+
+    public String getModulo() {
+        return modulo;
     }
 }

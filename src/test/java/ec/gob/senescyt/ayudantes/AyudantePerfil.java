@@ -22,7 +22,7 @@ public class AyudantePerfil {
     public Perfil construirConPermisos() {
         Perfil perfil = new Perfil();
         perfil.setNombre(RandomStringUtils.random(10).toString());
-        perfil.setPermisos(newArrayList(new Permiso(RandomStringUtils.random(10).toString(), Acceso.CREAR)));
+        perfil.setPermisos(newArrayList(new Permiso(RandomStringUtils.random(10).toString(), RandomStringUtils.random(10).toString(), Acceso.CREAR)));
         return perfil;
     }
 }

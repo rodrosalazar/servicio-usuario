@@ -22,7 +22,7 @@ public class PerfilDAOIntegracionTest extends AbstractIntegracionTest {
     @Before
     public void setUp() throws Exception {
         String nombre = RandomStringUtils.random(10).toString();
-        permisoSet.add(new Permiso(nombre, Acceso.CREAR));
+        permisoSet.add(new Permiso(nombre, nombre, Acceso.CREAR));
         perfil = new Perfil(nombre, permisoSet);
     }
 

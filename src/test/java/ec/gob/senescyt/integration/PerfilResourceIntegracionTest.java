@@ -86,7 +86,7 @@ public class PerfilResourceIntegracionTest extends AbstractIntegracionTest {
     }
 
     private Permiso construirPermiso() {
-        Permiso permiso = new Permiso(RandomStringUtils.random(10).toString(), Acceso.CREAR);
+        Permiso permiso = new Permiso(RandomStringUtils.random(10).toString(), RandomStringUtils.random(10).toString(), Acceso.CREAR);
         permisoDAO.guardar(permiso);
         return permiso;
     }
