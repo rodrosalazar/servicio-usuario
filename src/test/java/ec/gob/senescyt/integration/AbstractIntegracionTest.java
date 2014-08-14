@@ -8,12 +8,15 @@ import ec.gob.senescyt.UsuarioConfiguration;
 import ec.gob.senescyt.ayudantes.AyudantePerfil;
 import ec.gob.senescyt.commons.Constantes;
 import ec.gob.senescyt.usuario.core.Entidad;
+import ec.gob.senescyt.usuario.core.Institucion;
 import ec.gob.senescyt.usuario.dao.CredencialDAO;
+import ec.gob.senescyt.usuario.dao.InstitucionDAO;
 import ec.gob.senescyt.usuario.dao.PerfilDAO;
 import ec.gob.senescyt.usuario.dao.PermisoDAO;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
 import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import io.dropwizard.testing.junit.DropwizardAppRule;
+import org.apache.commons.lang.RandomStringUtils;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.context.internal.ManagedSessionContext;
@@ -36,6 +39,7 @@ public class AbstractIntegracionTest {
     protected TokenDAO tokenDAO;
     protected CredencialDAO credencialDAO;
     protected PermisoDAO permisoDAO;
+    protected InstitucionDAO institucionDAO;
     protected Session session;
     protected AyudantePerfil ayudantePerfil = new AyudantePerfil();
     private boolean seInicializaDB = false;
@@ -43,6 +47,7 @@ public class AbstractIntegracionTest {
 
     @Rule
     public final DropwizardAppRule<UsuarioConfiguration> RULE = new DropwizardAppRule<>(UsuarioApplication.class, resourceFilePath(CONFIGURACION));
+    protected Institucion institucion;
 
     protected static String resourceFilePath(String resourceClassPathLocation) {
         try {
@@ -57,6 +62,10 @@ public class AbstractIntegracionTest {
         if (!seInicializaDB){ inicializaDB(); }
         ManagedSessionContext.bind(session);
         limpiarTablas();
+        String nombre = RandomStringUtils.random(10).toString();
+        institucion = new Institucion(1L, nombre, 1L, nombre, 1L, nombre, 1L, nombre);
+        institucionDAO.guardar(institucion);
+        session.flush();
     }
 
     private void inicializaDB() {
@@ -66,6 +75,7 @@ public class AbstractIntegracionTest {
         perfilDAO = new PerfilDAO(sessionFactory);
         tokenDAO = new TokenDAO(sessionFactory);
         permisoDAO = new PermisoDAO(sessionFactory);
+        institucionDAO = new InstitucionDAO(sessionFactory);
         session = sessionFactory.openSession();
         seInicializaDB = true;
     }
@@ -83,6 +93,9 @@ public class AbstractIntegracionTest {
         usuarioDAO.limpiar();
         perfilDAO.limpiar();
         permisoDAO.limpiar();
+        if (institucion != null){
+            institucionDAO.eliminar(institucion);
+        }
         session.disconnect();
     }
 

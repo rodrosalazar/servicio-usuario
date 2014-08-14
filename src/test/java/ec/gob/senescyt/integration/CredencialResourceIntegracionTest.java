@@ -43,6 +43,7 @@ public class CredencialResourceIntegracionTest extends AbstractIntegracionTest {
 
         Usuario usuarioValido = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
+                .con(u -> u.institucion = institucion)
                 .con(u -> u.nombreUsuario = NOMBRE_USUARIO)
                 .generar();
         ClientResponse respuestaUsuario = hacerPost("usuario", usuarioValido);

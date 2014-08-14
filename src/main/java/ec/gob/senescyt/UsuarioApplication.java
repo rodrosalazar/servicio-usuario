@@ -10,6 +10,7 @@ import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
 import ec.gob.senescyt.commons.email.ConstructorContenidoEmail;
 import ec.gob.senescyt.commons.email.DespachadorEmail;
 import ec.gob.senescyt.commons.exceptions.DBConstraintViolationMapper;
+import ec.gob.senescyt.commons.exceptions.HibernateConstraintViolationMapper;
 import ec.gob.senescyt.commons.filters.HeaderResponseFilter;
 import ec.gob.senescyt.commons.filters.RedirectFilter;
 import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
@@ -256,6 +257,7 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         ValidacionExceptionMapper validacionExceptionMapper = new ValidacionExceptionMapper();
         environment.jersey().register(validacionExceptionMapper);
         environment.jersey().register(new DBConstraintViolationMapper());
+        environment.jersey().register(new HibernateConstraintViolationMapper());
 
         LoginIncorrectoMapper loginIncorrectoMapper = new LoginIncorrectoMapper();
         environment.jersey().register(loginIncorrectoMapper);

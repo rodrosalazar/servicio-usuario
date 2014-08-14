@@ -33,6 +33,7 @@ public class IdentificacionResourceIntegracionTest extends AbstractIntegracionTe
 
         usuarioDePrueba = hacerPost("usuario", UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.perfiles = newArrayList(perfilDePrueba.getId()))
+                .con(u -> u.institucion = institucion)
                 .generar()).getEntity(Usuario.class);
 
         Credencial credencial = new Credencial(usuarioDePrueba.getNombreUsuario(),

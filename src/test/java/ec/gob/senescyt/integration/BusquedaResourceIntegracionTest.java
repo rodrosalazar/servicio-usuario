@@ -32,8 +32,10 @@ public class BusquedaResourceIntegracionTest extends AbstractIntegracionTest {
         Perfil perfilGuardado = ayudantePerfil.construirConPermisos();
         perfilDAO.guardar(perfilGuardado);
 
+
         Usuario usuario = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
+                .con(u -> u.institucion = institucion)
                 .generar();
 
         ClientResponse responseUsuario = hacerPost("usuario", usuario);

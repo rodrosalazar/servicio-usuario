@@ -58,7 +58,7 @@ public class TituloExtranjeroResourceIntegracionTest extends AbstractIntegracion
     }
 
     @Test
-    public void debeHacerAlgoCuandoElCodigoDelPaisNoExiste() {
+    public void noDebeGuardarExpedienteCuandoElCodigoDelPaisNoExiste() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> p.identificacion = new Cedula(numeroIdentificacionCedulaValida))
                 .con(p -> p.idPaisNacionalidad = "invali")
@@ -71,7 +71,7 @@ public class TituloExtranjeroResourceIntegracionTest extends AbstractIntegracion
     }
 
     @Test
-    public void debeHacerAlgoCuandoElCodigoDeEtniaNoExiste() {
+    public void noDebeGuardarExpedienteElCodigoDeEtniaNoExiste() {
         PortadorTitulo portadorTitulo = PortadorTituloBuilder.nuevoPortadorTitulo()
                 .con(p -> p.identificacion = new Cedula(numeroIdentificacionCedulaValida))
                 .con(p -> p.idEtnia = "xx")
