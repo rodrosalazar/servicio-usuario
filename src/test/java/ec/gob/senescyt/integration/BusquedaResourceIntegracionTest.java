@@ -37,8 +37,10 @@ public class BusquedaResourceIntegracionTest extends AbstractIntegracionTest {
         assertThat(responsePerfil.getStatus(), is(201));
         Perfil perfilGuardado = responsePerfil.getEntity(Perfil.class);
 
+
         Usuario usuario = UsuarioBuilder.nuevoUsuario()
                 .con(u -> u.perfiles = newArrayList(perfilGuardado.getId()))
+                .con(u -> u.institucion = institucion)
                 .generar();
 
         ClientResponse responseUsuario = hacerPost("usuario", usuario);
