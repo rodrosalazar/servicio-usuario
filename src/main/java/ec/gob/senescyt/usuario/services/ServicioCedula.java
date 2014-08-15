@@ -20,18 +20,23 @@ import javax.xml.ws.WebServiceException;
 
 public class ServicioCedula {
 
+    public static final String URL_SERVICIO_CONSULTA_CEDULA = "https://www.bsg.gob.ec/sw/RC/BSGSW01_Consultar_Cedula?wsdl";
     private ConfiguracionBSG configuracionBSG;
     private ProvinciaDAO provinciaDAO;
+    private AccesoBSGService accesoBSGService;
+    private WSRegistroCivilConsultaCedula_Service servicioConsultaCedula;
 
-    public ServicioCedula(ConfiguracionBSG configuracionBSG, ProvinciaDAO provinciaDAO) {
+    public ServicioCedula(ConfiguracionBSG configuracionBSG, ProvinciaDAO provinciaDAO, AccesoBSGService accesoBSGService,
+                          WSRegistroCivilConsultaCedula_Service servicioConsultaCedula) {
         this.configuracionBSG = configuracionBSG;
         this.provinciaDAO = provinciaDAO;
+        this.accesoBSGService = accesoBSGService;
+        this.servicioConsultaCedula = servicioConsultaCedula;
     }
 
     public CedulaInfo buscar(String cedula) throws CedulaInvalidaException, ServicioNoDisponibleException, CredencialesIncorrectasException {
-        AccesoBSGService accesoBSGService = new AccesoBSGService();
         BSG04AccederBSG accederBSG = accesoBSGService.getBSG04AccederBSGPort();
-        ValidarPermisoPeticion validarPermisoPeticion = construirPeticionAccesoBSG("https://www.bsg.gob.ec/sw/RC/BSGSW01_Consultar_Cedula?wsdl");
+        ValidarPermisoPeticion validarPermisoPeticion = construirPeticionAccesoBSG(URL_SERVICIO_CONSULTA_CEDULA);
 
         try {
             ValidarPermisoRespuesta validarPermisoRespuesta = accederBSG.validarPermiso(validarPermisoPeticion);
@@ -40,12 +45,13 @@ public class ServicioCedula {
             }
             DatosHeader datosHeader = construirDatosHeader(validarPermisoRespuesta);
 
-            WSRegistroCivilConsultaCedula_Service wsRegistroCivilConsultaCedulaService = new WSRegistroCivilConsultaCedula_Service();
             HeaderHandlerResolver headerHandlerResolver = new HeaderHandlerResolver(datosHeader);
-            wsRegistroCivilConsultaCedulaService.setHandlerResolver(headerHandlerResolver);
+            servicioConsultaCedula.setHandlerResolver(headerHandlerResolver);
 
-            WSRegistroCivilConsultaCedula consultarCedulaRegistroCivil = wsRegistroCivilConsultaCedulaService.getWSRegistroCivilConsultaCedulaPort();
-            Cedula respuesta = consultarCedulaRegistroCivil.busquedaPorCedula(cedula, configuracionBSG.getUsuario(), configuracionBSG.getContrasenia());
+            WSRegistroCivilConsultaCedula consultarCedulaRegistroCivil =
+                    servicioConsultaCedula.getWSRegistroCivilConsultaCedulaPort();
+            Cedula respuesta = consultarCedulaRegistroCivil.busquedaPorCedula(cedula, configuracionBSG.getUsuario(),
+                    configuracionBSG.getContrasenia());
 
             if (respuesta.getCodigoError().equals("000")) {
                 return construirCedulaInfo(respuesta);

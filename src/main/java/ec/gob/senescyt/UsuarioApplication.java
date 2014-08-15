@@ -2,6 +2,8 @@ package ec.gob.senescyt;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.sun.jersey.api.core.ResourceConfig;
+import ec.gob.bsg.accesobsgservice.AccesoBSGService;
+import ec.gob.registrocivil.consultacedula.WSRegistroCivilConsultaCedula_Service;
 import ec.gob.senescyt.biblioteca.Arbol;
 import ec.gob.senescyt.biblioteca.NivelArbol;
 import ec.gob.senescyt.biblioteca.dao.ArbolDAO;
@@ -168,7 +170,9 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
         MensajeErrorBuilder mensajeErrorBuilder = new MensajeErrorBuilder(lectorPropiedadesValidacion);
         ServicioCredencial servicioCredencial = new ServicioCredencial(credencialesDAO, servicioCifrado, hasher);
         ProvinciaDAO provinciaDAO = new ProvinciaDAO(getSessionFactory());
-        ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG(), provinciaDAO);
+        AccesoBSGService accesoBSGService = new AccesoBSGService();
+        WSRegistroCivilConsultaCedula_Service servicioConsultaCedula = new WSRegistroCivilConsultaCedula_Service();
+        ServicioCedula servicioCedula = new ServicioCedula(configuration.getConfiguracionBSG(), provinciaDAO, accesoBSGService, servicioConsultaCedula);
         DespachadorEmail despachadorEmail = new DespachadorEmail(configuration.getConfiguracionEmail());
 
         UsuarioResource usuarioResource = new UsuarioResource(usuarioDAO, cedulaValidator, lectorPropiedadesValidacion,
