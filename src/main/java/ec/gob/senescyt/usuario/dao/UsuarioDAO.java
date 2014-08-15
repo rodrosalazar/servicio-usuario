@@ -25,14 +25,11 @@ public class UsuarioDAO extends AbstractDAO<Usuario> {
     }
 
     public boolean isRegistradoNombreUsuario(String nombreUsuario) {
-        Query query = currentSession().createQuery(
-                "SELECT COUNT(*) FROM Usuario u WHERE u.nombreUsuario = :nombreUsuario");
-        query.setParameter("nombreUsuario", nombreUsuario);
+        List usuarios = currentSession().createCriteria(Usuario.class)
+                .add(Restrictions.eq("nombreUsuario", nombreUsuario))
+                .list();
 
-        Long usuariosRegistrados = (Long) query.uniqueResult();
-
-        return usuariosRegistrados > 0;
-
+        return !usuarios.isEmpty();
     }
 
     public boolean isRegistradoNumeroIdentificacion(String numeroIdentificacion) {
