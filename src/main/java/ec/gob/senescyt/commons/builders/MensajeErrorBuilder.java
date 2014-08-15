@@ -47,4 +47,8 @@ public class MensajeErrorBuilder {
 
         return entidadRespuesta;
     }
+
+    public String mensajeUsuarioNoEncontrado() {
+        return lectorArchivoDePropiedades.leerPropiedad(MensajesErrorEnum.MENSAJE_ERROR_USUARIO_NO_ENCONTRADO.getKey());
+    }
 }
