@@ -144,8 +144,11 @@ public class UsuarioApplication extends Application<UsuarioConfiguration> {
     private void configurarLimpieza(JerseyEnvironment jerseyEnvironment) {
         PerfilDAO perfilDAO = new PerfilDAO(getSessionFactory());
         UsuarioDAO usuarioDAO = new UsuarioDAO(getSessionFactory());
+        InstitucionDAO institucionDAO = new InstitucionDAO(getSessionFactory());
+        CredencialDAO credencialDAO = new CredencialDAO(getSessionFactory());
+        Hasher hasher = new Hasher();
 
-        LimpiezaResource limpiezaResource = new LimpiezaResource(usuarioDAO, perfilDAO);
+        LimpiezaResource limpiezaResource = new LimpiezaResource(usuarioDAO, perfilDAO, institucionDAO, credencialDAO, hasher);
         jerseyEnvironment.register(limpiezaResource);
     }
 
