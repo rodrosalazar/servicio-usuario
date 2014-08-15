@@ -1,8 +1,12 @@
 package ec.gob.senescyt.usuario.resources;
 
+import ec.gob.senescyt.commons.builders.MensajeErrorBuilder;
+import ec.gob.senescyt.commons.lectores.LectorArchivoDePropiedades;
 import ec.gob.senescyt.usuario.core.CedulaInfo;
 import ec.gob.senescyt.usuario.core.Token;
+import ec.gob.senescyt.usuario.core.Usuario;
 import ec.gob.senescyt.usuario.dao.TokenDAO;
+import ec.gob.senescyt.usuario.dao.UsuarioDAO;
 import ec.gob.senescyt.usuario.exceptions.CedulaInvalidaException;
 import ec.gob.senescyt.usuario.exceptions.CredencialesIncorrectasException;
 import ec.gob.senescyt.usuario.exceptions.ServicioNoDisponibleException;
@@ -25,24 +29,43 @@ import static javax.ws.rs.core.Response.Status.SERVICE_UNAVAILABLE;
 @Produces(MediaType.APPLICATION_JSON)
 public class BusquedaResource {
 
-    private final TokenDAO tokenDAO;
-    private final ServicioCedula servicioCedula;
+    private TokenDAO tokenDAO;
+    private ServicioCedula servicioCedula;
+    private UsuarioDAO usuarioDAO;
+    private MensajeErrorBuilder mensajeErrorBuilder;
 
-    public BusquedaResource(ServicioCedula servicioCedula, TokenDAO tokenDAO) {
+    public BusquedaResource(ServicioCedula servicioCedula, TokenDAO tokenDAO, UsuarioDAO usuarioDAO, LectorArchivoDePropiedades lectorPropiedadesValidacion) {
         this.servicioCedula = servicioCedula;
         this.tokenDAO = tokenDAO;
+        this.usuarioDAO = usuarioDAO;
+        this.mensajeErrorBuilder =  new MensajeErrorBuilder(lectorPropiedadesValidacion);
     }
 
     @GET
     @UnitOfWork
-    public Response buscar(@QueryParam("cedula") String cedula, @QueryParam("token") String idToken) {
+    public Response buscar(@QueryParam("cedula") String cedula,
+                           @QueryParam("token") String idToken,
+                           @QueryParam("identificacion")com.google.common.base.Optional<String> idUsuario) {
         if (cedula != null) {
             return buscarCedula(cedula);
-        } else if (idToken != null) {
+        }
+        if (idToken != null) {
             return buscarToken(idToken);
+        }
+        if (idUsuario.isPresent()) {
+            return buscarUsuarioPorIdentificacion(idUsuario.get());
         }
 
         return Response.status(NOT_FOUND).build();
+    }
+
+    private Response buscarUsuarioPorIdentificacion(String identificacion) {
+        com.google.common.base.Optional<Usuario> usuario = usuarioDAO.buscarPorIdentificacion(identificacion);
+
+        if (usuario.isPresent()) {
+            return Response.ok(usuario).build();
+        }
+        return Response.status(BAD_REQUEST).entity(mensajeErrorBuilder.mensajeUsuarioNoEncontrado()).build();
     }
 
     private Response buscarCedula(String cedula) {

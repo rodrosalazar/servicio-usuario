@@ -6,12 +6,16 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
+import javax.persistence.Table;
 import java.util.Optional;
 
 public class TokenDAO extends AbstractDAO<Token> {
 
-    public TokenDAO(SessionFactory sessionFactory) {
+    private String defaultSchema;
+
+    public TokenDAO(SessionFactory sessionFactory, String defaultSchema) {
         super(sessionFactory);
+        this.defaultSchema = defaultSchema;
     }
 
     public Optional<Token> buscar(String idToken) {
@@ -51,7 +55,9 @@ public class TokenDAO extends AbstractDAO<Token> {
     }
 
     public void limpiar() {
-        Query query = currentSession().createSQLQuery("TRUNCATE tokens CASCADE");
+        String nombreTabla = getEntityClass().getAnnotation(Table.class).name();
+        String sqlQuery = String.format("TRUNCATE %s.%s CASCADE", defaultSchema, nombreTabla);
+        Query query = currentSession().createSQLQuery(sqlQuery);
         query.executeUpdate();
     }
 }

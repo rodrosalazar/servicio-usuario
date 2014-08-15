@@ -16,6 +16,7 @@ database:
     charSet: UTF-8
     hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate.show_sql: true
+    hibernate.default_schema: servicio_usuario_integracion
 
   # the maximum amount of time to wait on an empty pool before throwing an exception
   maxWaitForConnection: 2s
@@ -33,34 +34,7 @@ database:
   checkConnectionWhileIdle: false
 
 logging:
-  level: DEBUG
-
-  appenders:
-    - type: console
-      threshold: INFO
-      target: stderr
-      timeZone: EST
-
-    # Log info, warnings and errors to our apps' main log.
-    # Rolled over daily and retained for 5 days.
-    - type: file
-      threshold: INFO
-      currentLogFilename: ./logs/servicio-usuario.log
-      # When the log file rotates, the archived log will be renamed to this and gzipped. The
-      # %d is replaced with the previous day (yyyy-MM-dd). Custom rolling windows can be created
-      # by passing a SimpleDateFormat-compatible format as an argument: "%d{yyyy-MM-dd-hh}".
-      archivedLogFilenamePattern: ./logs/servicio-usuario-%d.log.gz
-      archivedFileCount: 5
-      timeZone: EST
-
-    # Log debug messages, info, warnings and errors to our apps' debug log.
-    # Rolled over hourly and retained for 6 hours
-    - type: file
-      threshold: DEBUG
-      currentLogFilename: ./logs/debug-servicio-usuario.log
-      archivedLogFilenamePattern: ./logs/debug-servicio-usuario-%d{yyyy-MM-dd-hh}.log.gz
-      archivedFileCount: 6
-      timeZone: EST
+  level: WARN
 
 configuracionEmail:
   servidor: smtp.gmail.com

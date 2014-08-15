@@ -13,18 +13,22 @@ import org.junit.Test;
 import javax.ws.rs.core.MultivaluedMap;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static org.eclipse.jetty.http.HttpStatus.BAD_REQUEST_400;
+import static org.eclipse.jetty.http.HttpStatus.OK_200;
+import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 public class BusquedaResourceIntegracionTest extends AbstractIntegracionTest {
 
     private static final String ID_TOKEN = "32d88be3-2233-4b58-bf3c-99c35b162805";
-
+private static final String USUARIO_IDENTIFICACION="12345";
     private TokenDAO tokenDAO;
+    private Usuario usuarioGuardado;
 
     @Before
     public void setUp() {
-        tokenDAO = new TokenDAO(sessionFactory);
+        tokenDAO = new TokenDAO(sessionFactory, RULE.getConfiguration().getDefaultSchema());
         cargarDataParaPruebas();
     }
 
@@ -40,7 +44,7 @@ public class BusquedaResourceIntegracionTest extends AbstractIntegracionTest {
 
         ClientResponse responseUsuario = hacerPost("usuario", usuario);
         assertThat(responseUsuario.getStatus(), is(201));
-        Usuario usuarioGuardado = responseUsuario.getEntity(Usuario.class);
+        usuarioGuardado = responseUsuario.getEntity(Usuario.class);
 
         Token token = new Token(ID_TOKEN, usuarioGuardado);
         tokenDAO.guardar(token);
@@ -50,13 +54,36 @@ public class BusquedaResourceIntegracionTest extends AbstractIntegracionTest {
     @Test
     public void debeObtenerUnTokenPorSuId() {
         MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
-
         parametros.add("token",ID_TOKEN);
+
         ClientResponse response = hacerGet("busqueda", parametros);
 
-        assertThat(response.getStatus(), is(200));
+        assertThat(response.getStatus(), is(OK_200));
         Token token = response.getEntity(Token.class);
         assertThat(token.getId(), is(ID_TOKEN));
         assertThat(token.getUsuario().getNombreUsuario(), is("usuarioSenescyt"));
+    }
+
+    @Test
+    public void debeRetornar400AlBuscarUnUsuarioQueNoExistePorIdentificacion(){
+        MultivaluedMap<String,String> parametros = new MultivaluedMapImpl();
+        parametros.add("identificacion", USUARIO_IDENTIFICACION);
+
+        ClientResponse response = hacerGet("busqueda",parametros);
+
+        assertThat(response.getStatus(), is(BAD_REQUEST_400));
+        assertThat(response.getEntity(String.class), notNullValue());
+    }
+
+    @Test
+    public void debeRetornarElUsuarioCorrepondienteALaIdentificacion() {
+        MultivaluedMap<String, String> parametros = new MultivaluedMapImpl();
+        parametros.add("identificacion", usuarioGuardado.getIdentificacion().getNumeroIdentificacion());
+
+        ClientResponse response = hacerGet("busqueda", parametros);
+
+        assertThat(response.getStatus(), is(OK_200));
+        Usuario usuario = response.getEntity(Usuario.class);
+        assertThat(usuario.getNombre(), is(usuarioGuardado.getNombre()));
     }
 }

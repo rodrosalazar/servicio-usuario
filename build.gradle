@@ -29,6 +29,7 @@ flyway {
     user = dbConfig.user
     password = dbConfig.password
     url = dbConfig.url
+    schemas = [dbConfig.properties.'hibernate.default_schema']
 }
 
 // Set our project variables

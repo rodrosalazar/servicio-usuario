@@ -2,6 +2,7 @@ package ec.gob.senescyt.usuario.resources.management;
 
 import ec.gob.senescyt.usuario.core.Acceso;
 import ec.gob.senescyt.usuario.core.Credencial;
+import ec.gob.senescyt.usuario.core.EstadoUsuario;
 import ec.gob.senescyt.usuario.core.Identificacion;
 import ec.gob.senescyt.usuario.core.Institucion;
 import ec.gob.senescyt.usuario.core.Nombre;
@@ -78,7 +79,7 @@ public class LimpiezaResource {
         Identificacion identificacion = new Identificacion(TipoDocumento.PASAPORTE,"USER123");
 
         Usuario usuario = new Usuario(identificacion, nombre, "myeamil@myemail.com", "SENESCYT-DFAPO-2014-65946-MI",
-                now, institucion, nombreSuperUsuario, newArrayList(idPerfil));
+                now, institucion, nombreSuperUsuario, newArrayList(idPerfil), EstadoUsuario.ACTIVO);
         usuarioDAO.guardar(usuario);
     }
 

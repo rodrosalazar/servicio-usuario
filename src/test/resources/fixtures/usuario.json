@@ -16,7 +16,8 @@
         "id":1
     },
     "nombreUsuario":"njumbo",
-    "perfiles": [1234, 5678, 9630]
+    "perfiles": [1234, 5678, 9630],
+    "estado": "ACTIVO"
 }
 
 
